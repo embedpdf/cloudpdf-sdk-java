@@ -1,0 +1,15 @@
+{
+  "cliVersion": "5.91.0",
+  "generatorName": "fernapi/fern-java-sdk",
+  "generatorVersion": "4.17.0",
+  "generatorConfig": {
+    "group": "com.cloudpdf",
+    "artifact": "cloudpdf",
+    "package-prefix": "com.cloudpdf.api"
+  },
+  "originGitCommit": "232d5e0240d5673a73c9ea7c7ae9e7b937fdd5b3",
+  "originGitCommitIsDirty": false,
+  "invokedBy": "ci",
+  "requestedVersion": "3.0.0-alpha.1",
+  "ciProvider": "github"
+}
