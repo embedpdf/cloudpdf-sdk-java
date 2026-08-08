@@ -1,0 +1,3 @@
+rootProject.name = 'cloudpdf'
+
+include 'sample-app'
