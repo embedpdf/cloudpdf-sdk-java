@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
     id 'com.diffplug.spotless' version '6.11.0'
 }
 
@@ -80,31 +81,45 @@ publishing {
                 url = 'https://www.cloudpdf.com'
                 licenses {
                     license {
-                        name = 'APACHE-2.0'
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
                     }
                 }
                 developers {
                     developer {
+                        id = 'cloudpdf'
                         name = 'CloudPDF'
                         email = 'hello@cloudpdf.com'
+                        organization = 'CloudPDF'
+                        organizationUrl = 'https://www.cloudpdf.com'
                     }
                 }
                 scm {
-                    connection = 'scm:git:git://github.com/YOUR-ORG/YOUR-REPO.git'
-                    developerConnection = 'scm:git:git://github.com/YOUR-ORG/YOUR-REPO.git'
-                    url = 'https://github.com/YOUR-ORG/YOUR-REPO'
+                    connection = 'scm:git:https://github.com/embedpdf/cloudpdf-sdk-java.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/embedpdf/cloudpdf-sdk-java.git'
+                    url = 'https://github.com/embedpdf/cloudpdf-sdk-java'
                 }
             }
         }
     }
     repositories {
         maven {
-            url "$System.env.MAVEN_PUBLISH_REGISTRY_URL"
-            credentials {
-                username "$System.env.MAVEN_USERNAME"
-                password "$System.env.MAVEN_PASSWORD"
-            }
+            name = 'centralStaging'
+            url = layout.buildDirectory.dir('central-staging')
         }
     }
 }
 
+
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
+
+signing {
+    useInMemoryPgpKeys(
+        System.getenv('MAVEN_GPG_PRIVATE_KEY'),
+        System.getenv('MAVEN_GPG_PASSPHRASE')
+    )
+    sign publishing.publications.maven
+}
