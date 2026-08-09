@@ -4,10 +4,13 @@
   "generatorVersion": "4.17.0",
   "generatorConfig": {
     "group": "com.cloudpdf",
-    "artifact": "cloudpdf",
-    "package-prefix": "com.cloudpdf.api"
+    "artifact": "sdk",
+    "package-prefix": "com.cloudpdf",
+    "client-class-name": "CloudPDFClient",
+    "base-exception-class-name": "CloudPDFException",
+    "base-api-exception-class-name": "CloudPDFApiException"
   },
-  "originGitCommit": "232d5e0240d5673a73c9ea7c7ae9e7b937fdd5b3",
+  "originGitCommit": "a0adb9e77ef16feaef2358d71b247b4f5a98fd23",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
   "requestedVersion": "3.0.0-alpha.1",

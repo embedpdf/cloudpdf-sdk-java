@@ -1,8 +1,8 @@
-# Cloudpdf Java Library
+# CloudPDF Java SDK
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=Cloudpdf%2FJava)
 
-The Cloudpdf Java library provides convenient access to the Cloudpdf APIs from Java.
+The official Java SDK for the CloudPDF API.
 
 ## Table of Contents
 
@@ -29,12 +29,12 @@ Instantiate and use the client with the following:
 ```java
 package com.example.usage;
 
-import com.cloudpdf.api.CloudpdfApiClient;
-import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
+import com.cloudpdf.CloudPDFClient;
+import com.cloudpdf.resources.tenants.requests.TenantsCreateRequest;
 
 public class Example {
     public static void main(String[] args) {
-        CloudpdfApiClient client = CloudpdfApiClient
+        CloudPDFClient client = CloudPDFClient
             .builder()
             .token("<token>")
             .build();
@@ -54,9 +54,9 @@ public class Example {
 You can set a custom base URL when constructing the client.
 
 ```java
-import com.cloudpdf.api.CloudpdfApiClient;
+import com.cloudpdf.CloudPDFClient;
 
-CloudpdfApiClient client = CloudpdfApiClient
+CloudPDFClient client = CloudPDFClient
     .builder()
     .url("https://example.com")
     .build();
@@ -67,11 +67,11 @@ CloudpdfApiClient client = CloudpdfApiClient
 When the API returns a non-success status code (4xx or 5xx response), an API exception will be thrown.
 
 ```java
-import com.cloudpdf.api.core.CloudpdfApiApiException;
+import com.cloudpdf.core.CloudPDFApiException;
 
 try{
     client.tenants().create(...);
-} catch (CloudpdfApiApiException e){
+} catch (CloudPDFApiException e){
     // Do something with the API exception...
 }
 ```
@@ -84,12 +84,12 @@ This SDK is built to work with any instance of `OkHttpClient`. By default, if no
 However, you can pass your own client like so:
 
 ```java
-import com.cloudpdf.api.CloudpdfApiClient;
+import com.cloudpdf.CloudPDFClient;
 import okhttp3.OkHttpClient;
 
 OkHttpClient customClient = ...;
 
-CloudpdfApiClient client = CloudpdfApiClient
+CloudPDFClient client = CloudPDFClient
     .builder()
     .httpClient(customClient)
     .build();
@@ -120,9 +120,9 @@ Which status codes are retried depends on the `retry-status-codes` generator con
 Use the `maxRetries` client option to configure this behavior.
 
 ```java
-import com.cloudpdf.api.CloudpdfApiClient;
+import com.cloudpdf.CloudPDFClient;
 
-CloudpdfApiClient client = CloudpdfApiClient
+CloudPDFClient client = CloudPDFClient
     .builder()
     .maxRetries(1)
     .build();
@@ -132,11 +132,11 @@ CloudpdfApiClient client = CloudpdfApiClient
 
 The SDK defaults to a 60 second timeout. You can configure this with a timeout option at the client or request level.
 ```java
-import com.cloudpdf.api.CloudpdfApiClient;
-import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.CloudPDFClient;
+import com.cloudpdf.core.RequestOptions;
 
 // Client level
-CloudpdfApiClient client = CloudpdfApiClient
+CloudPDFClient client = CloudPDFClient
     .builder()
     .timeout(60)
     .build();
@@ -156,11 +156,11 @@ client.tenants().create(
 The SDK allows you to add custom headers to requests. You can configure headers at the client level or at the request level.
 
 ```java
-import com.cloudpdf.api.CloudpdfApiClient;
-import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.CloudPDFClient;
+import com.cloudpdf.core.RequestOptions;
 
 // Client level
-CloudpdfApiClient client = CloudpdfApiClient
+CloudPDFClient client = CloudPDFClient
     .builder()
     .addHeader("X-Custom-Header", "custom-value")
     .addHeader("X-Request-Id", "abc-123")
@@ -184,7 +184,7 @@ The `withRawResponse()` method returns a raw client that wraps all responses wit
 (A normal client's `response` is identical to a raw client's `response.body()`.)
 
 ```java
-CloudpdfApiHttpResponse response = client.tenants().withRawResponse().create(...);
+CloudPDFClientHttpResponse response = client.tenants().withRawResponse().create(...);
 
 System.out.println(response.body());
 System.out.println(response.headers().get("X-My-Header"));
