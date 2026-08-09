@@ -49,15 +49,15 @@ version = '3.0.0-alpha.1'
 
 jar {
     dependsOn(":generatePomFileForMavenPublication")
-    archiveBaseName = "cloudpdf"
+    archiveBaseName = "sdk"
 }
 
 sourcesJar {
-    archiveBaseName = "cloudpdf"
+    archiveBaseName = "sdk"
 }
 
 javadocJar {
-    archiveBaseName = "cloudpdf"
+    archiveBaseName = "sdk"
 }
 
 test {
@@ -71,7 +71,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = 'com.cloudpdf'
-            artifactId = 'cloudpdf'
+            artifactId = 'sdk'
             version = '3.0.0-alpha.1'
             from components.java
             pom {
