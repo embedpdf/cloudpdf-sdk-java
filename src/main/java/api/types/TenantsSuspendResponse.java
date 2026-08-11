@@ -17,27 +17,26 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DocumentsUploadDirect400Response.Builder.class)
-public final class DocumentsUploadDirect400Response {
-    private final DocumentsUploadDirect400ResponseError error;
+@JsonDeserialize(builder = TenantsSuspendResponse.Builder.class)
+public final class TenantsSuspendResponse {
+    private final TenantsSuspendResponseError error;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocumentsUploadDirect400Response(
-            DocumentsUploadDirect400ResponseError error, Map<String, Object> additionalProperties) {
+    private TenantsSuspendResponse(TenantsSuspendResponseError error, Map<String, Object> additionalProperties) {
         this.error = error;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("error")
-    public DocumentsUploadDirect400ResponseError getError() {
+    public TenantsSuspendResponseError getError() {
         return error;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DocumentsUploadDirect400Response && equalTo((DocumentsUploadDirect400Response) other);
+        return other instanceof TenantsSuspendResponse && equalTo((TenantsSuspendResponse) other);
     }
 
     @JsonAnyGetter
@@ -45,7 +44,7 @@ public final class DocumentsUploadDirect400Response {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DocumentsUploadDirect400Response other) {
+    private boolean equalTo(TenantsSuspendResponse other) {
         return error.equals(other.error);
     }
 
@@ -64,13 +63,13 @@ public final class DocumentsUploadDirect400Response {
     }
 
     public interface ErrorStage {
-        _FinalStage error(@NotNull DocumentsUploadDirect400ResponseError error);
+        _FinalStage error(@NotNull TenantsSuspendResponseError error);
 
-        Builder from(DocumentsUploadDirect400Response other);
+        Builder from(TenantsSuspendResponse other);
     }
 
     public interface _FinalStage {
-        DocumentsUploadDirect400Response build();
+        TenantsSuspendResponse build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -79,7 +78,7 @@ public final class DocumentsUploadDirect400Response {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ErrorStage, _FinalStage {
-        private DocumentsUploadDirect400ResponseError error;
+        private TenantsSuspendResponseError error;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -87,21 +86,21 @@ public final class DocumentsUploadDirect400Response {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DocumentsUploadDirect400Response other) {
+        public Builder from(TenantsSuspendResponse other) {
             error(other.getError());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("error")
-        public _FinalStage error(@NotNull DocumentsUploadDirect400ResponseError error) {
+        public _FinalStage error(@NotNull TenantsSuspendResponseError error) {
             this.error = Objects.requireNonNull(error, "error must not be null");
             return this;
         }
 
         @java.lang.Override
-        public DocumentsUploadDirect400Response build() {
-            return new DocumentsUploadDirect400Response(error, additionalProperties);
+        public TenantsSuspendResponse build() {
+            return new TenantsSuspendResponse(error, additionalProperties);
         }
 
         @java.lang.Override

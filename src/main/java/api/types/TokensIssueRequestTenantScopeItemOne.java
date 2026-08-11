@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class TokensIssueRequestTenantScopeItemOne {
+    public static final TokensIssueRequestTenantScopeItemOne SHARES_MANAGE =
+            new TokensIssueRequestTenantScopeItemOne(Value.SHARES_MANAGE, "shares.manage");
+
     public static final TokensIssueRequestTenantScopeItemOne TOKENS_REVOKE =
             new TokensIssueRequestTenantScopeItemOne(Value.TOKENS_REVOKE, "tokens.revoke");
 
@@ -55,6 +58,8 @@ public final class TokensIssueRequestTenantScopeItemOne {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case SHARES_MANAGE:
+                return visitor.visitSharesManage();
             case TOKENS_REVOKE:
                 return visitor.visitTokensRevoke();
             case DOCS_CREATE:
@@ -74,6 +79,8 @@ public final class TokensIssueRequestTenantScopeItemOne {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static TokensIssueRequestTenantScopeItemOne valueOf(String value) {
         switch (value) {
+            case "shares.manage":
+                return SHARES_MANAGE;
             case "tokens.revoke":
                 return TOKENS_REVOKE;
             case "docs.create":
@@ -100,6 +107,8 @@ public final class TokensIssueRequestTenantScopeItemOne {
 
         TOKENS_REVOKE,
 
+        SHARES_MANAGE,
+
         UNKNOWN
     }
 
@@ -113,6 +122,8 @@ public final class TokensIssueRequestTenantScopeItemOne {
         T visitTokensIssueDoc();
 
         T visitTokensRevoke();
+
+        T visitSharesManage();
 
         T visitUnknown(String unknownType);
     }

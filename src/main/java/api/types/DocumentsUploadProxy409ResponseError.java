@@ -17,26 +17,36 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DocumentsUploadDirect200Response.Builder.class)
-public final class DocumentsUploadDirect200Response {
-    private final String sha256;
+@JsonDeserialize(builder = DocumentsUploadProxy409ResponseError.Builder.class)
+public final class DocumentsUploadProxy409ResponseError {
+    private final String code;
+
+    private final String message;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocumentsUploadDirect200Response(String sha256, Map<String, Object> additionalProperties) {
-        this.sha256 = sha256;
+    private DocumentsUploadProxy409ResponseError(
+            String code, String message, Map<String, Object> additionalProperties) {
+        this.code = code;
+        this.message = message;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("sha256")
-    public String getSha256() {
-        return sha256;
+    @JsonProperty("code")
+    public String getCode() {
+        return code;
+    }
+
+    @JsonProperty("message")
+    public String getMessage() {
+        return message;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DocumentsUploadDirect200Response && equalTo((DocumentsUploadDirect200Response) other);
+        return other instanceof DocumentsUploadProxy409ResponseError
+                && equalTo((DocumentsUploadProxy409ResponseError) other);
     }
 
     @JsonAnyGetter
@@ -44,13 +54,13 @@ public final class DocumentsUploadDirect200Response {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DocumentsUploadDirect200Response other) {
-        return sha256.equals(other.sha256);
+    private boolean equalTo(DocumentsUploadProxy409ResponseError other) {
+        return code.equals(other.code) && message.equals(other.message);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.sha256);
+        return Objects.hash(this.code, this.message);
     }
 
     @java.lang.Override
@@ -58,18 +68,22 @@ public final class DocumentsUploadDirect200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static Sha256Stage builder() {
+    public static CodeStage builder() {
         return new Builder();
     }
 
-    public interface Sha256Stage {
-        _FinalStage sha256(@NotNull String sha256);
+    public interface CodeStage {
+        MessageStage code(@NotNull String code);
 
-        Builder from(DocumentsUploadDirect200Response other);
+        Builder from(DocumentsUploadProxy409ResponseError other);
+    }
+
+    public interface MessageStage {
+        _FinalStage message(@NotNull String message);
     }
 
     public interface _FinalStage {
-        DocumentsUploadDirect200Response build();
+        DocumentsUploadProxy409ResponseError build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -77,8 +91,10 @@ public final class DocumentsUploadDirect200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements Sha256Stage, _FinalStage {
-        private String sha256;
+    public static final class Builder implements CodeStage, MessageStage, _FinalStage {
+        private String code;
+
+        private String message;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -86,21 +102,29 @@ public final class DocumentsUploadDirect200Response {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DocumentsUploadDirect200Response other) {
-            sha256(other.getSha256());
+        public Builder from(DocumentsUploadProxy409ResponseError other) {
+            code(other.getCode());
+            message(other.getMessage());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("sha256")
-        public _FinalStage sha256(@NotNull String sha256) {
-            this.sha256 = Objects.requireNonNull(sha256, "sha256 must not be null");
+        @JsonSetter("code")
+        public MessageStage code(@NotNull String code) {
+            this.code = Objects.requireNonNull(code, "code must not be null");
             return this;
         }
 
         @java.lang.Override
-        public DocumentsUploadDirect200Response build() {
-            return new DocumentsUploadDirect200Response(sha256, additionalProperties);
+        @JsonSetter("message")
+        public _FinalStage message(@NotNull String message) {
+            this.message = Objects.requireNonNull(message, "message must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public DocumentsUploadProxy409ResponseError build() {
+            return new DocumentsUploadProxy409ResponseError(code, message, additionalProperties);
         }
 
         @java.lang.Override

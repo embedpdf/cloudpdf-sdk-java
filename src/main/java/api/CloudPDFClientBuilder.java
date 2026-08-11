@@ -254,9 +254,6 @@ public class CloudPDFClientBuilder {
     protected void validateConfiguration() {}
 
     public CloudPDFClient build() {
-        if (token == null) {
-            throw new RuntimeException("Please provide token");
-        }
         validateConfiguration();
         return new CloudPDFClient(buildClientOptions());
     }
