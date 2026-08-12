@@ -17,36 +17,34 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DocumentsInit200ResponseResumedUploadDirect.Builder.class)
-public final class DocumentsInit200ResponseResumedUploadDirect {
-    private final String url;
+@JsonDeserialize(builder = SharesExchange410ResponseError.Builder.class)
+public final class SharesExchange410ResponseError {
+    private final String code;
 
-    private final String key;
+    private final String message;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocumentsInit200ResponseResumedUploadDirect(
-            String url, String key, Map<String, Object> additionalProperties) {
-        this.url = url;
-        this.key = key;
+    private SharesExchange410ResponseError(String code, String message, Map<String, Object> additionalProperties) {
+        this.code = code;
+        this.message = message;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("url")
-    public String getUrl() {
-        return url;
+    @JsonProperty("code")
+    public String getCode() {
+        return code;
     }
 
-    @JsonProperty("key")
-    public String getKey() {
-        return key;
+    @JsonProperty("message")
+    public String getMessage() {
+        return message;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DocumentsInit200ResponseResumedUploadDirect
-                && equalTo((DocumentsInit200ResponseResumedUploadDirect) other);
+        return other instanceof SharesExchange410ResponseError && equalTo((SharesExchange410ResponseError) other);
     }
 
     @JsonAnyGetter
@@ -54,13 +52,13 @@ public final class DocumentsInit200ResponseResumedUploadDirect {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DocumentsInit200ResponseResumedUploadDirect other) {
-        return url.equals(other.url) && key.equals(other.key);
+    private boolean equalTo(SharesExchange410ResponseError other) {
+        return code.equals(other.code) && message.equals(other.message);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.key);
+        return Objects.hash(this.code, this.message);
     }
 
     @java.lang.Override
@@ -68,22 +66,22 @@ public final class DocumentsInit200ResponseResumedUploadDirect {
         return ObjectMappers.stringify(this);
     }
 
-    public static UrlStage builder() {
+    public static CodeStage builder() {
         return new Builder();
     }
 
-    public interface UrlStage {
-        KeyStage url(@NotNull String url);
+    public interface CodeStage {
+        MessageStage code(@NotNull String code);
 
-        Builder from(DocumentsInit200ResponseResumedUploadDirect other);
+        Builder from(SharesExchange410ResponseError other);
     }
 
-    public interface KeyStage {
-        _FinalStage key(@NotNull String key);
+    public interface MessageStage {
+        _FinalStage message(@NotNull String message);
     }
 
     public interface _FinalStage {
-        DocumentsInit200ResponseResumedUploadDirect build();
+        SharesExchange410ResponseError build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -91,10 +89,10 @@ public final class DocumentsInit200ResponseResumedUploadDirect {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, KeyStage, _FinalStage {
-        private String url;
+    public static final class Builder implements CodeStage, MessageStage, _FinalStage {
+        private String code;
 
-        private String key;
+        private String message;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,29 +100,29 @@ public final class DocumentsInit200ResponseResumedUploadDirect {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DocumentsInit200ResponseResumedUploadDirect other) {
-            url(other.getUrl());
-            key(other.getKey());
+        public Builder from(SharesExchange410ResponseError other) {
+            code(other.getCode());
+            message(other.getMessage());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("url")
-        public KeyStage url(@NotNull String url) {
-            this.url = Objects.requireNonNull(url, "url must not be null");
+        @JsonSetter("code")
+        public MessageStage code(@NotNull String code) {
+            this.code = Objects.requireNonNull(code, "code must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("key")
-        public _FinalStage key(@NotNull String key) {
-            this.key = Objects.requireNonNull(key, "key must not be null");
+        @JsonSetter("message")
+        public _FinalStage message(@NotNull String message) {
+            this.message = Objects.requireNonNull(message, "message must not be null");
             return this;
         }
 
         @java.lang.Override
-        public DocumentsInit200ResponseResumedUploadDirect build() {
-            return new DocumentsInit200ResponseResumedUploadDirect(url, key, additionalProperties);
+        public SharesExchange410ResponseError build() {
+            return new SharesExchange410ResponseError(code, message, additionalProperties);
         }
 
         @java.lang.Override

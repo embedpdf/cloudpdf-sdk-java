@@ -8,10 +8,14 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.tenants.requests.DeleteTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.GetTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.ListTenantsRequest;
+import com.cloudpdf.api.resources.tenants.requests.ResumeTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
+import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
+import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
 import com.cloudpdf.api.types.TenantsCreate200Response;
 import com.cloudpdf.api.types.TenantsGet200Response;
 import com.cloudpdf.api.types.TenantsList200Response;
+import com.cloudpdf.api.types.TenantsUsage200Response;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncTenantsClient {
@@ -100,5 +104,80 @@ public class AsyncTenantsClient {
     public CompletableFuture<Void> delete(
             String tenantId, DeleteTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.delete(tenantId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> resume(String tenantId) {
+        return this.rawClient.resume(tenantId).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> resume(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.resume(tenantId, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> resume(String tenantId, ResumeTenantsRequest request) {
+        return this.rawClient.resume(tenantId, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> resume(
+            String tenantId, ResumeTenantsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.resume(tenantId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CompletableFuture<Void> suspend(String tenantId) {
+        return this.rawClient.suspend(tenantId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CompletableFuture<Void> suspend(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.suspend(tenantId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CompletableFuture<Void> suspend(String tenantId, TenantsSuspendRequest request) {
+        return this.rawClient.suspend(tenantId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CompletableFuture<Void> suspend(
+            String tenantId, TenantsSuspendRequest request, RequestOptions requestOptions) {
+        return this.rawClient.suspend(tenantId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CompletableFuture<TenantsUsage200Response> usage(String tenantId) {
+        return this.rawClient.usage(tenantId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CompletableFuture<TenantsUsage200Response> usage(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.usage(tenantId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CompletableFuture<TenantsUsage200Response> usage(String tenantId, UsageTenantsRequest request) {
+        return this.rawClient.usage(tenantId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CompletableFuture<TenantsUsage200Response> usage(
+            String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.usage(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
 }

@@ -17,36 +17,26 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DocumentsUploadDirect400ResponseError.Builder.class)
-public final class DocumentsUploadDirect400ResponseError {
-    private final String code;
-
-    private final String message;
+@JsonDeserialize(builder = SharesCreate200Response.Builder.class)
+public final class SharesCreate200Response {
+    private final SharesCreate200ResponseShare share;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocumentsUploadDirect400ResponseError(
-            String code, String message, Map<String, Object> additionalProperties) {
-        this.code = code;
-        this.message = message;
+    private SharesCreate200Response(SharesCreate200ResponseShare share, Map<String, Object> additionalProperties) {
+        this.share = share;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("code")
-    public String getCode() {
-        return code;
-    }
-
-    @JsonProperty("message")
-    public String getMessage() {
-        return message;
+    @JsonProperty("share")
+    public SharesCreate200ResponseShare getShare() {
+        return share;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DocumentsUploadDirect400ResponseError
-                && equalTo((DocumentsUploadDirect400ResponseError) other);
+        return other instanceof SharesCreate200Response && equalTo((SharesCreate200Response) other);
     }
 
     @JsonAnyGetter
@@ -54,13 +44,13 @@ public final class DocumentsUploadDirect400ResponseError {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DocumentsUploadDirect400ResponseError other) {
-        return code.equals(other.code) && message.equals(other.message);
+    private boolean equalTo(SharesCreate200Response other) {
+        return share.equals(other.share);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.code, this.message);
+        return Objects.hash(this.share);
     }
 
     @java.lang.Override
@@ -68,22 +58,18 @@ public final class DocumentsUploadDirect400ResponseError {
         return ObjectMappers.stringify(this);
     }
 
-    public static CodeStage builder() {
+    public static ShareStage builder() {
         return new Builder();
     }
 
-    public interface CodeStage {
-        MessageStage code(@NotNull String code);
+    public interface ShareStage {
+        _FinalStage share(@NotNull SharesCreate200ResponseShare share);
 
-        Builder from(DocumentsUploadDirect400ResponseError other);
-    }
-
-    public interface MessageStage {
-        _FinalStage message(@NotNull String message);
+        Builder from(SharesCreate200Response other);
     }
 
     public interface _FinalStage {
-        DocumentsUploadDirect400ResponseError build();
+        SharesCreate200Response build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -91,10 +77,8 @@ public final class DocumentsUploadDirect400ResponseError {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CodeStage, MessageStage, _FinalStage {
-        private String code;
-
-        private String message;
+    public static final class Builder implements ShareStage, _FinalStage {
+        private SharesCreate200ResponseShare share;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,29 +86,21 @@ public final class DocumentsUploadDirect400ResponseError {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DocumentsUploadDirect400ResponseError other) {
-            code(other.getCode());
-            message(other.getMessage());
+        public Builder from(SharesCreate200Response other) {
+            share(other.getShare());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("code")
-        public MessageStage code(@NotNull String code) {
-            this.code = Objects.requireNonNull(code, "code must not be null");
+        @JsonSetter("share")
+        public _FinalStage share(@NotNull SharesCreate200ResponseShare share) {
+            this.share = Objects.requireNonNull(share, "share must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("message")
-        public _FinalStage message(@NotNull String message) {
-            this.message = Objects.requireNonNull(message, "message must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public DocumentsUploadDirect400ResponseError build() {
-            return new DocumentsUploadDirect400ResponseError(code, message, additionalProperties);
+        public SharesCreate200Response build() {
+            return new SharesCreate200Response(share, additionalProperties);
         }
 
         @java.lang.Override

@@ -8,10 +8,14 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.tenants.requests.DeleteTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.GetTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.ListTenantsRequest;
+import com.cloudpdf.api.resources.tenants.requests.ResumeTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
+import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
+import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
 import com.cloudpdf.api.types.TenantsCreate200Response;
 import com.cloudpdf.api.types.TenantsGet200Response;
 import com.cloudpdf.api.types.TenantsList200Response;
+import com.cloudpdf.api.types.TenantsUsage200Response;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
@@ -96,5 +100,77 @@ public class TenantsClient {
      */
     public void delete(String tenantId, DeleteTenantsRequest request, RequestOptions requestOptions) {
         this.rawClient.delete(tenantId, request, requestOptions).body();
+    }
+
+    public void resume(String tenantId) {
+        this.rawClient.resume(tenantId).body();
+    }
+
+    public void resume(String tenantId, RequestOptions requestOptions) {
+        this.rawClient.resume(tenantId, requestOptions).body();
+    }
+
+    public void resume(String tenantId, ResumeTenantsRequest request) {
+        this.rawClient.resume(tenantId, request).body();
+    }
+
+    public void resume(String tenantId, ResumeTenantsRequest request, RequestOptions requestOptions) {
+        this.rawClient.resume(tenantId, request, requestOptions).body();
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public void suspend(String tenantId) {
+        this.rawClient.suspend(tenantId).body();
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public void suspend(String tenantId, RequestOptions requestOptions) {
+        this.rawClient.suspend(tenantId, requestOptions).body();
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public void suspend(String tenantId, TenantsSuspendRequest request) {
+        this.rawClient.suspend(tenantId, request).body();
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public void suspend(String tenantId, TenantsSuspendRequest request, RequestOptions requestOptions) {
+        this.rawClient.suspend(tenantId, request, requestOptions).body();
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public TenantsUsage200Response usage(String tenantId) {
+        return this.rawClient.usage(tenantId).body();
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public TenantsUsage200Response usage(String tenantId, RequestOptions requestOptions) {
+        return this.rawClient.usage(tenantId, requestOptions).body();
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request) {
+        return this.rawClient.usage(tenantId, request).body();
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.usage(tenantId, request, requestOptions).body();
     }
 }

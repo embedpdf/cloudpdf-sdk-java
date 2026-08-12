@@ -5,6 +5,7 @@ package com.cloudpdf.api.resources.documents.requests;
 
 import com.cloudpdf.api.core.ObjectMappers;
 import com.cloudpdf.api.resources.documents.types.DocumentsInitRequestDedupMode;
+import com.cloudpdf.api.resources.documents.types.DocumentsInitRequestUploadPreference;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,6 +37,8 @@ public final class DocumentsInitRequest {
 
     private final Optional<Double> uploadTtlSec;
 
+    private final Optional<DocumentsInitRequestUploadPreference> uploadPreference;
+
     private final Map<String, Object> additionalProperties;
 
     private DocumentsInitRequest(
@@ -46,6 +49,7 @@ public final class DocumentsInitRequest {
             Optional<DocumentsInitRequestDedupMode> dedupMode,
             Optional<String> docId,
             Optional<Double> uploadTtlSec,
+            Optional<DocumentsInitRequestUploadPreference> uploadPreference,
             Map<String, Object> additionalProperties) {
         this.contentLength = contentLength;
         this.contentSha256 = contentSha256;
@@ -54,6 +58,7 @@ public final class DocumentsInitRequest {
         this.dedupMode = dedupMode;
         this.docId = docId;
         this.uploadTtlSec = uploadTtlSec;
+        this.uploadPreference = uploadPreference;
         this.additionalProperties = additionalProperties;
     }
 
@@ -92,6 +97,11 @@ public final class DocumentsInitRequest {
         return uploadTtlSec;
     }
 
+    @JsonProperty("uploadPreference")
+    public Optional<DocumentsInitRequestUploadPreference> getUploadPreference() {
+        return uploadPreference;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -110,7 +120,8 @@ public final class DocumentsInitRequest {
                 && idempotencyKey.equals(other.idempotencyKey)
                 && dedupMode.equals(other.dedupMode)
                 && docId.equals(other.docId)
-                && uploadTtlSec.equals(other.uploadTtlSec);
+                && uploadTtlSec.equals(other.uploadTtlSec)
+                && uploadPreference.equals(other.uploadPreference);
     }
 
     @java.lang.Override
@@ -122,7 +133,8 @@ public final class DocumentsInitRequest {
                 this.idempotencyKey,
                 this.dedupMode,
                 this.docId,
-                this.uploadTtlSec);
+                this.uploadTtlSec,
+                this.uploadPreference);
     }
 
     @java.lang.Override
@@ -170,6 +182,10 @@ public final class DocumentsInitRequest {
         _FinalStage uploadTtlSec(Optional<Double> uploadTtlSec);
 
         _FinalStage uploadTtlSec(Double uploadTtlSec);
+
+        _FinalStage uploadPreference(Optional<DocumentsInitRequestUploadPreference> uploadPreference);
+
+        _FinalStage uploadPreference(DocumentsInitRequestUploadPreference uploadPreference);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -177,6 +193,8 @@ public final class DocumentsInitRequest {
         private double contentLength;
 
         private String contentSha256;
+
+        private Optional<DocumentsInitRequestUploadPreference> uploadPreference = Optional.empty();
 
         private Optional<Double> uploadTtlSec = Optional.empty();
 
@@ -202,6 +220,7 @@ public final class DocumentsInitRequest {
             dedupMode(other.getDedupMode());
             docId(other.getDocId());
             uploadTtlSec(other.getUploadTtlSec());
+            uploadPreference(other.getUploadPreference());
             return this;
         }
 
@@ -216,6 +235,19 @@ public final class DocumentsInitRequest {
         @JsonSetter("contentSha256")
         public _FinalStage contentSha256(@NotNull String contentSha256) {
             this.contentSha256 = Objects.requireNonNull(contentSha256, "contentSha256 must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage uploadPreference(DocumentsInitRequestUploadPreference uploadPreference) {
+            this.uploadPreference = Optional.ofNullable(uploadPreference);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "uploadPreference", nulls = Nulls.SKIP)
+        public _FinalStage uploadPreference(Optional<DocumentsInitRequestUploadPreference> uploadPreference) {
+            this.uploadPreference = uploadPreference;
             return this;
         }
 
@@ -294,6 +326,7 @@ public final class DocumentsInitRequest {
                     dedupMode,
                     docId,
                     uploadTtlSec,
+                    uploadPreference,
                     additionalProperties);
         }
 
