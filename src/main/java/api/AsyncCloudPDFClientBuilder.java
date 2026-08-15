@@ -254,9 +254,6 @@ public class AsyncCloudPDFClientBuilder {
     protected void validateConfiguration() {}
 
     public AsyncCloudPDFClient build() {
-        if (token == null) {
-            throw new RuntimeException("Please provide token");
-        }
         validateConfiguration();
         return new AsyncCloudPDFClient(buildClientOptions());
     }

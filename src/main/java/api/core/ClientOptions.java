@@ -49,7 +49,7 @@ public final class ClientOptions {
             {
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.cloudpdf:sdk");
-                put("X-Fern-SDK-Version", "3.0.0-alpha.1");
+                put("X-Fern-SDK-Version", "3.0.0-alpha.4");
             }
         });
         this.headerSuppliers = headerSuppliers;

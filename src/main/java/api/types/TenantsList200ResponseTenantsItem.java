@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -25,6 +27,8 @@ public final class TenantsList200ResponseTenantsItem {
 
     private final boolean autoProvisioned;
 
+    private final Optional<TenantsList200ResponseTenantsItemStatus> status;
+
     private final double createdAt;
 
     private final Map<String, Object> additionalProperties;
@@ -33,11 +37,13 @@ public final class TenantsList200ResponseTenantsItem {
             String id,
             String name,
             boolean autoProvisioned,
+            Optional<TenantsList200ResponseTenantsItemStatus> status,
             double createdAt,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.name = name;
         this.autoProvisioned = autoProvisioned;
+        this.status = status;
         this.createdAt = createdAt;
         this.additionalProperties = additionalProperties;
     }
@@ -55,6 +61,11 @@ public final class TenantsList200ResponseTenantsItem {
     @JsonProperty("autoProvisioned")
     public boolean getAutoProvisioned() {
         return autoProvisioned;
+    }
+
+    @JsonProperty("status")
+    public Optional<TenantsList200ResponseTenantsItemStatus> getStatus() {
+        return status;
     }
 
     @JsonProperty("createdAt")
@@ -77,12 +88,13 @@ public final class TenantsList200ResponseTenantsItem {
         return id.equals(other.id)
                 && name.equals(other.name)
                 && autoProvisioned == other.autoProvisioned
+                && status.equals(other.status)
                 && createdAt == other.createdAt;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.autoProvisioned, this.createdAt);
+        return Objects.hash(this.id, this.name, this.autoProvisioned, this.status, this.createdAt);
     }
 
     @java.lang.Override
@@ -118,6 +130,10 @@ public final class TenantsList200ResponseTenantsItem {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage status(Optional<TenantsList200ResponseTenantsItemStatus> status);
+
+        _FinalStage status(TenantsList200ResponseTenantsItemStatus status);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -130,6 +146,8 @@ public final class TenantsList200ResponseTenantsItem {
 
         private double createdAt;
 
+        private Optional<TenantsList200ResponseTenantsItemStatus> status = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -140,6 +158,7 @@ public final class TenantsList200ResponseTenantsItem {
             id(other.getId());
             name(other.getName());
             autoProvisioned(other.getAutoProvisioned());
+            status(other.getStatus());
             createdAt(other.getCreatedAt());
             return this;
         }
@@ -173,8 +192,22 @@ public final class TenantsList200ResponseTenantsItem {
         }
 
         @java.lang.Override
+        public _FinalStage status(TenantsList200ResponseTenantsItemStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<TenantsList200ResponseTenantsItemStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        @java.lang.Override
         public TenantsList200ResponseTenantsItem build() {
-            return new TenantsList200ResponseTenantsItem(id, name, autoProvisioned, createdAt, additionalProperties);
+            return new TenantsList200ResponseTenantsItem(
+                    id, name, autoProvisioned, status, createdAt, additionalProperties);
         }
 
         @java.lang.Override

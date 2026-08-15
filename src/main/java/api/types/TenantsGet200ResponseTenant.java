@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -25,6 +27,8 @@ public final class TenantsGet200ResponseTenant {
 
     private final boolean autoProvisioned;
 
+    private final Optional<TenantsGet200ResponseTenantStatus> status;
+
     private final double createdAt;
 
     private final Map<String, Object> additionalProperties;
@@ -33,11 +37,13 @@ public final class TenantsGet200ResponseTenant {
             String id,
             String name,
             boolean autoProvisioned,
+            Optional<TenantsGet200ResponseTenantStatus> status,
             double createdAt,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.name = name;
         this.autoProvisioned = autoProvisioned;
+        this.status = status;
         this.createdAt = createdAt;
         this.additionalProperties = additionalProperties;
     }
@@ -55,6 +61,11 @@ public final class TenantsGet200ResponseTenant {
     @JsonProperty("autoProvisioned")
     public boolean getAutoProvisioned() {
         return autoProvisioned;
+    }
+
+    @JsonProperty("status")
+    public Optional<TenantsGet200ResponseTenantStatus> getStatus() {
+        return status;
     }
 
     @JsonProperty("createdAt")
@@ -77,12 +88,13 @@ public final class TenantsGet200ResponseTenant {
         return id.equals(other.id)
                 && name.equals(other.name)
                 && autoProvisioned == other.autoProvisioned
+                && status.equals(other.status)
                 && createdAt == other.createdAt;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.name, this.autoProvisioned, this.createdAt);
+        return Objects.hash(this.id, this.name, this.autoProvisioned, this.status, this.createdAt);
     }
 
     @java.lang.Override
@@ -118,6 +130,10 @@ public final class TenantsGet200ResponseTenant {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage status(Optional<TenantsGet200ResponseTenantStatus> status);
+
+        _FinalStage status(TenantsGet200ResponseTenantStatus status);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -130,6 +146,8 @@ public final class TenantsGet200ResponseTenant {
 
         private double createdAt;
 
+        private Optional<TenantsGet200ResponseTenantStatus> status = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -140,6 +158,7 @@ public final class TenantsGet200ResponseTenant {
             id(other.getId());
             name(other.getName());
             autoProvisioned(other.getAutoProvisioned());
+            status(other.getStatus());
             createdAt(other.getCreatedAt());
             return this;
         }
@@ -173,8 +192,21 @@ public final class TenantsGet200ResponseTenant {
         }
 
         @java.lang.Override
+        public _FinalStage status(TenantsGet200ResponseTenantStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<TenantsGet200ResponseTenantStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        @java.lang.Override
         public TenantsGet200ResponseTenant build() {
-            return new TenantsGet200ResponseTenant(id, name, autoProvisioned, createdAt, additionalProperties);
+            return new TenantsGet200ResponseTenant(id, name, autoProvisioned, status, createdAt, additionalProperties);
         }
 
         @java.lang.Override

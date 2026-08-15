@@ -41,6 +41,9 @@ public final class DocPagesMove400ResponseCode {
     public static final DocPagesMove400ResponseCode INVALID_ARG =
             new DocPagesMove400ResponseCode(Value.INVALID_ARG, "InvalidArg");
 
+    public static final DocPagesMove400ResponseCode SHARE_PASSWORD_REQUIRED =
+            new DocPagesMove400ResponseCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
+
     public static final DocPagesMove400ResponseCode NETWORK = new DocPagesMove400ResponseCode(Value.NETWORK, "Network");
 
     public static final DocPagesMove400ResponseCode INVALID_REFERENCE =
@@ -115,6 +118,8 @@ public final class DocPagesMove400ResponseCode {
                 return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
+            case SHARE_PASSWORD_REQUIRED:
+                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case INVALID_REFERENCE:
@@ -160,6 +165,8 @@ public final class DocPagesMove400ResponseCode {
                 return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
+            case "SharePasswordRequired":
+                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "InvalidReference":
@@ -189,6 +196,8 @@ public final class DocPagesMove400ResponseCode {
         DOC_PASSWORD_REQUIRED,
 
         DOC_PASSWORD_INCORRECT,
+
+        SHARE_PASSWORD_REQUIRED,
 
         ABORTED,
 
@@ -229,6 +238,8 @@ public final class DocPagesMove400ResponseCode {
         T visitDocPasswordRequired();
 
         T visitDocPasswordIncorrect();
+
+        T visitSharePasswordRequired();
 
         T visitAborted();
 
