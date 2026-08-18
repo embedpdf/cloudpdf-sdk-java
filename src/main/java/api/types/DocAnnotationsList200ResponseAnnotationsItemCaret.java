@@ -71,6 +71,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
 
     private final Optional<DocAnnotationsList200ResponseAnnotationsItemCaretRectDifferences> rectDifferences;
 
+    private final Optional<Double> rotation;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> unrotatedRect;
+
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsList200ResponseAnnotationsItemCaret(
@@ -97,6 +101,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
             double opacity,
             Optional<DocAnnotationsList200ResponseAnnotationsItemCaretIntent> intent,
             Optional<DocAnnotationsList200ResponseAnnotationsItemCaretRectDifferences> rectDifferences,
+            Optional<Double> rotation,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> unrotatedRect,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
         this.pageObjectNumber = pageObjectNumber;
@@ -121,6 +127,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
         this.opacity = opacity;
         this.intent = intent;
         this.rectDifferences = rectDifferences;
+        this.rotation = rotation;
+        this.unrotatedRect = unrotatedRect;
         this.additionalProperties = additionalProperties;
     }
 
@@ -266,6 +274,16 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
         return rectDifferences;
     }
 
+    @JsonProperty("rotation")
+    public Optional<Double> getRotation() {
+        return rotation;
+    }
+
+    @JsonProperty("unrotatedRect")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> getUnrotatedRect() {
+        return unrotatedRect;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("nm")
     private Optional<String> _getNm() {
@@ -355,7 +373,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && intent.equals(other.intent)
-                && rectDifferences.equals(other.rectDifferences);
+                && rectDifferences.equals(other.rectDifferences)
+                && rotation.equals(other.rotation)
+                && unrotatedRect.equals(other.unrotatedRect);
     }
 
     @java.lang.Override
@@ -383,7 +403,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
                 this.color,
                 this.opacity,
                 this.intent,
-                this.rectDifferences);
+                this.rectDifferences,
+                this.rotation,
+                this.unrotatedRect);
     }
 
     @java.lang.Override
@@ -516,6 +538,15 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
 
         _FinalStage rectDifferences(
                 Nullable<DocAnnotationsList200ResponseAnnotationsItemCaretRectDifferences> rectDifferences);
+
+        _FinalStage rotation(Optional<Double> rotation);
+
+        _FinalStage rotation(Double rotation);
+
+        _FinalStage unrotatedRect(
+                Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> unrotatedRect);
+
+        _FinalStage unrotatedRect(DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect unrotatedRect);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -547,6 +578,11 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
         private DocAnnotationsList200ResponseAnnotationsItemCaretColor color;
 
         private double opacity;
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> unrotatedRect =
+                Optional.empty();
+
+        private Optional<Double> rotation = Optional.empty();
 
         private Optional<DocAnnotationsList200ResponseAnnotationsItemCaretRectDifferences> rectDifferences =
                 Optional.empty();
@@ -607,6 +643,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
             opacity(other.getOpacity());
             intent(other.getIntent());
             rectDifferences(other.getRectDifferences());
+            rotation(other.getRotation());
+            unrotatedRect(other.getUnrotatedRect());
             return this;
         }
 
@@ -671,6 +709,33 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
         @JsonSetter("opacity")
         public _FinalStage opacity(double opacity) {
             this.opacity = opacity;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage unrotatedRect(DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect unrotatedRect) {
+            this.unrotatedRect = Optional.ofNullable(unrotatedRect);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "unrotatedRect", nulls = Nulls.SKIP)
+        public _FinalStage unrotatedRect(
+                Optional<DocAnnotationsList200ResponseAnnotationsItemCaretUnrotatedRect> unrotatedRect) {
+            this.unrotatedRect = unrotatedRect;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage rotation(Double rotation) {
+            this.rotation = Optional.ofNullable(rotation);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
+        public _FinalStage rotation(Optional<Double> rotation) {
+            this.rotation = rotation;
             return this;
         }
 
@@ -993,6 +1058,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCaret {
                     opacity,
                     intent,
                     rectDifferences,
+                    rotation,
+                    unrotatedRect,
                     additionalProperties);
         }
 

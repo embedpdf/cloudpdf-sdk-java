@@ -17,36 +17,26 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DocumentsInit200ResponseCreatedUploadDirect.Builder.class)
-public final class DocumentsInit200ResponseCreatedUploadDirect {
-    private final String url;
-
-    private final String key;
+@JsonDeserialize(builder = SharesExchange400Response.Builder.class)
+public final class SharesExchange400Response {
+    private final SharesExchange400ResponseError error;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocumentsInit200ResponseCreatedUploadDirect(
-            String url, String key, Map<String, Object> additionalProperties) {
-        this.url = url;
-        this.key = key;
+    private SharesExchange400Response(SharesExchange400ResponseError error, Map<String, Object> additionalProperties) {
+        this.error = error;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("url")
-    public String getUrl() {
-        return url;
-    }
-
-    @JsonProperty("key")
-    public String getKey() {
-        return key;
+    @JsonProperty("error")
+    public SharesExchange400ResponseError getError() {
+        return error;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DocumentsInit200ResponseCreatedUploadDirect
-                && equalTo((DocumentsInit200ResponseCreatedUploadDirect) other);
+        return other instanceof SharesExchange400Response && equalTo((SharesExchange400Response) other);
     }
 
     @JsonAnyGetter
@@ -54,13 +44,13 @@ public final class DocumentsInit200ResponseCreatedUploadDirect {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DocumentsInit200ResponseCreatedUploadDirect other) {
-        return url.equals(other.url) && key.equals(other.key);
+    private boolean equalTo(SharesExchange400Response other) {
+        return error.equals(other.error);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.key);
+        return Objects.hash(this.error);
     }
 
     @java.lang.Override
@@ -68,22 +58,18 @@ public final class DocumentsInit200ResponseCreatedUploadDirect {
         return ObjectMappers.stringify(this);
     }
 
-    public static UrlStage builder() {
+    public static ErrorStage builder() {
         return new Builder();
     }
 
-    public interface UrlStage {
-        KeyStage url(@NotNull String url);
+    public interface ErrorStage {
+        _FinalStage error(@NotNull SharesExchange400ResponseError error);
 
-        Builder from(DocumentsInit200ResponseCreatedUploadDirect other);
-    }
-
-    public interface KeyStage {
-        _FinalStage key(@NotNull String key);
+        Builder from(SharesExchange400Response other);
     }
 
     public interface _FinalStage {
-        DocumentsInit200ResponseCreatedUploadDirect build();
+        SharesExchange400Response build();
 
         _FinalStage additionalProperty(String key, Object value);
 
@@ -91,10 +77,8 @@ public final class DocumentsInit200ResponseCreatedUploadDirect {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, KeyStage, _FinalStage {
-        private String url;
-
-        private String key;
+    public static final class Builder implements ErrorStage, _FinalStage {
+        private SharesExchange400ResponseError error;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,29 +86,21 @@ public final class DocumentsInit200ResponseCreatedUploadDirect {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DocumentsInit200ResponseCreatedUploadDirect other) {
-            url(other.getUrl());
-            key(other.getKey());
+        public Builder from(SharesExchange400Response other) {
+            error(other.getError());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("url")
-        public KeyStage url(@NotNull String url) {
-            this.url = Objects.requireNonNull(url, "url must not be null");
+        @JsonSetter("error")
+        public _FinalStage error(@NotNull SharesExchange400ResponseError error) {
+            this.error = Objects.requireNonNull(error, "error must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("key")
-        public _FinalStage key(@NotNull String key) {
-            this.key = Objects.requireNonNull(key, "key must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public DocumentsInit200ResponseCreatedUploadDirect build() {
-            return new DocumentsInit200ResponseCreatedUploadDirect(url, key, additionalProperties);
+        public SharesExchange400Response build() {
+            return new SharesExchange400Response(error, additionalProperties);
         }
 
         @java.lang.Override

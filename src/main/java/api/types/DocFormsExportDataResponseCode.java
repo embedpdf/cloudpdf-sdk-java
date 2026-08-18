@@ -43,6 +43,9 @@ public final class DocFormsExportDataResponseCode {
     public static final DocFormsExportDataResponseCode INVALID_ARG =
             new DocFormsExportDataResponseCode(Value.INVALID_ARG, "InvalidArg");
 
+    public static final DocFormsExportDataResponseCode SHARE_PASSWORD_REQUIRED =
+            new DocFormsExportDataResponseCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
+
     public static final DocFormsExportDataResponseCode NETWORK =
             new DocFormsExportDataResponseCode(Value.NETWORK, "Network");
 
@@ -118,6 +121,8 @@ public final class DocFormsExportDataResponseCode {
                 return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
+            case SHARE_PASSWORD_REQUIRED:
+                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case INVALID_REFERENCE:
@@ -163,6 +168,8 @@ public final class DocFormsExportDataResponseCode {
                 return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
+            case "SharePasswordRequired":
+                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "InvalidReference":
@@ -192,6 +199,8 @@ public final class DocFormsExportDataResponseCode {
         DOC_PASSWORD_REQUIRED,
 
         DOC_PASSWORD_INCORRECT,
+
+        SHARE_PASSWORD_REQUIRED,
 
         ABORTED,
 
@@ -232,6 +241,8 @@ public final class DocFormsExportDataResponseCode {
         T visitDocPasswordRequired();
 
         T visitDocPasswordIncorrect();
+
+        T visitSharePasswordRequired();
 
         T visitAborted();
 

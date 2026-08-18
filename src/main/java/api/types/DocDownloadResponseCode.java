@@ -39,6 +39,9 @@ public final class DocDownloadResponseCode {
     public static final DocDownloadResponseCode INVALID_ARG =
             new DocDownloadResponseCode(Value.INVALID_ARG, "InvalidArg");
 
+    public static final DocDownloadResponseCode SHARE_PASSWORD_REQUIRED =
+            new DocDownloadResponseCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
+
     public static final DocDownloadResponseCode NETWORK = new DocDownloadResponseCode(Value.NETWORK, "Network");
 
     public static final DocDownloadResponseCode INVALID_REFERENCE =
@@ -113,6 +116,8 @@ public final class DocDownloadResponseCode {
                 return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
+            case SHARE_PASSWORD_REQUIRED:
+                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case INVALID_REFERENCE:
@@ -158,6 +163,8 @@ public final class DocDownloadResponseCode {
                 return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
+            case "SharePasswordRequired":
+                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "InvalidReference":
@@ -187,6 +194,8 @@ public final class DocDownloadResponseCode {
         DOC_PASSWORD_REQUIRED,
 
         DOC_PASSWORD_INCORRECT,
+
+        SHARE_PASSWORD_REQUIRED,
 
         ABORTED,
 
@@ -227,6 +236,8 @@ public final class DocDownloadResponseCode {
         T visitDocPasswordRequired();
 
         T visitDocPasswordIncorrect();
+
+        T visitSharePasswordRequired();
 
         T visitAborted();
 

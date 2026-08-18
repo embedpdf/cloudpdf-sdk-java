@@ -31,16 +31,16 @@ public final class DocumentsInit200ResponseCreatedUpload {
         return new DocumentsInit200ResponseCreatedUpload(new PresignedValue(value));
     }
 
-    public static DocumentsInit200ResponseCreatedUpload direct(DocumentsInit200ResponseCreatedUploadDirect value) {
-        return new DocumentsInit200ResponseCreatedUpload(new DirectValue(value));
+    public static DocumentsInit200ResponseCreatedUpload proxy(DocumentsInit200ResponseCreatedUploadProxy value) {
+        return new DocumentsInit200ResponseCreatedUpload(new ProxyValue(value));
     }
 
     public boolean isPresigned() {
         return value instanceof PresignedValue;
     }
 
-    public boolean isDirect() {
-        return value instanceof DirectValue;
+    public boolean isProxy() {
+        return value instanceof ProxyValue;
     }
 
     public boolean _isUnknown() {
@@ -54,9 +54,9 @@ public final class DocumentsInit200ResponseCreatedUpload {
         return Optional.empty();
     }
 
-    public Optional<DocumentsInit200ResponseCreatedUploadDirect> getDirect() {
-        if (isDirect()) {
-            return Optional.of(((DirectValue) value).value);
+    public Optional<DocumentsInit200ResponseCreatedUploadProxy> getProxy() {
+        if (isProxy()) {
+            return Optional.of(((ProxyValue) value).value);
         }
         return Optional.empty();
     }
@@ -93,13 +93,13 @@ public final class DocumentsInit200ResponseCreatedUpload {
     public interface Visitor<T> {
         T visitPresigned(DocumentsInit200ResponseCreatedUploadPresigned presigned);
 
-        T visitDirect(DocumentsInit200ResponseCreatedUploadDirect direct);
+        T visitProxy(DocumentsInit200ResponseCreatedUploadProxy proxy);
 
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(PresignedValue.class), @JsonSubTypes.Type(DirectValue.class)})
+    @JsonSubTypes({@JsonSubTypes.Type(PresignedValue.class), @JsonSubTypes.Type(ProxyValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -145,32 +145,32 @@ public final class DocumentsInit200ResponseCreatedUpload {
         }
     }
 
-    @JsonTypeName("direct")
+    @JsonTypeName("proxy")
     @JsonIgnoreProperties("kind")
-    private static final class DirectValue implements Value {
+    private static final class ProxyValue implements Value {
         @JsonUnwrapped
         @JsonIgnoreProperties(value = "kind", allowSetters = true)
-        private DocumentsInit200ResponseCreatedUploadDirect value;
+        private DocumentsInit200ResponseCreatedUploadProxy value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private DirectValue() {}
+        private ProxyValue() {}
 
-        private DirectValue(DocumentsInit200ResponseCreatedUploadDirect value) {
+        private ProxyValue(DocumentsInit200ResponseCreatedUploadProxy value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitDirect(value);
+            return visitor.visitProxy(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof DirectValue && equalTo((DirectValue) other);
+            return other instanceof ProxyValue && equalTo((ProxyValue) other);
         }
 
-        private boolean equalTo(DirectValue other) {
+        private boolean equalTo(ProxyValue other) {
             return value.equals(other.value);
         }
 

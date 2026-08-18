@@ -12,12 +12,15 @@ import com.cloudpdf.api.resources.documents.requests.DownloadDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
+import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
 import com.cloudpdf.api.types.DocumentsCommit200Response;
 import com.cloudpdf.api.types.DocumentsGet200Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
-import com.cloudpdf.api.types.DocumentsUploadDirect200Response;
+import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
+import java.io.File;
 import java.io.InputStream;
+import okhttp3.MediaType;
 
 public class DocumentsClient {
     protected final ClientOptions clientOptions;
@@ -128,25 +131,52 @@ public class DocumentsClient {
         return this.rawClient.thumbnail(tenantId, id, request, requestOptions).body();
     }
 
-    public DocumentsUploadDirect200Response uploadDirect(String tenantId, String id, InputStream request) {
-        return this.rawClient.uploadDirect(tenantId, id, request).body();
+    /**
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     */
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
+        return this.rawClient.uploadProxy(tenantId, id, file, request).body();
     }
 
-    public DocumentsUploadDirect200Response uploadDirect(
-            String tenantId, String id, InputStream request, RequestOptions requestOptions) {
+    /**
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     */
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .uploadDirect(tenantId, id, request, requestOptions)
+                .uploadProxy(tenantId, id, file, request, requestOptions)
                 .body();
     }
 
-    public DocumentsUploadDirect200Response uploadDirect(String tenantId, String id, byte[] request) {
-        return this.rawClient.uploadDirect(tenantId, id, request).body();
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId, String id, InputStream stream, String filename) {
+        return this.rawClient.uploadProxy(tenantId, id, stream, filename).body();
     }
 
-    public DocumentsUploadDirect200Response uploadDirect(
-            String tenantId, String id, byte[] request, RequestOptions requestOptions) {
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId, String id, InputStream stream, String filename, MediaType mediaType) {
         return this.rawClient
-                .uploadDirect(tenantId, id, request, requestOptions)
+                .uploadProxy(tenantId, id, stream, filename, mediaType)
+                .body();
+    }
+
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId, String id, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadProxy(tenantId, id, stream, filename, requestOptions)
+                .body();
+    }
+
+    public DocumentsUploadProxy200Response uploadProxy(
+            String tenantId,
+            String id,
+            InputStream stream,
+            String filename,
+            MediaType mediaType,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadProxy(tenantId, id, stream, filename, mediaType, requestOptions)
                 .body();
     }
 

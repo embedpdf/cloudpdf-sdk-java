@@ -39,6 +39,8 @@ public final class TokensIssueRequestDoc {
 
     private final Optional<List<String>> groups;
 
+    private final Optional<List<String>> origins;
+
     private final int expiresIn;
 
     private final Map<String, Object> additionalProperties;
@@ -52,6 +54,7 @@ public final class TokensIssueRequestDoc {
             Optional<String> displayName,
             Optional<String> groupId,
             Optional<List<String>> groups,
+            Optional<List<String>> origins,
             int expiresIn,
             Map<String, Object> additionalProperties) {
         this.sub = sub;
@@ -62,6 +65,7 @@ public final class TokensIssueRequestDoc {
         this.displayName = displayName;
         this.groupId = groupId;
         this.groups = groups;
+        this.origins = origins;
         this.expiresIn = expiresIn;
         this.additionalProperties = additionalProperties;
     }
@@ -106,6 +110,11 @@ public final class TokensIssueRequestDoc {
         return groups;
     }
 
+    @JsonProperty("origins")
+    public Optional<List<String>> getOrigins() {
+        return origins;
+    }
+
     @JsonProperty("expiresIn")
     public int getExpiresIn() {
         return expiresIn;
@@ -131,6 +140,7 @@ public final class TokensIssueRequestDoc {
                 && displayName.equals(other.displayName)
                 && groupId.equals(other.groupId)
                 && groups.equals(other.groups)
+                && origins.equals(other.origins)
                 && expiresIn == other.expiresIn;
     }
 
@@ -145,6 +155,7 @@ public final class TokensIssueRequestDoc {
                 this.displayName,
                 this.groupId,
                 this.groups,
+                this.origins,
                 this.expiresIn);
     }
 
@@ -203,6 +214,10 @@ public final class TokensIssueRequestDoc {
         _FinalStage groups(Optional<List<String>> groups);
 
         _FinalStage groups(List<String> groups);
+
+        _FinalStage origins(Optional<List<String>> origins);
+
+        _FinalStage origins(List<String> origins);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -212,6 +227,8 @@ public final class TokensIssueRequestDoc {
         private String docId;
 
         private int expiresIn;
+
+        private Optional<List<String>> origins = Optional.empty();
 
         private Optional<List<String>> groups = Optional.empty();
 
@@ -240,6 +257,7 @@ public final class TokensIssueRequestDoc {
             displayName(other.getDisplayName());
             groupId(other.getGroupId());
             groups(other.getGroups());
+            origins(other.getOrigins());
             expiresIn(other.getExpiresIn());
             return this;
         }
@@ -262,6 +280,19 @@ public final class TokensIssueRequestDoc {
         @JsonSetter("expiresIn")
         public _FinalStage expiresIn(int expiresIn) {
             this.expiresIn = expiresIn;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage origins(List<String> origins) {
+            this.origins = Optional.ofNullable(origins);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "origins", nulls = Nulls.SKIP)
+        public _FinalStage origins(Optional<List<String>> origins) {
+            this.origins = origins;
             return this;
         }
 
@@ -365,6 +396,7 @@ public final class TokensIssueRequestDoc {
                     displayName,
                     groupId,
                     groups,
+                    origins,
                     expiresIn,
                     additionalProperties);
         }
