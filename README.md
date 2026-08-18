@@ -30,7 +30,7 @@ Instantiate and use the client with the following:
 package com.example.usage;
 
 import com.cloudpdf.CloudPDFClient;
-import com.cloudpdf.resources.tenants.requests.TenantsCreateRequest;
+import com.cloudpdf.resources.shares.requests.SharesExchangeRequest;
 
 public class Example {
     public static void main(String[] args) {
@@ -39,10 +39,10 @@ public class Example {
             .token("<token>")
             .build();
 
-        client.tenants().create(
-            TenantsCreateRequest
+        client.shares().exchange(
+            SharesExchangeRequest
                 .builder()
-                .id("id")
+                .shareToken("shareToken")
                 .build()
         );
     }
@@ -70,7 +70,7 @@ When the API returns a non-success status code (4xx or 5xx response), an API exc
 import com.cloudpdf.core.CloudPDFApiException;
 
 try{
-    client.tenants().create(...);
+    client.shares().exchange(...);
 } catch (CloudPDFApiException e){
     // Do something with the API exception...
 }
@@ -142,7 +142,7 @@ CloudPDFClient client = CloudPDFClient
     .build();
 
 // Request level
-client.tenants().create(
+client.shares().exchange(
     ...,
     RequestOptions
         .builder()
@@ -168,7 +168,7 @@ CloudPDFClient client = CloudPDFClient
 ;
 
 // Request level
-client.tenants().create(
+client.shares().exchange(
     ...,
     RequestOptions
         .builder()
@@ -184,7 +184,7 @@ The `withRawResponse()` method returns a raw client that wraps all responses wit
 (A normal client's `response` is identical to a raw client's `response.body()`.)
 
 ```java
-CloudPDFClientHttpResponse response = client.tenants().withRawResponse().create(...);
+CloudPDFClientHttpResponse response = client.shares().withRawResponse().exchange(...);
 
 System.out.println(response.body());
 System.out.println(response.headers().get("X-My-Header"));

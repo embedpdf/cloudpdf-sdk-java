@@ -17,10 +17,14 @@ import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.tenants.requests.DeleteTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.GetTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.ListTenantsRequest;
+import com.cloudpdf.api.resources.tenants.requests.ResumeTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
+import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
+import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
 import com.cloudpdf.api.types.TenantsCreate200Response;
 import com.cloudpdf.api.types.TenantsGet200Response;
 import com.cloudpdf.api.types.TenantsList200Response;
+import com.cloudpdf.api.types.TenantsUsage200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -311,6 +315,249 @@ public class RawTenantsClient {
                 if (response.code() == 404) {
                     throw new NotFoundError(
                             ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<Void> resume(String tenantId) {
+        return resume(tenantId, ResumeTenantsRequest.builder().build());
+    }
+
+    public CloudPDFClientHttpResponse<Void> resume(String tenantId, RequestOptions requestOptions) {
+        return resume(tenantId, ResumeTenantsRequest.builder().build(), requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<Void> resume(String tenantId, ResumeTenantsRequest request) {
+        return resume(tenantId, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<Void> resume(
+            String tenantId, ResumeTenantsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("resume");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(null, response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                if (response.code() == 404) {
+                    throw new NotFoundError(
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CloudPDFClientHttpResponse<Void> suspend(String tenantId) {
+        return suspend(tenantId, TenantsSuspendRequest.builder().build());
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CloudPDFClientHttpResponse<Void> suspend(String tenantId, RequestOptions requestOptions) {
+        return suspend(tenantId, TenantsSuspendRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CloudPDFClientHttpResponse<Void> suspend(String tenantId, TenantsSuspendRequest request) {
+        return suspend(tenantId, request, null);
+    }
+
+    /**
+     * Instantly reversible with resume. The API token is exempt, so a suspended tenant can still be inspected, exported, resumed, or deleted.
+     */
+    public CloudPDFClientHttpResponse<Void> suspend(
+            String tenantId, TenantsSuspendRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("suspend");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(null, response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                if (response.code() == 404) {
+                    throw new NotFoundError(
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId) {
+        return usage(tenantId, UsageTenantsRequest.builder().build());
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, RequestOptions requestOptions) {
+        return usage(tenantId, UsageTenantsRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, UsageTenantsRequest request) {
+        return usage(tenantId, request, null);
+    }
+
+    /**
+     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     */
+    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(
+            String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("usage");
+        if (request.getPeriod().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "period", request.getPeriod().get(), false);
+        }
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUsage200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

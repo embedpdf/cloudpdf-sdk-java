@@ -10,10 +10,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,11 +26,18 @@ public final class DocText200Response {
 
     private final int charCount;
 
+    private final Optional<List<List<Object>>> charMap;
+
     private final Map<String, Object> additionalProperties;
 
-    private DocText200Response(String text, int charCount, Map<String, Object> additionalProperties) {
+    private DocText200Response(
+            String text,
+            int charCount,
+            Optional<List<List<Object>>> charMap,
+            Map<String, Object> additionalProperties) {
         this.text = text;
         this.charCount = charCount;
+        this.charMap = charMap;
         this.additionalProperties = additionalProperties;
     }
 
@@ -39,6 +49,11 @@ public final class DocText200Response {
     @JsonProperty("charCount")
     public int getCharCount() {
         return charCount;
+    }
+
+    @JsonProperty("charMap")
+    public Optional<List<List<Object>>> getCharMap() {
+        return charMap;
     }
 
     @java.lang.Override
@@ -53,12 +68,12 @@ public final class DocText200Response {
     }
 
     private boolean equalTo(DocText200Response other) {
-        return text.equals(other.text) && charCount == other.charCount;
+        return text.equals(other.text) && charCount == other.charCount && charMap.equals(other.charMap);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.text, this.charCount);
+        return Objects.hash(this.text, this.charCount, this.charMap);
     }
 
     @java.lang.Override
@@ -86,6 +101,10 @@ public final class DocText200Response {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage charMap(Optional<List<List<Object>>> charMap);
+
+        _FinalStage charMap(List<List<Object>> charMap);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,6 +112,8 @@ public final class DocText200Response {
         private String text;
 
         private int charCount;
+
+        private Optional<List<List<Object>>> charMap = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -103,6 +124,7 @@ public final class DocText200Response {
         public Builder from(DocText200Response other) {
             text(other.getText());
             charCount(other.getCharCount());
+            charMap(other.getCharMap());
             return this;
         }
 
@@ -121,8 +143,21 @@ public final class DocText200Response {
         }
 
         @java.lang.Override
+        public _FinalStage charMap(List<List<Object>> charMap) {
+            this.charMap = Optional.ofNullable(charMap);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "charMap", nulls = Nulls.SKIP)
+        public _FinalStage charMap(Optional<List<List<Object>>> charMap) {
+            this.charMap = charMap;
+            return this;
+        }
+
+        @java.lang.Override
         public DocText200Response build() {
-            return new DocText200Response(text, charCount, additionalProperties);
+            return new DocText200Response(text, charCount, charMap, additionalProperties);
         }
 
         @java.lang.Override

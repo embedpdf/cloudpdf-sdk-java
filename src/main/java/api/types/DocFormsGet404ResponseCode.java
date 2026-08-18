@@ -41,6 +41,9 @@ public final class DocFormsGet404ResponseCode {
     public static final DocFormsGet404ResponseCode INVALID_ARG =
             new DocFormsGet404ResponseCode(Value.INVALID_ARG, "InvalidArg");
 
+    public static final DocFormsGet404ResponseCode SHARE_PASSWORD_REQUIRED =
+            new DocFormsGet404ResponseCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
+
     public static final DocFormsGet404ResponseCode NETWORK = new DocFormsGet404ResponseCode(Value.NETWORK, "Network");
 
     public static final DocFormsGet404ResponseCode INVALID_REFERENCE =
@@ -115,6 +118,8 @@ public final class DocFormsGet404ResponseCode {
                 return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
+            case SHARE_PASSWORD_REQUIRED:
+                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case INVALID_REFERENCE:
@@ -160,6 +165,8 @@ public final class DocFormsGet404ResponseCode {
                 return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
+            case "SharePasswordRequired":
+                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "InvalidReference":
@@ -189,6 +196,8 @@ public final class DocFormsGet404ResponseCode {
         DOC_PASSWORD_REQUIRED,
 
         DOC_PASSWORD_INCORRECT,
+
+        SHARE_PASSWORD_REQUIRED,
 
         ABORTED,
 
@@ -229,6 +238,8 @@ public final class DocFormsGet404ResponseCode {
         T visitDocPasswordRequired();
 
         T visitDocPasswordIncorrect();
+
+        T visitSharePasswordRequired();
 
         T visitAborted();
 

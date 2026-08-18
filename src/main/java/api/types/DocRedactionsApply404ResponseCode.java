@@ -44,6 +44,9 @@ public final class DocRedactionsApply404ResponseCode {
     public static final DocRedactionsApply404ResponseCode INVALID_ARG =
             new DocRedactionsApply404ResponseCode(Value.INVALID_ARG, "InvalidArg");
 
+    public static final DocRedactionsApply404ResponseCode SHARE_PASSWORD_REQUIRED =
+            new DocRedactionsApply404ResponseCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
+
     public static final DocRedactionsApply404ResponseCode NETWORK =
             new DocRedactionsApply404ResponseCode(Value.NETWORK, "Network");
 
@@ -119,6 +122,8 @@ public final class DocRedactionsApply404ResponseCode {
                 return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
+            case SHARE_PASSWORD_REQUIRED:
+                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case INVALID_REFERENCE:
@@ -164,6 +169,8 @@ public final class DocRedactionsApply404ResponseCode {
                 return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
+            case "SharePasswordRequired":
+                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "InvalidReference":
@@ -193,6 +200,8 @@ public final class DocRedactionsApply404ResponseCode {
         DOC_PASSWORD_REQUIRED,
 
         DOC_PASSWORD_INCORRECT,
+
+        SHARE_PASSWORD_REQUIRED,
 
         ABORTED,
 
@@ -233,6 +242,8 @@ public final class DocRedactionsApply404ResponseCode {
         T visitDocPasswordRequired();
 
         T visitDocPasswordIncorrect();
+
+        T visitSharePasswordRequired();
 
         T visitAborted();
 
