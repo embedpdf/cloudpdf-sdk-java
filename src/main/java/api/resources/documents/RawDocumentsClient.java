@@ -14,12 +14,14 @@ import com.cloudpdf.api.core.QueryStringMapper;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.ResponseBodyInputStream;
 import com.cloudpdf.api.core.RetryInterceptor;
+import com.cloudpdf.api.errors.BadGatewayError;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
+import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsInitRequest;
 import com.cloudpdf.api.resources.documents.requests.DownloadDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
@@ -28,6 +30,8 @@ import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
 import com.cloudpdf.api.types.DocumentsCommit200Response;
 import com.cloudpdf.api.types.DocumentsGet200Response;
+import com.cloudpdf.api.types.DocumentsImportFrom200Response;
+import com.cloudpdf.api.types.DocumentsImportFrom502Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
@@ -819,6 +823,92 @@ public class RawDocumentsClient {
                         throw new ConflictError(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, DocumentsUploadProxy409Response.class),
+                                response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Default mode is synchronous and bounded: the response returns only after the transfer verified and committed (or failed). mode=async (connection sources only) answers 202 immediately and an in-process worker performs the transfer with leased, fenced retries; poll the document until ready/failed. The deployment import policy gates scheme, network range, and size; sources must declare a length. CloudPDF copies and owns the bytes — the source is never referenced in place. A 502 marks a retryable upstream failure: retry with the same idempotencyKey to resume the same document. URL sources are capabilities and never echoed back. Connection sources name operator-registered storage (bucket/prefix scope, allowed credential classes, and tenant bindings are deployment configuration); <code>revision</code> is provider-interpreted (S3 VersionId, GCS generation, Azure version id).
+     */
+    public CloudPDFClientHttpResponse<DocumentsImportFrom200Response> importFrom(
+            String tenantId, DocumentsImportFromRequest request) {
+        return importFrom(tenantId, request, null);
+    }
+
+    /**
+     * Default mode is synchronous and bounded: the response returns only after the transfer verified and committed (or failed). mode=async (connection sources only) answers 202 immediately and an in-process worker performs the transfer with leased, fenced retries; poll the document until ready/failed. The deployment import policy gates scheme, network range, and size; sources must declare a length. CloudPDF copies and owns the bytes — the source is never referenced in place. A 502 marks a retryable upstream failure: retry with the same idempotencyKey to resume the same document. URL sources are capabilities and never echoed back. Connection sources name operator-registered storage (bucket/prefix scope, allowed credential classes, and tenant bindings are deployment configuration); <code>revision</code> is provider-interpreted (S3 VersionId, GCS generation, Azure version id).
+     */
+    public CloudPDFClientHttpResponse<DocumentsImportFrom200Response> importFrom(
+            String tenantId, DocumentsImportFromRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("documents")
+                .addPathSegments("import");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentsImportFrom200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 502:
+                        throw new BadGatewayError(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DocumentsImportFrom502Response.class),
                                 response);
                 }
             } catch (JsonProcessingException ignored) {

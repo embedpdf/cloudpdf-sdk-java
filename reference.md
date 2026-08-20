@@ -1632,6 +1632,129 @@ client.documents().uploadProxy(
 </dl>
 </details>
 
+<details><summary><code>client.documents.importFrom(tenantId, request) -> DocumentsImportFrom200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Default mode is synchronous and bounded: the response returns only after the transfer verified and committed (or failed). mode=async (connection sources only) answers 202 immediately and an in-process worker performs the transfer with leased, fenced retries; poll the document until ready/failed. The deployment import policy gates scheme, network range, and size; sources must declare a length. CloudPDF copies and owns the bytes — the source is never referenced in place. A 502 marks a retryable upstream failure: retry with the same idempotencyKey to resume the same document. URL sources are capabilities and never echoed back. Connection sources name operator-registered storage (bucket/prefix scope, allowed credential classes, and tenant bindings are deployment configuration); `revision` is provider-interpreted (S3 VersionId, GCS generation, Azure version id).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.documents().importFrom(
+    "tenantId",
+    DocumentsImportFromRequest
+        .builder()
+        .source(
+            DocumentsImportFromRequestSource.url(
+                DocumentsImportFromRequestSourceUrl
+                    .builder()
+                    .url("url")
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**source:** `DocumentsImportFromRequestSource` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**expected:** `Optional<DocumentsImportFromRequestExpected>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**metadata:** `Optional<Map<String, Object>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**dedupMode:** `Optional<DocumentsImportFromRequestDedupMode>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**docId:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**mode:** `Optional<DocumentsImportFromRequestMode>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.documents.init(tenantId, request) -> DocumentsInit200Response</code></summary>
 <dl>
 <dd>

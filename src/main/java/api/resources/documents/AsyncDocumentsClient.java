@@ -7,6 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
+import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsInitRequest;
 import com.cloudpdf.api.resources.documents.requests.DownloadDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
@@ -15,6 +16,7 @@ import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
 import com.cloudpdf.api.types.DocumentsCommit200Response;
 import com.cloudpdf.api.types.DocumentsGet200Response;
+import com.cloudpdf.api.types.DocumentsImportFrom200Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
@@ -182,6 +184,22 @@ public class AsyncDocumentsClient {
         return this.rawClient
                 .uploadProxy(tenantId, id, stream, filename, mediaType, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    /**
+     * Default mode is synchronous and bounded: the response returns only after the transfer verified and committed (or failed). mode=async (connection sources only) answers 202 immediately and an in-process worker performs the transfer with leased, fenced retries; poll the document until ready/failed. The deployment import policy gates scheme, network range, and size; sources must declare a length. CloudPDF copies and owns the bytes — the source is never referenced in place. A 502 marks a retryable upstream failure: retry with the same idempotencyKey to resume the same document. URL sources are capabilities and never echoed back. Connection sources name operator-registered storage (bucket/prefix scope, allowed credential classes, and tenant bindings are deployment configuration); <code>revision</code> is provider-interpreted (S3 VersionId, GCS generation, Azure version id).
+     */
+    public CompletableFuture<DocumentsImportFrom200Response> importFrom(
+            String tenantId, DocumentsImportFromRequest request) {
+        return this.rawClient.importFrom(tenantId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Default mode is synchronous and bounded: the response returns only after the transfer verified and committed (or failed). mode=async (connection sources only) answers 202 immediately and an in-process worker performs the transfer with leased, fenced retries; poll the document until ready/failed. The deployment import policy gates scheme, network range, and size; sources must declare a length. CloudPDF copies and owns the bytes — the source is never referenced in place. A 502 marks a retryable upstream failure: retry with the same idempotencyKey to resume the same document. URL sources are capabilities and never echoed back. Connection sources name operator-registered storage (bucket/prefix scope, allowed credential classes, and tenant bindings are deployment configuration); <code>revision</code> is provider-interpreted (S3 VersionId, GCS generation, Azure version id).
+     */
+    public CompletableFuture<DocumentsImportFrom200Response> importFrom(
+            String tenantId, DocumentsImportFromRequest request, RequestOptions requestOptions) {
+        return this.rawClient.importFrom(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocumentsInit200Response> init(String tenantId, DocumentsInitRequest request) {
