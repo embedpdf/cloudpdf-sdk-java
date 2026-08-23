@@ -82,6 +82,9 @@ public final class DocumentsInitRequest {
         return idempotencyKey;
     }
 
+    /**
+     * @return always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.
+     */
     @JsonProperty("dedupMode")
     public Optional<DocumentsInitRequestDedupMode> getDedupMode() {
         return dedupMode;
@@ -171,6 +174,9 @@ public final class DocumentsInitRequest {
 
         _FinalStage idempotencyKey(String idempotencyKey);
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         */
         _FinalStage dedupMode(Optional<DocumentsInitRequestDedupMode> dedupMode);
 
         _FinalStage dedupMode(DocumentsInitRequestDedupMode dedupMode);
@@ -277,12 +283,19 @@ public final class DocumentsInitRequest {
             return this;
         }
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage dedupMode(DocumentsInitRequestDedupMode dedupMode) {
             this.dedupMode = Optional.ofNullable(dedupMode);
             return this;
         }
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "dedupMode", nulls = Nulls.SKIP)
         public _FinalStage dedupMode(Optional<DocumentsInitRequestDedupMode> dedupMode) {

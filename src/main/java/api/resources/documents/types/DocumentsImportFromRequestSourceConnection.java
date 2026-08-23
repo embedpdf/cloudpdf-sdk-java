@@ -37,16 +37,25 @@ public final class DocumentsImportFromRequestSourceConnection {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The operator-registered storage connection to read from.
+     */
     @JsonProperty("connectionId")
     public String getConnectionId() {
         return connectionId;
     }
 
+    /**
+     * @return The object key to read, inside the connection's configured scope. At most 1024 UTF-8 bytes.
+     */
     @JsonProperty("key")
     public String getKey() {
         return key;
     }
 
+    /**
+     * @return Pins a specific version of the object. Provider-interpreted (S3 VersionId, GCS generation, Azure version id); providers without versioning reject it.
+     */
     @JsonProperty("revision")
     public Optional<String> getRevision() {
         return revision;
@@ -83,12 +92,18 @@ public final class DocumentsImportFromRequestSourceConnection {
     }
 
     public interface ConnectionIdStage {
+        /**
+         * <p>The operator-registered storage connection to read from.</p>
+         */
         KeyStage connectionId(@NotNull String connectionId);
 
         Builder from(DocumentsImportFromRequestSourceConnection other);
     }
 
     public interface KeyStage {
+        /**
+         * <p>The object key to read, inside the connection's configured scope. At most 1024 UTF-8 bytes.</p>
+         */
         _FinalStage key(@NotNull String key);
     }
 
@@ -99,6 +114,9 @@ public final class DocumentsImportFromRequestSourceConnection {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Pins a specific version of the object. Provider-interpreted (S3 VersionId, GCS generation, Azure version id); providers without versioning reject it.</p>
+         */
         _FinalStage revision(Optional<String> revision);
 
         _FinalStage revision(String revision);
@@ -125,6 +143,10 @@ public final class DocumentsImportFromRequestSourceConnection {
             return this;
         }
 
+        /**
+         * <p>The operator-registered storage connection to read from.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("connectionId")
         public KeyStage connectionId(@NotNull String connectionId) {
@@ -132,6 +154,10 @@ public final class DocumentsImportFromRequestSourceConnection {
             return this;
         }
 
+        /**
+         * <p>The object key to read, inside the connection's configured scope. At most 1024 UTF-8 bytes.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("key")
         public _FinalStage key(@NotNull String key) {
@@ -139,12 +165,19 @@ public final class DocumentsImportFromRequestSourceConnection {
             return this;
         }
 
+        /**
+         * <p>Pins a specific version of the object. Provider-interpreted (S3 VersionId, GCS generation, Azure version id); providers without versioning reject it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage revision(String revision) {
             this.revision = Optional.ofNullable(revision);
             return this;
         }
 
+        /**
+         * <p>Pins a specific version of the object. Provider-interpreted (S3 VersionId, GCS generation, Azure version id); providers without versioning reject it.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "revision", nulls = Nulls.SKIP)
         public _FinalStage revision(Optional<String> revision) {
