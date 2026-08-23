@@ -28,6 +28,9 @@ public final class DocumentsImportFromRequestSourceUrl {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The URL to fetch. Must be allowed by the deployment import policy (scheme, network range, size) and must declare a length.
+     */
     @JsonProperty("url")
     public String getUrl() {
         return url;
@@ -64,6 +67,9 @@ public final class DocumentsImportFromRequestSourceUrl {
     }
 
     public interface UrlStage {
+        /**
+         * <p>The URL to fetch. Must be allowed by the deployment import policy (scheme, network range, size) and must declare a length.</p>
+         */
         _FinalStage url(@NotNull String url);
 
         Builder from(DocumentsImportFromRequestSourceUrl other);
@@ -92,6 +98,10 @@ public final class DocumentsImportFromRequestSourceUrl {
             return this;
         }
 
+        /**
+         * <p>The URL to fetch. Must be allowed by the deployment import policy (scheme, network range, size) and must declare a length.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("url")
         public _FinalStage url(@NotNull String url) {

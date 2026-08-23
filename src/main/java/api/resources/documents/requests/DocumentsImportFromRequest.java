@@ -60,11 +60,17 @@ public final class DocumentsImportFromRequest {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.
+     */
     @JsonProperty("source")
     public DocumentsImportFromRequestSource getSource() {
         return source;
     }
 
+    /**
+     * @return Integrity pins, enforced when present. When absent, the server-observed values become authoritative.
+     */
     @JsonProperty("expected")
     public Optional<DocumentsImportFromRequestExpected> getExpected() {
         return expected;
@@ -75,11 +81,17 @@ public final class DocumentsImportFromRequest {
         return metadata;
     }
 
+    /**
+     * @return Retrying with the same key resumes the same document rather than importing a second copy — including after a 502.
+     */
     @JsonProperty("idempotencyKey")
     public Optional<String> getIdempotencyKey() {
         return idempotencyKey;
     }
 
+    /**
+     * @return always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.
+     */
     @JsonProperty("dedupMode")
     public Optional<DocumentsImportFromRequestDedupMode> getDedupMode() {
         return dedupMode;
@@ -90,6 +102,9 @@ public final class DocumentsImportFromRequest {
         return docId;
     }
 
+    /**
+     * @return sync (default) holds the response open for the whole transfer. async answers 202 with the document pending and transfers in the background; it requires a connection source, and filesystem connections additionally require expected.sha256.
+     */
     @JsonProperty("mode")
     public Optional<DocumentsImportFromRequestMode> getMode() {
         return mode;
@@ -132,6 +147,9 @@ public final class DocumentsImportFromRequest {
     }
 
     public interface SourceStage {
+        /**
+         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.</p>
+         */
         _FinalStage source(@NotNull DocumentsImportFromRequestSource source);
 
         Builder from(DocumentsImportFromRequest other);
@@ -144,6 +162,9 @@ public final class DocumentsImportFromRequest {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>Integrity pins, enforced when present. When absent, the server-observed values become authoritative.</p>
+         */
         _FinalStage expected(Optional<DocumentsImportFromRequestExpected> expected);
 
         _FinalStage expected(DocumentsImportFromRequestExpected expected);
@@ -152,10 +173,16 @@ public final class DocumentsImportFromRequest {
 
         _FinalStage metadata(Map<String, Object> metadata);
 
+        /**
+         * <p>Retrying with the same key resumes the same document rather than importing a second copy — including after a 502.</p>
+         */
         _FinalStage idempotencyKey(Optional<String> idempotencyKey);
 
         _FinalStage idempotencyKey(String idempotencyKey);
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         */
         _FinalStage dedupMode(Optional<DocumentsImportFromRequestDedupMode> dedupMode);
 
         _FinalStage dedupMode(DocumentsImportFromRequestDedupMode dedupMode);
@@ -164,6 +191,9 @@ public final class DocumentsImportFromRequest {
 
         _FinalStage docId(String docId);
 
+        /**
+         * <p>sync (default) holds the response open for the whole transfer. async answers 202 with the document pending and transfers in the background; it requires a connection source, and filesystem connections additionally require expected.sha256.</p>
+         */
         _FinalStage mode(Optional<DocumentsImportFromRequestMode> mode);
 
         _FinalStage mode(DocumentsImportFromRequestMode mode);
@@ -202,6 +232,10 @@ public final class DocumentsImportFromRequest {
             return this;
         }
 
+        /**
+         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("source")
         public _FinalStage source(@NotNull DocumentsImportFromRequestSource source) {
@@ -209,12 +243,19 @@ public final class DocumentsImportFromRequest {
             return this;
         }
 
+        /**
+         * <p>sync (default) holds the response open for the whole transfer. async answers 202 with the document pending and transfers in the background; it requires a connection source, and filesystem connections additionally require expected.sha256.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage mode(DocumentsImportFromRequestMode mode) {
             this.mode = Optional.ofNullable(mode);
             return this;
         }
 
+        /**
+         * <p>sync (default) holds the response open for the whole transfer. async answers 202 with the document pending and transfers in the background; it requires a connection source, and filesystem connections additionally require expected.sha256.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "mode", nulls = Nulls.SKIP)
         public _FinalStage mode(Optional<DocumentsImportFromRequestMode> mode) {
@@ -235,12 +276,19 @@ public final class DocumentsImportFromRequest {
             return this;
         }
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage dedupMode(DocumentsImportFromRequestDedupMode dedupMode) {
             this.dedupMode = Optional.ofNullable(dedupMode);
             return this;
         }
 
+        /**
+         * <p>always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "dedupMode", nulls = Nulls.SKIP)
         public _FinalStage dedupMode(Optional<DocumentsImportFromRequestDedupMode> dedupMode) {
@@ -248,12 +296,19 @@ public final class DocumentsImportFromRequest {
             return this;
         }
 
+        /**
+         * <p>Retrying with the same key resumes the same document rather than importing a second copy — including after a 502.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage idempotencyKey(String idempotencyKey) {
             this.idempotencyKey = Optional.ofNullable(idempotencyKey);
             return this;
         }
 
+        /**
+         * <p>Retrying with the same key resumes the same document rather than importing a second copy — including after a 502.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "idempotencyKey", nulls = Nulls.SKIP)
         public _FinalStage idempotencyKey(Optional<String> idempotencyKey) {
@@ -274,12 +329,19 @@ public final class DocumentsImportFromRequest {
             return this;
         }
 
+        /**
+         * <p>Integrity pins, enforced when present. When absent, the server-observed values become authoritative.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage expected(DocumentsImportFromRequestExpected expected) {
             this.expected = Optional.ofNullable(expected);
             return this;
         }
 
+        /**
+         * <p>Integrity pins, enforced when present. When absent, the server-observed values become authoritative.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expected", nulls = Nulls.SKIP)
         public _FinalStage expected(Optional<DocumentsImportFromRequestExpected> expected) {

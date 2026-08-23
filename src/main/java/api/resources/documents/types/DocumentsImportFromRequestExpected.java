@@ -33,11 +33,17 @@ public final class DocumentsImportFromRequestExpected {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Checked against the source's declared Content-Length before the transfer.
+     */
     @JsonProperty("sizeBytes")
     public Optional<Integer> getSizeBytes() {
         return sizeBytes;
     }
 
+    /**
+     * @return Checked against the server-observed digest after the transfer. Required when dedupMode is reuse-existing.
+     */
     @JsonProperty("sha256")
     public Optional<String> getSha256() {
         return sha256;
@@ -90,6 +96,9 @@ public final class DocumentsImportFromRequestExpected {
             return this;
         }
 
+        /**
+         * <p>Checked against the source's declared Content-Length before the transfer.</p>
+         */
         @JsonSetter(value = "sizeBytes", nulls = Nulls.SKIP)
         public Builder sizeBytes(Optional<Integer> sizeBytes) {
             this.sizeBytes = sizeBytes;
@@ -101,6 +110,9 @@ public final class DocumentsImportFromRequestExpected {
             return this;
         }
 
+        /**
+         * <p>Checked against the server-observed digest after the transfer. Required when dedupMode is reuse-existing.</p>
+         */
         @JsonSetter(value = "sha256", nulls = Nulls.SKIP)
         public Builder sha256(Optional<String> sha256) {
             this.sha256 = sha256;

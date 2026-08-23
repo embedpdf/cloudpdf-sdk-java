@@ -1695,7 +1695,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**source:** `DocumentsImportFromRequestSource` 
+**source:** `DocumentsImportFromRequestSource` — Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.
     
 </dd>
 </dl>
@@ -1703,7 +1703,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**expected:** `Optional<DocumentsImportFromRequestExpected>` 
+**expected:** `Optional<DocumentsImportFromRequestExpected>` — Integrity pins, enforced when present. When absent, the server-observed values become authoritative.
     
 </dd>
 </dl>
@@ -1719,7 +1719,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**idempotencyKey:** `Optional<String>` 
+**idempotencyKey:** `Optional<String>` — Retrying with the same key resumes the same document rather than importing a second copy — including after a 502.
     
 </dd>
 </dl>
@@ -1727,7 +1727,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**dedupMode:** `Optional<DocumentsImportFromRequestDedupMode>` 
+**dedupMode:** `Optional<DocumentsImportFromRequestDedupMode>` — always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.
     
 </dd>
 </dl>
@@ -1743,7 +1743,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**mode:** `Optional<DocumentsImportFromRequestMode>` 
+**mode:** `Optional<DocumentsImportFromRequestMode>` — sync (default) holds the response open for the whole transfer. async answers 202 with the document pending and transfers in the background; it requires a connection source, and filesystem connections additionally require expected.sha256.
     
 </dd>
 </dl>
@@ -1830,7 +1830,7 @@ client.documents().init(
 <dl>
 <dd>
 
-**dedupMode:** `Optional<DocumentsInitRequestDedupMode>` 
+**dedupMode:** `Optional<DocumentsInitRequestDedupMode>` — always-create (default) creates a new document every time. reuse-existing returns a document that already holds the same content instead of storing it twice.
     
 </dd>
 </dl>
