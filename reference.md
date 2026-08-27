@@ -2876,6 +2876,97 @@ client.doc().pages().delete(
 </dl>
 </details>
 
+<details><summary><code>client.doc.pages.extract(docId, layerName, request) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A read, not a mutation: the source document is untouched and no event is published. Body is `{"pageObjectNumbers": number[]}`; the response body is the new PDF.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().extract(
+    "docId",
+    "layerName",
+    ExtractPagesRequest
+        .builder()
+        .body(
+            new HashMap<String, Object>() {{
+                put("string", new 
+                HashMap<String, Object>() {{put("key", "value");
+                }});
+            }}
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Map<String, Object>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.doc.pages.flatten(docId, layerName, request) -> DocPagesFlatten200Response</code></summary>
 <dl>
 <dd>
@@ -2893,6 +2984,172 @@ client.doc().pages().flatten(
     "docId",
     "layerName",
     FlattenPagesRequest
+        .builder()
+        .body(
+            new HashMap<String, Object>() {{
+                put("key", "value");
+            }}
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Map<String, Object>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.pages.insert(docId, layerName, request) -> DocPagesInsert200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Multipart mutation envelope: a `body` field holding `{"destIndex"?: number}` (omitted → append) plus a `resource:source` file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().insert(
+    "docId",
+    "layerName",
+    null,
+    InsertPagesRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.pages.insertBlank(docId, layerName, request) -> DocPagesInsertBlank200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Body is `{"size": {"width", "height"}, "count"?, "destIndex"?}` — size in PDF points, count in [1, 100], destIndex omitted → append.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().insertBlank(
+    "docId",
+    "layerName",
+    InsertBlankPagesRequest
         .builder()
         .body(
             new HashMap<String, Object>() {{
