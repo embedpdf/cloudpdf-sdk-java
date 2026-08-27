@@ -6,14 +6,22 @@ package com.cloudpdf.api.resources.doc.pages;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.pages.requests.DeletePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.ExtractPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
 import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
+import com.cloudpdf.api.types.DocPagesInsert200Response;
+import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
 import com.cloudpdf.api.types.DocPagesMove200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
+import java.io.File;
+import java.io.InputStream;
 import java.util.Map;
+import okhttp3.MediaType;
 
 public class PagesClient {
     protected final ClientOptions clientOptions;
@@ -50,6 +58,36 @@ public class PagesClient {
         return this.rawClient.delete(docId, layerName, request, requestOptions).body();
     }
 
+    /**
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     */
+    public InputStream extract(String docId, String layerName, Map<String, Object> body) {
+        return this.rawClient.extract(docId, layerName, body).body();
+    }
+
+    /**
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     */
+    public InputStream extract(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient.extract(docId, layerName, body, requestOptions).body();
+    }
+
+    /**
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     */
+    public InputStream extract(String docId, String layerName, ExtractPagesRequest request) {
+        return this.rawClient.extract(docId, layerName, request).body();
+    }
+
+    /**
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     */
+    public InputStream extract(
+            String docId, String layerName, ExtractPagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.extract(docId, layerName, request, requestOptions).body();
+    }
+
     public DocPagesFlatten200Response flatten(String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.flatten(docId, layerName, body).body();
     }
@@ -66,6 +104,87 @@ public class PagesClient {
     public DocPagesFlatten200Response flatten(
             String docId, String layerName, FlattenPagesRequest request, RequestOptions requestOptions) {
         return this.rawClient.flatten(docId, layerName, request, requestOptions).body();
+    }
+
+    /**
+     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     */
+    public DocPagesInsert200Response insert(String docId, String layerName, File file, InsertPagesRequest request) {
+        return this.rawClient.insert(docId, layerName, file, request).body();
+    }
+
+    /**
+     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     */
+    public DocPagesInsert200Response insert(
+            String docId, String layerName, File file, InsertPagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .insert(docId, layerName, file, request, requestOptions)
+                .body();
+    }
+
+    public DocPagesInsert200Response insert(String docId, String layerName, InputStream stream, String filename) {
+        return this.rawClient.insert(docId, layerName, stream, filename).body();
+    }
+
+    public DocPagesInsert200Response insert(
+            String docId, String layerName, InputStream stream, String filename, MediaType mediaType) {
+        return this.rawClient
+                .insert(docId, layerName, stream, filename, mediaType)
+                .body();
+    }
+
+    public DocPagesInsert200Response insert(
+            String docId, String layerName, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient
+                .insert(docId, layerName, stream, filename, requestOptions)
+                .body();
+    }
+
+    public DocPagesInsert200Response insert(
+            String docId,
+            String layerName,
+            InputStream stream,
+            String filename,
+            MediaType mediaType,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .insert(docId, layerName, stream, filename, mediaType, requestOptions)
+                .body();
+    }
+
+    /**
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     */
+    public DocPagesInsertBlank200Response insertBlank(String docId, String layerName, Map<String, Object> body) {
+        return this.rawClient.insertBlank(docId, layerName, body).body();
+    }
+
+    /**
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     */
+    public DocPagesInsertBlank200Response insertBlank(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient
+                .insertBlank(docId, layerName, body, requestOptions)
+                .body();
+    }
+
+    /**
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     */
+    public DocPagesInsertBlank200Response insertBlank(String docId, String layerName, InsertBlankPagesRequest request) {
+        return this.rawClient.insertBlank(docId, layerName, request).body();
+    }
+
+    /**
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     */
+    public DocPagesInsertBlank200Response insertBlank(
+            String docId, String layerName, InsertBlankPagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .insertBlank(docId, layerName, request, requestOptions)
+                .body();
     }
 
     public DocPagesMove200Response move(String docId, String layerName, Map<String, Object> body) {
