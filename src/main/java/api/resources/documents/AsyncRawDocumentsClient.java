@@ -35,7 +35,6 @@ import com.cloudpdf.api.types.DocumentsImportFrom502Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
-import com.cloudpdf.api.types.DocumentsUploadProxy409Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
 import java.io.IOException;
@@ -700,8 +699,7 @@ public class AsyncRawDocumentsClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsUploadProxy409Response.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -770,8 +768,7 @@ public class AsyncRawDocumentsClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsUploadProxy409Response.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -840,8 +837,7 @@ public class AsyncRawDocumentsClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsUploadProxy409Response.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -927,8 +923,7 @@ public class AsyncRawDocumentsClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsUploadProxy409Response.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }
@@ -1019,8 +1014,7 @@ public class AsyncRawDocumentsClient {
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsUploadProxy409Response.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
                         }

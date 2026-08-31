@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesFlatten200ResponseMetaCacheDelta.Builder.class)
@@ -25,6 +26,8 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
 
     private final int docVersion;
 
+    private final Optional<Integer> annotationsVersion;
+
     private final List<DocPagesFlatten200ResponseMetaCacheDeltaPagesItem> pages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +35,12 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
     private DocPagesFlatten200ResponseMetaCacheDelta(
             int previousDocVersion,
             int docVersion,
+            Optional<Integer> annotationsVersion,
             List<DocPagesFlatten200ResponseMetaCacheDeltaPagesItem> pages,
             Map<String, Object> additionalProperties) {
         this.previousDocVersion = previousDocVersion;
         this.docVersion = docVersion;
+        this.annotationsVersion = annotationsVersion;
         this.pages = pages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +53,11 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
     @JsonProperty("docVersion")
     public int getDocVersion() {
         return docVersion;
+    }
+
+    @JsonProperty("annotationsVersion")
+    public Optional<Integer> getAnnotationsVersion() {
+        return annotationsVersion;
     }
 
     @JsonProperty("pages")
@@ -70,12 +80,13 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
     private boolean equalTo(DocPagesFlatten200ResponseMetaCacheDelta other) {
         return previousDocVersion == other.previousDocVersion
                 && docVersion == other.docVersion
+                && annotationsVersion.equals(other.annotationsVersion)
                 && pages.equals(other.pages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.previousDocVersion, this.docVersion, this.pages);
+        return Objects.hash(this.previousDocVersion, this.docVersion, this.annotationsVersion, this.pages);
     }
 
     @java.lang.Override
@@ -104,6 +115,10 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage annotationsVersion(Optional<Integer> annotationsVersion);
+
+        _FinalStage annotationsVersion(Integer annotationsVersion);
+
         _FinalStage pages(List<DocPagesFlatten200ResponseMetaCacheDeltaPagesItem> pages);
 
         _FinalStage addPages(DocPagesFlatten200ResponseMetaCacheDeltaPagesItem pages);
@@ -119,6 +134,8 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
 
         private List<DocPagesFlatten200ResponseMetaCacheDeltaPagesItem> pages = new ArrayList<>();
 
+        private Optional<Integer> annotationsVersion = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -128,6 +145,7 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
         public Builder from(DocPagesFlatten200ResponseMetaCacheDelta other) {
             previousDocVersion(other.getPreviousDocVersion());
             docVersion(other.getDocVersion());
+            annotationsVersion(other.getAnnotationsVersion());
             pages(other.getPages());
             return this;
         }
@@ -171,9 +189,22 @@ public final class DocPagesFlatten200ResponseMetaCacheDelta {
         }
 
         @java.lang.Override
+        public _FinalStage annotationsVersion(Integer annotationsVersion) {
+            this.annotationsVersion = Optional.ofNullable(annotationsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "annotationsVersion", nulls = Nulls.SKIP)
+        public _FinalStage annotationsVersion(Optional<Integer> annotationsVersion) {
+            this.annotationsVersion = annotationsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public DocPagesFlatten200ResponseMetaCacheDelta build() {
             return new DocPagesFlatten200ResponseMetaCacheDelta(
-                    previousDocVersion, docVersion, pages, additionalProperties);
+                    previousDocVersion, docVersion, annotationsVersion, pages, additionalProperties);
         }
 
         @java.lang.Override
