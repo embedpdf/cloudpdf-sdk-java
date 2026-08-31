@@ -33,6 +33,8 @@ public final class DocManifest200Response {
 
     private final Optional<Integer> attachmentsVersion;
 
+    private final Optional<Integer> annotationsVersion;
+
     private final int auditHead;
 
     private final String baseSha;
@@ -49,6 +51,7 @@ public final class DocManifest200Response {
             int metadataVersion,
             Optional<Integer> actionsVersion,
             Optional<Integer> attachmentsVersion,
+            Optional<Integer> annotationsVersion,
             int auditHead,
             String baseSha,
             Optional<DocManifest200ResponseScopes> scopes,
@@ -59,6 +62,7 @@ public final class DocManifest200Response {
         this.metadataVersion = metadataVersion;
         this.actionsVersion = actionsVersion;
         this.attachmentsVersion = attachmentsVersion;
+        this.annotationsVersion = annotationsVersion;
         this.auditHead = auditHead;
         this.baseSha = baseSha;
         this.scopes = scopes;
@@ -89,6 +93,11 @@ public final class DocManifest200Response {
     @JsonProperty("attachmentsVersion")
     public Optional<Integer> getAttachmentsVersion() {
         return attachmentsVersion;
+    }
+
+    @JsonProperty("annotationsVersion")
+    public Optional<Integer> getAnnotationsVersion() {
+        return annotationsVersion;
     }
 
     @JsonProperty("auditHead")
@@ -128,6 +137,7 @@ public final class DocManifest200Response {
                 && metadataVersion == other.metadataVersion
                 && actionsVersion.equals(other.actionsVersion)
                 && attachmentsVersion.equals(other.attachmentsVersion)
+                && annotationsVersion.equals(other.annotationsVersion)
                 && auditHead == other.auditHead
                 && baseSha.equals(other.baseSha)
                 && scopes.equals(other.scopes)
@@ -142,6 +152,7 @@ public final class DocManifest200Response {
                 this.metadataVersion,
                 this.actionsVersion,
                 this.attachmentsVersion,
+                this.annotationsVersion,
                 this.auditHead,
                 this.baseSha,
                 this.scopes,
@@ -194,6 +205,10 @@ public final class DocManifest200Response {
 
         _FinalStage attachmentsVersion(Integer attachmentsVersion);
 
+        _FinalStage annotationsVersion(Optional<Integer> annotationsVersion);
+
+        _FinalStage annotationsVersion(Integer annotationsVersion);
+
         _FinalStage scopes(Optional<DocManifest200ResponseScopes> scopes);
 
         _FinalStage scopes(DocManifest200ResponseScopes scopes);
@@ -227,6 +242,8 @@ public final class DocManifest200Response {
 
         private Optional<DocManifest200ResponseScopes> scopes = Optional.empty();
 
+        private Optional<Integer> annotationsVersion = Optional.empty();
+
         private Optional<Integer> attachmentsVersion = Optional.empty();
 
         private Optional<Integer> actionsVersion = Optional.empty();
@@ -243,6 +260,7 @@ public final class DocManifest200Response {
             metadataVersion(other.getMetadataVersion());
             actionsVersion(other.getActionsVersion());
             attachmentsVersion(other.getAttachmentsVersion());
+            annotationsVersion(other.getAnnotationsVersion());
             auditHead(other.getAuditHead());
             baseSha(other.getBaseSha());
             scopes(other.getScopes());
@@ -323,6 +341,19 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage annotationsVersion(Integer annotationsVersion) {
+            this.annotationsVersion = Optional.ofNullable(annotationsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "annotationsVersion", nulls = Nulls.SKIP)
+        public _FinalStage annotationsVersion(Optional<Integer> annotationsVersion) {
+            this.annotationsVersion = annotationsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage attachmentsVersion(Integer attachmentsVersion) {
             this.attachmentsVersion = Optional.ofNullable(attachmentsVersion);
             return this;
@@ -356,6 +387,7 @@ public final class DocManifest200Response {
                     metadataVersion,
                     actionsVersion,
                     attachmentsVersion,
+                    annotationsVersion,
                     auditHead,
                     baseSha,
                     scopes,

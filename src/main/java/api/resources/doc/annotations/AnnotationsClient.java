@@ -7,11 +7,13 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
 import com.cloudpdf.api.types.DocAnnotationsList200Response;
+import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
 import java.util.Map;
 
@@ -30,6 +32,35 @@ public class AnnotationsClient {
      */
     public RawAnnotationsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public DocAnnotationsListAll200Response listAll(String docId, String layerName) {
+        return this.rawClient.listAll(docId, layerName).body();
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public DocAnnotationsListAll200Response listAll(String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.listAll(docId, layerName, requestOptions).body();
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public DocAnnotationsListAll200Response listAll(String docId, String layerName, ListAllAnnotationsRequest request) {
+        return this.rawClient.listAll(docId, layerName, request).body();
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public DocAnnotationsListAll200Response listAll(
+            String docId, String layerName, ListAllAnnotationsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listAll(docId, layerName, request, requestOptions).body();
     }
 
     public DocAnnotationsList200Response list(String docId, String layerName, int pon) {

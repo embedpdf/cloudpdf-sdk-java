@@ -7,11 +7,13 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
 import com.cloudpdf.api.types.DocAnnotationsList200Response;
+import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +33,37 @@ public class AsyncAnnotationsClient {
      */
     public AsyncRawAnnotationsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public CompletableFuture<DocAnnotationsListAll200Response> listAll(String docId, String layerName) {
+        return this.rawClient.listAll(docId, layerName).thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public CompletableFuture<DocAnnotationsListAll200Response> listAll(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.listAll(docId, layerName, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public CompletableFuture<DocAnnotationsListAll200Response> listAll(
+            String docId, String layerName, ListAllAnnotationsRequest request) {
+        return this.rawClient.listAll(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     */
+    public CompletableFuture<DocAnnotationsListAll200Response> listAll(
+            String docId, String layerName, ListAllAnnotationsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.listAll(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocAnnotationsList200Response> list(String docId, String layerName, int pon) {

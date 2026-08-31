@@ -43,6 +43,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
 
     private final Optional<String> contents;
 
+    private final Optional<String> subject;
+
     private final Optional<String> author;
 
     private final Optional<OffsetDateTime> created;
@@ -92,6 +94,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
             DocAnnotationsList200ResponseAnnotationsItemInkFlags flags,
             DocAnnotationsList200ResponseAnnotationsItemInkRect rect,
             Optional<String> contents,
+            Optional<String> subject,
             Optional<String> author,
             Optional<OffsetDateTime> created,
             Optional<OffsetDateTime> modified,
@@ -120,6 +123,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
         this.flags = flags;
         this.rect = rect;
         this.contents = contents;
+        this.subject = subject;
         this.author = author;
         this.created = created;
         this.modified = modified;
@@ -186,6 +190,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
             return Optional.empty();
         }
         return contents;
+    }
+
+    @JsonIgnore
+    public Optional<String> getSubject() {
+        if (subject == null) {
+            return Optional.empty();
+        }
+        return subject;
     }
 
     @JsonIgnore
@@ -314,6 +326,12 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("subject")
+    private Optional<String> _getSubject() {
+        return subject;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("author")
     private Optional<String> _getAuthor() {
         return author;
@@ -370,6 +388,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
                 && flags.equals(other.flags)
                 && rect.equals(other.rect)
                 && contents.equals(other.contents)
+                && subject.equals(other.subject)
                 && author.equals(other.author)
                 && created.equals(other.created)
                 && modified.equals(other.modified)
@@ -402,6 +421,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
                 this.flags,
                 this.rect,
                 this.contents,
+                this.subject,
                 this.author,
                 this.created,
                 this.modified,
@@ -497,6 +517,12 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
         _FinalStage contents(String contents);
 
         _FinalStage contents(Nullable<String> contents);
+
+        _FinalStage subject(Optional<String> subject);
+
+        _FinalStage subject(String subject);
+
+        _FinalStage subject(Nullable<String> subject);
 
         _FinalStage author(Optional<String> author);
 
@@ -633,6 +659,8 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
 
         private Optional<String> author = Optional.empty();
 
+        private Optional<String> subject = Optional.empty();
+
         private Optional<String> contents = Optional.empty();
 
         private Optional<String> nm = Optional.empty();
@@ -652,6 +680,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
             flags(other.getFlags());
             rect(other.getRect());
             contents(other.getContents());
+            subject(other.getSubject());
             author(other.getAuthor());
             created(other.getCreated());
             modified(other.getModified());
@@ -1020,6 +1049,31 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
         }
 
         @java.lang.Override
+        public _FinalStage subject(Nullable<String> subject) {
+            if (subject.isNull()) {
+                this.subject = null;
+            } else if (subject.isEmpty()) {
+                this.subject = Optional.empty();
+            } else {
+                this.subject = Optional.of(subject.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage subject(String subject) {
+            this.subject = Optional.ofNullable(subject);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "subject", nulls = Nulls.SKIP)
+        public _FinalStage subject(Optional<String> subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage contents(Nullable<String> contents) {
             if (contents.isNull()) {
                 this.contents = null;
@@ -1080,6 +1134,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemInk {
                     flags,
                     rect,
                     contents,
+                    subject,
                     author,
                     created,
                     modified,
