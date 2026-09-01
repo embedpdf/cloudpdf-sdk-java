@@ -46,7 +46,7 @@ java {
 
 group = 'com.cloudpdf'
 
-version = '3.0.0-alpha.10'
+version = '3.0.0-alpha.11'
 
 jar {
     dependsOn(":generatePomFileForMavenPublication")
@@ -73,7 +73,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.cloudpdf'
             artifactId = 'sdk'
-            version = '3.0.0-alpha.10'
+            version = '3.0.0-alpha.11'
             from components.java
             pom {
                 name = 'CloudPDF'
@@ -114,6 +114,10 @@ publishing {
 
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
+}
+
+tasks.withType(Jar).configureEach {
+    zip64 = true
 }
 
 signing {

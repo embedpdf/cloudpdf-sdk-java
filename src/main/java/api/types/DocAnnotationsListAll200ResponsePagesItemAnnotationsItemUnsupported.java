@@ -63,7 +63,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final int rawSubtypeCode;
 
@@ -91,7 +91,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> actions,
+            Optional<PdfAnnotationActions> actions,
             int rawSubtypeCode,
             Optional<String> rawSubtypeName,
             Map<String, Object> additionalProperties) {
@@ -240,7 +240,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -497,10 +497,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage rawSubtypeName(Optional<String> rawSubtypeName);
 
@@ -538,8 +537,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
 
         private Optional<String> rawSubtypeName = Optional.empty();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -688,15 +686,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsup
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemUnsupportedActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
 
     private final DocFormsGet200ResponseFieldsItemRadioDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemRadioActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemRadioWidgetsItem> widgets;
 
@@ -66,7 +66,7 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemRadioValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemRadioDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemRadioActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemRadioWidgetsItem> widgets,
             String value,
             boolean radiosInUnison,
@@ -141,7 +141,7 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemRadioActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -295,9 +295,9 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemRadioActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemRadioActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemRadioWidgetsItem> widgets);
 
@@ -341,7 +341,7 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
 
         private List<DocFormsGet200ResponseFieldsItemRadioWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemRadioActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -467,14 +467,14 @@ public final class DocFormsGet200ResponseFieldsItemRadio {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemRadioActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemRadioActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }

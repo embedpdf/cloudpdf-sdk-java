@@ -19,19 +19,18 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGoto.Builder.class)
 public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGoto {
-    private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination destination;
+    private final PdfDestination destination;
 
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGoto(
-            DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination destination,
-            Map<String, Object> additionalProperties) {
+            PdfDestination destination, Map<String, Object> additionalProperties) {
         this.destination = destination;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("destination")
-    public DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination getDestination() {
+    public PdfDestination getDestination() {
         return destination;
     }
 
@@ -66,8 +65,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkT
     }
 
     public interface DestinationStage {
-        _FinalStage destination(
-                @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination destination);
+        _FinalStage destination(@NotNull PdfDestination destination);
 
         Builder from(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGoto other);
     }
@@ -82,7 +80,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkT
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements DestinationStage, _FinalStage {
-        private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination destination;
+        private PdfDestination destination;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -97,9 +95,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkT
 
         @java.lang.Override
         @JsonSetter("destination")
-        public _FinalStage destination(
-                @NotNull
-                        DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTargetGotoDestination destination) {
+        public _FinalStage destination(@NotNull PdfDestination destination) {
             this.destination = Objects.requireNonNull(destination, "destination must not be null");
             return this;
         }

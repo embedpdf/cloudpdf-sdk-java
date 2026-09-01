@@ -63,7 +63,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final int rawSubtypeCode;
 
@@ -91,7 +91,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> actions,
+            Optional<PdfAnnotationActions> actions,
             int rawSubtypeCode,
             Optional<String> rawSubtypeName,
             Map<String, Object> additionalProperties) {
@@ -240,7 +240,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -491,9 +491,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage rawSubtypeName(Optional<String> rawSubtypeName);
 
@@ -531,7 +531,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
 
         private Optional<String> rawSubtypeName = Optional.empty();
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -673,14 +673,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnsupported {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemUnsupportedActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

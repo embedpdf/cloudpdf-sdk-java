@@ -63,7 +63,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final Optional<String> name;
 
@@ -93,7 +93,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> actions,
+            Optional<PdfAnnotationActions> actions,
             Optional<String> name,
             Optional<Double> rotation,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampUnrotatedRect> unrotatedRect,
@@ -244,7 +244,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -502,9 +502,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage name(Optional<String> name);
 
@@ -554,8 +554,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
 
         private Optional<String> name = Optional.empty();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -722,15 +721,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStamp
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemStampActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

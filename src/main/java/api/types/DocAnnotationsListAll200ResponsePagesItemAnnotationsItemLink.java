@@ -63,7 +63,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTarget> target;
 
@@ -89,7 +89,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> actions,
+            Optional<PdfAnnotationActions> actions,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTarget> target,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
@@ -236,7 +236,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -479,9 +479,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage target(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTarget> target);
 
@@ -516,8 +516,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
 
         private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkTarget> target = Optional.empty();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -653,15 +652,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLink 
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemLinkActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

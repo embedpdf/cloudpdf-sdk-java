@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
 
     private final DocFormsGet200ResponseFieldsItemUnknownDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemUnknownActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemUnknownWidgetsItem> widgets;
 
@@ -62,7 +62,7 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemUnknownValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemUnknownDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemUnknownActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemUnknownWidgetsItem> widgets,
             String rawValue,
             Map<String, Object> additionalProperties) {
@@ -133,7 +133,7 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemUnknownActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -266,9 +266,9 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemUnknownActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemUnknownActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemUnknownWidgetsItem> widgets);
 
@@ -306,7 +306,7 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
 
         private List<DocFormsGet200ResponseFieldsItemUnknownWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemUnknownActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -417,14 +417,14 @@ public final class DocFormsGet200ResponseFieldsItemUnknown {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemUnknownActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemUnknownActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }

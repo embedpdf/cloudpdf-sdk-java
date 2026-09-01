@@ -64,7 +64,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsList200ResponseAnnotationsItemFreeTextIntent intent;
 
@@ -120,7 +120,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsList200ResponseAnnotationsItemFreeTextIntent intent,
             DocAnnotationsList200ResponseAnnotationsItemFreeTextFontFamily fontFamily,
             double fontSize,
@@ -297,7 +297,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -682,9 +682,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemFreeTextActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage fontColor(Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextFontColor> fontColor);
 
@@ -796,7 +796,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
 
         private Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextFontColor> fontColor = Optional.empty();
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -1115,14 +1115,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFreeText {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemFreeTextActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemFreeTextActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

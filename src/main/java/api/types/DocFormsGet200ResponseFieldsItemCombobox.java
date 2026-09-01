@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
 
     private final DocFormsGet200ResponseFieldsItemComboboxDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemComboboxActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemComboboxWidgetsItem> widgets;
 
@@ -68,7 +68,7 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemComboboxValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemComboboxDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemComboboxActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemComboboxWidgetsItem> widgets,
             String value,
             String defaultValue,
@@ -145,7 +145,7 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemComboboxActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -307,9 +307,9 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemComboboxActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemComboboxActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemComboboxWidgetsItem> widgets);
 
@@ -361,7 +361,7 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
 
         private List<DocFormsGet200ResponseFieldsItemComboboxWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemComboboxActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -513,14 +513,14 @@ public final class DocFormsGet200ResponseFieldsItemCombobox {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemComboboxActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemComboboxActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }

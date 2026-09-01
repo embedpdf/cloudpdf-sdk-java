@@ -65,7 +65,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsList200ResponseAnnotationsItemUnderlineColor color;
 
@@ -95,7 +95,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsList200ResponseAnnotationsItemUnderlineColor color,
             double opacity,
             List<DocAnnotationsList200ResponseAnnotationsItemUnderlineQuadPointsItem> quadPoints,
@@ -246,7 +246,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -498,9 +498,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemUnderlineActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage quadPoints(List<DocAnnotationsList200ResponseAnnotationsItemUnderlineQuadPointsItem> quadPoints);
 
@@ -543,7 +543,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
         private List<DocAnnotationsList200ResponseAnnotationsItemUnderlineQuadPointsItem> quadPoints =
                 new ArrayList<>();
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -694,14 +694,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemUnderline {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemUnderlineActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemUnderlineActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

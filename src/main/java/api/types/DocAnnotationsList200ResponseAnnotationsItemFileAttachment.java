@@ -63,7 +63,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsList200ResponseAnnotationsItemFileAttachmentColor color;
 
@@ -95,7 +95,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsList200ResponseAnnotationsItemFileAttachmentColor color,
             double opacity,
             DocAnnotationsList200ResponseAnnotationsItemFileAttachmentIcon icon,
@@ -248,7 +248,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -515,9 +515,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -556,7 +556,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
 
         private DocAnnotationsList200ResponseAnnotationsItemFileAttachmentFile file;
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -698,15 +698,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemFileAttachment {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsList200ResponseAnnotationsItemFileAttachmentActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }
