@@ -65,7 +65,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsList200ResponseAnnotationsItemStrikeoutColor color;
 
@@ -97,7 +97,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsList200ResponseAnnotationsItemStrikeoutColor color,
             double opacity,
             List<DocAnnotationsList200ResponseAnnotationsItemStrikeoutQuadPointsItem> quadPoints,
@@ -250,7 +250,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -518,9 +518,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage quadPoints(List<DocAnnotationsList200ResponseAnnotationsItemStrikeoutQuadPointsItem> quadPoints);
 
@@ -571,7 +571,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
         private List<DocAnnotationsList200ResponseAnnotationsItemStrikeoutQuadPointsItem> quadPoints =
                 new ArrayList<>();
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -748,14 +748,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemStrikeout {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemStrikeoutActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

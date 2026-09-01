@@ -63,7 +63,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetColor> color;
 
@@ -107,7 +107,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> actions,
+            Optional<PdfAnnotationActions> actions,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetColor> color,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetInteriorColor> interiorColor,
             double strokeWidth,
@@ -272,7 +272,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -611,9 +611,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage color(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetColor> color);
 
@@ -697,8 +697,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
 
         private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetColor> color = Optional.empty();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -954,15 +953,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidge
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemWidgetActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

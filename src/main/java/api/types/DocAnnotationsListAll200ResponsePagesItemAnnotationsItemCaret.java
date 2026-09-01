@@ -63,7 +63,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretColor color;
 
@@ -100,7 +100,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretColor color,
             double opacity,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretIntent> intent,
@@ -257,7 +257,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -553,9 +553,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage intent(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretIntent> intent);
 
@@ -623,8 +623,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
 
         private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretIntent> intent = Optional.empty();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -840,15 +839,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaret
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemCaretActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

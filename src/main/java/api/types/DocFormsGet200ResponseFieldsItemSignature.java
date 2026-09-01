@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
 
     private final DocFormsGet200ResponseFieldsItemSignatureDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemSignatureActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemSignatureWidgetsItem> widgets;
 
@@ -60,7 +60,7 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemSignatureValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemSignatureDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemSignatureActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemSignatureWidgetsItem> widgets,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
@@ -129,7 +129,7 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemSignatureActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -251,9 +251,9 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemSignatureActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemSignatureActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemSignatureWidgetsItem> widgets);
 
@@ -288,7 +288,7 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
 
         private List<DocFormsGet200ResponseFieldsItemSignatureWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemSignatureActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -391,14 +391,14 @@ public final class DocFormsGet200ResponseFieldsItemSignature {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemSignatureActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemSignatureActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }

@@ -65,7 +65,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyColor color;
 
@@ -95,7 +95,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyColor color,
             double opacity,
             List<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyQuadPointsItem> quadPoints,
@@ -246,7 +246,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -505,9 +505,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage quadPoints(
                 List<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyQuadPointsItem> quadPoints);
@@ -552,8 +552,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
         private List<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyQuadPointsItem> quadPoints =
                 new ArrayList<>();
 
-        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> actions =
-                Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -711,15 +710,14 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquig
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(
-                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemSquigglyActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

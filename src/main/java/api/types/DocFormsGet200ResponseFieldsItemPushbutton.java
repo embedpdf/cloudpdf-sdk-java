@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
 
     private final DocFormsGet200ResponseFieldsItemPushbuttonDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemPushbuttonWidgetsItem> widgets;
 
@@ -60,7 +60,7 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemPushbuttonValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemPushbuttonDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemPushbuttonWidgetsItem> widgets,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
@@ -129,7 +129,7 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -251,9 +251,9 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemPushbuttonActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemPushbuttonWidgetsItem> widgets);
 
@@ -288,7 +288,7 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
 
         private List<DocFormsGet200ResponseFieldsItemPushbuttonWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -391,14 +391,14 @@ public final class DocFormsGet200ResponseFieldsItemPushbutton {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemPushbuttonActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemPushbuttonActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }

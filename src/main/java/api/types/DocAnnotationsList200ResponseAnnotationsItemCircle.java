@@ -64,7 +64,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
 
     private final Optional<String> updatedBy;
 
-    private final Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> actions;
+    private final Optional<PdfAnnotationActions> actions;
 
     private final DocAnnotationsList200ResponseAnnotationsItemCircleColor color;
 
@@ -108,7 +108,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
             Optional<String> groupId,
             Optional<String> createdBy,
             Optional<String> updatedBy,
-            Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> actions,
+            Optional<PdfAnnotationActions> actions,
             DocAnnotationsList200ResponseAnnotationsItemCircleColor color,
             double opacity,
             double strokeWidth,
@@ -273,7 +273,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
     }
 
     @JsonProperty("actions")
-    public Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> getActions() {
+    public Optional<PdfAnnotationActions> getActions() {
         return actions;
     }
 
@@ -609,9 +609,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
 
         _FinalStage updatedBy(String updatedBy);
 
-        _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> actions);
+        _FinalStage actions(Optional<PdfAnnotationActions> actions);
 
-        _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemCircleActions actions);
+        _FinalStage actions(PdfAnnotationActions actions);
 
         _FinalStage dashArray(Optional<List<Double>> dashArray);
 
@@ -700,7 +700,7 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
 
         private Optional<List<Double>> dashArray = Optional.empty();
 
-        private Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> actions = Optional.empty();
+        private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> updatedBy = Optional.empty();
 
@@ -968,14 +968,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemCircle {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocAnnotationsList200ResponseAnnotationsItemCircleActions actions) {
+        public _FinalStage actions(PdfAnnotationActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocAnnotationsList200ResponseAnnotationsItemCircleActions> actions) {
+        public _FinalStage actions(Optional<PdfAnnotationActions> actions) {
             this.actions = actions;
             return this;
         }

@@ -44,7 +44,7 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
 
     private final DocFormsGet200ResponseFieldsItemCheckboxDefaultValueEntry defaultValueEntry;
 
-    private final Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> actions;
+    private final Optional<PdfFieldActions> actions;
 
     private final List<DocFormsGet200ResponseFieldsItemCheckboxWidgetsItem> widgets;
 
@@ -64,7 +64,7 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
             Optional<String> mappingName,
             DocFormsGet200ResponseFieldsItemCheckboxValueEntry valueEntry,
             DocFormsGet200ResponseFieldsItemCheckboxDefaultValueEntry defaultValueEntry,
-            Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> actions,
+            Optional<PdfFieldActions> actions,
             List<DocFormsGet200ResponseFieldsItemCheckboxWidgetsItem> widgets,
             boolean checked,
             String exportValue,
@@ -137,7 +137,7 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
     }
 
     @JsonProperty("actions")
-    public Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> getActions() {
+    public Optional<PdfFieldActions> getActions() {
         return actions;
     }
 
@@ -281,9 +281,9 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
 
         _FinalStage mappingName(Nullable<String> mappingName);
 
-        _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> actions);
+        _FinalStage actions(Optional<PdfFieldActions> actions);
 
-        _FinalStage actions(DocFormsGet200ResponseFieldsItemCheckboxActions actions);
+        _FinalStage actions(PdfFieldActions actions);
 
         _FinalStage widgets(List<DocFormsGet200ResponseFieldsItemCheckboxWidgetsItem> widgets);
 
@@ -324,7 +324,7 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
 
         private List<DocFormsGet200ResponseFieldsItemCheckboxWidgetsItem> widgets = new ArrayList<>();
 
-        private Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> actions = Optional.empty();
+        private Optional<PdfFieldActions> actions = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
 
@@ -443,14 +443,14 @@ public final class DocFormsGet200ResponseFieldsItemCheckbox {
         }
 
         @java.lang.Override
-        public _FinalStage actions(DocFormsGet200ResponseFieldsItemCheckboxActions actions) {
+        public _FinalStage actions(PdfFieldActions actions) {
             this.actions = Optional.ofNullable(actions);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
-        public _FinalStage actions(Optional<DocFormsGet200ResponseFieldsItemCheckboxActions> actions) {
+        public _FinalStage actions(Optional<PdfFieldActions> actions) {
             this.actions = actions;
             return this;
         }
