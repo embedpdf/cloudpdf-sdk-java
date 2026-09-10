@@ -11,13 +11,17 @@ import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
 import com.cloudpdf.api.types.DocPagesInsert200Response;
 import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
 import com.cloudpdf.api.types.DocPagesMove200Response;
+import com.cloudpdf.api.types.DocPagesRemoveName200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
+import com.cloudpdf.api.types.DocPagesSetName200Response;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
@@ -203,6 +207,44 @@ public class PagesClient {
     public DocPagesMove200Response move(
             String docId, String layerName, MovePagesRequest request, RequestOptions requestOptions) {
         return this.rawClient.move(docId, layerName, request, requestOptions).body();
+    }
+
+    public DocPagesSetName200Response setName(String docId, String layerName, Map<String, Object> body) {
+        return this.rawClient.setName(docId, layerName, body).body();
+    }
+
+    public DocPagesSetName200Response setName(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient.setName(docId, layerName, body, requestOptions).body();
+    }
+
+    public DocPagesSetName200Response setName(String docId, String layerName, SetNamePagesRequest request) {
+        return this.rawClient.setName(docId, layerName, request).body();
+    }
+
+    public DocPagesSetName200Response setName(
+            String docId, String layerName, SetNamePagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.setName(docId, layerName, request, requestOptions).body();
+    }
+
+    public DocPagesRemoveName200Response removeName(String docId, String layerName, Map<String, Object> body) {
+        return this.rawClient.removeName(docId, layerName, body).body();
+    }
+
+    public DocPagesRemoveName200Response removeName(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient.removeName(docId, layerName, body, requestOptions).body();
+    }
+
+    public DocPagesRemoveName200Response removeName(String docId, String layerName, RemoveNamePagesRequest request) {
+        return this.rawClient.removeName(docId, layerName, request).body();
+    }
+
+    public DocPagesRemoveName200Response removeName(
+            String docId, String layerName, RemoveNamePagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .removeName(docId, layerName, request, requestOptions)
+                .body();
     }
 
     public DocPagesRotate200Response rotate(String docId, String layerName, Map<String, Object> body) {

@@ -10,22 +10,27 @@ import com.cloudpdf.api.core.CloudPDFException;
 import com.cloudpdf.api.core.MediaTypes;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.ResponseBodyInputStream;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ExportAppearanceAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
+import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
 import com.cloudpdf.api.types.DocAnnotationsList200Response;
 import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -599,6 +604,252 @@ public class AsyncRawAnnotationsClient {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, DocAnnotationsUpdate200Response.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> exportAppearance(
+            String docId, String layerName, int pon, Map<String, Object> body) {
+        return exportAppearance(
+                docId,
+                layerName,
+                pon,
+                ExportAppearanceAnnotationsRequest.builder().body(body).build());
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> exportAppearance(
+            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+        return exportAppearance(
+                docId,
+                layerName,
+                pon,
+                ExportAppearanceAnnotationsRequest.builder().body(body).build(),
+                requestOptions);
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> exportAppearance(
+            String docId, String layerName, int pon, ExportAppearanceAnnotationsRequest request) {
+        return exportAppearance(docId, layerName, pon, request, null);
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> exportAppearance(
+            String docId,
+            String layerName,
+            int pon,
+            ExportAppearanceAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("annotations/pages")
+                .addPathSegment(Integer.toString(pon))
+                .addPathSegments("items")
+                .addPathSegments("appearance");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<InputStream>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    ResponseBody responseBody = response.body();
+                    if (response.isSuccessful()) {
+                        future.complete(
+                                new CloudPDFClientHttpResponse<>(new ResponseBodyInputStream(response), response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+            String docId, String layerName, int pon, Map<String, Object> body) {
+        return flatten(
+                docId,
+                layerName,
+                pon,
+                FlattenAnnotationsRequest.builder().body(body).build());
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+        return flatten(
+                docId,
+                layerName,
+                pon,
+                FlattenAnnotationsRequest.builder().body(body).build(),
+                requestOptions);
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+            String docId, String layerName, int pon, FlattenAnnotationsRequest request) {
+        return flatten(docId, layerName, pon, request, null);
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+            String docId, String layerName, int pon, FlattenAnnotationsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("annotations/pages")
+                .addPathSegment(Integer.toString(pon))
+                .addPathSegments("items")
+                .addPathSegments("flatten");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DocAnnotationsFlatten200Response.class),
                                 response));
                         return;
                     }
