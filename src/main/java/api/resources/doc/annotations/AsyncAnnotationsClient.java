@@ -7,14 +7,18 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ExportAppearanceAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
+import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
 import com.cloudpdf.api.types.DocAnnotationsList200Response;
 import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -183,6 +187,58 @@ public class AsyncAnnotationsClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .update(docId, layerName, pon, annotKey, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> exportAppearance(
+            String docId, String layerName, int pon, Map<String, Object> body) {
+        return this.rawClient.exportAppearance(docId, layerName, pon, body).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> exportAppearance(
+            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient
+                .exportAppearance(docId, layerName, pon, body, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> exportAppearance(
+            String docId, String layerName, int pon, ExportAppearanceAnnotationsRequest request) {
+        return this.rawClient.exportAppearance(docId, layerName, pon, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> exportAppearance(
+            String docId,
+            String layerName,
+            int pon,
+            ExportAppearanceAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .exportAppearance(docId, layerName, pon, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+            String docId, String layerName, int pon, Map<String, Object> body) {
+        return this.rawClient.flatten(docId, layerName, pon, body).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient
+                .flatten(docId, layerName, pon, body, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+            String docId, String layerName, int pon, FlattenAnnotationsRequest request) {
+        return this.rawClient.flatten(docId, layerName, pon, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+            String docId, String layerName, int pon, FlattenAnnotationsRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .flatten(docId, layerName, pon, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

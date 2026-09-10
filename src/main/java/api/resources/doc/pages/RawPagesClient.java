@@ -21,13 +21,17 @@ import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
 import com.cloudpdf.api.types.DocPagesInsert200Response;
 import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
 import com.cloudpdf.api.types.DocPagesMove200Response;
+import com.cloudpdf.api.types.DocPagesRemoveName200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
+import com.cloudpdf.api.types.DocPagesSetName200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
 import java.io.IOException;
@@ -837,6 +841,192 @@ public class RawPagesClient {
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesMove200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+            String docId, String layerName, Map<String, Object> body) {
+        return setName(
+                docId, layerName, SetNamePagesRequest.builder().body(body).build());
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return setName(
+                docId, layerName, SetNamePagesRequest.builder().body(body).build(), requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+            String docId, String layerName, SetNamePagesRequest request) {
+        return setName(docId, layerName, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+            String docId, String layerName, SetNamePagesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("pages")
+                .addPathSegments("names");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetName200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+            String docId, String layerName, Map<String, Object> body) {
+        return removeName(
+                docId, layerName, RemoveNamePagesRequest.builder().body(body).build());
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
+        return removeName(
+                docId, layerName, RemoveNamePagesRequest.builder().body(body).build(), requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+            String docId, String layerName, RemoveNamePagesRequest request) {
+        return removeName(docId, layerName, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+            String docId, String layerName, RemoveNamePagesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("pages/names")
+                .addPathSegments("delete");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesRemoveName200Response.class),
                         response);
             }
             try {
