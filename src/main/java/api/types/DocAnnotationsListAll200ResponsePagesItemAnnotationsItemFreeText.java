@@ -68,11 +68,13 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
 
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextIntent intent;
 
-    private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily fontFamily;
+    private final String fontFamily;
 
     private final double fontSize;
 
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign textAlign;
+
+    private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText richText;
 
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextColor color;
 
@@ -123,9 +125,10 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
             Optional<String> updatedBy,
             Optional<PdfAnnotationActions> actions,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextIntent intent,
-            DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily fontFamily,
+            String fontFamily,
             double fontSize,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign textAlign,
+            DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText richText,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextColor color,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontColor> fontColor,
             Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextInteriorColor> interiorColor,
@@ -163,6 +166,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
         this.fontFamily = fontFamily;
         this.fontSize = fontSize;
         this.textAlign = textAlign;
+        this.richText = richText;
         this.color = color;
         this.fontColor = fontColor;
         this.interiorColor = interiorColor;
@@ -308,7 +312,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
     }
 
     @JsonProperty("fontFamily")
-    public DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily getFontFamily() {
+    public String getFontFamily() {
         return fontFamily;
     }
 
@@ -320,6 +324,11 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
     @JsonProperty("textAlign")
     public DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign getTextAlign() {
         return textAlign;
+    }
+
+    @JsonProperty("richText")
+    public DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText getRichText() {
+        return richText;
     }
 
     @JsonProperty("color")
@@ -488,6 +497,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
                 && fontFamily.equals(other.fontFamily)
                 && fontSize == other.fontSize
                 && textAlign.equals(other.textAlign)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && fontColor.equals(other.fontColor)
                 && interiorColor.equals(other.interiorColor)
@@ -529,6 +539,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
                 this.fontFamily,
                 this.fontSize,
                 this.textAlign,
+                this.richText,
                 this.color,
                 this.fontColor,
                 this.interiorColor,
@@ -591,8 +602,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
     }
 
     public interface FontFamilyStage {
-        FontSizeStage fontFamily(
-                @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily fontFamily);
+        FontSizeStage fontFamily(@NotNull String fontFamily);
     }
 
     public interface FontSizeStage {
@@ -600,8 +610,12 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
     }
 
     public interface TextAlignStage {
-        ColorStage textAlign(
+        RichTextStage textAlign(
                 @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign textAlign);
+    }
+
+    public interface RichTextStage {
+        ColorStage richText(@NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText richText);
     }
 
     public interface ColorStage {
@@ -762,6 +776,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
                     FontFamilyStage,
                     FontSizeStage,
                     TextAlignStage,
+                    RichTextStage,
                     ColorStage,
                     OpacityStage,
                     StrokeWidthStage,
@@ -783,11 +798,13 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
 
         private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextIntent intent;
 
-        private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily fontFamily;
+        private String fontFamily;
 
         private double fontSize;
 
         private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign textAlign;
+
+        private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText richText;
 
         private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextColor color;
 
@@ -877,6 +894,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
             fontFamily(other.getFontFamily());
             fontSize(other.getFontSize());
             textAlign(other.getTextAlign());
+            richText(other.getRichText());
             color(other.getColor());
             fontColor(other.getFontColor());
             interiorColor(other.getInteriorColor());
@@ -956,8 +974,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
 
         @java.lang.Override
         @JsonSetter("fontFamily")
-        public FontSizeStage fontFamily(
-                @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextFontFamily fontFamily) {
+        public FontSizeStage fontFamily(@NotNull String fontFamily) {
             this.fontFamily = Objects.requireNonNull(fontFamily, "fontFamily must not be null");
             return this;
         }
@@ -971,9 +988,17 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
 
         @java.lang.Override
         @JsonSetter("textAlign")
-        public ColorStage textAlign(
+        public RichTextStage textAlign(
                 @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextTextAlign textAlign) {
             this.textAlign = Objects.requireNonNull(textAlign, "textAlign must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("richText")
+        public ColorStage richText(
+                @NotNull DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeTextRichText richText) {
+            this.richText = Objects.requireNonNull(richText, "richText must not be null");
             return this;
         }
 
@@ -1447,6 +1472,7 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemFreeT
                     fontFamily,
                     fontSize,
                     textAlign,
+                    richText,
                     color,
                     fontColor,
                     interiorColor,

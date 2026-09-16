@@ -39,6 +39,12 @@ public final class DocManifest200Response {
 
     private final String baseSha;
 
+    private final Optional<Integer> layerVersion;
+
+    private final Optional<Boolean> working;
+
+    private final Optional<Integer> baseByteLength;
+
     private final Optional<DocManifest200ResponseScopes> scopes;
 
     private final List<DocManifest200ResponsePagesItem> pages;
@@ -54,6 +60,9 @@ public final class DocManifest200Response {
             Optional<Integer> annotationsVersion,
             int auditHead,
             String baseSha,
+            Optional<Integer> layerVersion,
+            Optional<Boolean> working,
+            Optional<Integer> baseByteLength,
             Optional<DocManifest200ResponseScopes> scopes,
             List<DocManifest200ResponsePagesItem> pages,
             Map<String, Object> additionalProperties) {
@@ -65,6 +74,9 @@ public final class DocManifest200Response {
         this.annotationsVersion = annotationsVersion;
         this.auditHead = auditHead;
         this.baseSha = baseSha;
+        this.layerVersion = layerVersion;
+        this.working = working;
+        this.baseByteLength = baseByteLength;
         this.scopes = scopes;
         this.pages = pages;
         this.additionalProperties = additionalProperties;
@@ -110,6 +122,21 @@ public final class DocManifest200Response {
         return baseSha;
     }
 
+    @JsonProperty("layerVersion")
+    public Optional<Integer> getLayerVersion() {
+        return layerVersion;
+    }
+
+    @JsonProperty("working")
+    public Optional<Boolean> getWorking() {
+        return working;
+    }
+
+    @JsonProperty("baseByteLength")
+    public Optional<Integer> getBaseByteLength() {
+        return baseByteLength;
+    }
+
     @JsonProperty("scopes")
     public Optional<DocManifest200ResponseScopes> getScopes() {
         return scopes;
@@ -140,6 +167,9 @@ public final class DocManifest200Response {
                 && annotationsVersion.equals(other.annotationsVersion)
                 && auditHead == other.auditHead
                 && baseSha.equals(other.baseSha)
+                && layerVersion.equals(other.layerVersion)
+                && working.equals(other.working)
+                && baseByteLength.equals(other.baseByteLength)
                 && scopes.equals(other.scopes)
                 && pages.equals(other.pages);
     }
@@ -155,6 +185,9 @@ public final class DocManifest200Response {
                 this.annotationsVersion,
                 this.auditHead,
                 this.baseSha,
+                this.layerVersion,
+                this.working,
+                this.baseByteLength,
                 this.scopes,
                 this.pages);
     }
@@ -209,6 +242,18 @@ public final class DocManifest200Response {
 
         _FinalStage annotationsVersion(Integer annotationsVersion);
 
+        _FinalStage layerVersion(Optional<Integer> layerVersion);
+
+        _FinalStage layerVersion(Integer layerVersion);
+
+        _FinalStage working(Optional<Boolean> working);
+
+        _FinalStage working(Boolean working);
+
+        _FinalStage baseByteLength(Optional<Integer> baseByteLength);
+
+        _FinalStage baseByteLength(Integer baseByteLength);
+
         _FinalStage scopes(Optional<DocManifest200ResponseScopes> scopes);
 
         _FinalStage scopes(DocManifest200ResponseScopes scopes);
@@ -242,6 +287,12 @@ public final class DocManifest200Response {
 
         private Optional<DocManifest200ResponseScopes> scopes = Optional.empty();
 
+        private Optional<Integer> baseByteLength = Optional.empty();
+
+        private Optional<Boolean> working = Optional.empty();
+
+        private Optional<Integer> layerVersion = Optional.empty();
+
         private Optional<Integer> annotationsVersion = Optional.empty();
 
         private Optional<Integer> attachmentsVersion = Optional.empty();
@@ -263,6 +314,9 @@ public final class DocManifest200Response {
             annotationsVersion(other.getAnnotationsVersion());
             auditHead(other.getAuditHead());
             baseSha(other.getBaseSha());
+            layerVersion(other.getLayerVersion());
+            working(other.getWorking());
+            baseByteLength(other.getBaseByteLength());
             scopes(other.getScopes());
             pages(other.getPages());
             return this;
@@ -341,6 +395,45 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage baseByteLength(Integer baseByteLength) {
+            this.baseByteLength = Optional.ofNullable(baseByteLength);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "baseByteLength", nulls = Nulls.SKIP)
+        public _FinalStage baseByteLength(Optional<Integer> baseByteLength) {
+            this.baseByteLength = baseByteLength;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage working(Boolean working) {
+            this.working = Optional.ofNullable(working);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "working", nulls = Nulls.SKIP)
+        public _FinalStage working(Optional<Boolean> working) {
+            this.working = working;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage layerVersion(Integer layerVersion) {
+            this.layerVersion = Optional.ofNullable(layerVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "layerVersion", nulls = Nulls.SKIP)
+        public _FinalStage layerVersion(Optional<Integer> layerVersion) {
+            this.layerVersion = layerVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage annotationsVersion(Integer annotationsVersion) {
             this.annotationsVersion = Optional.ofNullable(annotationsVersion);
             return this;
@@ -390,6 +483,9 @@ public final class DocManifest200Response {
                     annotationsVersion,
                     auditHead,
                     baseSha,
+                    layerVersion,
+                    working,
+                    baseByteLength,
                     scopes,
                     pages,
                     additionalProperties);

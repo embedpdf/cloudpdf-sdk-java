@@ -16,6 +16,8 @@ import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
 import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
+import com.cloudpdf.api.resources.doc.signatures.SignaturesClient;
+import com.cloudpdf.api.resources.doc.versions.VersionsClient;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
@@ -37,6 +39,10 @@ public class DocClient {
 
     protected final Supplier<RedactionsClient> redactionsClient;
 
+    protected final Supplier<SignaturesClient> signaturesClient;
+
+    protected final Supplier<VersionsClient> versionsClient;
+
     public DocClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawDocClient(clientOptions);
@@ -45,6 +51,8 @@ public class DocClient {
         this.metadataClient = Suppliers.memoize(() -> new MetadataClient(clientOptions));
         this.pagesClient = Suppliers.memoize(() -> new PagesClient(clientOptions));
         this.redactionsClient = Suppliers.memoize(() -> new RedactionsClient(clientOptions));
+        this.signaturesClient = Suppliers.memoize(() -> new SignaturesClient(clientOptions));
+        this.versionsClient = Suppliers.memoize(() -> new VersionsClient(clientOptions));
     }
 
     /**
@@ -176,5 +184,13 @@ public class DocClient {
 
     public RedactionsClient redactions() {
         return this.redactionsClient.get();
+    }
+
+    public SignaturesClient signatures() {
+        return this.signaturesClient.get();
+    }
+
+    public VersionsClient versions() {
+        return this.versionsClient.get();
     }
 }

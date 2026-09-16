@@ -28,6 +28,10 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
 
     private final Optional<Integer> annotationsVersion;
 
+    private final Optional<Integer> layerVersion;
+
+    private final Optional<Boolean> working;
+
     private final List<DocPagesRemoveName200ResponseMetaCacheDeltaPagesItem> pages;
 
     private final Map<String, Object> additionalProperties;
@@ -36,11 +40,15 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
             int previousDocVersion,
             int docVersion,
             Optional<Integer> annotationsVersion,
+            Optional<Integer> layerVersion,
+            Optional<Boolean> working,
             List<DocPagesRemoveName200ResponseMetaCacheDeltaPagesItem> pages,
             Map<String, Object> additionalProperties) {
         this.previousDocVersion = previousDocVersion;
         this.docVersion = docVersion;
         this.annotationsVersion = annotationsVersion;
+        this.layerVersion = layerVersion;
+        this.working = working;
         this.pages = pages;
         this.additionalProperties = additionalProperties;
     }
@@ -58,6 +66,16 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
     @JsonProperty("annotationsVersion")
     public Optional<Integer> getAnnotationsVersion() {
         return annotationsVersion;
+    }
+
+    @JsonProperty("layerVersion")
+    public Optional<Integer> getLayerVersion() {
+        return layerVersion;
+    }
+
+    @JsonProperty("working")
+    public Optional<Boolean> getWorking() {
+        return working;
     }
 
     @JsonProperty("pages")
@@ -81,12 +99,20 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
         return previousDocVersion == other.previousDocVersion
                 && docVersion == other.docVersion
                 && annotationsVersion.equals(other.annotationsVersion)
+                && layerVersion.equals(other.layerVersion)
+                && working.equals(other.working)
                 && pages.equals(other.pages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.previousDocVersion, this.docVersion, this.annotationsVersion, this.pages);
+        return Objects.hash(
+                this.previousDocVersion,
+                this.docVersion,
+                this.annotationsVersion,
+                this.layerVersion,
+                this.working,
+                this.pages);
     }
 
     @java.lang.Override
@@ -119,6 +145,14 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
 
         _FinalStage annotationsVersion(Integer annotationsVersion);
 
+        _FinalStage layerVersion(Optional<Integer> layerVersion);
+
+        _FinalStage layerVersion(Integer layerVersion);
+
+        _FinalStage working(Optional<Boolean> working);
+
+        _FinalStage working(Boolean working);
+
         _FinalStage pages(List<DocPagesRemoveName200ResponseMetaCacheDeltaPagesItem> pages);
 
         _FinalStage addPages(DocPagesRemoveName200ResponseMetaCacheDeltaPagesItem pages);
@@ -134,6 +168,10 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
 
         private List<DocPagesRemoveName200ResponseMetaCacheDeltaPagesItem> pages = new ArrayList<>();
 
+        private Optional<Boolean> working = Optional.empty();
+
+        private Optional<Integer> layerVersion = Optional.empty();
+
         private Optional<Integer> annotationsVersion = Optional.empty();
 
         @JsonAnySetter
@@ -146,6 +184,8 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
             previousDocVersion(other.getPreviousDocVersion());
             docVersion(other.getDocVersion());
             annotationsVersion(other.getAnnotationsVersion());
+            layerVersion(other.getLayerVersion());
+            working(other.getWorking());
             pages(other.getPages());
             return this;
         }
@@ -189,6 +229,32 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
         }
 
         @java.lang.Override
+        public _FinalStage working(Boolean working) {
+            this.working = Optional.ofNullable(working);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "working", nulls = Nulls.SKIP)
+        public _FinalStage working(Optional<Boolean> working) {
+            this.working = working;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage layerVersion(Integer layerVersion) {
+            this.layerVersion = Optional.ofNullable(layerVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "layerVersion", nulls = Nulls.SKIP)
+        public _FinalStage layerVersion(Optional<Integer> layerVersion) {
+            this.layerVersion = layerVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage annotationsVersion(Integer annotationsVersion) {
             this.annotationsVersion = Optional.ofNullable(annotationsVersion);
             return this;
@@ -204,7 +270,13 @@ public final class DocPagesRemoveName200ResponseMetaCacheDelta {
         @java.lang.Override
         public DocPagesRemoveName200ResponseMetaCacheDelta build() {
             return new DocPagesRemoveName200ResponseMetaCacheDelta(
-                    previousDocVersion, docVersion, annotationsVersion, pages, additionalProperties);
+                    previousDocVersion,
+                    docVersion,
+                    annotationsVersion,
+                    layerVersion,
+                    working,
+                    pages,
+                    additionalProperties);
         }
 
         @java.lang.Override

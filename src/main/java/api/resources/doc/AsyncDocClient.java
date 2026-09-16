@@ -16,6 +16,8 @@ import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
 import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
+import com.cloudpdf.api.resources.doc.signatures.AsyncSignaturesClient;
+import com.cloudpdf.api.resources.doc.versions.AsyncVersionsClient;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
@@ -38,6 +40,10 @@ public class AsyncDocClient {
 
     protected final Supplier<AsyncRedactionsClient> redactionsClient;
 
+    protected final Supplier<AsyncSignaturesClient> signaturesClient;
+
+    protected final Supplier<AsyncVersionsClient> versionsClient;
+
     public AsyncDocClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawDocClient(clientOptions);
@@ -46,6 +52,8 @@ public class AsyncDocClient {
         this.metadataClient = Suppliers.memoize(() -> new AsyncMetadataClient(clientOptions));
         this.pagesClient = Suppliers.memoize(() -> new AsyncPagesClient(clientOptions));
         this.redactionsClient = Suppliers.memoize(() -> new AsyncRedactionsClient(clientOptions));
+        this.signaturesClient = Suppliers.memoize(() -> new AsyncSignaturesClient(clientOptions));
+        this.versionsClient = Suppliers.memoize(() -> new AsyncVersionsClient(clientOptions));
     }
 
     /**
@@ -182,5 +190,13 @@ public class AsyncDocClient {
 
     public AsyncRedactionsClient redactions() {
         return this.redactionsClient.get();
+    }
+
+    public AsyncSignaturesClient signatures() {
+        return this.signaturesClient.get();
+    }
+
+    public AsyncVersionsClient versions() {
+        return this.versionsClient.get();
     }
 }

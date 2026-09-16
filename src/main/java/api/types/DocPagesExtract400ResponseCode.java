@@ -7,17 +7,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class DocPagesExtract400ResponseCode {
-    public static final DocPagesExtract400ResponseCode MALFORMED_PDF =
-            new DocPagesExtract400ResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
-
     public static final DocPagesExtract400ResponseCode UNKNOWN =
             new DocPagesExtract400ResponseCode(Value.UNKNOWN, "Unknown");
 
     public static final DocPagesExtract400ResponseCode WEAK_ANNOTATION_SESSION_CONFLICT =
             new DocPagesExtract400ResponseCode(Value.WEAK_ANNOTATION_SESSION_CONFLICT, "WeakAnnotationSessionConflict");
 
-    public static final DocPagesExtract400ResponseCode WIRE_FORMAT =
-            new DocPagesExtract400ResponseCode(Value.WIRE_FORMAT, "WireFormat");
+    public static final DocPagesExtract400ResponseCode STALE_BASE =
+            new DocPagesExtract400ResponseCode(Value.STALE_BASE, "StaleBase");
 
     public static final DocPagesExtract400ResponseCode RUNTIME_UNAVAILABLE =
             new DocPagesExtract400ResponseCode(Value.RUNTIME_UNAVAILABLE, "RuntimeUnavailable");
@@ -34,12 +31,6 @@ public final class DocPagesExtract400ResponseCode {
     public static final DocPagesExtract400ResponseCode NOT_FOUND =
             new DocPagesExtract400ResponseCode(Value.NOT_FOUND, "NotFound");
 
-    public static final DocPagesExtract400ResponseCode ABORTED =
-            new DocPagesExtract400ResponseCode(Value.ABORTED, "Aborted");
-
-    public static final DocPagesExtract400ResponseCode DOC_PASSWORD_REQUIRED =
-            new DocPagesExtract400ResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
-
     public static final DocPagesExtract400ResponseCode INVALID_ARG =
             new DocPagesExtract400ResponseCode(Value.INVALID_ARG, "InvalidArg");
 
@@ -55,14 +46,41 @@ public final class DocPagesExtract400ResponseCode {
     public static final DocPagesExtract400ResponseCode DOC_PASSWORD_INCORRECT =
             new DocPagesExtract400ResponseCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
 
-    public static final DocPagesExtract400ResponseCode DOC_NOT_OPEN =
-            new DocPagesExtract400ResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
-
     public static final DocPagesExtract400ResponseCode LAYER_VERSION_CONFLICT =
             new DocPagesExtract400ResponseCode(Value.LAYER_VERSION_CONFLICT, "LayerVersionConflict");
 
     public static final DocPagesExtract400ResponseCode NOT_IMPLEMENTED =
             new DocPagesExtract400ResponseCode(Value.NOT_IMPLEMENTED, "NotImplemented");
+
+    public static final DocPagesExtract400ResponseCode SIGNATURE_REFUSED =
+            new DocPagesExtract400ResponseCode(Value.SIGNATURE_REFUSED, "SignatureRefused");
+
+    public static final DocPagesExtract400ResponseCode MALFORMED_PDF =
+            new DocPagesExtract400ResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
+
+    public static final DocPagesExtract400ResponseCode SIGNING_PENDING =
+            new DocPagesExtract400ResponseCode(Value.SIGNING_PENDING, "SigningPending");
+
+    public static final DocPagesExtract400ResponseCode WIRE_FORMAT =
+            new DocPagesExtract400ResponseCode(Value.WIRE_FORMAT, "WireFormat");
+
+    public static final DocPagesExtract400ResponseCode SIGNING_EXPIRED =
+            new DocPagesExtract400ResponseCode(Value.SIGNING_EXPIRED, "SigningExpired");
+
+    public static final DocPagesExtract400ResponseCode ABORTED =
+            new DocPagesExtract400ResponseCode(Value.ABORTED, "Aborted");
+
+    public static final DocPagesExtract400ResponseCode DOC_PASSWORD_REQUIRED =
+            new DocPagesExtract400ResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
+
+    public static final DocPagesExtract400ResponseCode PROTECTED_DOCUMENT =
+            new DocPagesExtract400ResponseCode(Value.PROTECTED_DOCUMENT, "ProtectedDocument");
+
+    public static final DocPagesExtract400ResponseCode SIGNING_VERSION_MISMATCH =
+            new DocPagesExtract400ResponseCode(Value.SIGNING_VERSION_MISMATCH, "SigningVersionMismatch");
+
+    public static final DocPagesExtract400ResponseCode DOC_NOT_OPEN =
+            new DocPagesExtract400ResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
 
     private final Value value;
 
@@ -97,14 +115,12 @@ public final class DocPagesExtract400ResponseCode {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case MALFORMED_PDF:
-                return visitor.visitMalformedPdf();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case WEAK_ANNOTATION_SESSION_CONFLICT:
                 return visitor.visitWeakAnnotationSessionConflict();
-            case WIRE_FORMAT:
-                return visitor.visitWireFormat();
+            case STALE_BASE:
+                return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
                 return visitor.visitRuntimeUnavailable();
             case UNAUTHENTICATED:
@@ -115,10 +131,6 @@ public final class DocPagesExtract400ResponseCode {
                 return visitor.visitDocOpenFailed();
             case NOT_FOUND:
                 return visitor.visitNotFound();
-            case ABORTED:
-                return visitor.visitAborted();
-            case DOC_PASSWORD_REQUIRED:
-                return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
             case SHARE_PASSWORD_REQUIRED:
@@ -129,12 +141,30 @@ public final class DocPagesExtract400ResponseCode {
                 return visitor.visitInvalidReference();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
-            case DOC_NOT_OPEN:
-                return visitor.visitDocNotOpen();
             case LAYER_VERSION_CONFLICT:
                 return visitor.visitLayerVersionConflict();
             case NOT_IMPLEMENTED:
                 return visitor.visitNotImplemented();
+            case SIGNATURE_REFUSED:
+                return visitor.visitSignatureRefused();
+            case MALFORMED_PDF:
+                return visitor.visitMalformedPdf();
+            case SIGNING_PENDING:
+                return visitor.visitSigningPending();
+            case WIRE_FORMAT:
+                return visitor.visitWireFormat();
+            case SIGNING_EXPIRED:
+                return visitor.visitSigningExpired();
+            case ABORTED:
+                return visitor.visitAborted();
+            case DOC_PASSWORD_REQUIRED:
+                return visitor.visitDocPasswordRequired();
+            case PROTECTED_DOCUMENT:
+                return visitor.visitProtectedDocument();
+            case SIGNING_VERSION_MISMATCH:
+                return visitor.visitSigningVersionMismatch();
+            case DOC_NOT_OPEN:
+                return visitor.visitDocNotOpen();
             case _UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -144,14 +174,12 @@ public final class DocPagesExtract400ResponseCode {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static DocPagesExtract400ResponseCode valueOf(String value) {
         switch (value) {
-            case "MalformedPdf":
-                return MALFORMED_PDF;
             case "Unknown":
                 return UNKNOWN;
             case "WeakAnnotationSessionConflict":
                 return WEAK_ANNOTATION_SESSION_CONFLICT;
-            case "WireFormat":
-                return WIRE_FORMAT;
+            case "StaleBase":
+                return STALE_BASE;
             case "RuntimeUnavailable":
                 return RUNTIME_UNAVAILABLE;
             case "Unauthenticated":
@@ -162,10 +190,6 @@ public final class DocPagesExtract400ResponseCode {
                 return DOC_OPEN_FAILED;
             case "NotFound":
                 return NOT_FOUND;
-            case "Aborted":
-                return ABORTED;
-            case "DocPasswordRequired":
-                return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
             case "SharePasswordRequired":
@@ -176,12 +200,30 @@ public final class DocPagesExtract400ResponseCode {
                 return INVALID_REFERENCE;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
-            case "DocNotOpen":
-                return DOC_NOT_OPEN;
             case "LayerVersionConflict":
                 return LAYER_VERSION_CONFLICT;
             case "NotImplemented":
                 return NOT_IMPLEMENTED;
+            case "SignatureRefused":
+                return SIGNATURE_REFUSED;
+            case "MalformedPdf":
+                return MALFORMED_PDF;
+            case "SigningPending":
+                return SIGNING_PENDING;
+            case "WireFormat":
+                return WIRE_FORMAT;
+            case "SigningExpired":
+                return SIGNING_EXPIRED;
+            case "Aborted":
+                return ABORTED;
+            case "DocPasswordRequired":
+                return DOC_PASSWORD_REQUIRED;
+            case "ProtectedDocument":
+                return PROTECTED_DOCUMENT;
+            case "SigningVersionMismatch":
+                return SIGNING_VERSION_MISMATCH;
+            case "DocNotOpen":
+                return DOC_NOT_OPEN;
             default:
                 return new DocPagesExtract400ResponseCode(Value._UNKNOWN, value);
         }
@@ -226,6 +268,18 @@ public final class DocPagesExtract400ResponseCode {
 
         MALFORMED_PDF,
 
+        SIGNING_PENDING,
+
+        SIGNING_EXPIRED,
+
+        SIGNING_VERSION_MISMATCH,
+
+        SIGNATURE_REFUSED,
+
+        PROTECTED_DOCUMENT,
+
+        STALE_BASE,
+
         _UNKNOWN
     }
 
@@ -267,6 +321,18 @@ public final class DocPagesExtract400ResponseCode {
         T visitNotImplemented();
 
         T visitMalformedPdf();
+
+        T visitSigningPending();
+
+        T visitSigningExpired();
+
+        T visitSigningVersionMismatch();
+
+        T visitSignatureRefused();
+
+        T visitProtectedDocument();
+
+        T visitStaleBase();
 
         T visitUnknown(String unknownType);
     }

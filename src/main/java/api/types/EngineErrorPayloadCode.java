@@ -7,16 +7,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class EngineErrorPayloadCode {
-    public static final EngineErrorPayloadCode MALFORMED_PDF =
-            new EngineErrorPayloadCode(Value.MALFORMED_PDF, "MalformedPdf");
-
     public static final EngineErrorPayloadCode UNKNOWN = new EngineErrorPayloadCode(Value.UNKNOWN, "Unknown");
 
     public static final EngineErrorPayloadCode WEAK_ANNOTATION_SESSION_CONFLICT =
             new EngineErrorPayloadCode(Value.WEAK_ANNOTATION_SESSION_CONFLICT, "WeakAnnotationSessionConflict");
 
-    public static final EngineErrorPayloadCode WIRE_FORMAT =
-            new EngineErrorPayloadCode(Value.WIRE_FORMAT, "WireFormat");
+    public static final EngineErrorPayloadCode STALE_BASE = new EngineErrorPayloadCode(Value.STALE_BASE, "StaleBase");
 
     public static final EngineErrorPayloadCode RUNTIME_UNAVAILABLE =
             new EngineErrorPayloadCode(Value.RUNTIME_UNAVAILABLE, "RuntimeUnavailable");
@@ -30,11 +26,6 @@ public final class EngineErrorPayloadCode {
             new EngineErrorPayloadCode(Value.DOC_OPEN_FAILED, "DocOpenFailed");
 
     public static final EngineErrorPayloadCode NOT_FOUND = new EngineErrorPayloadCode(Value.NOT_FOUND, "NotFound");
-
-    public static final EngineErrorPayloadCode ABORTED = new EngineErrorPayloadCode(Value.ABORTED, "Aborted");
-
-    public static final EngineErrorPayloadCode DOC_PASSWORD_REQUIRED =
-            new EngineErrorPayloadCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
 
     public static final EngineErrorPayloadCode INVALID_ARG =
             new EngineErrorPayloadCode(Value.INVALID_ARG, "InvalidArg");
@@ -50,14 +41,40 @@ public final class EngineErrorPayloadCode {
     public static final EngineErrorPayloadCode DOC_PASSWORD_INCORRECT =
             new EngineErrorPayloadCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
 
-    public static final EngineErrorPayloadCode DOC_NOT_OPEN =
-            new EngineErrorPayloadCode(Value.DOC_NOT_OPEN, "DocNotOpen");
-
     public static final EngineErrorPayloadCode LAYER_VERSION_CONFLICT =
             new EngineErrorPayloadCode(Value.LAYER_VERSION_CONFLICT, "LayerVersionConflict");
 
     public static final EngineErrorPayloadCode NOT_IMPLEMENTED =
             new EngineErrorPayloadCode(Value.NOT_IMPLEMENTED, "NotImplemented");
+
+    public static final EngineErrorPayloadCode SIGNATURE_REFUSED =
+            new EngineErrorPayloadCode(Value.SIGNATURE_REFUSED, "SignatureRefused");
+
+    public static final EngineErrorPayloadCode MALFORMED_PDF =
+            new EngineErrorPayloadCode(Value.MALFORMED_PDF, "MalformedPdf");
+
+    public static final EngineErrorPayloadCode SIGNING_PENDING =
+            new EngineErrorPayloadCode(Value.SIGNING_PENDING, "SigningPending");
+
+    public static final EngineErrorPayloadCode WIRE_FORMAT =
+            new EngineErrorPayloadCode(Value.WIRE_FORMAT, "WireFormat");
+
+    public static final EngineErrorPayloadCode SIGNING_EXPIRED =
+            new EngineErrorPayloadCode(Value.SIGNING_EXPIRED, "SigningExpired");
+
+    public static final EngineErrorPayloadCode ABORTED = new EngineErrorPayloadCode(Value.ABORTED, "Aborted");
+
+    public static final EngineErrorPayloadCode DOC_PASSWORD_REQUIRED =
+            new EngineErrorPayloadCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
+
+    public static final EngineErrorPayloadCode PROTECTED_DOCUMENT =
+            new EngineErrorPayloadCode(Value.PROTECTED_DOCUMENT, "ProtectedDocument");
+
+    public static final EngineErrorPayloadCode SIGNING_VERSION_MISMATCH =
+            new EngineErrorPayloadCode(Value.SIGNING_VERSION_MISMATCH, "SigningVersionMismatch");
+
+    public static final EngineErrorPayloadCode DOC_NOT_OPEN =
+            new EngineErrorPayloadCode(Value.DOC_NOT_OPEN, "DocNotOpen");
 
     private final Value value;
 
@@ -92,14 +109,12 @@ public final class EngineErrorPayloadCode {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case MALFORMED_PDF:
-                return visitor.visitMalformedPdf();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case WEAK_ANNOTATION_SESSION_CONFLICT:
                 return visitor.visitWeakAnnotationSessionConflict();
-            case WIRE_FORMAT:
-                return visitor.visitWireFormat();
+            case STALE_BASE:
+                return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
                 return visitor.visitRuntimeUnavailable();
             case UNAUTHENTICATED:
@@ -110,10 +125,6 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitDocOpenFailed();
             case NOT_FOUND:
                 return visitor.visitNotFound();
-            case ABORTED:
-                return visitor.visitAborted();
-            case DOC_PASSWORD_REQUIRED:
-                return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
             case SHARE_PASSWORD_REQUIRED:
@@ -124,12 +135,30 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitInvalidReference();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
-            case DOC_NOT_OPEN:
-                return visitor.visitDocNotOpen();
             case LAYER_VERSION_CONFLICT:
                 return visitor.visitLayerVersionConflict();
             case NOT_IMPLEMENTED:
                 return visitor.visitNotImplemented();
+            case SIGNATURE_REFUSED:
+                return visitor.visitSignatureRefused();
+            case MALFORMED_PDF:
+                return visitor.visitMalformedPdf();
+            case SIGNING_PENDING:
+                return visitor.visitSigningPending();
+            case WIRE_FORMAT:
+                return visitor.visitWireFormat();
+            case SIGNING_EXPIRED:
+                return visitor.visitSigningExpired();
+            case ABORTED:
+                return visitor.visitAborted();
+            case DOC_PASSWORD_REQUIRED:
+                return visitor.visitDocPasswordRequired();
+            case PROTECTED_DOCUMENT:
+                return visitor.visitProtectedDocument();
+            case SIGNING_VERSION_MISMATCH:
+                return visitor.visitSigningVersionMismatch();
+            case DOC_NOT_OPEN:
+                return visitor.visitDocNotOpen();
             case _UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -139,14 +168,12 @@ public final class EngineErrorPayloadCode {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static EngineErrorPayloadCode valueOf(String value) {
         switch (value) {
-            case "MalformedPdf":
-                return MALFORMED_PDF;
             case "Unknown":
                 return UNKNOWN;
             case "WeakAnnotationSessionConflict":
                 return WEAK_ANNOTATION_SESSION_CONFLICT;
-            case "WireFormat":
-                return WIRE_FORMAT;
+            case "StaleBase":
+                return STALE_BASE;
             case "RuntimeUnavailable":
                 return RUNTIME_UNAVAILABLE;
             case "Unauthenticated":
@@ -157,10 +184,6 @@ public final class EngineErrorPayloadCode {
                 return DOC_OPEN_FAILED;
             case "NotFound":
                 return NOT_FOUND;
-            case "Aborted":
-                return ABORTED;
-            case "DocPasswordRequired":
-                return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
             case "SharePasswordRequired":
@@ -171,12 +194,30 @@ public final class EngineErrorPayloadCode {
                 return INVALID_REFERENCE;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
-            case "DocNotOpen":
-                return DOC_NOT_OPEN;
             case "LayerVersionConflict":
                 return LAYER_VERSION_CONFLICT;
             case "NotImplemented":
                 return NOT_IMPLEMENTED;
+            case "SignatureRefused":
+                return SIGNATURE_REFUSED;
+            case "MalformedPdf":
+                return MALFORMED_PDF;
+            case "SigningPending":
+                return SIGNING_PENDING;
+            case "WireFormat":
+                return WIRE_FORMAT;
+            case "SigningExpired":
+                return SIGNING_EXPIRED;
+            case "Aborted":
+                return ABORTED;
+            case "DocPasswordRequired":
+                return DOC_PASSWORD_REQUIRED;
+            case "ProtectedDocument":
+                return PROTECTED_DOCUMENT;
+            case "SigningVersionMismatch":
+                return SIGNING_VERSION_MISMATCH;
+            case "DocNotOpen":
+                return DOC_NOT_OPEN;
             default:
                 return new EngineErrorPayloadCode(Value._UNKNOWN, value);
         }
@@ -221,6 +262,18 @@ public final class EngineErrorPayloadCode {
 
         MALFORMED_PDF,
 
+        SIGNING_PENDING,
+
+        SIGNING_EXPIRED,
+
+        SIGNING_VERSION_MISMATCH,
+
+        SIGNATURE_REFUSED,
+
+        PROTECTED_DOCUMENT,
+
+        STALE_BASE,
+
         _UNKNOWN
     }
 
@@ -262,6 +315,18 @@ public final class EngineErrorPayloadCode {
         T visitNotImplemented();
 
         T visitMalformedPdf();
+
+        T visitSigningPending();
+
+        T visitSigningExpired();
+
+        T visitSigningVersionMismatch();
+
+        T visitSignatureRefused();
+
+        T visitProtectedDocument();
+
+        T visitStaleBase();
 
         T visitUnknown(String unknownType);
     }
