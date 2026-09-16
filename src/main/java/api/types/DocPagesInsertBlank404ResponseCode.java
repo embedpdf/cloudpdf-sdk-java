@@ -7,9 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class DocPagesInsertBlank404ResponseCode {
-    public static final DocPagesInsertBlank404ResponseCode MALFORMED_PDF =
-            new DocPagesInsertBlank404ResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
-
     public static final DocPagesInsertBlank404ResponseCode UNKNOWN =
             new DocPagesInsertBlank404ResponseCode(Value.UNKNOWN, "Unknown");
 
@@ -17,8 +14,8 @@ public final class DocPagesInsertBlank404ResponseCode {
             new DocPagesInsertBlank404ResponseCode(
                     Value.WEAK_ANNOTATION_SESSION_CONFLICT, "WeakAnnotationSessionConflict");
 
-    public static final DocPagesInsertBlank404ResponseCode WIRE_FORMAT =
-            new DocPagesInsertBlank404ResponseCode(Value.WIRE_FORMAT, "WireFormat");
+    public static final DocPagesInsertBlank404ResponseCode STALE_BASE =
+            new DocPagesInsertBlank404ResponseCode(Value.STALE_BASE, "StaleBase");
 
     public static final DocPagesInsertBlank404ResponseCode RUNTIME_UNAVAILABLE =
             new DocPagesInsertBlank404ResponseCode(Value.RUNTIME_UNAVAILABLE, "RuntimeUnavailable");
@@ -35,12 +32,6 @@ public final class DocPagesInsertBlank404ResponseCode {
     public static final DocPagesInsertBlank404ResponseCode NOT_FOUND =
             new DocPagesInsertBlank404ResponseCode(Value.NOT_FOUND, "NotFound");
 
-    public static final DocPagesInsertBlank404ResponseCode ABORTED =
-            new DocPagesInsertBlank404ResponseCode(Value.ABORTED, "Aborted");
-
-    public static final DocPagesInsertBlank404ResponseCode DOC_PASSWORD_REQUIRED =
-            new DocPagesInsertBlank404ResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
-
     public static final DocPagesInsertBlank404ResponseCode INVALID_ARG =
             new DocPagesInsertBlank404ResponseCode(Value.INVALID_ARG, "InvalidArg");
 
@@ -56,14 +47,41 @@ public final class DocPagesInsertBlank404ResponseCode {
     public static final DocPagesInsertBlank404ResponseCode DOC_PASSWORD_INCORRECT =
             new DocPagesInsertBlank404ResponseCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
 
-    public static final DocPagesInsertBlank404ResponseCode DOC_NOT_OPEN =
-            new DocPagesInsertBlank404ResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
-
     public static final DocPagesInsertBlank404ResponseCode LAYER_VERSION_CONFLICT =
             new DocPagesInsertBlank404ResponseCode(Value.LAYER_VERSION_CONFLICT, "LayerVersionConflict");
 
     public static final DocPagesInsertBlank404ResponseCode NOT_IMPLEMENTED =
             new DocPagesInsertBlank404ResponseCode(Value.NOT_IMPLEMENTED, "NotImplemented");
+
+    public static final DocPagesInsertBlank404ResponseCode SIGNATURE_REFUSED =
+            new DocPagesInsertBlank404ResponseCode(Value.SIGNATURE_REFUSED, "SignatureRefused");
+
+    public static final DocPagesInsertBlank404ResponseCode MALFORMED_PDF =
+            new DocPagesInsertBlank404ResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
+
+    public static final DocPagesInsertBlank404ResponseCode SIGNING_PENDING =
+            new DocPagesInsertBlank404ResponseCode(Value.SIGNING_PENDING, "SigningPending");
+
+    public static final DocPagesInsertBlank404ResponseCode WIRE_FORMAT =
+            new DocPagesInsertBlank404ResponseCode(Value.WIRE_FORMAT, "WireFormat");
+
+    public static final DocPagesInsertBlank404ResponseCode SIGNING_EXPIRED =
+            new DocPagesInsertBlank404ResponseCode(Value.SIGNING_EXPIRED, "SigningExpired");
+
+    public static final DocPagesInsertBlank404ResponseCode ABORTED =
+            new DocPagesInsertBlank404ResponseCode(Value.ABORTED, "Aborted");
+
+    public static final DocPagesInsertBlank404ResponseCode DOC_PASSWORD_REQUIRED =
+            new DocPagesInsertBlank404ResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
+
+    public static final DocPagesInsertBlank404ResponseCode PROTECTED_DOCUMENT =
+            new DocPagesInsertBlank404ResponseCode(Value.PROTECTED_DOCUMENT, "ProtectedDocument");
+
+    public static final DocPagesInsertBlank404ResponseCode SIGNING_VERSION_MISMATCH =
+            new DocPagesInsertBlank404ResponseCode(Value.SIGNING_VERSION_MISMATCH, "SigningVersionMismatch");
+
+    public static final DocPagesInsertBlank404ResponseCode DOC_NOT_OPEN =
+            new DocPagesInsertBlank404ResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
 
     private final Value value;
 
@@ -98,14 +116,12 @@ public final class DocPagesInsertBlank404ResponseCode {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case MALFORMED_PDF:
-                return visitor.visitMalformedPdf();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case WEAK_ANNOTATION_SESSION_CONFLICT:
                 return visitor.visitWeakAnnotationSessionConflict();
-            case WIRE_FORMAT:
-                return visitor.visitWireFormat();
+            case STALE_BASE:
+                return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
                 return visitor.visitRuntimeUnavailable();
             case UNAUTHENTICATED:
@@ -116,10 +132,6 @@ public final class DocPagesInsertBlank404ResponseCode {
                 return visitor.visitDocOpenFailed();
             case NOT_FOUND:
                 return visitor.visitNotFound();
-            case ABORTED:
-                return visitor.visitAborted();
-            case DOC_PASSWORD_REQUIRED:
-                return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
             case SHARE_PASSWORD_REQUIRED:
@@ -130,12 +142,30 @@ public final class DocPagesInsertBlank404ResponseCode {
                 return visitor.visitInvalidReference();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
-            case DOC_NOT_OPEN:
-                return visitor.visitDocNotOpen();
             case LAYER_VERSION_CONFLICT:
                 return visitor.visitLayerVersionConflict();
             case NOT_IMPLEMENTED:
                 return visitor.visitNotImplemented();
+            case SIGNATURE_REFUSED:
+                return visitor.visitSignatureRefused();
+            case MALFORMED_PDF:
+                return visitor.visitMalformedPdf();
+            case SIGNING_PENDING:
+                return visitor.visitSigningPending();
+            case WIRE_FORMAT:
+                return visitor.visitWireFormat();
+            case SIGNING_EXPIRED:
+                return visitor.visitSigningExpired();
+            case ABORTED:
+                return visitor.visitAborted();
+            case DOC_PASSWORD_REQUIRED:
+                return visitor.visitDocPasswordRequired();
+            case PROTECTED_DOCUMENT:
+                return visitor.visitProtectedDocument();
+            case SIGNING_VERSION_MISMATCH:
+                return visitor.visitSigningVersionMismatch();
+            case DOC_NOT_OPEN:
+                return visitor.visitDocNotOpen();
             case _UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -145,14 +175,12 @@ public final class DocPagesInsertBlank404ResponseCode {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static DocPagesInsertBlank404ResponseCode valueOf(String value) {
         switch (value) {
-            case "MalformedPdf":
-                return MALFORMED_PDF;
             case "Unknown":
                 return UNKNOWN;
             case "WeakAnnotationSessionConflict":
                 return WEAK_ANNOTATION_SESSION_CONFLICT;
-            case "WireFormat":
-                return WIRE_FORMAT;
+            case "StaleBase":
+                return STALE_BASE;
             case "RuntimeUnavailable":
                 return RUNTIME_UNAVAILABLE;
             case "Unauthenticated":
@@ -163,10 +191,6 @@ public final class DocPagesInsertBlank404ResponseCode {
                 return DOC_OPEN_FAILED;
             case "NotFound":
                 return NOT_FOUND;
-            case "Aborted":
-                return ABORTED;
-            case "DocPasswordRequired":
-                return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
             case "SharePasswordRequired":
@@ -177,12 +201,30 @@ public final class DocPagesInsertBlank404ResponseCode {
                 return INVALID_REFERENCE;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
-            case "DocNotOpen":
-                return DOC_NOT_OPEN;
             case "LayerVersionConflict":
                 return LAYER_VERSION_CONFLICT;
             case "NotImplemented":
                 return NOT_IMPLEMENTED;
+            case "SignatureRefused":
+                return SIGNATURE_REFUSED;
+            case "MalformedPdf":
+                return MALFORMED_PDF;
+            case "SigningPending":
+                return SIGNING_PENDING;
+            case "WireFormat":
+                return WIRE_FORMAT;
+            case "SigningExpired":
+                return SIGNING_EXPIRED;
+            case "Aborted":
+                return ABORTED;
+            case "DocPasswordRequired":
+                return DOC_PASSWORD_REQUIRED;
+            case "ProtectedDocument":
+                return PROTECTED_DOCUMENT;
+            case "SigningVersionMismatch":
+                return SIGNING_VERSION_MISMATCH;
+            case "DocNotOpen":
+                return DOC_NOT_OPEN;
             default:
                 return new DocPagesInsertBlank404ResponseCode(Value._UNKNOWN, value);
         }
@@ -227,6 +269,18 @@ public final class DocPagesInsertBlank404ResponseCode {
 
         MALFORMED_PDF,
 
+        SIGNING_PENDING,
+
+        SIGNING_EXPIRED,
+
+        SIGNING_VERSION_MISMATCH,
+
+        SIGNATURE_REFUSED,
+
+        PROTECTED_DOCUMENT,
+
+        STALE_BASE,
+
         _UNKNOWN
     }
 
@@ -268,6 +322,18 @@ public final class DocPagesInsertBlank404ResponseCode {
         T visitNotImplemented();
 
         T visitMalformedPdf();
+
+        T visitSigningPending();
+
+        T visitSigningExpired();
+
+        T visitSigningVersionMismatch();
+
+        T visitSignatureRefused();
+
+        T visitProtectedDocument();
+
+        T visitStaleBase();
 
         T visitUnknown(String unknownType);
     }

@@ -7,17 +7,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class DocFormsExportDataResponseCode {
-    public static final DocFormsExportDataResponseCode MALFORMED_PDF =
-            new DocFormsExportDataResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
-
     public static final DocFormsExportDataResponseCode UNKNOWN =
             new DocFormsExportDataResponseCode(Value.UNKNOWN, "Unknown");
 
     public static final DocFormsExportDataResponseCode WEAK_ANNOTATION_SESSION_CONFLICT =
             new DocFormsExportDataResponseCode(Value.WEAK_ANNOTATION_SESSION_CONFLICT, "WeakAnnotationSessionConflict");
 
-    public static final DocFormsExportDataResponseCode WIRE_FORMAT =
-            new DocFormsExportDataResponseCode(Value.WIRE_FORMAT, "WireFormat");
+    public static final DocFormsExportDataResponseCode STALE_BASE =
+            new DocFormsExportDataResponseCode(Value.STALE_BASE, "StaleBase");
 
     public static final DocFormsExportDataResponseCode RUNTIME_UNAVAILABLE =
             new DocFormsExportDataResponseCode(Value.RUNTIME_UNAVAILABLE, "RuntimeUnavailable");
@@ -34,12 +31,6 @@ public final class DocFormsExportDataResponseCode {
     public static final DocFormsExportDataResponseCode NOT_FOUND =
             new DocFormsExportDataResponseCode(Value.NOT_FOUND, "NotFound");
 
-    public static final DocFormsExportDataResponseCode ABORTED =
-            new DocFormsExportDataResponseCode(Value.ABORTED, "Aborted");
-
-    public static final DocFormsExportDataResponseCode DOC_PASSWORD_REQUIRED =
-            new DocFormsExportDataResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
-
     public static final DocFormsExportDataResponseCode INVALID_ARG =
             new DocFormsExportDataResponseCode(Value.INVALID_ARG, "InvalidArg");
 
@@ -55,14 +46,41 @@ public final class DocFormsExportDataResponseCode {
     public static final DocFormsExportDataResponseCode DOC_PASSWORD_INCORRECT =
             new DocFormsExportDataResponseCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
 
-    public static final DocFormsExportDataResponseCode DOC_NOT_OPEN =
-            new DocFormsExportDataResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
-
     public static final DocFormsExportDataResponseCode LAYER_VERSION_CONFLICT =
             new DocFormsExportDataResponseCode(Value.LAYER_VERSION_CONFLICT, "LayerVersionConflict");
 
     public static final DocFormsExportDataResponseCode NOT_IMPLEMENTED =
             new DocFormsExportDataResponseCode(Value.NOT_IMPLEMENTED, "NotImplemented");
+
+    public static final DocFormsExportDataResponseCode SIGNATURE_REFUSED =
+            new DocFormsExportDataResponseCode(Value.SIGNATURE_REFUSED, "SignatureRefused");
+
+    public static final DocFormsExportDataResponseCode MALFORMED_PDF =
+            new DocFormsExportDataResponseCode(Value.MALFORMED_PDF, "MalformedPdf");
+
+    public static final DocFormsExportDataResponseCode SIGNING_PENDING =
+            new DocFormsExportDataResponseCode(Value.SIGNING_PENDING, "SigningPending");
+
+    public static final DocFormsExportDataResponseCode WIRE_FORMAT =
+            new DocFormsExportDataResponseCode(Value.WIRE_FORMAT, "WireFormat");
+
+    public static final DocFormsExportDataResponseCode SIGNING_EXPIRED =
+            new DocFormsExportDataResponseCode(Value.SIGNING_EXPIRED, "SigningExpired");
+
+    public static final DocFormsExportDataResponseCode ABORTED =
+            new DocFormsExportDataResponseCode(Value.ABORTED, "Aborted");
+
+    public static final DocFormsExportDataResponseCode DOC_PASSWORD_REQUIRED =
+            new DocFormsExportDataResponseCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
+
+    public static final DocFormsExportDataResponseCode PROTECTED_DOCUMENT =
+            new DocFormsExportDataResponseCode(Value.PROTECTED_DOCUMENT, "ProtectedDocument");
+
+    public static final DocFormsExportDataResponseCode SIGNING_VERSION_MISMATCH =
+            new DocFormsExportDataResponseCode(Value.SIGNING_VERSION_MISMATCH, "SigningVersionMismatch");
+
+    public static final DocFormsExportDataResponseCode DOC_NOT_OPEN =
+            new DocFormsExportDataResponseCode(Value.DOC_NOT_OPEN, "DocNotOpen");
 
     private final Value value;
 
@@ -97,14 +115,12 @@ public final class DocFormsExportDataResponseCode {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case MALFORMED_PDF:
-                return visitor.visitMalformedPdf();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case WEAK_ANNOTATION_SESSION_CONFLICT:
                 return visitor.visitWeakAnnotationSessionConflict();
-            case WIRE_FORMAT:
-                return visitor.visitWireFormat();
+            case STALE_BASE:
+                return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
                 return visitor.visitRuntimeUnavailable();
             case UNAUTHENTICATED:
@@ -115,10 +131,6 @@ public final class DocFormsExportDataResponseCode {
                 return visitor.visitDocOpenFailed();
             case NOT_FOUND:
                 return visitor.visitNotFound();
-            case ABORTED:
-                return visitor.visitAborted();
-            case DOC_PASSWORD_REQUIRED:
-                return visitor.visitDocPasswordRequired();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
             case SHARE_PASSWORD_REQUIRED:
@@ -129,12 +141,30 @@ public final class DocFormsExportDataResponseCode {
                 return visitor.visitInvalidReference();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
-            case DOC_NOT_OPEN:
-                return visitor.visitDocNotOpen();
             case LAYER_VERSION_CONFLICT:
                 return visitor.visitLayerVersionConflict();
             case NOT_IMPLEMENTED:
                 return visitor.visitNotImplemented();
+            case SIGNATURE_REFUSED:
+                return visitor.visitSignatureRefused();
+            case MALFORMED_PDF:
+                return visitor.visitMalformedPdf();
+            case SIGNING_PENDING:
+                return visitor.visitSigningPending();
+            case WIRE_FORMAT:
+                return visitor.visitWireFormat();
+            case SIGNING_EXPIRED:
+                return visitor.visitSigningExpired();
+            case ABORTED:
+                return visitor.visitAborted();
+            case DOC_PASSWORD_REQUIRED:
+                return visitor.visitDocPasswordRequired();
+            case PROTECTED_DOCUMENT:
+                return visitor.visitProtectedDocument();
+            case SIGNING_VERSION_MISMATCH:
+                return visitor.visitSigningVersionMismatch();
+            case DOC_NOT_OPEN:
+                return visitor.visitDocNotOpen();
             case _UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -144,14 +174,12 @@ public final class DocFormsExportDataResponseCode {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static DocFormsExportDataResponseCode valueOf(String value) {
         switch (value) {
-            case "MalformedPdf":
-                return MALFORMED_PDF;
             case "Unknown":
                 return UNKNOWN;
             case "WeakAnnotationSessionConflict":
                 return WEAK_ANNOTATION_SESSION_CONFLICT;
-            case "WireFormat":
-                return WIRE_FORMAT;
+            case "StaleBase":
+                return STALE_BASE;
             case "RuntimeUnavailable":
                 return RUNTIME_UNAVAILABLE;
             case "Unauthenticated":
@@ -162,10 +190,6 @@ public final class DocFormsExportDataResponseCode {
                 return DOC_OPEN_FAILED;
             case "NotFound":
                 return NOT_FOUND;
-            case "Aborted":
-                return ABORTED;
-            case "DocPasswordRequired":
-                return DOC_PASSWORD_REQUIRED;
             case "InvalidArg":
                 return INVALID_ARG;
             case "SharePasswordRequired":
@@ -176,12 +200,30 @@ public final class DocFormsExportDataResponseCode {
                 return INVALID_REFERENCE;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
-            case "DocNotOpen":
-                return DOC_NOT_OPEN;
             case "LayerVersionConflict":
                 return LAYER_VERSION_CONFLICT;
             case "NotImplemented":
                 return NOT_IMPLEMENTED;
+            case "SignatureRefused":
+                return SIGNATURE_REFUSED;
+            case "MalformedPdf":
+                return MALFORMED_PDF;
+            case "SigningPending":
+                return SIGNING_PENDING;
+            case "WireFormat":
+                return WIRE_FORMAT;
+            case "SigningExpired":
+                return SIGNING_EXPIRED;
+            case "Aborted":
+                return ABORTED;
+            case "DocPasswordRequired":
+                return DOC_PASSWORD_REQUIRED;
+            case "ProtectedDocument":
+                return PROTECTED_DOCUMENT;
+            case "SigningVersionMismatch":
+                return SIGNING_VERSION_MISMATCH;
+            case "DocNotOpen":
+                return DOC_NOT_OPEN;
             default:
                 return new DocFormsExportDataResponseCode(Value._UNKNOWN, value);
         }
@@ -226,6 +268,18 @@ public final class DocFormsExportDataResponseCode {
 
         MALFORMED_PDF,
 
+        SIGNING_PENDING,
+
+        SIGNING_EXPIRED,
+
+        SIGNING_VERSION_MISMATCH,
+
+        SIGNATURE_REFUSED,
+
+        PROTECTED_DOCUMENT,
+
+        STALE_BASE,
+
         _UNKNOWN
     }
 
@@ -267,6 +321,18 @@ public final class DocFormsExportDataResponseCode {
         T visitNotImplemented();
 
         T visitMalformedPdf();
+
+        T visitSigningPending();
+
+        T visitSigningExpired();
+
+        T visitSigningVersionMismatch();
+
+        T visitSignatureRefused();
+
+        T visitProtectedDocument();
+
+        T visitStaleBase();
 
         T visitUnknown(String unknownType);
     }
