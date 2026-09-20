@@ -26,6 +26,14 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsList200ResponseAnnotationsItemLine.Builder.class)
 public final class DocAnnotationsList200ResponseAnnotationsItemLine {
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> intent;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> measure;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> caption;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> leader;
+
     private final DocAnnotationsList200ResponseAnnotationsItemLineRef ref;
 
     private final int pageObjectNumber;
@@ -87,6 +95,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsList200ResponseAnnotationsItemLine(
+            Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> intent,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> measure,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> caption,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> leader,
             DocAnnotationsList200ResponseAnnotationsItemLineRef ref,
             int pageObjectNumber,
             int index,
@@ -117,6 +129,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
             DocAnnotationsList200ResponseAnnotationsItemLineLineEndings lineEndings,
             Optional<Double> rotation,
             Map<String, Object> additionalProperties) {
+        this.intent = intent;
+        this.measure = measure;
+        this.caption = caption;
+        this.leader = leader;
         this.ref = ref;
         this.pageObjectNumber = pageObjectNumber;
         this.index = index;
@@ -147,6 +163,26 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
         this.lineEndings = lineEndings;
         this.rotation = rotation;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("intent")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> getIntent() {
+        return intent;
+    }
+
+    @JsonProperty("measure")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> getMeasure() {
+        return measure;
+    }
+
+    @JsonProperty("caption")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> getCaption() {
+        return caption;
+    }
+
+    @JsonProperty("leader")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> getLeader() {
+        return leader;
     }
 
     @JsonProperty("ref")
@@ -388,7 +424,11 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
     }
 
     private boolean equalTo(DocAnnotationsList200ResponseAnnotationsItemLine other) {
-        return ref.equals(other.ref)
+        return intent.equals(other.intent)
+                && measure.equals(other.measure)
+                && caption.equals(other.caption)
+                && leader.equals(other.leader)
+                && ref.equals(other.ref)
                 && pageObjectNumber == other.pageObjectNumber
                 && index == other.index
                 && identityQuality.equals(other.identityQuality)
@@ -422,6 +462,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.intent,
+                this.measure,
+                this.caption,
+                this.leader,
                 this.ref,
                 this.pageObjectNumber,
                 this.index,
@@ -523,6 +567,22 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage intent(Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> intent);
+
+        _FinalStage intent(DocAnnotationsList200ResponseAnnotationsItemLineIntent intent);
+
+        _FinalStage measure(Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> measure);
+
+        _FinalStage measure(DocAnnotationsList200ResponseAnnotationsItemLineMeasure measure);
+
+        _FinalStage caption(Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> caption);
+
+        _FinalStage caption(DocAnnotationsList200ResponseAnnotationsItemLineCaption caption);
+
+        _FinalStage leader(Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> leader);
+
+        _FinalStage leader(DocAnnotationsList200ResponseAnnotationsItemLineLeader leader);
 
         _FinalStage nm(Optional<String> nm);
 
@@ -684,6 +744,14 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
 
         private Optional<String> nm = Optional.empty();
 
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> leader = Optional.empty();
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> caption = Optional.empty();
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> measure = Optional.empty();
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> intent = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -691,6 +759,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
 
         @java.lang.Override
         public Builder from(DocAnnotationsList200ResponseAnnotationsItemLine other) {
+            intent(other.getIntent());
+            measure(other.getMeasure());
+            caption(other.getCaption());
+            leader(other.getLeader());
             ref(other.getRef());
             pageObjectNumber(other.getPageObjectNumber());
             index(other.getIndex());
@@ -1137,8 +1209,64 @@ public final class DocAnnotationsList200ResponseAnnotationsItemLine {
         }
 
         @java.lang.Override
+        public _FinalStage leader(DocAnnotationsList200ResponseAnnotationsItemLineLeader leader) {
+            this.leader = Optional.ofNullable(leader);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "leader", nulls = Nulls.SKIP)
+        public _FinalStage leader(Optional<DocAnnotationsList200ResponseAnnotationsItemLineLeader> leader) {
+            this.leader = leader;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage caption(DocAnnotationsList200ResponseAnnotationsItemLineCaption caption) {
+            this.caption = Optional.ofNullable(caption);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "caption", nulls = Nulls.SKIP)
+        public _FinalStage caption(Optional<DocAnnotationsList200ResponseAnnotationsItemLineCaption> caption) {
+            this.caption = caption;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage measure(DocAnnotationsList200ResponseAnnotationsItemLineMeasure measure) {
+            this.measure = Optional.ofNullable(measure);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "measure", nulls = Nulls.SKIP)
+        public _FinalStage measure(Optional<DocAnnotationsList200ResponseAnnotationsItemLineMeasure> measure) {
+            this.measure = measure;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage intent(DocAnnotationsList200ResponseAnnotationsItemLineIntent intent) {
+            this.intent = Optional.ofNullable(intent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "intent", nulls = Nulls.SKIP)
+        public _FinalStage intent(Optional<DocAnnotationsList200ResponseAnnotationsItemLineIntent> intent) {
+            this.intent = intent;
+            return this;
+        }
+
+        @java.lang.Override
         public DocAnnotationsList200ResponseAnnotationsItemLine build() {
             return new DocAnnotationsList200ResponseAnnotationsItemLine(
+                    intent,
+                    measure,
+                    caption,
+                    leader,
                     ref,
                     pageObjectNumber,
                     index,

@@ -6,6 +6,7 @@ package com.cloudpdf.api.resources.doc.pages;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.pages.requests.DeletePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.DocPagesSetScaleRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ExtractPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
@@ -14,6 +15,7 @@ import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.ViewportsPagesRequest;
 import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
 import com.cloudpdf.api.types.DocPagesInsert200Response;
@@ -22,8 +24,11 @@ import com.cloudpdf.api.types.DocPagesMove200Response;
 import com.cloudpdf.api.types.DocPagesRemoveName200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
 import com.cloudpdf.api.types.DocPagesSetName200Response;
+import com.cloudpdf.api.types.DocPagesSetScale200Response;
+import com.cloudpdf.api.types.DocPagesViewports200ResponseItem;
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.MediaType;
@@ -43,6 +48,40 @@ public class AsyncPagesClient {
      */
     public AsyncRawPagesClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public CompletableFuture<DocPagesSetScale200Response> setScale(
+            String docId, String layerName, int pon, DocPagesSetScaleRequest request) {
+        return this.rawClient.setScale(docId, layerName, pon, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocPagesSetScale200Response> setScale(
+            String docId, String layerName, int pon, DocPagesSetScaleRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .setScale(docId, layerName, pon, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
+            String docId, String layerName, int pon) {
+        return this.rawClient.viewports(docId, layerName, pon).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
+            String docId, String layerName, int pon, RequestOptions requestOptions) {
+        return this.rawClient.viewports(docId, layerName, pon, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
+            String docId, String layerName, int pon, ViewportsPagesRequest request) {
+        return this.rawClient.viewports(docId, layerName, pon, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
+            String docId, String layerName, int pon, ViewportsPagesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .viewports(docId, layerName, pon, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocPagesDelete200Response> delete(
