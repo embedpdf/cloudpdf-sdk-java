@@ -27,6 +27,12 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon.Builder.class)
 public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon {
+    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> intent;
+
+    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> measure;
+
+    private final Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> caption;
+
     private final DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonRef ref;
 
     private final int pageObjectNumber;
@@ -88,6 +94,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon(
+            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> intent,
+            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> measure,
+            Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> caption,
             DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonRef ref,
             int pageObjectNumber,
             int index,
@@ -118,6 +127,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
             Optional<Double> rotation,
             Optional<Double> cloudyIntensity,
             Map<String, Object> additionalProperties) {
+        this.intent = intent;
+        this.measure = measure;
+        this.caption = caption;
         this.ref = ref;
         this.pageObjectNumber = pageObjectNumber;
         this.index = index;
@@ -148,6 +160,21 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
         this.rotation = rotation;
         this.cloudyIntensity = cloudyIntensity;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("intent")
+    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> getIntent() {
+        return intent;
+    }
+
+    @JsonProperty("measure")
+    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> getMeasure() {
+        return measure;
+    }
+
+    @JsonProperty("caption")
+    public Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> getCaption() {
+        return caption;
     }
 
     @JsonProperty("ref")
@@ -398,7 +425,10 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
     }
 
     private boolean equalTo(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon other) {
-        return ref.equals(other.ref)
+        return intent.equals(other.intent)
+                && measure.equals(other.measure)
+                && caption.equals(other.caption)
+                && ref.equals(other.ref)
                 && pageObjectNumber == other.pageObjectNumber
                 && index == other.index
                 && identityQuality.equals(other.identityQuality)
@@ -432,6 +462,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.intent,
+                this.measure,
+                this.caption,
                 this.ref,
                 this.pageObjectNumber,
                 this.index,
@@ -528,6 +561,18 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage intent(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> intent);
+
+        _FinalStage intent(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent intent);
+
+        _FinalStage measure(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> measure);
+
+        _FinalStage measure(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure measure);
+
+        _FinalStage caption(Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> caption);
+
+        _FinalStage caption(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption caption);
 
         _FinalStage nm(Optional<String> nm);
 
@@ -709,6 +754,15 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
 
         private Optional<String> nm = Optional.empty();
 
+        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> caption =
+                Optional.empty();
+
+        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> measure =
+                Optional.empty();
+
+        private Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> intent =
+                Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -716,6 +770,9 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
 
         @java.lang.Override
         public Builder from(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon other) {
+            intent(other.getIntent());
+            measure(other.getMeasure());
+            caption(other.getCaption());
             ref(other.getRef());
             pageObjectNumber(other.getPageObjectNumber());
             index(other.getIndex());
@@ -1209,8 +1266,53 @@ public final class DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolyg
         }
 
         @java.lang.Override
+        public _FinalStage caption(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption caption) {
+            this.caption = Optional.ofNullable(caption);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "caption", nulls = Nulls.SKIP)
+        public _FinalStage caption(
+                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonCaption> caption) {
+            this.caption = caption;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage measure(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure measure) {
+            this.measure = Optional.ofNullable(measure);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "measure", nulls = Nulls.SKIP)
+        public _FinalStage measure(
+                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonMeasure> measure) {
+            this.measure = measure;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage intent(DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent intent) {
+            this.intent = Optional.ofNullable(intent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "intent", nulls = Nulls.SKIP)
+        public _FinalStage intent(
+                Optional<DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygonIntent> intent) {
+            this.intent = intent;
+            return this;
+        }
+
+        @java.lang.Override
         public DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon build() {
             return new DocAnnotationsListAll200ResponsePagesItemAnnotationsItemPolygon(
+                    intent,
+                    measure,
+                    caption,
                     ref,
                     pageObjectNumber,
                     index,

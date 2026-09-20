@@ -3047,6 +3047,156 @@ client.doc().metadata().get(
 </details>
 
 ## Doc Pages
+<details><summary><code>client.doc.pages.setScale(docId, layerName, pon, request) -> DocPagesSetScale200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().setScale(
+    "docId",
+    "layerName",
+    1,
+    DocPagesSetScaleRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pon:** `Integer` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**measure:** `Optional<DocPagesSetScaleRequestMeasure>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.pages.viewports(docId, layerName, pon) -> List&amp;lt;DocPagesViewports200ResponseItem&amp;gt;</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().viewports(
+    "docId",
+    "layerName",
+    1,
+    ViewportsPagesRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pon:** `Integer` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.doc.pages.delete(docId, layerName, request) -> DocPagesDelete200Response</code></summary>
 <dl>
 <dd>

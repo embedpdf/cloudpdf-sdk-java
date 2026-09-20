@@ -27,6 +27,12 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsList200ResponseAnnotationsItemPolyline.Builder.class)
 public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> intent;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> measure;
+
+    private final Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> caption;
+
     private final DocAnnotationsList200ResponseAnnotationsItemPolylineRef ref;
 
     private final int pageObjectNumber;
@@ -88,6 +94,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsList200ResponseAnnotationsItemPolyline(
+            Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> intent,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> measure,
+            Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> caption,
             DocAnnotationsList200ResponseAnnotationsItemPolylineRef ref,
             int pageObjectNumber,
             int index,
@@ -118,6 +127,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
             Optional<Double> rotation,
             DocAnnotationsList200ResponseAnnotationsItemPolylineLineEndings lineEndings,
             Map<String, Object> additionalProperties) {
+        this.intent = intent;
+        this.measure = measure;
+        this.caption = caption;
         this.ref = ref;
         this.pageObjectNumber = pageObjectNumber;
         this.index = index;
@@ -148,6 +160,21 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
         this.rotation = rotation;
         this.lineEndings = lineEndings;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("intent")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> getIntent() {
+        return intent;
+    }
+
+    @JsonProperty("measure")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> getMeasure() {
+        return measure;
+    }
+
+    @JsonProperty("caption")
+    public Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> getCaption() {
+        return caption;
     }
 
     @JsonProperty("ref")
@@ -389,7 +416,10 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
     }
 
     private boolean equalTo(DocAnnotationsList200ResponseAnnotationsItemPolyline other) {
-        return ref.equals(other.ref)
+        return intent.equals(other.intent)
+                && measure.equals(other.measure)
+                && caption.equals(other.caption)
+                && ref.equals(other.ref)
                 && pageObjectNumber == other.pageObjectNumber
                 && index == other.index
                 && identityQuality.equals(other.identityQuality)
@@ -423,6 +453,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.intent,
+                this.measure,
+                this.caption,
                 this.ref,
                 this.pageObjectNumber,
                 this.index,
@@ -521,6 +554,18 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage intent(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> intent);
+
+        _FinalStage intent(DocAnnotationsList200ResponseAnnotationsItemPolylineIntent intent);
+
+        _FinalStage measure(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> measure);
+
+        _FinalStage measure(DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure measure);
+
+        _FinalStage caption(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> caption);
+
+        _FinalStage caption(DocAnnotationsList200ResponseAnnotationsItemPolylineCaption caption);
 
         _FinalStage nm(Optional<String> nm);
 
@@ -687,6 +732,12 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
 
         private Optional<String> nm = Optional.empty();
 
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> caption = Optional.empty();
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> measure = Optional.empty();
+
+        private Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> intent = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -694,6 +745,9 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
 
         @java.lang.Override
         public Builder from(DocAnnotationsList200ResponseAnnotationsItemPolyline other) {
+            intent(other.getIntent());
+            measure(other.getMeasure());
+            caption(other.getCaption());
             ref(other.getRef());
             pageObjectNumber(other.getPageObjectNumber());
             index(other.getIndex());
@@ -1162,8 +1216,50 @@ public final class DocAnnotationsList200ResponseAnnotationsItemPolyline {
         }
 
         @java.lang.Override
+        public _FinalStage caption(DocAnnotationsList200ResponseAnnotationsItemPolylineCaption caption) {
+            this.caption = Optional.ofNullable(caption);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "caption", nulls = Nulls.SKIP)
+        public _FinalStage caption(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineCaption> caption) {
+            this.caption = caption;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage measure(DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure measure) {
+            this.measure = Optional.ofNullable(measure);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "measure", nulls = Nulls.SKIP)
+        public _FinalStage measure(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineMeasure> measure) {
+            this.measure = measure;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage intent(DocAnnotationsList200ResponseAnnotationsItemPolylineIntent intent) {
+            this.intent = Optional.ofNullable(intent);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "intent", nulls = Nulls.SKIP)
+        public _FinalStage intent(Optional<DocAnnotationsList200ResponseAnnotationsItemPolylineIntent> intent) {
+            this.intent = intent;
+            return this;
+        }
+
+        @java.lang.Override
         public DocAnnotationsList200ResponseAnnotationsItemPolyline build() {
             return new DocAnnotationsList200ResponseAnnotationsItemPolyline(
+                    intent,
+                    measure,
+                    caption,
                     ref,
                     pageObjectNumber,
                     index,
