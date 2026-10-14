@@ -28,10 +28,10 @@ import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import com.cloudpdf.api.types.DocumentsCommit200Response;
 import com.cloudpdf.api.types.DocumentsGet200Response;
 import com.cloudpdf.api.types.DocumentsImportFrom200Response;
-import com.cloudpdf.api.types.DocumentsImportFrom502Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
@@ -1121,7 +1121,7 @@ public class AsyncRawDocumentsClient {
                             case 502:
                                 future.completeExceptionally(new BadGatewayError(
                                         ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, DocumentsImportFrom502Response.class),
+                                                responseBodyString, AdminErrorPayload.class),
                                         response));
                                 return;
                         }

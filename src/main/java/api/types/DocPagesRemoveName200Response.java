@@ -19,18 +19,26 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesRemoveName200Response.Builder.class)
 public final class DocPagesRemoveName200Response {
-    private final DocPagesRemoveName200ResponseMeta meta;
+    private final DocPagesRemoveName200ResponseLayout layout;
+
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesRemoveName200Response(
-            DocPagesRemoveName200ResponseMeta meta, Map<String, Object> additionalProperties) {
+            DocPagesRemoveName200ResponseLayout layout, MutationMeta meta, Map<String, Object> additionalProperties) {
+        this.layout = layout;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("layout")
+    public DocPagesRemoveName200ResponseLayout getLayout() {
+        return layout;
+    }
+
     @JsonProperty("meta")
-    public DocPagesRemoveName200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -46,12 +54,12 @@ public final class DocPagesRemoveName200Response {
     }
 
     private boolean equalTo(DocPagesRemoveName200Response other) {
-        return meta.equals(other.meta);
+        return layout.equals(other.layout) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.layout, this.meta);
     }
 
     @java.lang.Override
@@ -59,14 +67,18 @@ public final class DocPagesRemoveName200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static MetaStage builder() {
+    public static LayoutStage builder() {
         return new Builder();
     }
 
-    public interface MetaStage {
-        _FinalStage meta(@NotNull DocPagesRemoveName200ResponseMeta meta);
+    public interface LayoutStage {
+        MetaStage layout(@NotNull DocPagesRemoveName200ResponseLayout layout);
 
         Builder from(DocPagesRemoveName200Response other);
+    }
+
+    public interface MetaStage {
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -78,8 +90,10 @@ public final class DocPagesRemoveName200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MetaStage, _FinalStage {
-        private DocPagesRemoveName200ResponseMeta meta;
+    public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
+        private DocPagesRemoveName200ResponseLayout layout;
+
+        private MutationMeta meta;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,20 +102,28 @@ public final class DocPagesRemoveName200Response {
 
         @java.lang.Override
         public Builder from(DocPagesRemoveName200Response other) {
+            layout(other.getLayout());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("layout")
+        public MetaStage layout(@NotNull DocPagesRemoveName200ResponseLayout layout) {
+            this.layout = Objects.requireNonNull(layout, "layout must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocPagesRemoveName200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
         public DocPagesRemoveName200Response build() {
-            return new DocPagesRemoveName200Response(meta, additionalProperties);
+            return new DocPagesRemoveName200Response(layout, meta, additionalProperties);
         }
 
         @java.lang.Override

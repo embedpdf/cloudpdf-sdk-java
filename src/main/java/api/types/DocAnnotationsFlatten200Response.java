@@ -10,8 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +22,46 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsFlatten200Response.Builder.class)
 public final class DocAnnotationsFlatten200Response {
-    private final DocAnnotationsFlatten200ResponseMeta meta;
+    private final PageRef page;
+
+    private final DocAnnotationsFlatten200ResponseUsage usage;
+
+    private final List<DocAnnotationsFlatten200ResponseResultsItem> results;
+
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsFlatten200Response(
-            DocAnnotationsFlatten200ResponseMeta meta, Map<String, Object> additionalProperties) {
+            PageRef page,
+            DocAnnotationsFlatten200ResponseUsage usage,
+            List<DocAnnotationsFlatten200ResponseResultsItem> results,
+            MutationMeta meta,
+            Map<String, Object> additionalProperties) {
+        this.page = page;
+        this.usage = usage;
+        this.results = results;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("page")
+    public PageRef getPage() {
+        return page;
+    }
+
+    @JsonProperty("usage")
+    public DocAnnotationsFlatten200ResponseUsage getUsage() {
+        return usage;
+    }
+
+    @JsonProperty("results")
+    public List<DocAnnotationsFlatten200ResponseResultsItem> getResults() {
+        return results;
+    }
+
     @JsonProperty("meta")
-    public DocAnnotationsFlatten200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -46,12 +77,15 @@ public final class DocAnnotationsFlatten200Response {
     }
 
     private boolean equalTo(DocAnnotationsFlatten200Response other) {
-        return meta.equals(other.meta);
+        return page.equals(other.page)
+                && usage.equals(other.usage)
+                && results.equals(other.results)
+                && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.page, this.usage, this.results, this.meta);
     }
 
     @java.lang.Override
@@ -59,14 +93,22 @@ public final class DocAnnotationsFlatten200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static MetaStage builder() {
+    public static PageStage builder() {
         return new Builder();
     }
 
-    public interface MetaStage {
-        _FinalStage meta(@NotNull DocAnnotationsFlatten200ResponseMeta meta);
+    public interface PageStage {
+        UsageStage page(@NotNull PageRef page);
 
         Builder from(DocAnnotationsFlatten200Response other);
+    }
+
+    public interface UsageStage {
+        MetaStage usage(@NotNull DocAnnotationsFlatten200ResponseUsage usage);
+    }
+
+    public interface MetaStage {
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -75,11 +117,23 @@ public final class DocAnnotationsFlatten200Response {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage results(List<DocAnnotationsFlatten200ResponseResultsItem> results);
+
+        _FinalStage addResults(DocAnnotationsFlatten200ResponseResultsItem results);
+
+        _FinalStage addAllResults(List<DocAnnotationsFlatten200ResponseResultsItem> results);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MetaStage, _FinalStage {
-        private DocAnnotationsFlatten200ResponseMeta meta;
+    public static final class Builder implements PageStage, UsageStage, MetaStage, _FinalStage {
+        private PageRef page;
+
+        private DocAnnotationsFlatten200ResponseUsage usage;
+
+        private MutationMeta meta;
+
+        private List<DocAnnotationsFlatten200ResponseResultsItem> results = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,20 +142,61 @@ public final class DocAnnotationsFlatten200Response {
 
         @java.lang.Override
         public Builder from(DocAnnotationsFlatten200Response other) {
+            page(other.getPage());
+            usage(other.getUsage());
+            results(other.getResults());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("page")
+        public UsageStage page(@NotNull PageRef page) {
+            this.page = Objects.requireNonNull(page, "page must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("usage")
+        public MetaStage usage(@NotNull DocAnnotationsFlatten200ResponseUsage usage) {
+            this.usage = Objects.requireNonNull(usage, "usage must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocAnnotationsFlatten200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
+        public _FinalStage addAllResults(List<DocAnnotationsFlatten200ResponseResultsItem> results) {
+            if (results != null) {
+                this.results.addAll(results);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addResults(DocAnnotationsFlatten200ResponseResultsItem results) {
+            this.results.add(results);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "results", nulls = Nulls.SKIP)
+        public _FinalStage results(List<DocAnnotationsFlatten200ResponseResultsItem> results) {
+            this.results.clear();
+            if (results != null) {
+                this.results.addAll(results);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public DocAnnotationsFlatten200Response build() {
-            return new DocAnnotationsFlatten200Response(meta, additionalProperties);
+            return new DocAnnotationsFlatten200Response(page, usage, results, meta, additionalProperties);
         }
 
         @java.lang.Override

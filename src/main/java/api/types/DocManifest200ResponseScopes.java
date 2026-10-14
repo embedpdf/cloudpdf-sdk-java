@@ -23,6 +23,8 @@ public final class DocManifest200ResponseScopes {
 
     private final DocManifest200ResponseScopesAnnotations annotations;
 
+    private final DocManifest200ResponseScopesForms forms;
+
     private final DocManifest200ResponseScopesLayout layout;
 
     private final DocManifest200ResponseScopesAttachments attachments;
@@ -36,6 +38,7 @@ public final class DocManifest200ResponseScopes {
     private DocManifest200ResponseScopes(
             DocManifest200ResponseScopesContent content,
             DocManifest200ResponseScopesAnnotations annotations,
+            DocManifest200ResponseScopesForms forms,
             DocManifest200ResponseScopesLayout layout,
             DocManifest200ResponseScopesAttachments attachments,
             DocManifest200ResponseScopesMetadata metadata,
@@ -43,6 +46,7 @@ public final class DocManifest200ResponseScopes {
             Map<String, Object> additionalProperties) {
         this.content = content;
         this.annotations = annotations;
+        this.forms = forms;
         this.layout = layout;
         this.attachments = attachments;
         this.metadata = metadata;
@@ -58,6 +62,11 @@ public final class DocManifest200ResponseScopes {
     @JsonProperty("annotations")
     public DocManifest200ResponseScopesAnnotations getAnnotations() {
         return annotations;
+    }
+
+    @JsonProperty("forms")
+    public DocManifest200ResponseScopesForms getForms() {
+        return forms;
     }
 
     @JsonProperty("layout")
@@ -94,6 +103,7 @@ public final class DocManifest200ResponseScopes {
     private boolean equalTo(DocManifest200ResponseScopes other) {
         return content.equals(other.content)
                 && annotations.equals(other.annotations)
+                && forms.equals(other.forms)
                 && layout.equals(other.layout)
                 && attachments.equals(other.attachments)
                 && metadata.equals(other.metadata)
@@ -102,7 +112,8 @@ public final class DocManifest200ResponseScopes {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.content, this.annotations, this.layout, this.attachments, this.metadata, this.actions);
+        return Objects.hash(
+                this.content, this.annotations, this.forms, this.layout, this.attachments, this.metadata, this.actions);
     }
 
     @java.lang.Override
@@ -121,7 +132,11 @@ public final class DocManifest200ResponseScopes {
     }
 
     public interface AnnotationsStage {
-        LayoutStage annotations(@NotNull DocManifest200ResponseScopesAnnotations annotations);
+        FormsStage annotations(@NotNull DocManifest200ResponseScopesAnnotations annotations);
+    }
+
+    public interface FormsStage {
+        LayoutStage forms(@NotNull DocManifest200ResponseScopesForms forms);
     }
 
     public interface LayoutStage {
@@ -152,6 +167,7 @@ public final class DocManifest200ResponseScopes {
     public static final class Builder
             implements ContentStage,
                     AnnotationsStage,
+                    FormsStage,
                     LayoutStage,
                     AttachmentsStage,
                     MetadataStage,
@@ -160,6 +176,8 @@ public final class DocManifest200ResponseScopes {
         private DocManifest200ResponseScopesContent content;
 
         private DocManifest200ResponseScopesAnnotations annotations;
+
+        private DocManifest200ResponseScopesForms forms;
 
         private DocManifest200ResponseScopesLayout layout;
 
@@ -178,6 +196,7 @@ public final class DocManifest200ResponseScopes {
         public Builder from(DocManifest200ResponseScopes other) {
             content(other.getContent());
             annotations(other.getAnnotations());
+            forms(other.getForms());
             layout(other.getLayout());
             attachments(other.getAttachments());
             metadata(other.getMetadata());
@@ -194,8 +213,15 @@ public final class DocManifest200ResponseScopes {
 
         @java.lang.Override
         @JsonSetter("annotations")
-        public LayoutStage annotations(@NotNull DocManifest200ResponseScopesAnnotations annotations) {
+        public FormsStage annotations(@NotNull DocManifest200ResponseScopesAnnotations annotations) {
             this.annotations = Objects.requireNonNull(annotations, "annotations must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("forms")
+        public LayoutStage forms(@NotNull DocManifest200ResponseScopesForms forms) {
+            this.forms = Objects.requireNonNull(forms, "forms must not be null");
             return this;
         }
 
@@ -230,7 +256,7 @@ public final class DocManifest200ResponseScopes {
         @java.lang.Override
         public DocManifest200ResponseScopes build() {
             return new DocManifest200ResponseScopes(
-                    content, annotations, layout, attachments, metadata, actions, additionalProperties);
+                    content, annotations, forms, layout, attachments, metadata, actions, additionalProperties);
         }
 
         @java.lang.Override

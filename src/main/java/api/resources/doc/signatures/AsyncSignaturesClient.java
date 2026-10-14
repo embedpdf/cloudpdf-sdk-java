@@ -5,13 +5,13 @@ package com.cloudpdf.api.resources.doc.signatures;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.resources.doc.signatures.requests.AbortSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.AnalysisSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
-import com.cloudpdf.api.types.DocSignaturesAbort200Response;
 import com.cloudpdf.api.types.DocSignaturesAnalysis200Response;
+import com.cloudpdf.api.types.DocSignaturesCancel200Response;
 import com.cloudpdf.api.types.DocSignaturesComplete200Response;
 import com.cloudpdf.api.types.DocSignaturesList200Response;
 import com.cloudpdf.api.types.DocSignaturesPrepare200Response;
@@ -68,28 +68,30 @@ public class AsyncSignaturesClient {
         return this.rawClient.list(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocSignaturesAbort200Response> abort(String docId, String layerName, String signingId) {
-        return this.rawClient.abort(docId, layerName, signingId).thenApply(response -> response.body());
+    public CompletableFuture<DocSignaturesCancel200Response> cancel(String docId, String layerName, String signingId) {
+        return this.rawClient.cancel(docId, layerName, signingId).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocSignaturesAbort200Response> abort(
+    public CompletableFuture<DocSignaturesCancel200Response> cancel(
             String docId, String layerName, String signingId, RequestOptions requestOptions) {
-        return this.rawClient.abort(docId, layerName, signingId, requestOptions).thenApply(response -> response.body());
+        return this.rawClient
+                .cancel(docId, layerName, signingId, requestOptions)
+                .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocSignaturesAbort200Response> abort(
-            String docId, String layerName, String signingId, AbortSignaturesRequest request) {
-        return this.rawClient.abort(docId, layerName, signingId, request).thenApply(response -> response.body());
+    public CompletableFuture<DocSignaturesCancel200Response> cancel(
+            String docId, String layerName, String signingId, CancelSignaturesRequest request) {
+        return this.rawClient.cancel(docId, layerName, signingId, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocSignaturesAbort200Response> abort(
+    public CompletableFuture<DocSignaturesCancel200Response> cancel(
             String docId,
             String layerName,
             String signingId,
-            AbortSignaturesRequest request,
+            CancelSignaturesRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .abort(docId, layerName, signingId, request, requestOptions)
+                .cancel(docId, layerName, signingId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -149,7 +151,7 @@ public class AsyncSignaturesClient {
     }
 
     /**
-     * The multipart envelope: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock, appearance) and an optional <code>resource:&lt;key&gt;</code> PDF part the body's <code>appearance.resource</code> names. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is aborted, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
      */
     public CompletableFuture<DocSignaturesPrepare200Response> prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
@@ -157,7 +159,7 @@ public class AsyncSignaturesClient {
     }
 
     /**
-     * The multipart envelope: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock, appearance) and an optional <code>resource:&lt;key&gt;</code> PDF part the body's <code>appearance.resource</code> names. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is aborted, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
      */
     public CompletableFuture<DocSignaturesPrepare200Response> prepare(
             String docId,

@@ -10,8 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +22,37 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesInsertBlank200Response.Builder.class)
 public final class DocPagesInsertBlank200Response {
-    private final DocPagesInsertBlank200ResponseMeta meta;
+    private final List<PageRef> insertedPages;
+
+    private final DocPagesInsertBlank200ResponseLayout layout;
+
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesInsertBlank200Response(
-            DocPagesInsertBlank200ResponseMeta meta, Map<String, Object> additionalProperties) {
+            List<PageRef> insertedPages,
+            DocPagesInsertBlank200ResponseLayout layout,
+            MutationMeta meta,
+            Map<String, Object> additionalProperties) {
+        this.insertedPages = insertedPages;
+        this.layout = layout;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("insertedPages")
+    public List<PageRef> getInsertedPages() {
+        return insertedPages;
+    }
+
+    @JsonProperty("layout")
+    public DocPagesInsertBlank200ResponseLayout getLayout() {
+        return layout;
+    }
+
     @JsonProperty("meta")
-    public DocPagesInsertBlank200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -46,12 +68,12 @@ public final class DocPagesInsertBlank200Response {
     }
 
     private boolean equalTo(DocPagesInsertBlank200Response other) {
-        return meta.equals(other.meta);
+        return insertedPages.equals(other.insertedPages) && layout.equals(other.layout) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.insertedPages, this.layout, this.meta);
     }
 
     @java.lang.Override
@@ -59,14 +81,18 @@ public final class DocPagesInsertBlank200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static MetaStage builder() {
+    public static LayoutStage builder() {
         return new Builder();
     }
 
-    public interface MetaStage {
-        _FinalStage meta(@NotNull DocPagesInsertBlank200ResponseMeta meta);
+    public interface LayoutStage {
+        MetaStage layout(@NotNull DocPagesInsertBlank200ResponseLayout layout);
 
         Builder from(DocPagesInsertBlank200Response other);
+    }
+
+    public interface MetaStage {
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -75,11 +101,21 @@ public final class DocPagesInsertBlank200Response {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage insertedPages(List<PageRef> insertedPages);
+
+        _FinalStage addInsertedPages(PageRef insertedPages);
+
+        _FinalStage addAllInsertedPages(List<PageRef> insertedPages);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MetaStage, _FinalStage {
-        private DocPagesInsertBlank200ResponseMeta meta;
+    public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
+        private DocPagesInsertBlank200ResponseLayout layout;
+
+        private MutationMeta meta;
+
+        private List<PageRef> insertedPages = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,20 +124,53 @@ public final class DocPagesInsertBlank200Response {
 
         @java.lang.Override
         public Builder from(DocPagesInsertBlank200Response other) {
+            insertedPages(other.getInsertedPages());
+            layout(other.getLayout());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("layout")
+        public MetaStage layout(@NotNull DocPagesInsertBlank200ResponseLayout layout) {
+            this.layout = Objects.requireNonNull(layout, "layout must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocPagesInsertBlank200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
+        public _FinalStage addAllInsertedPages(List<PageRef> insertedPages) {
+            if (insertedPages != null) {
+                this.insertedPages.addAll(insertedPages);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addInsertedPages(PageRef insertedPages) {
+            this.insertedPages.add(insertedPages);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "insertedPages", nulls = Nulls.SKIP)
+        public _FinalStage insertedPages(List<PageRef> insertedPages) {
+            this.insertedPages.clear();
+            if (insertedPages != null) {
+                this.insertedPages.addAll(insertedPages);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public DocPagesInsertBlank200Response build() {
-            return new DocPagesInsertBlank200Response(meta, additionalProperties);
+            return new DocPagesInsertBlank200Response(insertedPages, layout, meta, additionalProperties);
         }
 
         @java.lang.Override

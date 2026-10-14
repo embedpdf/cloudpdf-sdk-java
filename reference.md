@@ -79,6 +79,98 @@ client.doc().head(
 </dl>
 </details>
 
+<details><summary><code>client.doc.changes(docId, layerName, request) -> DocChanges200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Each change stands on its own and names itself by `opId`: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its `opId`, a change gets the same answer, refusals included; a different change under an answered `opId` is refused (IdempotencyKeyReused). `{ opId, undoOf }` undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need `doc.annotate.modify`, form values `doc.forms.fill`, form structure `doc.forms.modify`, metadata `doc.metadata.modify`. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON `body` part, each op naming its files by role as `resources: { <role>: '<key>' }`, and each file as the part `resource:<key>`. At most 64 changes per request and 512 ops per change.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().changes(
+    "docId",
+    "layerName",
+    DocChangesRequest
+        .builder()
+        .changes(
+            Arrays.asList(
+                DocChangesRequestChangesItem
+                    .builder()
+                    .opId("opId")
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**changes:** `List<DocChangesRequestChangesItem>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.doc.download(docId, layerName) -> InputStream</code></summary>
 <dl>
 <dd>
@@ -203,7 +295,7 @@ client.doc().manifest(
 </dl>
 </details>
 
-<details><summary><code>client.doc.render(docId, layerName, pon) -> InputStream</code></summary>
+<details><summary><code>client.doc.render(docId, layerName, pageKey) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -233,7 +325,7 @@ Render parameters (viewport, format) pass as flat dotted query keys, e.g. `?view
 client.doc().render(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     RenderDocRequest
         .builder()
         .build()
@@ -268,7 +360,7 @@ client.doc().render(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -288,7 +380,7 @@ client.doc().render(
 </dl>
 </details>
 
-<details><summary><code>client.doc.text(docId, layerName, pon) -> DocText200Response</code></summary>
+<details><summary><code>client.doc.text(docId, layerName, pageKey) -> DocText200Response</code></summary>
 <dl>
 <dd>
 
@@ -304,7 +396,7 @@ client.doc().render(
 client.doc().text(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     TextDocRequest
         .builder()
         .build()
@@ -339,7 +431,7 @@ client.doc().text(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -508,7 +600,7 @@ client.shares().list(
 <dl>
 <dd>
 
-The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
 </dd>
 </dl>
 </dd>
@@ -1695,7 +1787,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-**source:** `DocumentsImportFromRequestSource` — Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.
+**source:** `DocumentsImportFromRequestSource` — Where CloudPDF pulls the bytes from. The two shapes differ in who supplies the authority to read, not in which storage vendor holds the file.
     
 </dd>
 </dl>
@@ -2032,7 +2124,7 @@ client.tokens().revoke(
 </details>
 
 ## Doc Annotations
-<details><summary><code>client.doc.annotations.listAll(docId, layerName) -> DocAnnotationsListAll200Response</code></summary>
+<details><summary><code>client.doc.annotations.listAll(docId, layerName) -> AnnotationList</code></summary>
 <dl>
 <dd>
 
@@ -2044,7 +2136,7 @@ client.tokens().revoke(
 <dl>
 <dd>
 
-Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by `pageState.pageObjectNumber` when display order matters.
+Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by `page` (a `PageRef`) when display order matters.
 </dd>
 </dl>
 </dd>
@@ -2108,7 +2200,7 @@ client.doc().annotations().listAll(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.list(docId, layerName, pon) -> DocAnnotationsList200Response</code></summary>
+<details><summary><code>client.doc.annotations.list(docId, layerName, pageKey) -> AnnotationList</code></summary>
 <dl>
 <dd>
 
@@ -2124,7 +2216,7 @@ client.doc().annotations().listAll(
 client.doc().annotations().list(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     ListAnnotationsRequest
         .builder()
         .build()
@@ -2159,7 +2251,7 @@ client.doc().annotations().list(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2179,7 +2271,7 @@ client.doc().annotations().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.create(docId, layerName, pon, request) -> DocAnnotationsCreate200Response</code></summary>
+<details><summary><code>client.doc.annotations.create(docId, layerName, pageKey, request) -> DocAnnotationsCreate200Response</code></summary>
 <dl>
 <dd>
 
@@ -2209,7 +2301,7 @@ Doc JWTs may instead carry collab scopes (annotations:create:self, …) that ref
 client.doc().annotations().create(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     CreateAnnotationsRequest
         .builder()
         .body(
@@ -2249,7 +2341,7 @@ client.doc().annotations().create(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2258,6 +2350,14 @@ client.doc().annotations().create(
 <dd>
 
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -2277,7 +2377,7 @@ client.doc().annotations().create(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.delete(docId, layerName, pon, annotKey) -> DocAnnotationsDelete200Response</code></summary>
+<details><summary><code>client.doc.annotations.delete(docId, layerName, pageKey, annotKey) -> DocAnnotationsDelete200Response</code></summary>
 <dl>
 <dd>
 
@@ -2293,7 +2393,7 @@ client.doc().annotations().create(
 client.doc().annotations().delete(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     "annotKey",
     DeleteAnnotationsRequest
         .builder()
@@ -2329,7 +2429,7 @@ client.doc().annotations().delete(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2337,7 +2437,7 @@ client.doc().annotations().delete(
 <dl>
 <dd>
 
-**annotKey:** `String` 
+**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -2349,6 +2449,14 @@ client.doc().annotations().delete(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2357,7 +2465,7 @@ client.doc().annotations().delete(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.update(docId, layerName, pon, annotKey, request) -> DocAnnotationsUpdate200Response</code></summary>
+<details><summary><code>client.doc.annotations.update(docId, layerName, pageKey, annotKey, request) -> DocAnnotationsUpdate200Response</code></summary>
 <dl>
 <dd>
 
@@ -2373,7 +2481,7 @@ client.doc().annotations().delete(
 client.doc().annotations().update(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     "annotKey",
     UpdateAnnotationsRequest
         .builder()
@@ -2414,7 +2522,7 @@ client.doc().annotations().update(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2422,7 +2530,7 @@ client.doc().annotations().update(
 <dl>
 <dd>
 
-**annotKey:** `String` 
+**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -2431,6 +2539,14 @@ client.doc().annotations().update(
 <dd>
 
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -2450,7 +2566,87 @@ client.doc().annotations().update(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.exportAppearance(docId, layerName, pon, request) -> InputStream</code></summary>
+<details><summary><code>client.doc.annotations.readAppearance(docId, layerName, pageKey, annotKey) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().annotations().readAppearance(
+    "docId",
+    "layerName",
+    "pageKey",
+    "annotKey",
+    ReadAppearanceAnnotationsRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.annotations.exportAppearance(docId, layerName, pageKey, request) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -2466,7 +2662,7 @@ client.doc().annotations().update(
 client.doc().annotations().exportAppearance(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     ExportAppearanceAnnotationsRequest
         .builder()
         .body(
@@ -2508,7 +2704,7 @@ client.doc().annotations().exportAppearance(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2536,7 +2732,7 @@ client.doc().annotations().exportAppearance(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.flatten(docId, layerName, pon, request) -> DocAnnotationsFlatten200Response</code></summary>
+<details><summary><code>client.doc.annotations.flatten(docId, layerName, pageKey, request) -> DocAnnotationsFlatten200Response</code></summary>
 <dl>
 <dd>
 
@@ -2552,7 +2748,7 @@ client.doc().annotations().exportAppearance(
 client.doc().annotations().flatten(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     FlattenAnnotationsRequest
         .builder()
         .body(
@@ -2592,7 +2788,7 @@ client.doc().annotations().flatten(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -2601,6 +2797,14 @@ client.doc().annotations().flatten(
 <dd>
 
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -2620,8 +2824,123 @@ client.doc().annotations().flatten(
 </dl>
 </details>
 
+<details><summary><code>client.doc.annotations.reorder(docId, layerName, pageKey, request) -> DocAnnotationsReorder200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().annotations().reorder(
+    "docId",
+    "layerName",
+    "pageKey",
+    DocAnnotationsReorderRequest
+        .builder()
+        .position(
+            AnnotationPosition.of(AnnotationPositionZero.START)
+        )
+        .refs(
+            Arrays.asList(
+                AnnotationRef.objectNumber(
+                    AnnotationRefObjectNumber
+                        .builder()
+                        .page(
+                            PageRef
+                                .builder()
+                                .kind(PageRefKind.OBJECT_NUMBER)
+                                .objectNumber(1)
+                                .build()
+                        )
+                        .objectNumber(1)
+                        .build()
+                )
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**refs:** `List<AnnotationRef>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**position:** `AnnotationPosition` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Doc Forms
-<details><summary><code>client.doc.forms.get(docId, layerName) -> DocFormsGet200Response</code></summary>
+<details><summary><code>client.doc.forms.list(docId, layerName) -> DocFormsList200Response</code></summary>
 <dl>
 <dd>
 
@@ -2634,10 +2953,10 @@ client.doc().annotations().flatten(
 <dd>
 
 ```java
-client.doc().forms().get(
+client.doc().forms().list(
     "docId",
     "layerName",
-    GetFormsRequest
+    ListFormsRequest
         .builder()
         .build()
 );
@@ -2683,7 +3002,7 @@ client.doc().forms().get(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.exportData(docId, layerName) -> InputStream</code></summary>
+<details><summary><code>client.doc.forms.reorderCalculations(docId, layerName, request) -> DocFormsReorderCalculations200Response</code></summary>
 <dl>
 <dd>
 
@@ -2696,85 +3015,23 @@ client.doc().forms().get(
 <dd>
 
 ```java
-client.doc().forms().exportData(
+client.doc().forms().reorderCalculations(
     "docId",
     "layerName",
-    ExportDataFormsRequest
+    DocFormsReorderCalculationsRequest
         .builder()
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**docId:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**layerName:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**format:** `Optional<ExportDataFormsRequestFormat>` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.doc.forms.importData(docId, layerName, request) -> DocFormsImportData200Response</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.doc().forms().importData(
-    "docId",
-    "layerName",
-    ImportDataFormsRequest
-        .builder()
-        .body(
-            new HashMap<String, Object>() {{
-                put("key", "value");
-            }}
+        .position(
+            FieldPosition.of(FieldPositionZero.START)
+        )
+        .fields(
+            Arrays.asList(
+                FormFieldRef.objectNumber(
+                    FormFieldRefObjectNumber
+                        .builder()
+                        .objectNumber(1)
+                        .build()
+                )
+            )
         )
         .build()
 );
@@ -2816,54 +3073,7 @@ client.doc().forms().importData(
 <dl>
 <dd>
 
-**request:** `Map<String, Object>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.doc.forms.reset(docId, layerName, fieldKey) -> DocFormsReset200Response</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.doc().forms().reset(
-    "docId",
-    "layerName",
-    "fieldKey",
-    ResetFormsRequest
-        .builder()
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**docId:** `String` 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -2871,7 +3081,7 @@ client.doc().forms().reset(
 <dl>
 <dd>
 
-**layerName:** `String` 
+**fields:** `List<FormFieldRef>` 
     
 </dd>
 </dl>
@@ -2879,15 +3089,7 @@ client.doc().forms().reset(
 <dl>
 <dd>
 
-**fieldKey:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+**position:** `FieldPosition` 
     
 </dd>
 </dl>
@@ -2971,6 +3173,14 @@ client.doc().forms().setValue(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
     
 </dd>
@@ -2983,8 +3193,390 @@ client.doc().forms().setValue(
 </dl>
 </details>
 
+<details><summary><code>client.doc.forms.reset(docId, layerName, request) -> DocFormsReset200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().forms().reset(
+    "docId",
+    "layerName",
+    DocFormsResetRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**refs:** `Optional<List<FormFieldRef>>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.forms.deleteWidget(docId, layerName, pageKey, annotKey) -> DocFormsDeleteWidget200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().forms().deleteWidget(
+    "docId",
+    "layerName",
+    "pageKey",
+    "annotKey",
+    DeleteWidgetFormsRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.forms.updateWidget(docId, layerName, pageKey, annotKey, request) -> DocFormsUpdateWidget200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().forms().updateWidget(
+    "docId",
+    "layerName",
+    "pageKey",
+    "annotKey",
+    DocFormsUpdateWidgetRequest
+        .builder()
+        .patch(
+            WidgetPatch
+                .builder()
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**patch:** `WidgetPatch` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.forms.reorderWidgets(docId, layerName, pageKey, request) -> DocFormsReorderWidgets200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().forms().reorderWidgets(
+    "docId",
+    "layerName",
+    "pageKey",
+    DocFormsReorderWidgetsRequest
+        .builder()
+        .position(
+            AnnotationPosition.of(AnnotationPositionZero.START)
+        )
+        .widgets(
+            Arrays.asList(
+                AnnotationRef.objectNumber(
+                    AnnotationRefObjectNumber
+                        .builder()
+                        .page(
+                            PageRef
+                                .builder()
+                                .kind(PageRefKind.OBJECT_NUMBER)
+                                .objectNumber(1)
+                                .build()
+                        )
+                        .objectNumber(1)
+                        .build()
+                )
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**widgets:** `List<AnnotationRef>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**position:** `AnnotationPosition` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Doc Metadata
-<details><summary><code>client.doc.metadata.get(docId, layerName) -> DocMetadataGet200Response</code></summary>
+<details><summary><code>client.doc.metadata.get(docId, layerName) -> DocumentMetadata</code></summary>
 <dl>
 <dd>
 
@@ -3047,7 +3639,7 @@ client.doc().metadata().get(
 </details>
 
 ## Doc Pages
-<details><summary><code>client.doc.pages.setScale(docId, layerName, pon, request) -> DocPagesSetScale200Response</code></summary>
+<details><summary><code>client.doc.pages.setScale(docId, layerName, pageKey, request) -> DocPagesSetScale200Response</code></summary>
 <dl>
 <dd>
 
@@ -3063,7 +3655,7 @@ client.doc().metadata().get(
 client.doc().pages().setScale(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     DocPagesSetScaleRequest
         .builder()
         .build()
@@ -3098,7 +3690,7 @@ client.doc().pages().setScale(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3107,6 +3699,14 @@ client.doc().pages().setScale(
 <dd>
 
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -3126,7 +3726,7 @@ client.doc().pages().setScale(
 </dl>
 </details>
 
-<details><summary><code>client.doc.pages.viewports(docId, layerName, pon) -> List&amp;lt;DocPagesViewports200ResponseItem&amp;gt;</code></summary>
+<details><summary><code>client.doc.pages.viewports(docId, layerName, pageKey) -> DocPagesViewports200Response</code></summary>
 <dl>
 <dd>
 
@@ -3142,7 +3742,7 @@ client.doc().pages().setScale(
 client.doc().pages().viewports(
     "docId",
     "layerName",
-    1,
+    "pageKey",
     ViewportsPagesRequest
         .builder()
         .build()
@@ -3177,7 +3777,7 @@ client.doc().pages().viewports(
 <dl>
 <dd>
 
-**pon:** `Integer` 
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3260,6 +3860,14 @@ client.doc().pages().delete(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
     
 </dd>
@@ -3284,7 +3892,7 @@ client.doc().pages().delete(
 <dl>
 <dd>
 
-A read, not a mutation: the source document is untouched and no event is published. Body is `{"pageObjectNumbers": number[]}`; the response body is the new PDF.
+A read, not a mutation: the source document is untouched and no event is published. Body is `{"pages": PageRef[]}`; the response body is the new PDF.
 </dd>
 </dl>
 </dd>
@@ -3426,6 +4034,14 @@ client.doc().pages().flatten(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
     
 </dd>
@@ -3450,7 +4066,7 @@ client.doc().pages().flatten(
 <dl>
 <dd>
 
-Multipart mutation envelope: a `body` field holding `{"destIndex"?: number}` (omitted → append) plus a `resource:source` file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+Multipart: a JSON `body` part `{"position"?: PagePosition, "resources": {"source": "<key>"}}` (position omitted → the end), and the standalone PDF whose pages are copied in as the part `resource:<key>`. The inserted copies get fresh page object numbers, returned in insertion order.
 </dd>
 </dl>
 </dd>
@@ -3507,6 +4123,14 @@ client.doc().pages().insert(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -3527,7 +4151,7 @@ client.doc().pages().insert(
 <dl>
 <dd>
 
-Body is `{"size": {"width", "height"}, "count"?, "destIndex"?}` — size in PDF points, count in [1, 100], destIndex omitted → append.
+Body is `{"size": {"width", "height"}, "count"?, "position"?}` — size in PDF points, count in [1, 100], `position` a `PagePosition` (omitted → the end).
 </dd>
 </dl>
 </dd>
@@ -3592,74 +4216,7 @@ client.doc().pages().insertBlank(
 <dl>
 <dd>
 
-**request:** `Map<String, Object>` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.doc.pages.move(docId, layerName, request) -> DocPagesMove200Response</code></summary>
-<dl>
-<dd>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.doc().pages().move(
-    "docId",
-    "layerName",
-    MovePagesRequest
-        .builder()
-        .body(
-            new HashMap<String, Object>() {{
-                put("key", "value");
-            }}
-        )
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**docId:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**layerName:** `String` 
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
     
 </dd>
 </dl>
@@ -3742,6 +4299,14 @@ client.doc().pages().setName(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
     
 </dd>
@@ -3817,7 +4382,113 @@ client.doc().pages().removeName(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.pages.reorder(docId, layerName, request) -> DocPagesReorder200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().pages().reorder(
+    "docId",
+    "layerName",
+    DocPagesReorderRequest
+        .builder()
+        .position(
+            PagePosition.of(PagePositionZero.START)
+        )
+        .pages(
+            Arrays.asList(
+                PageRef
+                    .builder()
+                    .kind(PageRefKind.OBJECT_NUMBER)
+                    .objectNumber(1)
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pages:** `List<PageRef>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**position:** `PagePosition` 
     
 </dd>
 </dl>
@@ -3892,6 +4563,14 @@ client.doc().pages().rotate(
 <dl>
 <dd>
 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **request:** `Map<String, Object>` 
     
 </dd>
@@ -3921,13 +4600,8 @@ client.doc().pages().rotate(
 client.doc().redactions().apply(
     "docId",
     "layerName",
-    ApplyRedactionsRequest
+    DocRedactionsApplyRequest
         .builder()
-        .body(
-            new HashMap<String, Object>() {{
-                put("key", "value");
-            }}
-        )
         .build()
 );
 ```
@@ -3968,7 +4642,23 @@ client.doc().redactions().apply(
 <dl>
 <dd>
 
-**request:** `Map<String, Object>` 
+**idempotencyKey:** `Optional<String>` — Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**pages:** `Optional<List<PageRef>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**annotations:** `Optional<List<AnnotationRef>>` 
     
 </dd>
 </dl>
@@ -4057,7 +4747,7 @@ client.doc().signatures().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.signatures.abort(docId, layerName, signingId) -> DocSignaturesAbort200Response</code></summary>
+<details><summary><code>client.doc.signatures.cancel(docId, layerName, signingId) -> DocSignaturesCancel200Response</code></summary>
 <dl>
 <dd>
 
@@ -4070,11 +4760,11 @@ client.doc().signatures().list(
 <dd>
 
 ```java
-client.doc().signatures().abort(
+client.doc().signatures().cancel(
     "docId",
     "layerName",
     "signingId",
-    AbortSignaturesRequest
+    CancelSignaturesRequest
         .builder()
         .build()
 );
@@ -4349,7 +5039,7 @@ client.doc().signatures().analysis(
 <dl>
 <dd>
 
-The multipart envelope: a JSON `body` part (field, subFilter, digest, contentsSize, signer, certify, lock, appearance) and an optional `resource:<key>` PDF part the body's `appearance.resource` names. A certification (`certify.permission`) additionally requires `doc.sign.certify`. The layer is read-only until the signing completes, is aborted, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+Multipart: a JSON `body` part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as `resources: { appearance: '<key>' }`, and that PDF as the part `resource:<key>`. A certification (`certify.permission`) additionally requires `doc.sign.certify`. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
 </dd>
 </dl>
 </dd>
@@ -4953,6 +5643,69 @@ client.doc().versions().signatureDigest(
 <dd>
 
 **algorithm:** `SignatureDigestVersionsRequestAlgorithm` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Doc Metadata Custom
+<details><summary><code>client.doc.metadata.custom.get(docId, layerName) -> Map&amp;lt;String, String&amp;gt;</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().metadata().custom().get(
+    "docId",
+    "layerName",
+    GetCustomRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
     
 </dd>
 </dl>

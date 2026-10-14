@@ -28,10 +28,10 @@ import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import com.cloudpdf.api.types.DocumentsCommit200Response;
 import com.cloudpdf.api.types.DocumentsGet200Response;
 import com.cloudpdf.api.types.DocumentsImportFrom200Response;
-import com.cloudpdf.api.types.DocumentsImportFrom502Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
@@ -896,8 +896,7 @@ public class RawDocumentsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 502:
                         throw new BadGatewayError(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocumentsImportFrom502Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AdminErrorPayload.class),
                                 response);
                 }
             } catch (JsonProcessingException ignored) {

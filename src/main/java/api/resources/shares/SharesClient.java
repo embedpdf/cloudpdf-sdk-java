@@ -65,14 +65,14 @@ public class SharesClient {
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public SharesCreate200Response create(String tenantId, SharesCreateRequest request) {
         return this.rawClient.create(tenantId, request).body();
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public SharesCreate200Response create(String tenantId, SharesCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(tenantId, request, requestOptions).body();

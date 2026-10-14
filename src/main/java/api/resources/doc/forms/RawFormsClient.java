@@ -9,24 +9,26 @@ import com.cloudpdf.api.core.CloudPDFClientHttpResponse;
 import com.cloudpdf.api.core.CloudPDFException;
 import com.cloudpdf.api.core.MediaTypes;
 import com.cloudpdf.api.core.ObjectMappers;
-import com.cloudpdf.api.core.QueryStringMapper;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.core.ResponseBodyInputStream;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
-import com.cloudpdf.api.resources.doc.forms.requests.ExportDataFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.GetFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.ImportDataFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.ResetFormsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DeleteWidgetFormsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsReorderCalculationsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsReorderWidgetsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsResetRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsUpdateWidgetRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.ListFormsRequest;
 import com.cloudpdf.api.resources.doc.forms.requests.SetValueFormsRequest;
-import com.cloudpdf.api.types.DocFormsGet200Response;
-import com.cloudpdf.api.types.DocFormsImportData200Response;
+import com.cloudpdf.api.types.DocFormsDeleteWidget200Response;
+import com.cloudpdf.api.types.DocFormsList200Response;
+import com.cloudpdf.api.types.DocFormsReorderCalculations200Response;
+import com.cloudpdf.api.types.DocFormsReorderWidgets200Response;
 import com.cloudpdf.api.types.DocFormsReset200Response;
 import com.cloudpdf.api.types.DocFormsSetValue200Response;
+import com.cloudpdf.api.types.DocFormsUpdateWidget200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -43,22 +45,22 @@ public class RawFormsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocFormsGet200Response> get(String docId, String layerName) {
-        return get(docId, layerName, GetFormsRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocFormsList200Response> list(String docId, String layerName) {
+        return list(docId, layerName, ListFormsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocFormsGet200Response> get(
+    public CloudPDFClientHttpResponse<DocFormsList200Response> list(
             String docId, String layerName, RequestOptions requestOptions) {
-        return get(docId, layerName, GetFormsRequest.builder().build(), requestOptions);
+        return list(docId, layerName, ListFormsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocFormsGet200Response> get(
-            String docId, String layerName, GetFormsRequest request) {
-        return get(docId, layerName, request, null);
+    public CloudPDFClientHttpResponse<DocFormsList200Response> list(
+            String docId, String layerName, ListFormsRequest request) {
+        return list(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocFormsGet200Response> get(
-            String docId, String layerName, GetFormsRequest request, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<DocFormsList200Response> list(
+            String docId, String layerName, ListFormsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -99,7 +101,7 @@ public class RawFormsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsGet200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsList200Response.class),
                         response);
             }
             try {
@@ -120,114 +122,21 @@ public class RawFormsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<InputStream> exportData(String docId, String layerName) {
-        return exportData(docId, layerName, ExportDataFormsRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocFormsReorderCalculations200Response> reorderCalculations(
+            String docId, String layerName, DocFormsReorderCalculationsRequest request) {
+        return reorderCalculations(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<InputStream> exportData(
-            String docId, String layerName, RequestOptions requestOptions) {
-        return exportData(docId, layerName, ExportDataFormsRequest.builder().build(), requestOptions);
-    }
-
-    public CloudPDFClientHttpResponse<InputStream> exportData(
-            String docId, String layerName, ExportDataFormsRequest request) {
-        return exportData(docId, layerName, request, null);
-    }
-
-    public CloudPDFClientHttpResponse<InputStream> exportData(
-            String docId, String layerName, ExportDataFormsRequest request, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<DocFormsReorderCalculations200Response> reorderCalculations(
+            String docId, String layerName, DocFormsReorderCalculationsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
-                .addPathSegments("form")
-                .addPathSegments("data");
-        if (request.getFormat().isPresent()) {
-            QueryStringMapper.addQueryParameter(
-                    httpUrl, "format", request.getFormat().get(), false);
-        }
-        if (requestOptions != null) {
-            requestOptions.getQueryParameters().forEach((_key, _value) -> {
-                httpUrl.addQueryParameter(_key, _value);
-            });
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        if (request.getDocumentPassword().isPresent()) {
-            _requestBuilder.addHeader(
-                    "X-Document-Password", request.getDocumentPassword().get());
-        }
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
-            okhttpRequest = okhttpRequest
-                    .newBuilder()
-                    .tag(
-                            RetryInterceptor.MaxRetriesOverride.class,
-                            new RetryInterceptor.MaxRetriesOverride(
-                                    requestOptions.getMaxRetries().get()))
-                    .build();
-        }
-        try {
-            Response response = client.newCall(okhttpRequest).execute();
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return new CloudPDFClientHttpResponse<>(new ResponseBodyInputStream(response), response);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 404) {
-                    throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
-            throw new CloudPDFApiException(
-                    "Error with status code " + response.code(), response.code(), errorBody, response);
-        } catch (JsonProcessingException e) {
-            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
-        } catch (IOException e) {
-            throw new CloudPDFException("Network error executing HTTP request", e);
-        }
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsImportData200Response> importData(
-            String docId, String layerName, Map<String, Object> body) {
-        return importData(
-                docId, layerName, ImportDataFormsRequest.builder().body(body).build());
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsImportData200Response> importData(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return importData(
-                docId, layerName, ImportDataFormsRequest.builder().body(body).build(), requestOptions);
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsImportData200Response> importData(
-            String docId, String layerName, ImportDataFormsRequest request) {
-        return importData(docId, layerName, request, null);
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsImportData200Response> importData(
-            String docId, String layerName, ImportDataFormsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("v1/docs")
-                .addPathSegment(docId)
-                .addPathSegments("layers")
-                .addPathSegment(layerName)
-                .addPathSegments("form")
-                .addPathSegments("data");
+                .addPathSegments("form/calculations")
+                .addPathSegments("reorder");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -236,7 +145,7 @@ public class RawFormsClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -250,6 +159,10 @@ public class RawFormsClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -269,7 +182,8 @@ public class RawFormsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsImportData200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, DocFormsReorderCalculations200Response.class),
                         response);
             }
             try {
@@ -280,85 +194,6 @@ public class RawFormsClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
-            throw new CloudPDFApiException(
-                    "Error with status code " + response.code(), response.code(), errorBody, response);
-        } catch (JsonProcessingException e) {
-            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
-        } catch (IOException e) {
-            throw new CloudPDFException("Network error executing HTTP request", e);
-        }
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(String docId, String layerName, String fieldKey) {
-        return reset(docId, layerName, fieldKey, ResetFormsRequest.builder().build());
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, RequestOptions requestOptions) {
-        return reset(docId, layerName, fieldKey, ResetFormsRequest.builder().build(), requestOptions);
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, ResetFormsRequest request) {
-        return reset(docId, layerName, fieldKey, request, null);
-    }
-
-    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, ResetFormsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("v1/docs")
-                .addPathSegment(docId)
-                .addPathSegments("layers")
-                .addPathSegment(layerName)
-                .addPathSegments("form/fields")
-                .addPathSegment(fieldKey)
-                .addPathSegments("reset");
-        if (requestOptions != null) {
-            requestOptions.getQueryParameters().forEach((_key, _value) -> {
-                httpUrl.addQueryParameter(_key, _value);
-            });
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("POST", RequestBody.create("", null))
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json");
-        if (request.getDocumentPassword().isPresent()) {
-            _requestBuilder.addHeader(
-                    "X-Document-Password", request.getDocumentPassword().get());
-        }
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
-            okhttpRequest = okhttpRequest
-                    .newBuilder()
-                    .tag(
-                            RetryInterceptor.MaxRetriesOverride.class,
-                            new RetryInterceptor.MaxRetriesOverride(
-                                    requestOptions.getMaxRetries().get()))
-                    .build();
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            if (response.isSuccessful()) {
-                return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsReset200Response.class),
-                        response);
-            }
-            try {
-                if (response.code() == 404) {
-                    throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -434,6 +269,10 @@ public class RawFormsClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -454,6 +293,386 @@ public class RawFormsClient {
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsSetValue200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(String docId, String layerName) {
+        return reset(docId, layerName, DocFormsResetRequest.builder().build());
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return reset(docId, layerName, DocFormsResetRequest.builder().build(), requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
+            String docId, String layerName, DocFormsResetRequest request) {
+        return reset(docId, layerName, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReset200Response> reset(
+            String docId, String layerName, DocFormsResetRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("form")
+                .addPathSegments("reset");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsReset200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey) {
+        return deleteWidget(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                DeleteWidgetFormsRequest.builder().build());
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return deleteWidget(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                DeleteWidgetFormsRequest.builder().build(),
+                requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey, DeleteWidgetFormsRequest request) {
+        return deleteWidget(docId, layerName, pageKey, annotKey, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            DeleteWidgetFormsRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("form/widgets")
+                .addPathSegment(pageKey)
+                .addPathSegment(annotKey);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsDeleteWidget200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsUpdateWidget200Response> updateWidget(
+            String docId, String layerName, String pageKey, String annotKey, DocFormsUpdateWidgetRequest request) {
+        return updateWidget(docId, layerName, pageKey, annotKey, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsUpdateWidget200Response> updateWidget(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            DocFormsUpdateWidgetRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("form/widgets")
+                .addPathSegment(pageKey)
+                .addPathSegment(annotKey);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsUpdateWidget200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReorderWidgets200Response> reorderWidgets(
+            String docId, String layerName, String pageKey, DocFormsReorderWidgetsRequest request) {
+        return reorderWidgets(docId, layerName, pageKey, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocFormsReorderWidgets200Response> reorderWidgets(
+            String docId,
+            String layerName,
+            String pageKey,
+            DocFormsReorderWidgetsRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("form/widgets")
+                .addPathSegment(pageKey)
+                .addPathSegments("reorder");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBodyString, DocFormsReorderWidgets200Response.class),
                         response);
             }
             try {

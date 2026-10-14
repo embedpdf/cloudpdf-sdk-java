@@ -4,21 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
-import com.cloudpdf.api.types.DocumentsImportFrom502Response;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import okhttp3.Response;
 
 public final class BadGatewayError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final DocumentsImportFrom502Response body;
+    private final AdminErrorPayload body;
 
-    public BadGatewayError(DocumentsImportFrom502Response body) {
+    public BadGatewayError(AdminErrorPayload body) {
         super("BadGatewayError", 502, body);
         this.body = body;
     }
 
-    public BadGatewayError(DocumentsImportFrom502Response body, Response rawResponse) {
+    public BadGatewayError(AdminErrorPayload body, Response rawResponse) {
         super("BadGatewayError", 502, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +27,7 @@ public final class BadGatewayError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public DocumentsImportFrom502Response body() {
+    public AdminErrorPayload body() {
         return this.body;
     }
 }

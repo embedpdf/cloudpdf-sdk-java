@@ -19,24 +19,22 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocManifest200ResponsePagesItem.Builder.class)
 public final class DocManifest200ResponsePagesItem {
-    private final DocManifest200ResponsePagesItemState state;
+    private final PageRef page;
 
     private final DocManifest200ResponsePagesItemCache cache;
 
     private final Map<String, Object> additionalProperties;
 
     private DocManifest200ResponsePagesItem(
-            DocManifest200ResponsePagesItemState state,
-            DocManifest200ResponsePagesItemCache cache,
-            Map<String, Object> additionalProperties) {
-        this.state = state;
+            PageRef page, DocManifest200ResponsePagesItemCache cache, Map<String, Object> additionalProperties) {
+        this.page = page;
         this.cache = cache;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("state")
-    public DocManifest200ResponsePagesItemState getState() {
-        return state;
+    @JsonProperty("page")
+    public PageRef getPage() {
+        return page;
     }
 
     @JsonProperty("cache")
@@ -56,12 +54,12 @@ public final class DocManifest200ResponsePagesItem {
     }
 
     private boolean equalTo(DocManifest200ResponsePagesItem other) {
-        return state.equals(other.state) && cache.equals(other.cache);
+        return page.equals(other.page) && cache.equals(other.cache);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.state, this.cache);
+        return Objects.hash(this.page, this.cache);
     }
 
     @java.lang.Override
@@ -69,12 +67,12 @@ public final class DocManifest200ResponsePagesItem {
         return ObjectMappers.stringify(this);
     }
 
-    public static StateStage builder() {
+    public static PageStage builder() {
         return new Builder();
     }
 
-    public interface StateStage {
-        CacheStage state(@NotNull DocManifest200ResponsePagesItemState state);
+    public interface PageStage {
+        CacheStage page(@NotNull PageRef page);
 
         Builder from(DocManifest200ResponsePagesItem other);
     }
@@ -92,8 +90,8 @@ public final class DocManifest200ResponsePagesItem {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements StateStage, CacheStage, _FinalStage {
-        private DocManifest200ResponsePagesItemState state;
+    public static final class Builder implements PageStage, CacheStage, _FinalStage {
+        private PageRef page;
 
         private DocManifest200ResponsePagesItemCache cache;
 
@@ -104,15 +102,15 @@ public final class DocManifest200ResponsePagesItem {
 
         @java.lang.Override
         public Builder from(DocManifest200ResponsePagesItem other) {
-            state(other.getState());
+            page(other.getPage());
             cache(other.getCache());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("state")
-        public CacheStage state(@NotNull DocManifest200ResponsePagesItemState state) {
-            this.state = Objects.requireNonNull(state, "state must not be null");
+        @JsonSetter("page")
+        public CacheStage page(@NotNull PageRef page) {
+            this.page = Objects.requireNonNull(page, "page must not be null");
             return this;
         }
 
@@ -125,7 +123,7 @@ public final class DocManifest200ResponsePagesItem {
 
         @java.lang.Override
         public DocManifest200ResponsePagesItem build() {
-            return new DocManifest200ResponsePagesItem(state, cache, additionalProperties);
+            return new DocManifest200ResponsePagesItem(page, cache, additionalProperties);
         }
 
         @java.lang.Override

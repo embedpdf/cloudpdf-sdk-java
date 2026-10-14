@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class DocPagesSetScaleRequestMeasureSubtype {
-    public static final DocPagesSetScaleRequestMeasureSubtype RL =
-            new DocPagesSetScaleRequestMeasureSubtype(Value.RL, "RL");
+    public static final DocPagesSetScaleRequestMeasureSubtype RECTILINEAR =
+            new DocPagesSetScaleRequestMeasureSubtype(Value.RECTILINEAR, "rectilinear");
 
     private final Value value;
 
@@ -43,8 +43,8 @@ public final class DocPagesSetScaleRequestMeasureSubtype {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case RL:
-                return visitor.visitRl();
+            case RECTILINEAR:
+                return visitor.visitRectilinear();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -54,21 +54,21 @@ public final class DocPagesSetScaleRequestMeasureSubtype {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static DocPagesSetScaleRequestMeasureSubtype valueOf(String value) {
         switch (value) {
-            case "RL":
-                return RL;
+            case "rectilinear":
+                return RECTILINEAR;
             default:
                 return new DocPagesSetScaleRequestMeasureSubtype(Value.UNKNOWN, value);
         }
     }
 
     public enum Value {
-        RL,
+        RECTILINEAR,
 
         UNKNOWN
     }
 
     public interface Visitor<T> {
-        T visitRl();
+        T visitRectilinear();
 
         T visitUnknown(String unknownType);
     }

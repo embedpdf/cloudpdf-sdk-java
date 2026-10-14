@@ -7,19 +7,26 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.CloudPDFApiException;
 import com.cloudpdf.api.core.CloudPDFClientHttpResponse;
 import com.cloudpdf.api.core.CloudPDFException;
+import com.cloudpdf.api.core.MediaTypes;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.ResponseBodyInputStream;
 import com.cloudpdf.api.core.RetryInterceptor;
+import com.cloudpdf.api.errors.BadRequestError;
+import com.cloudpdf.api.errors.ConflictError;
+import com.cloudpdf.api.errors.ContentTooLargeError;
 import com.cloudpdf.api.errors.NotFoundError;
+import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
 import com.cloudpdf.api.resources.doc.requests.DownloadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
 import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
+import com.cloudpdf.api.types.DocChanges200Response;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
+import com.cloudpdf.api.types.EngineErrorPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +37,7 @@ import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
@@ -107,6 +115,121 @@ public class AsyncRawDocClient {
                             future.completeExceptionally(new NotFoundError(
                                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
                             return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocChanges200Response>> changes(
+            String docId, String layerName, DocChangesRequest request) {
+        return changes(docId, layerName, request, null);
+    }
+
+    /**
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocChanges200Response>> changes(
+            String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("changes");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<DocChanges200Response>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocChanges200Response.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 409:
+                                future.completeExceptionally(new ConflictError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new ContentTooLargeError(
+                                        ObjectMappers.JSON_MAPPER.readValue(
+                                                responseBodyString, EngineErrorPayload.class),
+                                        response));
+                                return;
                         }
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
@@ -319,31 +442,32 @@ public class AsyncRawDocClient {
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> render(String docId, String layerName, int pon) {
-        return render(docId, layerName, pon, RenderDocRequest.builder().build());
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> render(
+            String docId, String layerName, String pageKey) {
+        return render(docId, layerName, pageKey, RenderDocRequest.builder().build());
     }
 
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> render(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return render(docId, layerName, pon, RenderDocRequest.builder().build(), requestOptions);
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return render(docId, layerName, pageKey, RenderDocRequest.builder().build(), requestOptions);
     }
 
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> render(
-            String docId, String layerName, int pon, RenderDocRequest request) {
-        return render(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, RenderDocRequest request) {
+        return render(docId, layerName, pageKey, request, null);
     }
 
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> render(
-            String docId, String layerName, int pon, RenderDocRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, RenderDocRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -351,7 +475,7 @@ public class AsyncRawDocClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("render/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("data");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -423,22 +547,22 @@ public class AsyncRawDocClient {
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocText200Response>> text(
-            String docId, String layerName, int pon) {
-        return text(docId, layerName, pon, TextDocRequest.builder().build());
+            String docId, String layerName, String pageKey) {
+        return text(docId, layerName, pageKey, TextDocRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocText200Response>> text(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return text(docId, layerName, pon, TextDocRequest.builder().build(), requestOptions);
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return text(docId, layerName, pageKey, TextDocRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocText200Response>> text(
-            String docId, String layerName, int pon, TextDocRequest request) {
-        return text(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, TextDocRequest request) {
+        return text(docId, layerName, pageKey, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocText200Response>> text(
-            String docId, String layerName, int pon, TextDocRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, TextDocRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -446,7 +570,7 @@ public class AsyncRawDocClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("text/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("data");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

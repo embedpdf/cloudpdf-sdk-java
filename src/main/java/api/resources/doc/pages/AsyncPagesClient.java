@@ -6,12 +6,12 @@ package com.cloudpdf.api.resources.doc.pages;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.pages.requests.DeletePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.DocPagesReorderRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.DocPagesSetScaleRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ExtractPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
@@ -20,15 +20,14 @@ import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
 import com.cloudpdf.api.types.DocPagesInsert200Response;
 import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
-import com.cloudpdf.api.types.DocPagesMove200Response;
 import com.cloudpdf.api.types.DocPagesRemoveName200Response;
+import com.cloudpdf.api.types.DocPagesReorder200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
 import com.cloudpdf.api.types.DocPagesSetName200Response;
 import com.cloudpdf.api.types.DocPagesSetScale200Response;
-import com.cloudpdf.api.types.DocPagesViewports200ResponseItem;
+import com.cloudpdf.api.types.DocPagesViewports200Response;
 import java.io.File;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.MediaType;
@@ -51,36 +50,45 @@ public class AsyncPagesClient {
     }
 
     public CompletableFuture<DocPagesSetScale200Response> setScale(
-            String docId, String layerName, int pon, DocPagesSetScaleRequest request) {
-        return this.rawClient.setScale(docId, layerName, pon, request).thenApply(response -> response.body());
+            String docId, String layerName, String pageKey, DocPagesSetScaleRequest request) {
+        return this.rawClient.setScale(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocPagesSetScale200Response> setScale(
-            String docId, String layerName, int pon, DocPagesSetScaleRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String pageKey,
+            DocPagesSetScaleRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .setScale(docId, layerName, pon, request, requestOptions)
+                .setScale(docId, layerName, pageKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon) {
-        return this.rawClient.viewports(docId, layerName, pon).thenApply(response -> response.body());
+    public CompletableFuture<DocPagesViewports200Response> viewports(String docId, String layerName, String pageKey) {
+        return this.rawClient.viewports(docId, layerName, pageKey).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return this.rawClient.viewports(docId, layerName, pon, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, ViewportsPagesRequest request) {
-        return this.rawClient.viewports(docId, layerName, pon, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, ViewportsPagesRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<DocPagesViewports200Response> viewports(
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return this.rawClient
-                .viewports(docId, layerName, pon, request, requestOptions)
+                .viewports(docId, layerName, pageKey, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocPagesViewports200Response> viewports(
+            String docId, String layerName, String pageKey, ViewportsPagesRequest request) {
+        return this.rawClient.viewports(docId, layerName, pageKey, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocPagesViewports200Response> viewports(
+            String docId,
+            String layerName,
+            String pageKey,
+            ViewportsPagesRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .viewports(docId, layerName, pageKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -105,14 +113,14 @@ public class AsyncPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CompletableFuture<InputStream> extract(String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.extract(docId, layerName, body).thenApply(response -> response.body());
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CompletableFuture<InputStream> extract(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
@@ -120,14 +128,14 @@ public class AsyncPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CompletableFuture<InputStream> extract(String docId, String layerName, ExtractPagesRequest request) {
         return this.rawClient.extract(docId, layerName, request).thenApply(response -> response.body());
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CompletableFuture<InputStream> extract(
             String docId, String layerName, ExtractPagesRequest request, RequestOptions requestOptions) {
@@ -155,7 +163,7 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
      */
     public CompletableFuture<DocPagesInsert200Response> insert(
             String docId, String layerName, File file, InsertPagesRequest request) {
@@ -163,7 +171,7 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
      */
     public CompletableFuture<DocPagesInsert200Response> insert(
             String docId, String layerName, File file, InsertPagesRequest request, RequestOptions requestOptions) {
@@ -204,7 +212,7 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, Map<String, Object> body) {
@@ -212,7 +220,7 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
@@ -222,7 +230,7 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, InsertBlankPagesRequest request) {
@@ -230,31 +238,13 @@ public class AsyncPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, InsertBlankPagesRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .insertBlank(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesMove200Response> move(String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.move(docId, layerName, body).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesMove200Response> move(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.move(docId, layerName, body, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesMove200Response> move(String docId, String layerName, MovePagesRequest request) {
-        return this.rawClient.move(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesMove200Response> move(
-            String docId, String layerName, MovePagesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.move(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocPagesSetName200Response> setName(
@@ -297,6 +287,16 @@ public class AsyncPagesClient {
         return this.rawClient
                 .removeName(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocPagesReorder200Response> reorder(
+            String docId, String layerName, DocPagesReorderRequest request) {
+        return this.rawClient.reorder(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocPagesReorder200Response> reorder(
+            String docId, String layerName, DocPagesReorderRequest request, RequestOptions requestOptions) {
+        return this.rawClient.reorder(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocPagesRotate200Response> rotate(

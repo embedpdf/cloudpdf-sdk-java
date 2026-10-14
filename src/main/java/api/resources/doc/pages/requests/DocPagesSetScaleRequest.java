@@ -26,15 +26,19 @@ import java.util.Optional;
 public final class DocPagesSetScaleRequest {
     private final Optional<String> documentPassword;
 
+    private final Optional<String> idempotencyKey;
+
     private final Optional<DocPagesSetScaleRequestMeasure> measure;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesSetScaleRequest(
             Optional<String> documentPassword,
+            Optional<String> idempotencyKey,
             Optional<DocPagesSetScaleRequestMeasure> measure,
             Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
+        this.idempotencyKey = idempotencyKey;
         this.measure = measure;
         this.additionalProperties = additionalProperties;
     }
@@ -45,6 +49,14 @@ public final class DocPagesSetScaleRequest {
     @JsonIgnore
     public Optional<String> getDocumentPassword() {
         return documentPassword;
+    }
+
+    /**
+     * @return Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+     */
+    @JsonIgnore
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @JsonIgnore
@@ -73,12 +85,14 @@ public final class DocPagesSetScaleRequest {
     }
 
     private boolean equalTo(DocPagesSetScaleRequest other) {
-        return documentPassword.equals(other.documentPassword) && measure.equals(other.measure);
+        return documentPassword.equals(other.documentPassword)
+                && idempotencyKey.equals(other.idempotencyKey)
+                && measure.equals(other.measure);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentPassword, this.measure);
+        return Objects.hash(this.documentPassword, this.idempotencyKey, this.measure);
     }
 
     @java.lang.Override
@@ -94,6 +108,8 @@ public final class DocPagesSetScaleRequest {
     public static final class Builder {
         private Optional<String> documentPassword = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Optional<DocPagesSetScaleRequestMeasure> measure = Optional.empty();
 
         @JsonAnySetter
@@ -103,6 +119,7 @@ public final class DocPagesSetScaleRequest {
 
         public Builder from(DocPagesSetScaleRequest other) {
             documentPassword(other.getDocumentPassword());
+            idempotencyKey(other.getIdempotencyKey());
             measure(other.getMeasure());
             return this;
         }
@@ -117,6 +134,19 @@ public final class DocPagesSetScaleRequest {
 
         public Builder documentPassword(String documentPassword) {
             this.documentPassword = Optional.ofNullable(documentPassword);
+            return this;
+        }
+
+        /**
+         * <p>Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.</p>
+         */
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
             return this;
         }
 
@@ -143,7 +173,7 @@ public final class DocPagesSetScaleRequest {
         }
 
         public DocPagesSetScaleRequest build() {
-            return new DocPagesSetScaleRequest(documentPassword, measure, additionalProperties);
+            return new DocPagesSetScaleRequest(documentPassword, idempotencyKey, measure, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

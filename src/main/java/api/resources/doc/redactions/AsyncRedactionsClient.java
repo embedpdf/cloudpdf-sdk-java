@@ -5,9 +5,8 @@ package com.cloudpdf.api.resources.doc.redactions;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.resources.doc.redactions.requests.ApplyRedactionsRequest;
+import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
 import com.cloudpdf.api.types.DocRedactionsApply200Response;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncRedactionsClient {
@@ -27,23 +26,22 @@ public class AsyncRedactionsClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocRedactionsApply200Response> apply(
-            String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.apply(docId, layerName, body).thenApply(response -> response.body());
+    public CompletableFuture<DocRedactionsApply200Response> apply(String docId, String layerName) {
+        return this.rawClient.apply(docId, layerName).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocRedactionsApply200Response> apply(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.apply(docId, layerName, body, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.apply(docId, layerName, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocRedactionsApply200Response> apply(
-            String docId, String layerName, ApplyRedactionsRequest request) {
+            String docId, String layerName, DocRedactionsApplyRequest request) {
         return this.rawClient.apply(docId, layerName, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocRedactionsApply200Response> apply(
-            String docId, String layerName, ApplyRedactionsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         return this.rawClient.apply(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 }

@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 public final class DocVersionsSignatures200ResponseSignaturesItem {
     private final int index;
 
-    private final DocVersionsSignatures200ResponseSignaturesItemField field;
+    private final FormFieldRef field;
 
     private final String fieldName;
 
-    private final Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> widget;
+    private final Optional<FormWidget> widget;
 
     private final boolean signed;
 
@@ -65,9 +65,9 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
 
     private DocVersionsSignatures200ResponseSignaturesItem(
             int index,
-            DocVersionsSignatures200ResponseSignaturesItemField field,
+            FormFieldRef field,
             String fieldName,
-            Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> widget,
+            Optional<FormWidget> widget,
             boolean signed,
             DocVersionsSignatures200ResponseSignaturesItemKind kind,
             Optional<String> filter,
@@ -110,7 +110,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
     }
 
     @JsonProperty("field")
-    public DocVersionsSignatures200ResponseSignaturesItemField getField() {
+    public FormFieldRef getField() {
         return field;
     }
 
@@ -120,7 +120,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
     }
 
     @JsonIgnore
-    public Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> getWidget() {
+    public Optional<FormWidget> getWidget() {
         if (widget == null) {
             return Optional.empty();
         }
@@ -226,7 +226,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("widget")
-    private Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> _getWidget() {
+    private Optional<FormWidget> _getWidget() {
         return widget;
     }
 
@@ -356,7 +356,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
     }
 
     public interface FieldStage {
-        FieldNameStage field(@NotNull DocVersionsSignatures200ResponseSignaturesItemField field);
+        FieldNameStage field(@NotNull FormFieldRef field);
     }
 
     public interface FieldNameStage {
@@ -390,11 +390,11 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage widget(Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> widget);
+        _FinalStage widget(Optional<FormWidget> widget);
 
-        _FinalStage widget(DocVersionsSignatures200ResponseSignaturesItemWidget widget);
+        _FinalStage widget(FormWidget widget);
 
-        _FinalStage widget(Nullable<DocVersionsSignatures200ResponseSignaturesItemWidget> widget);
+        _FinalStage widget(Nullable<FormWidget> widget);
 
         _FinalStage filter(Optional<String> filter);
 
@@ -464,7 +464,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
                     _FinalStage {
         private int index;
 
-        private DocVersionsSignatures200ResponseSignaturesItemField field;
+        private FormFieldRef field;
 
         private String fieldName;
 
@@ -496,7 +496,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
 
         private Optional<String> filter = Optional.empty();
 
-        private Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> widget = Optional.empty();
+        private Optional<FormWidget> widget = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -535,7 +535,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
 
         @java.lang.Override
         @JsonSetter("field")
-        public FieldNameStage field(@NotNull DocVersionsSignatures200ResponseSignaturesItemField field) {
+        public FieldNameStage field(@NotNull FormFieldRef field) {
             this.field = Objects.requireNonNull(field, "field must not be null");
             return this;
         }
@@ -808,7 +808,7 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
         }
 
         @java.lang.Override
-        public _FinalStage widget(Nullable<DocVersionsSignatures200ResponseSignaturesItemWidget> widget) {
+        public _FinalStage widget(Nullable<FormWidget> widget) {
             if (widget.isNull()) {
                 this.widget = null;
             } else if (widget.isEmpty()) {
@@ -820,14 +820,14 @@ public final class DocVersionsSignatures200ResponseSignaturesItem {
         }
 
         @java.lang.Override
-        public _FinalStage widget(DocVersionsSignatures200ResponseSignaturesItemWidget widget) {
+        public _FinalStage widget(FormWidget widget) {
             this.widget = Optional.ofNullable(widget);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "widget", nulls = Nulls.SKIP)
-        public _FinalStage widget(Optional<DocVersionsSignatures200ResponseSignaturesItemWidget> widget) {
+        public _FinalStage widget(Optional<FormWidget> widget) {
             this.widget = widget;
             return this;
         }

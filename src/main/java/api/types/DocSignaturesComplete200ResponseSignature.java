@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 public final class DocSignaturesComplete200ResponseSignature {
     private final int index;
 
-    private final DocSignaturesComplete200ResponseSignatureField field;
+    private final FormFieldRef field;
 
     private final String fieldName;
 
-    private final Optional<DocSignaturesComplete200ResponseSignatureWidget> widget;
+    private final Optional<FormWidget> widget;
 
     private final boolean signed;
 
@@ -65,9 +65,9 @@ public final class DocSignaturesComplete200ResponseSignature {
 
     private DocSignaturesComplete200ResponseSignature(
             int index,
-            DocSignaturesComplete200ResponseSignatureField field,
+            FormFieldRef field,
             String fieldName,
-            Optional<DocSignaturesComplete200ResponseSignatureWidget> widget,
+            Optional<FormWidget> widget,
             boolean signed,
             DocSignaturesComplete200ResponseSignatureKind kind,
             Optional<String> filter,
@@ -110,7 +110,7 @@ public final class DocSignaturesComplete200ResponseSignature {
     }
 
     @JsonProperty("field")
-    public DocSignaturesComplete200ResponseSignatureField getField() {
+    public FormFieldRef getField() {
         return field;
     }
 
@@ -120,7 +120,7 @@ public final class DocSignaturesComplete200ResponseSignature {
     }
 
     @JsonIgnore
-    public Optional<DocSignaturesComplete200ResponseSignatureWidget> getWidget() {
+    public Optional<FormWidget> getWidget() {
         if (widget == null) {
             return Optional.empty();
         }
@@ -226,7 +226,7 @@ public final class DocSignaturesComplete200ResponseSignature {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("widget")
-    private Optional<DocSignaturesComplete200ResponseSignatureWidget> _getWidget() {
+    private Optional<FormWidget> _getWidget() {
         return widget;
     }
 
@@ -356,7 +356,7 @@ public final class DocSignaturesComplete200ResponseSignature {
     }
 
     public interface FieldStage {
-        FieldNameStage field(@NotNull DocSignaturesComplete200ResponseSignatureField field);
+        FieldNameStage field(@NotNull FormFieldRef field);
     }
 
     public interface FieldNameStage {
@@ -390,11 +390,11 @@ public final class DocSignaturesComplete200ResponseSignature {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage widget(Optional<DocSignaturesComplete200ResponseSignatureWidget> widget);
+        _FinalStage widget(Optional<FormWidget> widget);
 
-        _FinalStage widget(DocSignaturesComplete200ResponseSignatureWidget widget);
+        _FinalStage widget(FormWidget widget);
 
-        _FinalStage widget(Nullable<DocSignaturesComplete200ResponseSignatureWidget> widget);
+        _FinalStage widget(Nullable<FormWidget> widget);
 
         _FinalStage filter(Optional<String> filter);
 
@@ -464,7 +464,7 @@ public final class DocSignaturesComplete200ResponseSignature {
                     _FinalStage {
         private int index;
 
-        private DocSignaturesComplete200ResponseSignatureField field;
+        private FormFieldRef field;
 
         private String fieldName;
 
@@ -496,7 +496,7 @@ public final class DocSignaturesComplete200ResponseSignature {
 
         private Optional<String> filter = Optional.empty();
 
-        private Optional<DocSignaturesComplete200ResponseSignatureWidget> widget = Optional.empty();
+        private Optional<FormWidget> widget = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -535,7 +535,7 @@ public final class DocSignaturesComplete200ResponseSignature {
 
         @java.lang.Override
         @JsonSetter("field")
-        public FieldNameStage field(@NotNull DocSignaturesComplete200ResponseSignatureField field) {
+        public FieldNameStage field(@NotNull FormFieldRef field) {
             this.field = Objects.requireNonNull(field, "field must not be null");
             return this;
         }
@@ -808,7 +808,7 @@ public final class DocSignaturesComplete200ResponseSignature {
         }
 
         @java.lang.Override
-        public _FinalStage widget(Nullable<DocSignaturesComplete200ResponseSignatureWidget> widget) {
+        public _FinalStage widget(Nullable<FormWidget> widget) {
             if (widget.isNull()) {
                 this.widget = null;
             } else if (widget.isEmpty()) {
@@ -820,14 +820,14 @@ public final class DocSignaturesComplete200ResponseSignature {
         }
 
         @java.lang.Override
-        public _FinalStage widget(DocSignaturesComplete200ResponseSignatureWidget widget) {
+        public _FinalStage widget(FormWidget widget) {
             this.widget = Optional.ofNullable(widget);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "widget", nulls = Nulls.SKIP)
-        public _FinalStage widget(Optional<DocSignaturesComplete200ResponseSignatureWidget> widget) {
+        public _FinalStage widget(Optional<FormWidget> widget) {
             this.widget = widget;
             return this;
         }

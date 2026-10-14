@@ -19,26 +19,25 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesSetScale200Response.Builder.class)
 public final class DocPagesSetScale200Response {
-    private final int pageObjectNumber;
+    private final PageRef page;
 
-    private final DocPagesSetScale200ResponseMeta meta;
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocPagesSetScale200Response(
-            int pageObjectNumber, DocPagesSetScale200ResponseMeta meta, Map<String, Object> additionalProperties) {
-        this.pageObjectNumber = pageObjectNumber;
+    private DocPagesSetScale200Response(PageRef page, MutationMeta meta, Map<String, Object> additionalProperties) {
+        this.page = page;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("pageObjectNumber")
-    public int getPageObjectNumber() {
-        return pageObjectNumber;
+    @JsonProperty("page")
+    public PageRef getPage() {
+        return page;
     }
 
     @JsonProperty("meta")
-    public DocPagesSetScale200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -54,12 +53,12 @@ public final class DocPagesSetScale200Response {
     }
 
     private boolean equalTo(DocPagesSetScale200Response other) {
-        return pageObjectNumber == other.pageObjectNumber && meta.equals(other.meta);
+        return page.equals(other.page) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageObjectNumber, this.meta);
+        return Objects.hash(this.page, this.meta);
     }
 
     @java.lang.Override
@@ -67,18 +66,18 @@ public final class DocPagesSetScale200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static PageObjectNumberStage builder() {
+    public static PageStage builder() {
         return new Builder();
     }
 
-    public interface PageObjectNumberStage {
-        MetaStage pageObjectNumber(int pageObjectNumber);
+    public interface PageStage {
+        MetaStage page(@NotNull PageRef page);
 
         Builder from(DocPagesSetScale200Response other);
     }
 
     public interface MetaStage {
-        _FinalStage meta(@NotNull DocPagesSetScale200ResponseMeta meta);
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -90,10 +89,10 @@ public final class DocPagesSetScale200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PageObjectNumberStage, MetaStage, _FinalStage {
-        private int pageObjectNumber;
+    public static final class Builder implements PageStage, MetaStage, _FinalStage {
+        private PageRef page;
 
-        private DocPagesSetScale200ResponseMeta meta;
+        private MutationMeta meta;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -102,28 +101,28 @@ public final class DocPagesSetScale200Response {
 
         @java.lang.Override
         public Builder from(DocPagesSetScale200Response other) {
-            pageObjectNumber(other.getPageObjectNumber());
+            page(other.getPage());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("pageObjectNumber")
-        public MetaStage pageObjectNumber(int pageObjectNumber) {
-            this.pageObjectNumber = pageObjectNumber;
+        @JsonSetter("page")
+        public MetaStage page(@NotNull PageRef page) {
+            this.page = Objects.requireNonNull(page, "page must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocPagesSetScale200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
         public DocPagesSetScale200Response build() {
-            return new DocPagesSetScale200Response(pageObjectNumber, meta, additionalProperties);
+            return new DocPagesSetScale200Response(page, meta, additionalProperties);
         }
 
         @java.lang.Override

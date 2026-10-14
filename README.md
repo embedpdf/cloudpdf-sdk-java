@@ -30,7 +30,9 @@ Instantiate and use the client with the following:
 package com.example.usage;
 
 import com.cloudpdf.CloudPDFClient;
-import com.cloudpdf.resources.shares.requests.SharesExchangeRequest;
+import com.cloudpdf.resources.doc.requests.DocChangesRequest;
+import com.cloudpdf.resources.doc.types.DocChangesRequestChangesItem;
+import java.util.Arrays;
 
 public class Example {
     public static void main(String[] args) {
@@ -39,10 +41,19 @@ public class Example {
             .token("<token>")
             .build();
 
-        client.shares().exchange(
-            SharesExchangeRequest
+        client.doc().changes(
+            "docId",
+            "layerName",
+            DocChangesRequest
                 .builder()
-                .shareToken("shareToken")
+                .changes(
+                    Arrays.asList(
+                        DocChangesRequestChangesItem
+                            .builder()
+                            .opId("opId")
+                            .build()
+                    )
+                )
                 .build()
         );
     }
@@ -70,7 +81,7 @@ When the API returns a non-success status code (4xx or 5xx response), an API exc
 import com.cloudpdf.core.CloudPDFApiException;
 
 try{
-    client.shares().exchange(...);
+    client.doc().changes(...);
 } catch (CloudPDFApiException e){
     // Do something with the API exception...
 }
@@ -142,7 +153,7 @@ CloudPDFClient client = CloudPDFClient
     .build();
 
 // Request level
-client.shares().exchange(
+client.doc().changes(
     ...,
     RequestOptions
         .builder()
@@ -168,7 +179,7 @@ CloudPDFClient client = CloudPDFClient
 ;
 
 // Request level
-client.shares().exchange(
+client.doc().changes(
     ...,
     RequestOptions
         .builder()
@@ -184,7 +195,7 @@ The `withRawResponse()` method returns a raw client that wraps all responses wit
 (A normal client's `response` is identical to a raw client's `response.body()`.)
 
 ```java
-CloudPDFClientHttpResponse response = client.shares().withRawResponse().exchange(...);
+CloudPDFClientHttpResponse response = client.doc().withRawResponse().changes(...);
 
 System.out.println(response.body());
 System.out.println(response.headers().get("X-My-Header"));

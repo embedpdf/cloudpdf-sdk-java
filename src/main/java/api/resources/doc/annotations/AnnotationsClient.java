@@ -7,16 +7,18 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.DocAnnotationsReorderRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ExportAppearanceAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
+import com.cloudpdf.api.types.AnnotationList;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
 import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
-import com.cloudpdf.api.types.DocAnnotationsList200Response;
-import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
+import com.cloudpdf.api.types.DocAnnotationsReorder200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
 import java.io.InputStream;
 import java.util.Map;
@@ -39,67 +41,54 @@ public class AnnotationsClient {
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public DocAnnotationsListAll200Response listAll(String docId, String layerName) {
+    public AnnotationList listAll(String docId, String layerName) {
         return this.rawClient.listAll(docId, layerName).body();
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public DocAnnotationsListAll200Response listAll(String docId, String layerName, RequestOptions requestOptions) {
+    public AnnotationList listAll(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.listAll(docId, layerName, requestOptions).body();
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public DocAnnotationsListAll200Response listAll(String docId, String layerName, ListAllAnnotationsRequest request) {
+    public AnnotationList listAll(String docId, String layerName, ListAllAnnotationsRequest request) {
         return this.rawClient.listAll(docId, layerName, request).body();
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public DocAnnotationsListAll200Response listAll(
+    public AnnotationList listAll(
             String docId, String layerName, ListAllAnnotationsRequest request, RequestOptions requestOptions) {
         return this.rawClient.listAll(docId, layerName, request, requestOptions).body();
     }
 
-    public DocAnnotationsList200Response list(String docId, String layerName, int pon) {
-        return this.rawClient.list(docId, layerName, pon).body();
+    public AnnotationList list(String docId, String layerName, String pageKey) {
+        return this.rawClient.list(docId, layerName, pageKey).body();
     }
 
-    public DocAnnotationsList200Response list(String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return this.rawClient.list(docId, layerName, pon, requestOptions).body();
+    public AnnotationList list(String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, pageKey, requestOptions).body();
     }
 
-    public DocAnnotationsList200Response list(String docId, String layerName, int pon, ListAnnotationsRequest request) {
-        return this.rawClient.list(docId, layerName, pon, request).body();
+    public AnnotationList list(String docId, String layerName, String pageKey, ListAnnotationsRequest request) {
+        return this.rawClient.list(docId, layerName, pageKey, request).body();
     }
 
-    public DocAnnotationsList200Response list(
-            String docId, String layerName, int pon, ListAnnotationsRequest request, RequestOptions requestOptions) {
+    public AnnotationList list(
+            String docId,
+            String layerName,
+            String pageKey,
+            ListAnnotationsRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .list(docId, layerName, pon, request, requestOptions)
-                .body();
-    }
-
-    /**
-     * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
-     */
-    public DocAnnotationsCreate200Response create(String docId, String layerName, int pon, Map<String, Object> body) {
-        return this.rawClient.create(docId, layerName, pon, body).body();
-    }
-
-    /**
-     * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
-     */
-    public DocAnnotationsCreate200Response create(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient
-                .create(docId, layerName, pon, body, requestOptions)
+                .list(docId, layerName, pageKey, request, requestOptions)
                 .body();
     }
 
@@ -107,129 +96,210 @@ public class AnnotationsClient {
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public DocAnnotationsCreate200Response create(
-            String docId, String layerName, int pon, CreateAnnotationsRequest request) {
-        return this.rawClient.create(docId, layerName, pon, request).body();
+            String docId, String layerName, String pageKey, Map<String, Object> body) {
+        return this.rawClient.create(docId, layerName, pageKey, body).body();
     }
 
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public DocAnnotationsCreate200Response create(
-            String docId, String layerName, int pon, CreateAnnotationsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
-                .create(docId, layerName, pon, request, requestOptions)
+                .create(docId, layerName, pageKey, body, requestOptions)
                 .body();
     }
 
-    public DocAnnotationsDelete200Response delete(String docId, String layerName, int pon, String annotKey) {
-        return this.rawClient.delete(docId, layerName, pon, annotKey).body();
+    /**
+     * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
+     */
+    public DocAnnotationsCreate200Response create(
+            String docId, String layerName, String pageKey, CreateAnnotationsRequest request) {
+        return this.rawClient.create(docId, layerName, pageKey, request).body();
+    }
+
+    /**
+     * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
+     */
+    public DocAnnotationsCreate200Response create(
+            String docId,
+            String layerName,
+            String pageKey,
+            CreateAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .create(docId, layerName, pageKey, request, requestOptions)
+                .body();
+    }
+
+    public DocAnnotationsDelete200Response delete(String docId, String layerName, String pageKey, String annotKey) {
+        return this.rawClient.delete(docId, layerName, pageKey, annotKey).body();
     }
 
     public DocAnnotationsDelete200Response delete(
-            String docId, String layerName, int pon, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pon, annotKey, requestOptions)
+                .delete(docId, layerName, pageKey, annotKey, requestOptions)
                 .body();
     }
 
     public DocAnnotationsDelete200Response delete(
-            String docId, String layerName, int pon, String annotKey, DeleteAnnotationsRequest request) {
-        return this.rawClient.delete(docId, layerName, pon, annotKey, request).body();
+            String docId, String layerName, String pageKey, String annotKey, DeleteAnnotationsRequest request) {
+        return this.rawClient
+                .delete(docId, layerName, pageKey, annotKey, request)
+                .body();
     }
 
     public DocAnnotationsDelete200Response delete(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             DeleteAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pon, annotKey, request, requestOptions)
+                .delete(docId, layerName, pageKey, annotKey, request, requestOptions)
                 .body();
     }
 
     public DocAnnotationsUpdate200Response update(
-            String docId, String layerName, int pon, String annotKey, Map<String, Object> body) {
-        return this.rawClient.update(docId, layerName, pon, annotKey, body).body();
+            String docId, String layerName, String pageKey, String annotKey, Map<String, Object> body) {
+        return this.rawClient.update(docId, layerName, pageKey, annotKey, body).body();
     }
 
     public DocAnnotationsUpdate200Response update(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             Map<String, Object> body,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pon, annotKey, body, requestOptions)
+                .update(docId, layerName, pageKey, annotKey, body, requestOptions)
                 .body();
     }
 
     public DocAnnotationsUpdate200Response update(
-            String docId, String layerName, int pon, String annotKey, UpdateAnnotationsRequest request) {
-        return this.rawClient.update(docId, layerName, pon, annotKey, request).body();
+            String docId, String layerName, String pageKey, String annotKey, UpdateAnnotationsRequest request) {
+        return this.rawClient
+                .update(docId, layerName, pageKey, annotKey, request)
+                .body();
     }
 
     public DocAnnotationsUpdate200Response update(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             UpdateAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pon, annotKey, request, requestOptions)
+                .update(docId, layerName, pageKey, annotKey, request, requestOptions)
                 .body();
     }
 
-    public InputStream exportAppearance(String docId, String layerName, int pon, Map<String, Object> body) {
-        return this.rawClient.exportAppearance(docId, layerName, pon, body).body();
-    }
-
-    public InputStream exportAppearance(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+    public InputStream readAppearance(String docId, String layerName, String pageKey, String annotKey) {
         return this.rawClient
-                .exportAppearance(docId, layerName, pon, body, requestOptions)
+                .readAppearance(docId, layerName, pageKey, annotKey)
+                .body();
+    }
+
+    public InputStream readAppearance(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return this.rawClient
+                .readAppearance(docId, layerName, pageKey, annotKey, requestOptions)
+                .body();
+    }
+
+    public InputStream readAppearance(
+            String docId, String layerName, String pageKey, String annotKey, ReadAppearanceAnnotationsRequest request) {
+        return this.rawClient
+                .readAppearance(docId, layerName, pageKey, annotKey, request)
+                .body();
+    }
+
+    public InputStream readAppearance(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            ReadAppearanceAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .readAppearance(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .body();
+    }
+
+    public InputStream exportAppearance(String docId, String layerName, String pageKey, Map<String, Object> body) {
+        return this.rawClient.exportAppearance(docId, layerName, pageKey, body).body();
+    }
+
+    public InputStream exportAppearance(
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
+        return this.rawClient
+                .exportAppearance(docId, layerName, pageKey, body, requestOptions)
                 .body();
     }
 
     public InputStream exportAppearance(
-            String docId, String layerName, int pon, ExportAppearanceAnnotationsRequest request) {
-        return this.rawClient.exportAppearance(docId, layerName, pon, request).body();
+            String docId, String layerName, String pageKey, ExportAppearanceAnnotationsRequest request) {
+        return this.rawClient
+                .exportAppearance(docId, layerName, pageKey, request)
+                .body();
     }
 
     public InputStream exportAppearance(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             ExportAppearanceAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .exportAppearance(docId, layerName, pon, request, requestOptions)
-                .body();
-    }
-
-    public DocAnnotationsFlatten200Response flatten(String docId, String layerName, int pon, Map<String, Object> body) {
-        return this.rawClient.flatten(docId, layerName, pon, body).body();
-    }
-
-    public DocAnnotationsFlatten200Response flatten(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient
-                .flatten(docId, layerName, pon, body, requestOptions)
+                .exportAppearance(docId, layerName, pageKey, request, requestOptions)
                 .body();
     }
 
     public DocAnnotationsFlatten200Response flatten(
-            String docId, String layerName, int pon, FlattenAnnotationsRequest request) {
-        return this.rawClient.flatten(docId, layerName, pon, request).body();
+            String docId, String layerName, String pageKey, Map<String, Object> body) {
+        return this.rawClient.flatten(docId, layerName, pageKey, body).body();
     }
 
     public DocAnnotationsFlatten200Response flatten(
-            String docId, String layerName, int pon, FlattenAnnotationsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
-                .flatten(docId, layerName, pon, request, requestOptions)
+                .flatten(docId, layerName, pageKey, body, requestOptions)
+                .body();
+    }
+
+    public DocAnnotationsFlatten200Response flatten(
+            String docId, String layerName, String pageKey, FlattenAnnotationsRequest request) {
+        return this.rawClient.flatten(docId, layerName, pageKey, request).body();
+    }
+
+    public DocAnnotationsFlatten200Response flatten(
+            String docId,
+            String layerName,
+            String pageKey,
+            FlattenAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .flatten(docId, layerName, pageKey, request, requestOptions)
+                .body();
+    }
+
+    public DocAnnotationsReorder200Response reorder(
+            String docId, String layerName, String pageKey, DocAnnotationsReorderRequest request) {
+        return this.rawClient.reorder(docId, layerName, pageKey, request).body();
+    }
+
+    public DocAnnotationsReorder200Response reorder(
+            String docId,
+            String layerName,
+            String pageKey,
+            DocAnnotationsReorderRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .reorder(docId, layerName, pageKey, request, requestOptions)
                 .body();
     }
 }

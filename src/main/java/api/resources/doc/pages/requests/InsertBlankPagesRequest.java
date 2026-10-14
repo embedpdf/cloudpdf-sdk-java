@@ -24,13 +24,19 @@ import java.util.Optional;
 public final class InsertBlankPagesRequest {
     private final Optional<String> documentPassword;
 
+    private final Optional<String> idempotencyKey;
+
     private final Map<String, Object> body;
 
     private final Map<String, Object> additionalProperties;
 
     private InsertBlankPagesRequest(
-            Optional<String> documentPassword, Map<String, Object> body, Map<String, Object> additionalProperties) {
+            Optional<String> documentPassword,
+            Optional<String> idempotencyKey,
+            Map<String, Object> body,
+            Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
+        this.idempotencyKey = idempotencyKey;
         this.body = body;
         this.additionalProperties = additionalProperties;
     }
@@ -41,6 +47,14 @@ public final class InsertBlankPagesRequest {
     @JsonIgnore
     public Optional<String> getDocumentPassword() {
         return documentPassword;
+    }
+
+    /**
+     * @return Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+     */
+    @JsonIgnore
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @JsonProperty("body")
@@ -60,12 +74,14 @@ public final class InsertBlankPagesRequest {
     }
 
     private boolean equalTo(InsertBlankPagesRequest other) {
-        return documentPassword.equals(other.documentPassword) && body.equals(other.body);
+        return documentPassword.equals(other.documentPassword)
+                && idempotencyKey.equals(other.idempotencyKey)
+                && body.equals(other.body);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentPassword, this.body);
+        return Objects.hash(this.documentPassword, this.idempotencyKey, this.body);
     }
 
     @java.lang.Override
@@ -81,6 +97,8 @@ public final class InsertBlankPagesRequest {
     public static final class Builder {
         private Optional<String> documentPassword = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         private Map<String, Object> body = new LinkedHashMap<>();
 
         @JsonAnySetter
@@ -90,6 +108,7 @@ public final class InsertBlankPagesRequest {
 
         public Builder from(InsertBlankPagesRequest other) {
             documentPassword(other.getDocumentPassword());
+            idempotencyKey(other.getIdempotencyKey());
             body(other.getBody());
             return this;
         }
@@ -104,6 +123,19 @@ public final class InsertBlankPagesRequest {
 
         public Builder documentPassword(String documentPassword) {
             this.documentPassword = Optional.ofNullable(documentPassword);
+            return this;
+        }
+
+        /**
+         * <p>Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.</p>
+         */
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
             return this;
         }
 
@@ -129,7 +161,7 @@ public final class InsertBlankPagesRequest {
         }
 
         public InsertBlankPagesRequest build() {
-            return new InsertBlankPagesRequest(documentPassword, body, additionalProperties);
+            return new InsertBlankPagesRequest(documentPassword, idempotencyKey, body, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

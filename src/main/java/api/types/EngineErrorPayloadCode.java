@@ -9,9 +9,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class EngineErrorPayloadCode {
     public static final EngineErrorPayloadCode UNKNOWN = new EngineErrorPayloadCode(Value.UNKNOWN, "Unknown");
 
-    public static final EngineErrorPayloadCode WEAK_ANNOTATION_SESSION_CONFLICT =
-            new EngineErrorPayloadCode(Value.WEAK_ANNOTATION_SESSION_CONFLICT, "WeakAnnotationSessionConflict");
-
     public static final EngineErrorPayloadCode STALE_BASE = new EngineErrorPayloadCode(Value.STALE_BASE, "StaleBase");
 
     public static final EngineErrorPayloadCode RUNTIME_UNAVAILABLE =
@@ -27,6 +24,9 @@ public final class EngineErrorPayloadCode {
 
     public static final EngineErrorPayloadCode NOT_FOUND = new EngineErrorPayloadCode(Value.NOT_FOUND, "NotFound");
 
+    public static final EngineErrorPayloadCode IDEMPOTENCY_KEY_REUSED =
+            new EngineErrorPayloadCode(Value.IDEMPOTENCY_KEY_REUSED, "IdempotencyKeyReused");
+
     public static final EngineErrorPayloadCode INVALID_ARG =
             new EngineErrorPayloadCode(Value.INVALID_ARG, "InvalidArg");
 
@@ -34,9 +34,6 @@ public final class EngineErrorPayloadCode {
             new EngineErrorPayloadCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
 
     public static final EngineErrorPayloadCode NETWORK = new EngineErrorPayloadCode(Value.NETWORK, "Network");
-
-    public static final EngineErrorPayloadCode INVALID_REFERENCE =
-            new EngineErrorPayloadCode(Value.INVALID_REFERENCE, "InvalidReference");
 
     public static final EngineErrorPayloadCode DOC_PASSWORD_INCORRECT =
             new EngineErrorPayloadCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
@@ -53,6 +50,11 @@ public final class EngineErrorPayloadCode {
     public static final EngineErrorPayloadCode MALFORMED_PDF =
             new EngineErrorPayloadCode(Value.MALFORMED_PDF, "MalformedPdf");
 
+    public static final EngineErrorPayloadCode LAYER_FULL = new EngineErrorPayloadCode(Value.LAYER_FULL, "LayerFull");
+
+    public static final EngineErrorPayloadCode PAYLOAD_TOO_LARGE =
+            new EngineErrorPayloadCode(Value.PAYLOAD_TOO_LARGE, "PayloadTooLarge");
+
     public static final EngineErrorPayloadCode SIGNING_PENDING =
             new EngineErrorPayloadCode(Value.SIGNING_PENDING, "SigningPending");
 
@@ -66,6 +68,15 @@ public final class EngineErrorPayloadCode {
 
     public static final EngineErrorPayloadCode DOC_PASSWORD_REQUIRED =
             new EngineErrorPayloadCode(Value.DOC_PASSWORD_REQUIRED, "DocPasswordRequired");
+
+    public static final EngineErrorPayloadCode CHANGE_CONFLICT =
+            new EngineErrorPayloadCode(Value.CHANGE_CONFLICT, "ChangeConflict");
+
+    public static final EngineErrorPayloadCode UNDO_UNAVAILABLE =
+            new EngineErrorPayloadCode(Value.UNDO_UNAVAILABLE, "UndoUnavailable");
+
+    public static final EngineErrorPayloadCode OBJECT_NUMBER_UNAVAILABLE =
+            new EngineErrorPayloadCode(Value.OBJECT_NUMBER_UNAVAILABLE, "ObjectNumberUnavailable");
 
     public static final EngineErrorPayloadCode PROTECTED_DOCUMENT =
             new EngineErrorPayloadCode(Value.PROTECTED_DOCUMENT, "ProtectedDocument");
@@ -111,8 +122,6 @@ public final class EngineErrorPayloadCode {
         switch (value) {
             case UNKNOWN:
                 return visitor.visitUnknown();
-            case WEAK_ANNOTATION_SESSION_CONFLICT:
-                return visitor.visitWeakAnnotationSessionConflict();
             case STALE_BASE:
                 return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
@@ -125,14 +134,14 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitDocOpenFailed();
             case NOT_FOUND:
                 return visitor.visitNotFound();
+            case IDEMPOTENCY_KEY_REUSED:
+                return visitor.visitIdempotencyKeyReused();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
             case SHARE_PASSWORD_REQUIRED:
                 return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
-            case INVALID_REFERENCE:
-                return visitor.visitInvalidReference();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
             case LAYER_VERSION_CONFLICT:
@@ -143,6 +152,10 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitSignatureRefused();
             case MALFORMED_PDF:
                 return visitor.visitMalformedPdf();
+            case LAYER_FULL:
+                return visitor.visitLayerFull();
+            case PAYLOAD_TOO_LARGE:
+                return visitor.visitPayloadTooLarge();
             case SIGNING_PENDING:
                 return visitor.visitSigningPending();
             case WIRE_FORMAT:
@@ -153,6 +166,12 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitAborted();
             case DOC_PASSWORD_REQUIRED:
                 return visitor.visitDocPasswordRequired();
+            case CHANGE_CONFLICT:
+                return visitor.visitChangeConflict();
+            case UNDO_UNAVAILABLE:
+                return visitor.visitUndoUnavailable();
+            case OBJECT_NUMBER_UNAVAILABLE:
+                return visitor.visitObjectNumberUnavailable();
             case PROTECTED_DOCUMENT:
                 return visitor.visitProtectedDocument();
             case SIGNING_VERSION_MISMATCH:
@@ -170,8 +189,6 @@ public final class EngineErrorPayloadCode {
         switch (value) {
             case "Unknown":
                 return UNKNOWN;
-            case "WeakAnnotationSessionConflict":
-                return WEAK_ANNOTATION_SESSION_CONFLICT;
             case "StaleBase":
                 return STALE_BASE;
             case "RuntimeUnavailable":
@@ -184,14 +201,14 @@ public final class EngineErrorPayloadCode {
                 return DOC_OPEN_FAILED;
             case "NotFound":
                 return NOT_FOUND;
+            case "IdempotencyKeyReused":
+                return IDEMPOTENCY_KEY_REUSED;
             case "InvalidArg":
                 return INVALID_ARG;
             case "SharePasswordRequired":
                 return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
-            case "InvalidReference":
-                return INVALID_REFERENCE;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
             case "LayerVersionConflict":
@@ -202,6 +219,10 @@ public final class EngineErrorPayloadCode {
                 return SIGNATURE_REFUSED;
             case "MalformedPdf":
                 return MALFORMED_PDF;
+            case "LayerFull":
+                return LAYER_FULL;
+            case "PayloadTooLarge":
+                return PAYLOAD_TOO_LARGE;
             case "SigningPending":
                 return SIGNING_PENDING;
             case "WireFormat":
@@ -212,6 +233,12 @@ public final class EngineErrorPayloadCode {
                 return ABORTED;
             case "DocPasswordRequired":
                 return DOC_PASSWORD_REQUIRED;
+            case "ChangeConflict":
+                return CHANGE_CONFLICT;
+            case "UndoUnavailable":
+                return UNDO_UNAVAILABLE;
+            case "ObjectNumberUnavailable":
+                return OBJECT_NUMBER_UNAVAILABLE;
             case "ProtectedDocument":
                 return PROTECTED_DOCUMENT;
             case "SigningVersionMismatch":
@@ -252,10 +279,6 @@ public final class EngineErrorPayloadCode {
 
         RUNTIME_UNAVAILABLE,
 
-        INVALID_REFERENCE,
-
-        WEAK_ANNOTATION_SESSION_CONFLICT,
-
         LAYER_VERSION_CONFLICT,
 
         NOT_IMPLEMENTED,
@@ -273,6 +296,18 @@ public final class EngineErrorPayloadCode {
         PROTECTED_DOCUMENT,
 
         STALE_BASE,
+
+        PAYLOAD_TOO_LARGE,
+
+        OBJECT_NUMBER_UNAVAILABLE,
+
+        LAYER_FULL,
+
+        CHANGE_CONFLICT,
+
+        UNDO_UNAVAILABLE,
+
+        IDEMPOTENCY_KEY_REUSED,
 
         _UNKNOWN
     }
@@ -306,10 +341,6 @@ public final class EngineErrorPayloadCode {
 
         T visitRuntimeUnavailable();
 
-        T visitInvalidReference();
-
-        T visitWeakAnnotationSessionConflict();
-
         T visitLayerVersionConflict();
 
         T visitNotImplemented();
@@ -327,6 +358,18 @@ public final class EngineErrorPayloadCode {
         T visitProtectedDocument();
 
         T visitStaleBase();
+
+        T visitPayloadTooLarge();
+
+        T visitObjectNumberUnavailable();
+
+        T visitLayerFull();
+
+        T visitChangeConflict();
+
+        T visitUndoUnavailable();
+
+        T visitIdempotencyKeyReused();
 
         T visitUnknown(String unknownType);
     }

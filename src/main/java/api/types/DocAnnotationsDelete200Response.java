@@ -19,18 +19,17 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsDelete200Response.Builder.class)
 public final class DocAnnotationsDelete200Response {
-    private final DocAnnotationsDelete200ResponseMeta meta;
+    private final AnnotationMutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocAnnotationsDelete200Response(
-            DocAnnotationsDelete200ResponseMeta meta, Map<String, Object> additionalProperties) {
+    private DocAnnotationsDelete200Response(AnnotationMutationMeta meta, Map<String, Object> additionalProperties) {
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("meta")
-    public DocAnnotationsDelete200ResponseMeta getMeta() {
+    public AnnotationMutationMeta getMeta() {
         return meta;
     }
 
@@ -64,7 +63,7 @@ public final class DocAnnotationsDelete200Response {
     }
 
     public interface MetaStage {
-        _FinalStage meta(@NotNull DocAnnotationsDelete200ResponseMeta meta);
+        _FinalStage meta(@NotNull AnnotationMutationMeta meta);
 
         Builder from(DocAnnotationsDelete200Response other);
     }
@@ -79,7 +78,7 @@ public final class DocAnnotationsDelete200Response {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MetaStage, _FinalStage {
-        private DocAnnotationsDelete200ResponseMeta meta;
+        private AnnotationMutationMeta meta;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -94,7 +93,7 @@ public final class DocAnnotationsDelete200Response {
 
         @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocAnnotationsDelete200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull AnnotationMutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
