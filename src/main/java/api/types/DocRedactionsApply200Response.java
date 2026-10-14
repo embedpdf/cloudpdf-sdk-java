@@ -10,8 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,18 +22,46 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocRedactionsApply200Response.Builder.class)
 public final class DocRedactionsApply200Response {
-    private final DocRedactionsApply200ResponseMeta meta;
+    private final DocRedactionsApply200ResponseScope scope;
+
+    private final List<DocRedactionsApply200ResponseResultsItem> results;
+
+    private final int removedAnnotationCount;
+
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocRedactionsApply200Response(
-            DocRedactionsApply200ResponseMeta meta, Map<String, Object> additionalProperties) {
+            DocRedactionsApply200ResponseScope scope,
+            List<DocRedactionsApply200ResponseResultsItem> results,
+            int removedAnnotationCount,
+            MutationMeta meta,
+            Map<String, Object> additionalProperties) {
+        this.scope = scope;
+        this.results = results;
+        this.removedAnnotationCount = removedAnnotationCount;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("scope")
+    public DocRedactionsApply200ResponseScope getScope() {
+        return scope;
+    }
+
+    @JsonProperty("results")
+    public List<DocRedactionsApply200ResponseResultsItem> getResults() {
+        return results;
+    }
+
+    @JsonProperty("removedAnnotationCount")
+    public int getRemovedAnnotationCount() {
+        return removedAnnotationCount;
+    }
+
     @JsonProperty("meta")
-    public DocRedactionsApply200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -46,12 +77,15 @@ public final class DocRedactionsApply200Response {
     }
 
     private boolean equalTo(DocRedactionsApply200Response other) {
-        return meta.equals(other.meta);
+        return scope.equals(other.scope)
+                && results.equals(other.results)
+                && removedAnnotationCount == other.removedAnnotationCount
+                && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.scope, this.results, this.removedAnnotationCount, this.meta);
     }
 
     @java.lang.Override
@@ -59,14 +93,22 @@ public final class DocRedactionsApply200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static MetaStage builder() {
+    public static ScopeStage builder() {
         return new Builder();
     }
 
-    public interface MetaStage {
-        _FinalStage meta(@NotNull DocRedactionsApply200ResponseMeta meta);
+    public interface ScopeStage {
+        RemovedAnnotationCountStage scope(@NotNull DocRedactionsApply200ResponseScope scope);
 
         Builder from(DocRedactionsApply200Response other);
+    }
+
+    public interface RemovedAnnotationCountStage {
+        MetaStage removedAnnotationCount(int removedAnnotationCount);
+    }
+
+    public interface MetaStage {
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -75,11 +117,23 @@ public final class DocRedactionsApply200Response {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage results(List<DocRedactionsApply200ResponseResultsItem> results);
+
+        _FinalStage addResults(DocRedactionsApply200ResponseResultsItem results);
+
+        _FinalStage addAllResults(List<DocRedactionsApply200ResponseResultsItem> results);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MetaStage, _FinalStage {
-        private DocRedactionsApply200ResponseMeta meta;
+    public static final class Builder implements ScopeStage, RemovedAnnotationCountStage, MetaStage, _FinalStage {
+        private DocRedactionsApply200ResponseScope scope;
+
+        private int removedAnnotationCount;
+
+        private MutationMeta meta;
+
+        private List<DocRedactionsApply200ResponseResultsItem> results = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,20 +142,62 @@ public final class DocRedactionsApply200Response {
 
         @java.lang.Override
         public Builder from(DocRedactionsApply200Response other) {
+            scope(other.getScope());
+            results(other.getResults());
+            removedAnnotationCount(other.getRemovedAnnotationCount());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("scope")
+        public RemovedAnnotationCountStage scope(@NotNull DocRedactionsApply200ResponseScope scope) {
+            this.scope = Objects.requireNonNull(scope, "scope must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("removedAnnotationCount")
+        public MetaStage removedAnnotationCount(int removedAnnotationCount) {
+            this.removedAnnotationCount = removedAnnotationCount;
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocRedactionsApply200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
+        public _FinalStage addAllResults(List<DocRedactionsApply200ResponseResultsItem> results) {
+            if (results != null) {
+                this.results.addAll(results);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addResults(DocRedactionsApply200ResponseResultsItem results) {
+            this.results.add(results);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "results", nulls = Nulls.SKIP)
+        public _FinalStage results(List<DocRedactionsApply200ResponseResultsItem> results) {
+            this.results.clear();
+            if (results != null) {
+                this.results.addAll(results);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public DocRedactionsApply200Response build() {
-            return new DocRedactionsApply200Response(meta, additionalProperties);
+            return new DocRedactionsApply200Response(
+                    scope, results, removedAnnotationCount, meta, additionalProperties);
         }
 
         @java.lang.Override

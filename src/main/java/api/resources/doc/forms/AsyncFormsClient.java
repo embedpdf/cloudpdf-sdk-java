@@ -5,16 +5,20 @@ package com.cloudpdf.api.resources.doc.forms;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.resources.doc.forms.requests.ExportDataFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.GetFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.ImportDataFormsRequest;
-import com.cloudpdf.api.resources.doc.forms.requests.ResetFormsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DeleteWidgetFormsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsReorderCalculationsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsReorderWidgetsRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsResetRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.DocFormsUpdateWidgetRequest;
+import com.cloudpdf.api.resources.doc.forms.requests.ListFormsRequest;
 import com.cloudpdf.api.resources.doc.forms.requests.SetValueFormsRequest;
-import com.cloudpdf.api.types.DocFormsGet200Response;
-import com.cloudpdf.api.types.DocFormsImportData200Response;
+import com.cloudpdf.api.types.DocFormsDeleteWidget200Response;
+import com.cloudpdf.api.types.DocFormsList200Response;
+import com.cloudpdf.api.types.DocFormsReorderCalculations200Response;
+import com.cloudpdf.api.types.DocFormsReorderWidgets200Response;
 import com.cloudpdf.api.types.DocFormsReset200Response;
 import com.cloudpdf.api.types.DocFormsSetValue200Response;
-import java.io.InputStream;
+import com.cloudpdf.api.types.DocFormsUpdateWidget200Response;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,83 +39,33 @@ public class AsyncFormsClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocFormsGet200Response> get(String docId, String layerName) {
-        return this.rawClient.get(docId, layerName).thenApply(response -> response.body());
+    public CompletableFuture<DocFormsList200Response> list(String docId, String layerName) {
+        return this.rawClient.list(docId, layerName).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocFormsGet200Response> get(
+    public CompletableFuture<DocFormsList200Response> list(
             String docId, String layerName, RequestOptions requestOptions) {
-        return this.rawClient.get(docId, layerName, requestOptions).thenApply(response -> response.body());
+        return this.rawClient.list(docId, layerName, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocFormsGet200Response> get(String docId, String layerName, GetFormsRequest request) {
-        return this.rawClient.get(docId, layerName, request).thenApply(response -> response.body());
+    public CompletableFuture<DocFormsList200Response> list(String docId, String layerName, ListFormsRequest request) {
+        return this.rawClient.list(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocFormsGet200Response> get(
-            String docId, String layerName, GetFormsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.get(docId, layerName, request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<DocFormsList200Response> list(
+            String docId, String layerName, ListFormsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<InputStream> exportData(String docId, String layerName) {
-        return this.rawClient.exportData(docId, layerName).thenApply(response -> response.body());
+    public CompletableFuture<DocFormsReorderCalculations200Response> reorderCalculations(
+            String docId, String layerName, DocFormsReorderCalculationsRequest request) {
+        return this.rawClient.reorderCalculations(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<InputStream> exportData(String docId, String layerName, RequestOptions requestOptions) {
-        return this.rawClient.exportData(docId, layerName, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> exportData(String docId, String layerName, ExportDataFormsRequest request) {
-        return this.rawClient.exportData(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> exportData(
-            String docId, String layerName, ExportDataFormsRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<DocFormsReorderCalculations200Response> reorderCalculations(
+            String docId, String layerName, DocFormsReorderCalculationsRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .exportData(docId, layerName, request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsImportData200Response> importData(
-            String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.importData(docId, layerName, body).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsImportData200Response> importData(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.importData(docId, layerName, body, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsImportData200Response> importData(
-            String docId, String layerName, ImportDataFormsRequest request) {
-        return this.rawClient.importData(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsImportData200Response> importData(
-            String docId, String layerName, ImportDataFormsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .importData(docId, layerName, request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsReset200Response> reset(String docId, String layerName, String fieldKey) {
-        return this.rawClient.reset(docId, layerName, fieldKey).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, RequestOptions requestOptions) {
-        return this.rawClient.reset(docId, layerName, fieldKey, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, ResetFormsRequest request) {
-        return this.rawClient.reset(docId, layerName, fieldKey, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocFormsReset200Response> reset(
-            String docId, String layerName, String fieldKey, ResetFormsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .reset(docId, layerName, fieldKey, request, requestOptions)
+                .reorderCalculations(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -140,6 +94,91 @@ public class AsyncFormsClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .setValue(docId, layerName, fieldKey, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReset200Response> reset(String docId, String layerName) {
+        return this.rawClient.reset(docId, layerName).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReset200Response> reset(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.reset(docId, layerName, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReset200Response> reset(
+            String docId, String layerName, DocFormsResetRequest request) {
+        return this.rawClient.reset(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReset200Response> reset(
+            String docId, String layerName, DocFormsResetRequest request, RequestOptions requestOptions) {
+        return this.rawClient.reset(docId, layerName, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey) {
+        return this.rawClient.deleteWidget(docId, layerName, pageKey, annotKey).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteWidget(docId, layerName, pageKey, annotKey, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId, String layerName, String pageKey, String annotKey, DeleteWidgetFormsRequest request) {
+        return this.rawClient
+                .deleteWidget(docId, layerName, pageKey, annotKey, request)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsDeleteWidget200Response> deleteWidget(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            DeleteWidgetFormsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .deleteWidget(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsUpdateWidget200Response> updateWidget(
+            String docId, String layerName, String pageKey, String annotKey, DocFormsUpdateWidgetRequest request) {
+        return this.rawClient
+                .updateWidget(docId, layerName, pageKey, annotKey, request)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsUpdateWidget200Response> updateWidget(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            DocFormsUpdateWidgetRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .updateWidget(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReorderWidgets200Response> reorderWidgets(
+            String docId, String layerName, String pageKey, DocFormsReorderWidgetsRequest request) {
+        return this.rawClient.reorderWidgets(docId, layerName, pageKey, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocFormsReorderWidgets200Response> reorderWidgets(
+            String docId,
+            String layerName,
+            String pageKey,
+            DocFormsReorderWidgetsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .reorderWidgets(docId, layerName, pageKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

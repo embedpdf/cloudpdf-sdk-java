@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
 
     private final Optional<String> contactInfo;
 
-    private final Optional<String> claimedTime;
+    private final Optional<OffsetDateTime> signedAt;
 
     private final Map<String, Object> additionalProperties;
 
@@ -40,13 +41,13 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
             Optional<String> reason,
             Optional<String> location,
             Optional<String> contactInfo,
-            Optional<String> claimedTime,
+            Optional<OffsetDateTime> signedAt,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.reason = reason;
         this.location = location;
         this.contactInfo = contactInfo;
-        this.claimedTime = claimedTime;
+        this.signedAt = signedAt;
         this.additionalProperties = additionalProperties;
     }
 
@@ -83,11 +84,11 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
     }
 
     @JsonIgnore
-    public Optional<String> getClaimedTime() {
-        if (claimedTime == null) {
+    public Optional<OffsetDateTime> getSignedAt() {
+        if (signedAt == null) {
             return Optional.empty();
         }
-        return claimedTime;
+        return signedAt;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -115,9 +116,9 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("claimedTime")
-    private Optional<String> _getClaimedTime() {
-        return claimedTime;
+    @JsonProperty("signedAt")
+    private Optional<OffsetDateTime> _getSignedAt() {
+        return signedAt;
     }
 
     @java.lang.Override
@@ -137,12 +138,12 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
                 && reason.equals(other.reason)
                 && location.equals(other.location)
                 && contactInfo.equals(other.contactInfo)
-                && claimedTime.equals(other.claimedTime);
+                && signedAt.equals(other.signedAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.reason, this.location, this.contactInfo, this.claimedTime);
+        return Objects.hash(this.name, this.reason, this.location, this.contactInfo, this.signedAt);
     }
 
     @java.lang.Override
@@ -164,7 +165,7 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
 
         private Optional<String> contactInfo = Optional.empty();
 
-        private Optional<String> claimedTime = Optional.empty();
+        private Optional<OffsetDateTime> signedAt = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -176,7 +177,7 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
             reason(other.getReason());
             location(other.getLocation());
             contactInfo(other.getContactInfo());
-            claimedTime(other.getClaimedTime());
+            signedAt(other.getSignedAt());
             return this;
         }
 
@@ -268,31 +269,31 @@ public final class DocSignaturesList200ResponseSignaturesItemSigner {
             return this;
         }
 
-        @JsonSetter(value = "claimedTime", nulls = Nulls.SKIP)
-        public Builder claimedTime(Optional<String> claimedTime) {
-            this.claimedTime = claimedTime;
+        @JsonSetter(value = "signedAt", nulls = Nulls.SKIP)
+        public Builder signedAt(Optional<OffsetDateTime> signedAt) {
+            this.signedAt = signedAt;
             return this;
         }
 
-        public Builder claimedTime(String claimedTime) {
-            this.claimedTime = Optional.ofNullable(claimedTime);
+        public Builder signedAt(OffsetDateTime signedAt) {
+            this.signedAt = Optional.ofNullable(signedAt);
             return this;
         }
 
-        public Builder claimedTime(Nullable<String> claimedTime) {
-            if (claimedTime.isNull()) {
-                this.claimedTime = null;
-            } else if (claimedTime.isEmpty()) {
-                this.claimedTime = Optional.empty();
+        public Builder signedAt(Nullable<OffsetDateTime> signedAt) {
+            if (signedAt.isNull()) {
+                this.signedAt = null;
+            } else if (signedAt.isEmpty()) {
+                this.signedAt = Optional.empty();
             } else {
-                this.claimedTime = Optional.of(claimedTime.get());
+                this.signedAt = Optional.of(signedAt.get());
             }
             return this;
         }
 
         public DocSignaturesList200ResponseSignaturesItemSigner build() {
             return new DocSignaturesList200ResponseSignaturesItemSigner(
-                    name, reason, location, contactInfo, claimedTime, additionalProperties);
+                    name, reason, location, contactInfo, signedAt, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -16,12 +16,12 @@ import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.pages.requests.DeletePagesRequest;
+import com.cloudpdf.api.resources.doc.pages.requests.DocPagesReorderRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.DocPagesSetScaleRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ExtractPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.MovePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
@@ -30,19 +30,17 @@ import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
 import com.cloudpdf.api.types.DocPagesInsert200Response;
 import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
-import com.cloudpdf.api.types.DocPagesMove200Response;
 import com.cloudpdf.api.types.DocPagesRemoveName200Response;
+import com.cloudpdf.api.types.DocPagesReorder200Response;
 import com.cloudpdf.api.types.DocPagesRotate200Response;
 import com.cloudpdf.api.types.DocPagesSetName200Response;
 import com.cloudpdf.api.types.DocPagesSetScale200Response;
-import com.cloudpdf.api.types.DocPagesViewports200ResponseItem;
+import com.cloudpdf.api.types.DocPagesViewports200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.List;
 import java.util.Map;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -62,12 +60,16 @@ public class RawPagesClient {
     }
 
     public CloudPDFClientHttpResponse<DocPagesSetScale200Response> setScale(
-            String docId, String layerName, int pon, DocPagesSetScaleRequest request) {
-        return setScale(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, DocPagesSetScaleRequest request) {
+        return setScale(docId, layerName, pageKey, request, null);
     }
 
     public CloudPDFClientHttpResponse<DocPagesSetScale200Response> setScale(
-            String docId, String layerName, int pon, DocPagesSetScaleRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String pageKey,
+            DocPagesSetScaleRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -75,7 +77,7 @@ public class RawPagesClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("scale");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -98,6 +100,10 @@ public class RawPagesClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -143,23 +149,29 @@ public class RawPagesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon) {
-        return viewports(docId, layerName, pon, ViewportsPagesRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+            String docId, String layerName, String pageKey) {
+        return viewports(
+                docId, layerName, pageKey, ViewportsPagesRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return viewports(docId, layerName, pon, ViewportsPagesRequest.builder().build(), requestOptions);
+    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return viewports(
+                docId, layerName, pageKey, ViewportsPagesRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, ViewportsPagesRequest request) {
-        return viewports(docId, layerName, pon, request, null);
+    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+            String docId, String layerName, String pageKey, ViewportsPagesRequest request) {
+        return viewports(docId, layerName, pageKey, request, null);
     }
 
-    public CloudPDFClientHttpResponse<List<DocPagesViewports200ResponseItem>> viewports(
-            String docId, String layerName, int pon, ViewportsPagesRequest request, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+            String docId,
+            String layerName,
+            String pageKey,
+            ViewportsPagesRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -167,7 +179,7 @@ public class RawPagesClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("viewports");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -202,8 +214,7 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(
-                                responseBodyString, new TypeReference<List<DocPagesViewports200ResponseItem>>() {}),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesViewports200Response.class),
                         response);
             }
             try {
@@ -271,6 +282,10 @@ public class RawPagesClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -316,7 +331,7 @@ public class RawPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CloudPDFClientHttpResponse<InputStream> extract(String docId, String layerName, Map<String, Object> body) {
         return extract(
@@ -324,7 +339,7 @@ public class RawPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CloudPDFClientHttpResponse<InputStream> extract(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
@@ -333,7 +348,7 @@ public class RawPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CloudPDFClientHttpResponse<InputStream> extract(
             String docId, String layerName, ExtractPagesRequest request) {
@@ -341,7 +356,7 @@ public class RawPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pageObjectNumbers&quot;: number[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
      */
     public CloudPDFClientHttpResponse<InputStream> extract(
             String docId, String layerName, ExtractPagesRequest request, RequestOptions requestOptions) {
@@ -467,6 +482,10 @@ public class RawPagesClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -512,7 +531,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
      */
     public CloudPDFClientHttpResponse<DocPagesInsert200Response> insert(
             String docId, String layerName, File file, InsertPagesRequest request) {
@@ -520,7 +539,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Multipart mutation envelope: a <code>body</code> field holding <code>{&quot;destIndex&quot;?: number}</code> (omitted → append) plus a <code>resource:source</code> file part carrying the standalone PDF whose pages are copied in. The inserted copies get fresh page object numbers, returned in insertion order.
+     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
      */
     public CloudPDFClientHttpResponse<DocPagesInsert200Response> insert(
             String docId, String layerName, File file, InsertPagesRequest request, RequestOptions requestOptions) {
@@ -554,6 +573,10 @@ public class RawPagesClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -839,7 +862,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CloudPDFClientHttpResponse<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, Map<String, Object> body) {
@@ -848,7 +871,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CloudPDFClientHttpResponse<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
@@ -857,7 +880,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CloudPDFClientHttpResponse<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, InsertBlankPagesRequest request) {
@@ -865,7 +888,7 @@ public class RawPagesClient {
     }
 
     /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;destIndex&quot;?}</code> — size in PDF points, count in [1, 100], destIndex omitted → append.
+     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
      */
     public CloudPDFClientHttpResponse<DocPagesInsertBlank200Response> insertBlank(
             String docId, String layerName, InsertBlankPagesRequest request, RequestOptions requestOptions) {
@@ -899,6 +922,10 @@ public class RawPagesClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -919,97 +946,6 @@ public class RawPagesClient {
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesInsertBlank200Response.class),
-                        response);
-            }
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
-            throw new CloudPDFApiException(
-                    "Error with status code " + response.code(), response.code(), errorBody, response);
-        } catch (JsonProcessingException e) {
-            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
-        } catch (IOException e) {
-            throw new CloudPDFException("Network error executing HTTP request", e);
-        }
-    }
-
-    public CloudPDFClientHttpResponse<DocPagesMove200Response> move(
-            String docId, String layerName, Map<String, Object> body) {
-        return move(docId, layerName, MovePagesRequest.builder().body(body).build());
-    }
-
-    public CloudPDFClientHttpResponse<DocPagesMove200Response> move(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return move(docId, layerName, MovePagesRequest.builder().body(body).build(), requestOptions);
-    }
-
-    public CloudPDFClientHttpResponse<DocPagesMove200Response> move(
-            String docId, String layerName, MovePagesRequest request) {
-        return move(docId, layerName, request, null);
-    }
-
-    public CloudPDFClientHttpResponse<DocPagesMove200Response> move(
-            String docId, String layerName, MovePagesRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("v1/docs")
-                .addPathSegment(docId)
-                .addPathSegments("layers")
-                .addPathSegment(layerName)
-                .addPathSegments("pages")
-                .addPathSegments("move");
-        if (requestOptions != null) {
-            requestOptions.getQueryParameters().forEach((_key, _value) -> {
-                httpUrl.addQueryParameter(_key, _value);
-            });
-        }
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json");
-        if (request.getDocumentPassword().isPresent()) {
-            _requestBuilder.addHeader(
-                    "X-Document-Password", request.getDocumentPassword().get());
-        }
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
-            okhttpRequest = okhttpRequest
-                    .newBuilder()
-                    .tag(
-                            RetryInterceptor.MaxRetriesOverride.class,
-                            new RetryInterceptor.MaxRetriesOverride(
-                                    requestOptions.getMaxRetries().get()))
-                    .build();
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            if (response.isSuccessful()) {
-                return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesMove200Response.class),
                         response);
             }
             try {
@@ -1082,6 +1018,10 @@ public class RawPagesClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -1176,6 +1116,10 @@ public class RawPagesClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -1196,6 +1140,91 @@ public class RawPagesClient {
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesRemoveName200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesReorder200Response> reorder(
+            String docId, String layerName, DocPagesReorderRequest request) {
+        return reorder(docId, layerName, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocPagesReorder200Response> reorder(
+            String docId, String layerName, DocPagesReorderRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("pages")
+                .addPathSegments("reorder");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesReorder200Response.class),
                         response);
             }
             try {
@@ -1266,6 +1295,10 @@ public class RawPagesClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();

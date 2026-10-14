@@ -31,13 +31,7 @@ public final class TokensIssueRequestDoc {
 
     private final List<String> scope;
 
-    private final Optional<String> userId;
-
-    private final Optional<String> displayName;
-
-    private final Optional<String> groupId;
-
-    private final Optional<List<String>> groups;
+    private final Optional<TokensIssueRequestDocIdentity> identity;
 
     private final Optional<List<String>> origins;
 
@@ -50,10 +44,7 @@ public final class TokensIssueRequestDoc {
             String docId,
             Optional<String> layerName,
             List<String> scope,
-            Optional<String> userId,
-            Optional<String> displayName,
-            Optional<String> groupId,
-            Optional<List<String>> groups,
+            Optional<TokensIssueRequestDocIdentity> identity,
             Optional<List<String>> origins,
             int expiresIn,
             Map<String, Object> additionalProperties) {
@@ -61,10 +52,7 @@ public final class TokensIssueRequestDoc {
         this.docId = docId;
         this.layerName = layerName;
         this.scope = scope;
-        this.userId = userId;
-        this.displayName = displayName;
-        this.groupId = groupId;
-        this.groups = groups;
+        this.identity = identity;
         this.origins = origins;
         this.expiresIn = expiresIn;
         this.additionalProperties = additionalProperties;
@@ -90,24 +78,9 @@ public final class TokensIssueRequestDoc {
         return scope;
     }
 
-    @JsonProperty("userId")
-    public Optional<String> getUserId() {
-        return userId;
-    }
-
-    @JsonProperty("displayName")
-    public Optional<String> getDisplayName() {
-        return displayName;
-    }
-
-    @JsonProperty("groupId")
-    public Optional<String> getGroupId() {
-        return groupId;
-    }
-
-    @JsonProperty("groups")
-    public Optional<List<String>> getGroups() {
-        return groups;
+    @JsonProperty("identity")
+    public Optional<TokensIssueRequestDocIdentity> getIdentity() {
+        return identity;
     }
 
     @JsonProperty("origins")
@@ -136,10 +109,7 @@ public final class TokensIssueRequestDoc {
                 && docId.equals(other.docId)
                 && layerName.equals(other.layerName)
                 && scope.equals(other.scope)
-                && userId.equals(other.userId)
-                && displayName.equals(other.displayName)
-                && groupId.equals(other.groupId)
-                && groups.equals(other.groups)
+                && identity.equals(other.identity)
                 && origins.equals(other.origins)
                 && expiresIn == other.expiresIn;
     }
@@ -147,16 +117,7 @@ public final class TokensIssueRequestDoc {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.sub,
-                this.docId,
-                this.layerName,
-                this.scope,
-                this.userId,
-                this.displayName,
-                this.groupId,
-                this.groups,
-                this.origins,
-                this.expiresIn);
+                this.sub, this.docId, this.layerName, this.scope, this.identity, this.origins, this.expiresIn);
     }
 
     @java.lang.Override
@@ -199,21 +160,9 @@ public final class TokensIssueRequestDoc {
 
         _FinalStage addAllScope(List<String> scope);
 
-        _FinalStage userId(Optional<String> userId);
+        _FinalStage identity(Optional<TokensIssueRequestDocIdentity> identity);
 
-        _FinalStage userId(String userId);
-
-        _FinalStage displayName(Optional<String> displayName);
-
-        _FinalStage displayName(String displayName);
-
-        _FinalStage groupId(Optional<String> groupId);
-
-        _FinalStage groupId(String groupId);
-
-        _FinalStage groups(Optional<List<String>> groups);
-
-        _FinalStage groups(List<String> groups);
+        _FinalStage identity(TokensIssueRequestDocIdentity identity);
 
         _FinalStage origins(Optional<List<String>> origins);
 
@@ -230,13 +179,7 @@ public final class TokensIssueRequestDoc {
 
         private Optional<List<String>> origins = Optional.empty();
 
-        private Optional<List<String>> groups = Optional.empty();
-
-        private Optional<String> groupId = Optional.empty();
-
-        private Optional<String> displayName = Optional.empty();
-
-        private Optional<String> userId = Optional.empty();
+        private Optional<TokensIssueRequestDocIdentity> identity = Optional.empty();
 
         private List<String> scope = new ArrayList<>();
 
@@ -253,10 +196,7 @@ public final class TokensIssueRequestDoc {
             docId(other.getDocId());
             layerName(other.getLayerName());
             scope(other.getScope());
-            userId(other.getUserId());
-            displayName(other.getDisplayName());
-            groupId(other.getGroupId());
-            groups(other.getGroups());
+            identity(other.getIdentity());
             origins(other.getOrigins());
             expiresIn(other.getExpiresIn());
             return this;
@@ -297,54 +237,15 @@ public final class TokensIssueRequestDoc {
         }
 
         @java.lang.Override
-        public _FinalStage groups(List<String> groups) {
-            this.groups = Optional.ofNullable(groups);
+        public _FinalStage identity(TokensIssueRequestDocIdentity identity) {
+            this.identity = Optional.ofNullable(identity);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "groups", nulls = Nulls.SKIP)
-        public _FinalStage groups(Optional<List<String>> groups) {
-            this.groups = groups;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage groupId(String groupId) {
-            this.groupId = Optional.ofNullable(groupId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "groupId", nulls = Nulls.SKIP)
-        public _FinalStage groupId(Optional<String> groupId) {
-            this.groupId = groupId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage displayName(String displayName) {
-            this.displayName = Optional.ofNullable(displayName);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "displayName", nulls = Nulls.SKIP)
-        public _FinalStage displayName(Optional<String> displayName) {
-            this.displayName = displayName;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage userId(String userId) {
-            this.userId = Optional.ofNullable(userId);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "userId", nulls = Nulls.SKIP)
-        public _FinalStage userId(Optional<String> userId) {
-            this.userId = userId;
+        @JsonSetter(value = "identity", nulls = Nulls.SKIP)
+        public _FinalStage identity(Optional<TokensIssueRequestDocIdentity> identity) {
+            this.identity = identity;
             return this;
         }
 
@@ -388,17 +289,7 @@ public final class TokensIssueRequestDoc {
         @java.lang.Override
         public TokensIssueRequestDoc build() {
             return new TokensIssueRequestDoc(
-                    sub,
-                    docId,
-                    layerName,
-                    scope,
-                    userId,
-                    displayName,
-                    groupId,
-                    groups,
-                    origins,
-                    expiresIn,
-                    additionalProperties);
+                    sub, docId, layerName, scope, identity, origins, expiresIn, additionalProperties);
         }
 
         @java.lang.Override

@@ -5,9 +5,8 @@ package com.cloudpdf.api.resources.doc.redactions;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.resources.doc.redactions.requests.ApplyRedactionsRequest;
+import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
 import com.cloudpdf.api.types.DocRedactionsApply200Response;
-import java.util.Map;
 
 public class RedactionsClient {
     protected final ClientOptions clientOptions;
@@ -26,21 +25,20 @@ public class RedactionsClient {
         return this.rawClient;
     }
 
-    public DocRedactionsApply200Response apply(String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.apply(docId, layerName, body).body();
+    public DocRedactionsApply200Response apply(String docId, String layerName) {
+        return this.rawClient.apply(docId, layerName).body();
     }
 
-    public DocRedactionsApply200Response apply(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.apply(docId, layerName, body, requestOptions).body();
+    public DocRedactionsApply200Response apply(String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.apply(docId, layerName, requestOptions).body();
     }
 
-    public DocRedactionsApply200Response apply(String docId, String layerName, ApplyRedactionsRequest request) {
+    public DocRedactionsApply200Response apply(String docId, String layerName, DocRedactionsApplyRequest request) {
         return this.rawClient.apply(docId, layerName, request).body();
     }
 
     public DocRedactionsApply200Response apply(
-            String docId, String layerName, ApplyRedactionsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         return this.rawClient.apply(docId, layerName, request, requestOptions).body();
     }
 }

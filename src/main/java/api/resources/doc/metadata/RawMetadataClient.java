@@ -12,7 +12,7 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.metadata.requests.GetMetadataRequest;
-import com.cloudpdf.api.types.DocMetadataGet200Response;
+import com.cloudpdf.api.types.DocumentMetadata;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -29,21 +29,21 @@ public class RawMetadataClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocMetadataGet200Response> get(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocumentMetadata> get(String docId, String layerName) {
         return get(docId, layerName, GetMetadataRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocMetadataGet200Response> get(
+    public CloudPDFClientHttpResponse<DocumentMetadata> get(
             String docId, String layerName, RequestOptions requestOptions) {
         return get(docId, layerName, GetMetadataRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocMetadataGet200Response> get(
+    public CloudPDFClientHttpResponse<DocumentMetadata> get(
             String docId, String layerName, GetMetadataRequest request) {
         return get(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocMetadataGet200Response> get(
+    public CloudPDFClientHttpResponse<DocumentMetadata> get(
             String docId, String layerName, GetMetadataRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -85,8 +85,7 @@ public class RawMetadataClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocMetadataGet200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentMetadata.class), response);
             }
             try {
                 if (response.code() == 404) {

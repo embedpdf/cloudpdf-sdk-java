@@ -16,13 +16,13 @@ import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.NotFoundError;
-import com.cloudpdf.api.resources.doc.signatures.requests.AbortSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.AnalysisSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
-import com.cloudpdf.api.types.DocSignaturesAbort200Response;
 import com.cloudpdf.api.types.DocSignaturesAnalysis200Response;
+import com.cloudpdf.api.types.DocSignaturesCancel200Response;
 import com.cloudpdf.api.types.DocSignaturesComplete200Response;
 import com.cloudpdf.api.types.DocSignaturesList200Response;
 import com.cloudpdf.api.types.DocSignaturesPrepare200Response;
@@ -137,28 +137,28 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesAbort200Response> abort(
+    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
             String docId, String layerName, String signingId) {
-        return abort(
-                docId, layerName, signingId, AbortSignaturesRequest.builder().build());
+        return cancel(
+                docId, layerName, signingId, CancelSignaturesRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesAbort200Response> abort(
+    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
             String docId, String layerName, String signingId, RequestOptions requestOptions) {
-        return abort(
-                docId, layerName, signingId, AbortSignaturesRequest.builder().build(), requestOptions);
+        return cancel(
+                docId, layerName, signingId, CancelSignaturesRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesAbort200Response> abort(
-            String docId, String layerName, String signingId, AbortSignaturesRequest request) {
-        return abort(docId, layerName, signingId, request, null);
+    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
+            String docId, String layerName, String signingId, CancelSignaturesRequest request) {
+        return cancel(docId, layerName, signingId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesAbort200Response> abort(
+    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
             String docId,
             String layerName,
             String signingId,
-            AbortSignaturesRequest request,
+            CancelSignaturesRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -201,7 +201,7 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesAbort200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesCancel200Response.class),
                         response);
             }
             try {
@@ -424,7 +424,7 @@ public class RawSignaturesClient {
     }
 
     /**
-     * The multipart envelope: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock, appearance) and an optional <code>resource:&lt;key&gt;</code> PDF part the body's <code>appearance.resource</code> names. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is aborted, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
      */
     public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
@@ -432,7 +432,7 @@ public class RawSignaturesClient {
     }
 
     /**
-     * The multipart envelope: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock, appearance) and an optional <code>resource:&lt;key&gt;</code> PDF part the body's <code>appearance.resource</code> names. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is aborted, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
      */
     public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
             String docId,

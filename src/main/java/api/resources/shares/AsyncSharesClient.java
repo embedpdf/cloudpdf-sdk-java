@@ -68,14 +68,14 @@ public class AsyncSharesClient {
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<SharesCreate200Response> create(String tenantId, SharesCreateRequest request) {
         return this.rawClient.create(tenantId, request).thenApply(response -> response.body());
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<SharesCreate200Response> create(
             String tenantId, SharesCreateRequest request, RequestOptions requestOptions) {

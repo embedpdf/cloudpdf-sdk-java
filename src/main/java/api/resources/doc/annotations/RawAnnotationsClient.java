@@ -17,16 +17,18 @@ import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.DocAnnotationsReorderRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ExportAppearanceAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
+import com.cloudpdf.api.types.AnnotationList;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
 import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
 import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
-import com.cloudpdf.api.types.DocAnnotationsList200Response;
-import com.cloudpdf.api.types.DocAnnotationsListAll200Response;
+import com.cloudpdf.api.types.DocAnnotationsReorder200Response;
 import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -48,32 +50,32 @@ public class RawAnnotationsClient {
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public CloudPDFClientHttpResponse<DocAnnotationsListAll200Response> listAll(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<AnnotationList> listAll(String docId, String layerName) {
         return listAll(docId, layerName, ListAllAnnotationsRequest.builder().build());
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public CloudPDFClientHttpResponse<DocAnnotationsListAll200Response> listAll(
+    public CloudPDFClientHttpResponse<AnnotationList> listAll(
             String docId, String layerName, RequestOptions requestOptions) {
         return listAll(docId, layerName, ListAllAnnotationsRequest.builder().build(), requestOptions);
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public CloudPDFClientHttpResponse<DocAnnotationsListAll200Response> listAll(
+    public CloudPDFClientHttpResponse<AnnotationList> listAll(
             String docId, String layerName, ListAllAnnotationsRequest request) {
         return listAll(docId, layerName, request, null);
     }
 
     /**
-     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>pageState.pageObjectNumber</code> when display order matters.
+     * Returns one entry per page plus the audit-log cursor for reconciling subsequent document events. Page order is unspecified; join by <code>page</code> (a <code>PageRef</code>) when display order matters.
      */
-    public CloudPDFClientHttpResponse<DocAnnotationsListAll200Response> listAll(
+    public CloudPDFClientHttpResponse<AnnotationList> listAll(
             String docId, String layerName, ListAllAnnotationsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -116,8 +118,7 @@ public class RawAnnotationsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocAnnotationsListAll200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AnnotationList.class), response);
             }
             try {
                 switch (response.code()) {
@@ -141,22 +142,26 @@ public class RawAnnotationsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocAnnotationsList200Response> list(String docId, String layerName, int pon) {
-        return list(docId, layerName, pon, ListAnnotationsRequest.builder().build());
+    public CloudPDFClientHttpResponse<AnnotationList> list(String docId, String layerName, String pageKey) {
+        return list(docId, layerName, pageKey, ListAnnotationsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocAnnotationsList200Response> list(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return list(docId, layerName, pon, ListAnnotationsRequest.builder().build(), requestOptions);
+    public CloudPDFClientHttpResponse<AnnotationList> list(
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return list(docId, layerName, pageKey, ListAnnotationsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocAnnotationsList200Response> list(
-            String docId, String layerName, int pon, ListAnnotationsRequest request) {
-        return list(docId, layerName, pon, request, null);
+    public CloudPDFClientHttpResponse<AnnotationList> list(
+            String docId, String layerName, String pageKey, ListAnnotationsRequest request) {
+        return list(docId, layerName, pageKey, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocAnnotationsList200Response> list(
-            String docId, String layerName, int pon, ListAnnotationsRequest request, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<AnnotationList> list(
+            String docId,
+            String layerName,
+            String pageKey,
+            ListAnnotationsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -164,7 +169,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -199,8 +204,7 @@ public class RawAnnotationsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocAnnotationsList200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AnnotationList.class), response);
             }
             try {
                 if (response.code() == 404) {
@@ -224,11 +228,11 @@ public class RawAnnotationsClient {
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public CloudPDFClientHttpResponse<DocAnnotationsCreate200Response> create(
-            String docId, String layerName, int pon, Map<String, Object> body) {
+            String docId, String layerName, String pageKey, Map<String, Object> body) {
         return create(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 CreateAnnotationsRequest.builder().body(body).build());
     }
 
@@ -236,11 +240,11 @@ public class RawAnnotationsClient {
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public CloudPDFClientHttpResponse<DocAnnotationsCreate200Response> create(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return create(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 CreateAnnotationsRequest.builder().body(body).build(),
                 requestOptions);
     }
@@ -249,15 +253,19 @@ public class RawAnnotationsClient {
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public CloudPDFClientHttpResponse<DocAnnotationsCreate200Response> create(
-            String docId, String layerName, int pon, CreateAnnotationsRequest request) {
-        return create(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, CreateAnnotationsRequest request) {
+        return create(docId, layerName, pageKey, request, null);
     }
 
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
     public CloudPDFClientHttpResponse<DocAnnotationsCreate200Response> create(
-            String docId, String layerName, int pon, CreateAnnotationsRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String pageKey,
+            CreateAnnotationsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -265,7 +273,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -288,6 +296,10 @@ public class RawAnnotationsClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -334,35 +346,35 @@ public class RawAnnotationsClient {
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, int pon, String annotKey) {
+            String docId, String layerName, String pageKey, String annotKey) {
         return delete(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 annotKey,
                 DeleteAnnotationsRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, int pon, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
         return delete(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 annotKey,
                 DeleteAnnotationsRequest.builder().build(),
                 requestOptions);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, int pon, String annotKey, DeleteAnnotationsRequest request) {
-        return delete(docId, layerName, pon, annotKey, request, null);
+            String docId, String layerName, String pageKey, String annotKey, DeleteAnnotationsRequest request) {
+        return delete(docId, layerName, pageKey, annotKey, request, null);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsDelete200Response> delete(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             DeleteAnnotationsRequest request,
             RequestOptions requestOptions) {
@@ -373,7 +385,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items")
                 .addPathSegment(annotKey);
         if (requestOptions != null) {
@@ -389,6 +401,10 @@ public class RawAnnotationsClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -431,11 +447,11 @@ public class RawAnnotationsClient {
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response> update(
-            String docId, String layerName, int pon, String annotKey, Map<String, Object> body) {
+            String docId, String layerName, String pageKey, String annotKey, Map<String, Object> body) {
         return update(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 annotKey,
                 UpdateAnnotationsRequest.builder().body(body).build());
     }
@@ -443,28 +459,28 @@ public class RawAnnotationsClient {
     public CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response> update(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             Map<String, Object> body,
             RequestOptions requestOptions) {
         return update(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 annotKey,
                 UpdateAnnotationsRequest.builder().body(body).build(),
                 requestOptions);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response> update(
-            String docId, String layerName, int pon, String annotKey, UpdateAnnotationsRequest request) {
-        return update(docId, layerName, pon, annotKey, request, null);
+            String docId, String layerName, String pageKey, String annotKey, UpdateAnnotationsRequest request) {
+        return update(docId, layerName, pageKey, annotKey, request, null);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response> update(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             String annotKey,
             UpdateAnnotationsRequest request,
             RequestOptions requestOptions) {
@@ -475,7 +491,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items")
                 .addPathSegment(annotKey);
         if (requestOptions != null) {
@@ -499,6 +515,10 @@ public class RawAnnotationsClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
@@ -544,34 +564,136 @@ public class RawAnnotationsClient {
         }
     }
 
+    public CloudPDFClientHttpResponse<InputStream> readAppearance(
+            String docId, String layerName, String pageKey, String annotKey) {
+        return readAppearance(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                ReadAppearanceAnnotationsRequest.builder().build());
+    }
+
+    public CloudPDFClientHttpResponse<InputStream> readAppearance(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return readAppearance(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                ReadAppearanceAnnotationsRequest.builder().build(),
+                requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<InputStream> readAppearance(
+            String docId, String layerName, String pageKey, String annotKey, ReadAppearanceAnnotationsRequest request) {
+        return readAppearance(docId, layerName, pageKey, annotKey, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<InputStream> readAppearance(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            ReadAppearanceAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("annotations/pages")
+                .addPathSegment(pageKey)
+                .addPathSegments("items")
+                .addPathSegment(annotKey)
+                .addPathSegments("resources")
+                .addPathSegments("appearance");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try {
+            Response response = client.newCall(okhttpRequest).execute();
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(new ResponseBodyInputStream(response), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
     public CloudPDFClientHttpResponse<InputStream> exportAppearance(
-            String docId, String layerName, int pon, Map<String, Object> body) {
+            String docId, String layerName, String pageKey, Map<String, Object> body) {
         return exportAppearance(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 ExportAppearanceAnnotationsRequest.builder().body(body).build());
     }
 
     public CloudPDFClientHttpResponse<InputStream> exportAppearance(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return exportAppearance(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 ExportAppearanceAnnotationsRequest.builder().body(body).build(),
                 requestOptions);
     }
 
     public CloudPDFClientHttpResponse<InputStream> exportAppearance(
-            String docId, String layerName, int pon, ExportAppearanceAnnotationsRequest request) {
-        return exportAppearance(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, ExportAppearanceAnnotationsRequest request) {
+        return exportAppearance(docId, layerName, pageKey, request, null);
     }
 
     public CloudPDFClientHttpResponse<InputStream> exportAppearance(
             String docId,
             String layerName,
-            int pon,
+            String pageKey,
             ExportAppearanceAnnotationsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -581,7 +703,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items")
                 .addPathSegments("appearance");
         if (requestOptions != null) {
@@ -650,31 +772,35 @@ public class RawAnnotationsClient {
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response> flatten(
-            String docId, String layerName, int pon, Map<String, Object> body) {
+            String docId, String layerName, String pageKey, Map<String, Object> body) {
         return flatten(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 FlattenAnnotationsRequest.builder().body(body).build());
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response> flatten(
-            String docId, String layerName, int pon, Map<String, Object> body, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return flatten(
                 docId,
                 layerName,
-                pon,
+                pageKey,
                 FlattenAnnotationsRequest.builder().body(body).build(),
                 requestOptions);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response> flatten(
-            String docId, String layerName, int pon, FlattenAnnotationsRequest request) {
-        return flatten(docId, layerName, pon, request, null);
+            String docId, String layerName, String pageKey, FlattenAnnotationsRequest request) {
+        return flatten(docId, layerName, pageKey, request, null);
     }
 
     public CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response> flatten(
-            String docId, String layerName, int pon, FlattenAnnotationsRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String pageKey,
+            FlattenAnnotationsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -682,7 +808,7 @@ public class RawAnnotationsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("annotations/pages")
-                .addPathSegment(Integer.toString(pon))
+                .addPathSegment(pageKey)
                 .addPathSegments("items")
                 .addPathSegments("flatten");
         if (requestOptions != null) {
@@ -707,6 +833,10 @@ public class RawAnnotationsClient {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
         }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -727,6 +857,97 @@ public class RawAnnotationsClient {
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocAnnotationsFlatten200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    public CloudPDFClientHttpResponse<DocAnnotationsReorder200Response> reorder(
+            String docId, String layerName, String pageKey, DocAnnotationsReorderRequest request) {
+        return reorder(docId, layerName, pageKey, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<DocAnnotationsReorder200Response> reorder(
+            String docId,
+            String layerName,
+            String pageKey,
+            DocAnnotationsReorderRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("annotations/pages")
+                .addPathSegment(pageKey)
+                .addPathSegments("items")
+                .addPathSegments("reorder");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocAnnotationsReorder200Response.class),
                         response);
             }
             try {

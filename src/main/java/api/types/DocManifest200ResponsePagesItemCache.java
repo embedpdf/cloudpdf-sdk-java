@@ -22,12 +22,15 @@ public final class DocManifest200ResponsePagesItemCache {
 
     private final int annotationVersion;
 
+    private final int widgetVersion;
+
     private final Map<String, Object> additionalProperties;
 
     private DocManifest200ResponsePagesItemCache(
-            int contentVersion, int annotationVersion, Map<String, Object> additionalProperties) {
+            int contentVersion, int annotationVersion, int widgetVersion, Map<String, Object> additionalProperties) {
         this.contentVersion = contentVersion;
         this.annotationVersion = annotationVersion;
+        this.widgetVersion = widgetVersion;
         this.additionalProperties = additionalProperties;
     }
 
@@ -39,6 +42,11 @@ public final class DocManifest200ResponsePagesItemCache {
     @JsonProperty("annotationVersion")
     public int getAnnotationVersion() {
         return annotationVersion;
+    }
+
+    @JsonProperty("widgetVersion")
+    public int getWidgetVersion() {
+        return widgetVersion;
     }
 
     @java.lang.Override
@@ -54,12 +62,14 @@ public final class DocManifest200ResponsePagesItemCache {
     }
 
     private boolean equalTo(DocManifest200ResponsePagesItemCache other) {
-        return contentVersion == other.contentVersion && annotationVersion == other.annotationVersion;
+        return contentVersion == other.contentVersion
+                && annotationVersion == other.annotationVersion
+                && widgetVersion == other.widgetVersion;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.contentVersion, this.annotationVersion);
+        return Objects.hash(this.contentVersion, this.annotationVersion, this.widgetVersion);
     }
 
     @java.lang.Override
@@ -78,7 +88,11 @@ public final class DocManifest200ResponsePagesItemCache {
     }
 
     public interface AnnotationVersionStage {
-        _FinalStage annotationVersion(int annotationVersion);
+        WidgetVersionStage annotationVersion(int annotationVersion);
+    }
+
+    public interface WidgetVersionStage {
+        _FinalStage widgetVersion(int widgetVersion);
     }
 
     public interface _FinalStage {
@@ -90,10 +104,13 @@ public final class DocManifest200ResponsePagesItemCache {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentVersionStage, AnnotationVersionStage, _FinalStage {
+    public static final class Builder
+            implements ContentVersionStage, AnnotationVersionStage, WidgetVersionStage, _FinalStage {
         private int contentVersion;
 
         private int annotationVersion;
+
+        private int widgetVersion;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -104,6 +121,7 @@ public final class DocManifest200ResponsePagesItemCache {
         public Builder from(DocManifest200ResponsePagesItemCache other) {
             contentVersion(other.getContentVersion());
             annotationVersion(other.getAnnotationVersion());
+            widgetVersion(other.getWidgetVersion());
             return this;
         }
 
@@ -116,14 +134,22 @@ public final class DocManifest200ResponsePagesItemCache {
 
         @java.lang.Override
         @JsonSetter("annotationVersion")
-        public _FinalStage annotationVersion(int annotationVersion) {
+        public WidgetVersionStage annotationVersion(int annotationVersion) {
             this.annotationVersion = annotationVersion;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("widgetVersion")
+        public _FinalStage widgetVersion(int widgetVersion) {
+            this.widgetVersion = widgetVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public DocManifest200ResponsePagesItemCache build() {
-            return new DocManifest200ResponsePagesItemCache(contentVersion, annotationVersion, additionalProperties);
+            return new DocManifest200ResponsePagesItemCache(
+                    contentVersion, annotationVersion, widgetVersion, additionalProperties);
         }
 
         @java.lang.Override

@@ -4,21 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
-import com.cloudpdf.api.types.SharesExchange422Response;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import okhttp3.Response;
 
 public final class UnprocessableEntityError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final SharesExchange422Response body;
+    private final AdminErrorPayload body;
 
-    public UnprocessableEntityError(SharesExchange422Response body) {
+    public UnprocessableEntityError(AdminErrorPayload body) {
         super("UnprocessableEntityError", 422, body);
         this.body = body;
     }
 
-    public UnprocessableEntityError(SharesExchange422Response body, Response rawResponse) {
+    public UnprocessableEntityError(AdminErrorPayload body, Response rawResponse) {
         super("UnprocessableEntityError", 422, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +27,7 @@ public final class UnprocessableEntityError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public SharesExchange422Response body() {
+    public AdminErrorPayload body() {
         return this.body;
     }
 }

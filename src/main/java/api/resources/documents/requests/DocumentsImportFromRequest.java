@@ -61,7 +61,7 @@ public final class DocumentsImportFromRequest {
     }
 
     /**
-     * @return Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.
+     * @return Where CloudPDF pulls the bytes from. The two shapes differ in who supplies the authority to read, not in which storage vendor holds the file.
      */
     @JsonProperty("source")
     public DocumentsImportFromRequestSource getSource() {
@@ -148,7 +148,7 @@ public final class DocumentsImportFromRequest {
 
     public interface SourceStage {
         /**
-         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.</p>
+         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in who supplies the authority to read, not in which storage vendor holds the file.</p>
          */
         _FinalStage source(@NotNull DocumentsImportFromRequestSource source);
 
@@ -233,7 +233,7 @@ public final class DocumentsImportFromRequest {
         }
 
         /**
-         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in WHO supplies the authority to read, not in which storage vendor holds the file.</p>
+         * <p>Where CloudPDF pulls the bytes from. The two shapes differ in who supplies the authority to read, not in which storage vendor holds the file.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

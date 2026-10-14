@@ -29,7 +29,7 @@ public final class DocumentActionsSnapshot {
 
     private final Optional<PdfActionTree> openAction;
 
-    private final Optional<PdfDestination> openDestination;
+    private final Optional<PageDestination> openDestination;
 
     private final Optional<PdfActionTree> willClose;
 
@@ -46,7 +46,7 @@ public final class DocumentActionsSnapshot {
     private DocumentActionsSnapshot(
             List<DocumentActionsSnapshotNameTreeScriptsItem> nameTreeScripts,
             Optional<PdfActionTree> openAction,
-            Optional<PdfDestination> openDestination,
+            Optional<PageDestination> openDestination,
             Optional<PdfActionTree> willClose,
             Optional<PdfActionTree> willSave,
             Optional<PdfActionTree> didSave,
@@ -78,7 +78,7 @@ public final class DocumentActionsSnapshot {
     }
 
     @JsonIgnore
-    public Optional<PdfDestination> getOpenDestination() {
+    public Optional<PageDestination> getOpenDestination() {
         if (openDestination == null) {
             return Optional.empty();
         }
@@ -118,7 +118,7 @@ public final class DocumentActionsSnapshot {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("openDestination")
-    private Optional<PdfDestination> _getOpenDestination() {
+    private Optional<PageDestination> _getOpenDestination() {
         return openDestination;
     }
 
@@ -172,7 +172,7 @@ public final class DocumentActionsSnapshot {
 
         private Optional<PdfActionTree> openAction = Optional.empty();
 
-        private Optional<PdfDestination> openDestination = Optional.empty();
+        private Optional<PageDestination> openDestination = Optional.empty();
 
         private Optional<PdfActionTree> willClose = Optional.empty();
 
@@ -245,17 +245,17 @@ public final class DocumentActionsSnapshot {
         }
 
         @JsonSetter(value = "openDestination", nulls = Nulls.SKIP)
-        public Builder openDestination(Optional<PdfDestination> openDestination) {
+        public Builder openDestination(Optional<PageDestination> openDestination) {
             this.openDestination = openDestination;
             return this;
         }
 
-        public Builder openDestination(PdfDestination openDestination) {
+        public Builder openDestination(PageDestination openDestination) {
             this.openDestination = Optional.ofNullable(openDestination);
             return this;
         }
 
-        public Builder openDestination(Nullable<PdfDestination> openDestination) {
+        public Builder openDestination(Nullable<PageDestination> openDestination) {
             if (openDestination.isNull()) {
                 this.openDestination = null;
             } else if (openDestination.isEmpty()) {

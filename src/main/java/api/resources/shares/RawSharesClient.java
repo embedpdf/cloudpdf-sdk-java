@@ -23,10 +23,9 @@ import com.cloudpdf.api.resources.shares.requests.ListSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesCreateRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesExchangeRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesUpdateRequest;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import com.cloudpdf.api.types.SharesCreate200Response;
 import com.cloudpdf.api.types.SharesExchange200Response;
-import com.cloudpdf.api.types.SharesExchange410Response;
-import com.cloudpdf.api.types.SharesExchange422Response;
 import com.cloudpdf.api.types.SharesGet200Response;
 import com.cloudpdf.api.types.SharesList200Response;
 import com.cloudpdf.api.types.SharesUpdate200Response;
@@ -115,13 +114,11 @@ public class RawSharesClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 410:
                         throw new GoneError(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, SharesExchange410Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AdminErrorPayload.class),
                                 response);
                     case 422:
                         throw new UnprocessableEntityError(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, SharesExchange422Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AdminErrorPayload.class),
                                 response);
                 }
             } catch (JsonProcessingException ignored) {
@@ -218,14 +215,14 @@ public class RawSharesClient {
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CloudPDFClientHttpResponse<SharesCreate200Response> create(String tenantId, SharesCreateRequest request) {
         return create(tenantId, request, null);
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CloudPDFClientHttpResponse<SharesCreate200Response> create(
             String tenantId, SharesCreateRequest request, RequestOptions requestOptions) {

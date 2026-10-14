@@ -26,12 +26,12 @@ public final class PdfActionNodeGoto {
 
     private final List<Object> next;
 
-    private final PdfDestination destination;
+    private final PageDestination destination;
 
     private final Map<String, Object> additionalProperties;
 
     private PdfActionNodeGoto(
-            String subtype, List<Object> next, PdfDestination destination, Map<String, Object> additionalProperties) {
+            String subtype, List<Object> next, PageDestination destination, Map<String, Object> additionalProperties) {
         this.subtype = subtype;
         this.next = next;
         this.destination = destination;
@@ -49,7 +49,7 @@ public final class PdfActionNodeGoto {
     }
 
     @JsonProperty("destination")
-    public PdfDestination getDestination() {
+    public PageDestination getDestination() {
         return destination;
     }
 
@@ -89,7 +89,7 @@ public final class PdfActionNodeGoto {
     }
 
     public interface DestinationStage {
-        _FinalStage destination(@NotNull PdfDestination destination);
+        _FinalStage destination(@NotNull PageDestination destination);
     }
 
     public interface _FinalStage {
@@ -110,7 +110,7 @@ public final class PdfActionNodeGoto {
     public static final class Builder implements SubtypeStage, DestinationStage, _FinalStage {
         private String subtype;
 
-        private PdfDestination destination;
+        private PageDestination destination;
 
         private List<Object> next = new ArrayList<>();
 
@@ -136,7 +136,7 @@ public final class PdfActionNodeGoto {
 
         @java.lang.Override
         @JsonSetter("destination")
-        public _FinalStage destination(@NotNull PdfDestination destination) {
+        public _FinalStage destination(@NotNull PageDestination destination) {
             this.destination = Objects.requireNonNull(destination, "destination must not be null");
             return this;
         }

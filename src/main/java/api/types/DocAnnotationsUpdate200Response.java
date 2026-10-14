@@ -19,18 +19,37 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocAnnotationsUpdate200Response.Builder.class)
 public final class DocAnnotationsUpdate200Response {
-    private final DocAnnotationsUpdate200ResponseMeta meta;
+    private final Annotation annotation;
+
+    private final DocAnnotationsUpdate200ResponseAppearance appearance;
+
+    private final AnnotationMutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocAnnotationsUpdate200Response(
-            DocAnnotationsUpdate200ResponseMeta meta, Map<String, Object> additionalProperties) {
+            Annotation annotation,
+            DocAnnotationsUpdate200ResponseAppearance appearance,
+            AnnotationMutationMeta meta,
+            Map<String, Object> additionalProperties) {
+        this.annotation = annotation;
+        this.appearance = appearance;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("annotation")
+    public Annotation getAnnotation() {
+        return annotation;
+    }
+
+    @JsonProperty("appearance")
+    public DocAnnotationsUpdate200ResponseAppearance getAppearance() {
+        return appearance;
+    }
+
     @JsonProperty("meta")
-    public DocAnnotationsUpdate200ResponseMeta getMeta() {
+    public AnnotationMutationMeta getMeta() {
         return meta;
     }
 
@@ -46,12 +65,12 @@ public final class DocAnnotationsUpdate200Response {
     }
 
     private boolean equalTo(DocAnnotationsUpdate200Response other) {
-        return meta.equals(other.meta);
+        return annotation.equals(other.annotation) && appearance.equals(other.appearance) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.annotation, this.appearance, this.meta);
     }
 
     @java.lang.Override
@@ -59,14 +78,22 @@ public final class DocAnnotationsUpdate200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static MetaStage builder() {
+    public static AnnotationStage builder() {
         return new Builder();
     }
 
-    public interface MetaStage {
-        _FinalStage meta(@NotNull DocAnnotationsUpdate200ResponseMeta meta);
+    public interface AnnotationStage {
+        AppearanceStage annotation(@NotNull Annotation annotation);
 
         Builder from(DocAnnotationsUpdate200Response other);
+    }
+
+    public interface AppearanceStage {
+        MetaStage appearance(@NotNull DocAnnotationsUpdate200ResponseAppearance appearance);
+    }
+
+    public interface MetaStage {
+        _FinalStage meta(@NotNull AnnotationMutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -78,8 +105,12 @@ public final class DocAnnotationsUpdate200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements MetaStage, _FinalStage {
-        private DocAnnotationsUpdate200ResponseMeta meta;
+    public static final class Builder implements AnnotationStage, AppearanceStage, MetaStage, _FinalStage {
+        private Annotation annotation;
+
+        private DocAnnotationsUpdate200ResponseAppearance appearance;
+
+        private AnnotationMutationMeta meta;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,20 +119,36 @@ public final class DocAnnotationsUpdate200Response {
 
         @java.lang.Override
         public Builder from(DocAnnotationsUpdate200Response other) {
+            annotation(other.getAnnotation());
+            appearance(other.getAppearance());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("annotation")
+        public AppearanceStage annotation(@NotNull Annotation annotation) {
+            this.annotation = Objects.requireNonNull(annotation, "annotation must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("appearance")
+        public MetaStage appearance(@NotNull DocAnnotationsUpdate200ResponseAppearance appearance) {
+            this.appearance = Objects.requireNonNull(appearance, "appearance must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocAnnotationsUpdate200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull AnnotationMutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
         public DocAnnotationsUpdate200Response build() {
-            return new DocAnnotationsUpdate200Response(meta, additionalProperties);
+            return new DocAnnotationsUpdate200Response(annotation, appearance, meta, additionalProperties);
         }
 
         @java.lang.Override

@@ -20,10 +20,16 @@ import java.util.Optional;
 public final class InsertPagesRequest {
     private final Optional<String> documentPassword;
 
+    private final Optional<String> idempotencyKey;
+
     private final Map<String, Object> additionalProperties;
 
-    private InsertPagesRequest(Optional<String> documentPassword, Map<String, Object> additionalProperties) {
+    private InsertPagesRequest(
+            Optional<String> documentPassword,
+            Optional<String> idempotencyKey,
+            Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
+        this.idempotencyKey = idempotencyKey;
         this.additionalProperties = additionalProperties;
     }
 
@@ -33,6 +39,14 @@ public final class InsertPagesRequest {
     @JsonIgnore
     public Optional<String> getDocumentPassword() {
         return documentPassword;
+    }
+
+    /**
+     * @return Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.
+     */
+    @JsonIgnore
+    public Optional<String> getIdempotencyKey() {
+        return idempotencyKey;
     }
 
     @java.lang.Override
@@ -47,12 +61,12 @@ public final class InsertPagesRequest {
     }
 
     private boolean equalTo(InsertPagesRequest other) {
-        return documentPassword.equals(other.documentPassword);
+        return documentPassword.equals(other.documentPassword) && idempotencyKey.equals(other.idempotencyKey);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentPassword);
+        return Objects.hash(this.documentPassword, this.idempotencyKey);
     }
 
     @java.lang.Override
@@ -68,6 +82,8 @@ public final class InsertPagesRequest {
     public static final class Builder {
         private Optional<String> documentPassword = Optional.empty();
 
+        private Optional<String> idempotencyKey = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -75,6 +91,7 @@ public final class InsertPagesRequest {
 
         public Builder from(InsertPagesRequest other) {
             documentPassword(other.getDocumentPassword());
+            idempotencyKey(other.getIdempotencyKey());
             return this;
         }
 
@@ -91,8 +108,21 @@ public final class InsertPagesRequest {
             return this;
         }
 
+        /**
+         * <p>Names the change: 1 to 255 printable ASCII characters. A retry under the same key on the same layer answers with what the first request committed, and changes nothing.</p>
+         */
+        public Builder idempotencyKey(Optional<String> idempotencyKey) {
+            this.idempotencyKey = idempotencyKey;
+            return this;
+        }
+
+        public Builder idempotencyKey(String idempotencyKey) {
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
+            return this;
+        }
+
         public InsertPagesRequest build() {
-            return new InsertPagesRequest(documentPassword, additionalProperties);
+            return new InsertPagesRequest(documentPassword, idempotencyKey, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

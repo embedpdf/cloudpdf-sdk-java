@@ -5,17 +5,23 @@ package com.cloudpdf.api.resources.doc.metadata;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.Suppliers;
+import com.cloudpdf.api.resources.doc.metadata.custom.CustomClient;
 import com.cloudpdf.api.resources.doc.metadata.requests.GetMetadataRequest;
-import com.cloudpdf.api.types.DocMetadataGet200Response;
+import com.cloudpdf.api.types.DocumentMetadata;
+import java.util.function.Supplier;
 
 public class MetadataClient {
     protected final ClientOptions clientOptions;
 
     private final RawMetadataClient rawClient;
 
+    protected final Supplier<CustomClient> customClient;
+
     public MetadataClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawMetadataClient(clientOptions);
+        this.customClient = Suppliers.memoize(() -> new CustomClient(clientOptions));
     }
 
     /**
@@ -25,20 +31,24 @@ public class MetadataClient {
         return this.rawClient;
     }
 
-    public DocMetadataGet200Response get(String docId, String layerName) {
+    public DocumentMetadata get(String docId, String layerName) {
         return this.rawClient.get(docId, layerName).body();
     }
 
-    public DocMetadataGet200Response get(String docId, String layerName, RequestOptions requestOptions) {
+    public DocumentMetadata get(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.get(docId, layerName, requestOptions).body();
     }
 
-    public DocMetadataGet200Response get(String docId, String layerName, GetMetadataRequest request) {
+    public DocumentMetadata get(String docId, String layerName, GetMetadataRequest request) {
         return this.rawClient.get(docId, layerName, request).body();
     }
 
-    public DocMetadataGet200Response get(
+    public DocumentMetadata get(
             String docId, String layerName, GetMetadataRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(docId, layerName, request, requestOptions).body();
+    }
+
+    public CustomClient custom() {
+        return this.customClient.get();
     }
 }

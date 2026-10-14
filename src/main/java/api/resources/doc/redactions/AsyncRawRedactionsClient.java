@@ -13,11 +13,10 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
-import com.cloudpdf.api.resources.doc.redactions.requests.ApplyRedactionsRequest;
+import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
 import com.cloudpdf.api.types.DocRedactionsApply200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -38,24 +37,22 @@ public class AsyncRawRedactionsClient {
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
-            String docId, String layerName, Map<String, Object> body) {
-        return apply(
-                docId, layerName, ApplyRedactionsRequest.builder().body(body).build());
+            String docId, String layerName) {
+        return apply(docId, layerName, DocRedactionsApplyRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return apply(
-                docId, layerName, ApplyRedactionsRequest.builder().body(body).build(), requestOptions);
+            String docId, String layerName, RequestOptions requestOptions) {
+        return apply(docId, layerName, DocRedactionsApplyRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
-            String docId, String layerName, ApplyRedactionsRequest request) {
+            String docId, String layerName, DocRedactionsApplyRequest request) {
         return apply(docId, layerName, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
-            String docId, String layerName, ApplyRedactionsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
@@ -72,7 +69,7 @@ public class AsyncRawRedactionsClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +82,10 @@ public class AsyncRawRedactionsClient {
         if (request.getDocumentPassword().isPresent()) {
             _requestBuilder.addHeader(
                     "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
         }
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();

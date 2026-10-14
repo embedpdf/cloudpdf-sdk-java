@@ -12,7 +12,7 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.metadata.requests.GetMetadataRequest;
-import com.cloudpdf.api.types.DocMetadataGet200Response;
+import com.cloudpdf.api.types.DocumentMetadata;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -33,22 +33,21 @@ public class AsyncRawMetadataClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocMetadataGet200Response>> get(
-            String docId, String layerName) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentMetadata>> get(String docId, String layerName) {
         return get(docId, layerName, GetMetadataRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocMetadataGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentMetadata>> get(
             String docId, String layerName, RequestOptions requestOptions) {
         return get(docId, layerName, GetMetadataRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocMetadataGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentMetadata>> get(
             String docId, String layerName, GetMetadataRequest request) {
         return get(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocMetadataGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentMetadata>> get(
             String docId, String layerName, GetMetadataRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -85,7 +84,7 @@ public class AsyncRawMetadataClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocMetadataGet200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocumentMetadata>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -93,8 +92,7 @@ public class AsyncRawMetadataClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocMetadataGet200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentMetadata.class),
                                 response));
                         return;
                     }

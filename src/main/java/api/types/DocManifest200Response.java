@@ -3,9 +3,12 @@
  */
 package com.cloudpdf.api.types;
 
+import com.cloudpdf.api.core.Nullable;
+import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,6 +38,8 @@ public final class DocManifest200Response {
 
     private final Optional<Integer> annotationsVersion;
 
+    private final Optional<Integer> formsVersion;
+
     private final int auditHead;
 
     private final String baseSha;
@@ -47,6 +52,8 @@ public final class DocManifest200Response {
 
     private final Optional<DocManifest200ResponseScopes> scopes;
 
+    private final Optional<DocManifest200ResponseProtection> protection;
+
     private final List<DocManifest200ResponsePagesItem> pages;
 
     private final Map<String, Object> additionalProperties;
@@ -58,12 +65,14 @@ public final class DocManifest200Response {
             Optional<Integer> actionsVersion,
             Optional<Integer> attachmentsVersion,
             Optional<Integer> annotationsVersion,
+            Optional<Integer> formsVersion,
             int auditHead,
             String baseSha,
             Optional<Integer> layerVersion,
             Optional<Boolean> working,
             Optional<Integer> baseByteLength,
             Optional<DocManifest200ResponseScopes> scopes,
+            Optional<DocManifest200ResponseProtection> protection,
             List<DocManifest200ResponsePagesItem> pages,
             Map<String, Object> additionalProperties) {
         this.docVersion = docVersion;
@@ -72,12 +81,14 @@ public final class DocManifest200Response {
         this.actionsVersion = actionsVersion;
         this.attachmentsVersion = attachmentsVersion;
         this.annotationsVersion = annotationsVersion;
+        this.formsVersion = formsVersion;
         this.auditHead = auditHead;
         this.baseSha = baseSha;
         this.layerVersion = layerVersion;
         this.working = working;
         this.baseByteLength = baseByteLength;
         this.scopes = scopes;
+        this.protection = protection;
         this.pages = pages;
         this.additionalProperties = additionalProperties;
     }
@@ -112,6 +123,11 @@ public final class DocManifest200Response {
         return annotationsVersion;
     }
 
+    @JsonProperty("formsVersion")
+    public Optional<Integer> getFormsVersion() {
+        return formsVersion;
+    }
+
     @JsonProperty("auditHead")
     public int getAuditHead() {
         return auditHead;
@@ -142,9 +158,23 @@ public final class DocManifest200Response {
         return scopes;
     }
 
+    @JsonIgnore
+    public Optional<DocManifest200ResponseProtection> getProtection() {
+        if (protection == null) {
+            return Optional.empty();
+        }
+        return protection;
+    }
+
     @JsonProperty("pages")
     public List<DocManifest200ResponsePagesItem> getPages() {
         return pages;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("protection")
+    private Optional<DocManifest200ResponseProtection> _getProtection() {
+        return protection;
     }
 
     @java.lang.Override
@@ -165,12 +195,14 @@ public final class DocManifest200Response {
                 && actionsVersion.equals(other.actionsVersion)
                 && attachmentsVersion.equals(other.attachmentsVersion)
                 && annotationsVersion.equals(other.annotationsVersion)
+                && formsVersion.equals(other.formsVersion)
                 && auditHead == other.auditHead
                 && baseSha.equals(other.baseSha)
                 && layerVersion.equals(other.layerVersion)
                 && working.equals(other.working)
                 && baseByteLength.equals(other.baseByteLength)
                 && scopes.equals(other.scopes)
+                && protection.equals(other.protection)
                 && pages.equals(other.pages);
     }
 
@@ -183,12 +215,14 @@ public final class DocManifest200Response {
                 this.actionsVersion,
                 this.attachmentsVersion,
                 this.annotationsVersion,
+                this.formsVersion,
                 this.auditHead,
                 this.baseSha,
                 this.layerVersion,
                 this.working,
                 this.baseByteLength,
                 this.scopes,
+                this.protection,
                 this.pages);
     }
 
@@ -242,6 +276,10 @@ public final class DocManifest200Response {
 
         _FinalStage annotationsVersion(Integer annotationsVersion);
 
+        _FinalStage formsVersion(Optional<Integer> formsVersion);
+
+        _FinalStage formsVersion(Integer formsVersion);
+
         _FinalStage layerVersion(Optional<Integer> layerVersion);
 
         _FinalStage layerVersion(Integer layerVersion);
@@ -257,6 +295,12 @@ public final class DocManifest200Response {
         _FinalStage scopes(Optional<DocManifest200ResponseScopes> scopes);
 
         _FinalStage scopes(DocManifest200ResponseScopes scopes);
+
+        _FinalStage protection(Optional<DocManifest200ResponseProtection> protection);
+
+        _FinalStage protection(DocManifest200ResponseProtection protection);
+
+        _FinalStage protection(Nullable<DocManifest200ResponseProtection> protection);
 
         _FinalStage pages(List<DocManifest200ResponsePagesItem> pages);
 
@@ -285,6 +329,8 @@ public final class DocManifest200Response {
 
         private List<DocManifest200ResponsePagesItem> pages = new ArrayList<>();
 
+        private Optional<DocManifest200ResponseProtection> protection = Optional.empty();
+
         private Optional<DocManifest200ResponseScopes> scopes = Optional.empty();
 
         private Optional<Integer> baseByteLength = Optional.empty();
@@ -292,6 +338,8 @@ public final class DocManifest200Response {
         private Optional<Boolean> working = Optional.empty();
 
         private Optional<Integer> layerVersion = Optional.empty();
+
+        private Optional<Integer> formsVersion = Optional.empty();
 
         private Optional<Integer> annotationsVersion = Optional.empty();
 
@@ -312,12 +360,14 @@ public final class DocManifest200Response {
             actionsVersion(other.getActionsVersion());
             attachmentsVersion(other.getAttachmentsVersion());
             annotationsVersion(other.getAnnotationsVersion());
+            formsVersion(other.getFormsVersion());
             auditHead(other.getAuditHead());
             baseSha(other.getBaseSha());
             layerVersion(other.getLayerVersion());
             working(other.getWorking());
             baseByteLength(other.getBaseByteLength());
             scopes(other.getScopes());
+            protection(other.getProtection());
             pages(other.getPages());
             return this;
         }
@@ -382,6 +432,31 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage protection(Nullable<DocManifest200ResponseProtection> protection) {
+            if (protection.isNull()) {
+                this.protection = null;
+            } else if (protection.isEmpty()) {
+                this.protection = Optional.empty();
+            } else {
+                this.protection = Optional.of(protection.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage protection(DocManifest200ResponseProtection protection) {
+            this.protection = Optional.ofNullable(protection);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "protection", nulls = Nulls.SKIP)
+        public _FinalStage protection(Optional<DocManifest200ResponseProtection> protection) {
+            this.protection = protection;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage scopes(DocManifest200ResponseScopes scopes) {
             this.scopes = Optional.ofNullable(scopes);
             return this;
@@ -434,6 +509,19 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage formsVersion(Integer formsVersion) {
+            this.formsVersion = Optional.ofNullable(formsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "formsVersion", nulls = Nulls.SKIP)
+        public _FinalStage formsVersion(Optional<Integer> formsVersion) {
+            this.formsVersion = formsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage annotationsVersion(Integer annotationsVersion) {
             this.annotationsVersion = Optional.ofNullable(annotationsVersion);
             return this;
@@ -481,12 +569,14 @@ public final class DocManifest200Response {
                     actionsVersion,
                     attachmentsVersion,
                     annotationsVersion,
+                    formsVersion,
                     auditHead,
                     baseSha,
                     layerVersion,
                     working,
                     baseByteLength,
                     scopes,
+                    protection,
                     pages,
                     additionalProperties);
         }

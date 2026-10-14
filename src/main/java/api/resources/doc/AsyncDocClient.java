@@ -11,6 +11,7 @@ import com.cloudpdf.api.resources.doc.forms.AsyncFormsClient;
 import com.cloudpdf.api.resources.doc.metadata.AsyncMetadataClient;
 import com.cloudpdf.api.resources.doc.pages.AsyncPagesClient;
 import com.cloudpdf.api.resources.doc.redactions.AsyncRedactionsClient;
+import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
 import com.cloudpdf.api.resources.doc.requests.DownloadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
@@ -18,6 +19,7 @@ import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
 import com.cloudpdf.api.resources.doc.signatures.AsyncSignaturesClient;
 import com.cloudpdf.api.resources.doc.versions.AsyncVersionsClient;
+import com.cloudpdf.api.types.DocChanges200Response;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
@@ -80,6 +82,21 @@ public class AsyncDocClient {
         return this.rawClient.head(docId, request, requestOptions).thenApply(response -> response.body());
     }
 
+    /**
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     */
+    public CompletableFuture<DocChanges200Response> changes(String docId, String layerName, DocChangesRequest request) {
+        return this.rawClient.changes(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     */
+    public CompletableFuture<DocChanges200Response> changes(
+            String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.changes(docId, layerName, request, requestOptions).thenApply(response -> response.body());
+    }
+
     public CompletableFuture<InputStream> download(String docId, String layerName) {
         return this.rawClient.download(docId, layerName).thenApply(response -> response.body());
     }
@@ -123,52 +140,54 @@ public class AsyncDocClient {
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
-    public CompletableFuture<InputStream> render(String docId, String layerName, int pon) {
-        return this.rawClient.render(docId, layerName, pon).thenApply(response -> response.body());
+    public CompletableFuture<InputStream> render(String docId, String layerName, String pageKey) {
+        return this.rawClient.render(docId, layerName, pageKey).thenApply(response -> response.body());
     }
 
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
     public CompletableFuture<InputStream> render(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return this.rawClient.render(docId, layerName, pon, requestOptions).thenApply(response -> response.body());
-    }
-
-    /**
-     * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
-     */
-    public CompletableFuture<InputStream> render(String docId, String layerName, int pon, RenderDocRequest request) {
-        return this.rawClient.render(docId, layerName, pon, request).thenApply(response -> response.body());
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return this.rawClient.render(docId, layerName, pageKey, requestOptions).thenApply(response -> response.body());
     }
 
     /**
      * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
      */
     public CompletableFuture<InputStream> render(
-            String docId, String layerName, int pon, RenderDocRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, RenderDocRequest request) {
+        return this.rawClient.render(docId, layerName, pageKey, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Render parameters (viewport, format) pass as flat dotted query keys, e.g. <code>?viewport.kind=width&amp;viewport.width=800</code>; the full grammar is documented with the viewer.
+     */
+    public CompletableFuture<InputStream> render(
+            String docId, String layerName, String pageKey, RenderDocRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .render(docId, layerName, pon, request, requestOptions)
+                .render(docId, layerName, pageKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocText200Response> text(String docId, String layerName, int pon) {
-        return this.rawClient.text(docId, layerName, pon).thenApply(response -> response.body());
+    public CompletableFuture<DocText200Response> text(String docId, String layerName, String pageKey) {
+        return this.rawClient.text(docId, layerName, pageKey).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocText200Response> text(
-            String docId, String layerName, int pon, RequestOptions requestOptions) {
-        return this.rawClient.text(docId, layerName, pon, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocText200Response> text(String docId, String layerName, int pon, TextDocRequest request) {
-        return this.rawClient.text(docId, layerName, pon, request).thenApply(response -> response.body());
+            String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+        return this.rawClient.text(docId, layerName, pageKey, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocText200Response> text(
-            String docId, String layerName, int pon, TextDocRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, TextDocRequest request) {
+        return this.rawClient.text(docId, layerName, pageKey, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocText200Response> text(
+            String docId, String layerName, String pageKey, TextDocRequest request, RequestOptions requestOptions) {
         return this.rawClient
-                .text(docId, layerName, pon, request, requestOptions)
+                .text(docId, layerName, pageKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

@@ -29,7 +29,7 @@ public final class DocSignaturesComplete200Response {
 
     private final DocSignaturesComplete200ResponseProtection protection;
 
-    private final DocSignaturesComplete200ResponseMeta meta;
+    private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
@@ -39,7 +39,7 @@ public final class DocSignaturesComplete200Response {
             DocSignaturesComplete200ResponseVersion version,
             DocSignaturesComplete200ResponsePrevious previous,
             DocSignaturesComplete200ResponseProtection protection,
-            DocSignaturesComplete200ResponseMeta meta,
+            MutationMeta meta,
             Map<String, Object> additionalProperties) {
         this.status = status;
         this.signature = signature;
@@ -76,7 +76,7 @@ public final class DocSignaturesComplete200Response {
     }
 
     @JsonProperty("meta")
-    public DocSignaturesComplete200ResponseMeta getMeta() {
+    public MutationMeta getMeta() {
         return meta;
     }
 
@@ -137,7 +137,7 @@ public final class DocSignaturesComplete200Response {
     }
 
     public interface MetaStage {
-        _FinalStage meta(@NotNull DocSignaturesComplete200ResponseMeta meta);
+        _FinalStage meta(@NotNull MutationMeta meta);
     }
 
     public interface _FinalStage {
@@ -167,7 +167,7 @@ public final class DocSignaturesComplete200Response {
 
         private DocSignaturesComplete200ResponseProtection protection;
 
-        private DocSignaturesComplete200ResponseMeta meta;
+        private MutationMeta meta;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -222,7 +222,7 @@ public final class DocSignaturesComplete200Response {
 
         @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocSignaturesComplete200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull MutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }

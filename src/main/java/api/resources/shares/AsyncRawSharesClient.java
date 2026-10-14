@@ -23,10 +23,9 @@ import com.cloudpdf.api.resources.shares.requests.ListSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesCreateRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesExchangeRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesUpdateRequest;
+import com.cloudpdf.api.types.AdminErrorPayload;
 import com.cloudpdf.api.types.SharesCreate200Response;
 import com.cloudpdf.api.types.SharesExchange200Response;
-import com.cloudpdf.api.types.SharesExchange410Response;
-import com.cloudpdf.api.types.SharesExchange422Response;
 import com.cloudpdf.api.types.SharesGet200Response;
 import com.cloudpdf.api.types.SharesList200Response;
 import com.cloudpdf.api.types.SharesUpdate200Response;
@@ -132,13 +131,13 @@ public class AsyncRawSharesClient {
                             case 410:
                                 future.completeExceptionally(new GoneError(
                                         ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, SharesExchange410Response.class),
+                                                responseBodyString, AdminErrorPayload.class),
                                         response));
                                 return;
                             case 422:
                                 future.completeExceptionally(new UnprocessableEntityError(
                                         ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, SharesExchange422Response.class),
+                                                responseBodyString, AdminErrorPayload.class),
                                         response));
                                 return;
                         }
@@ -264,7 +263,7 @@ public class AsyncRawSharesClient {
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<SharesCreate200Response>> create(
             String tenantId, SharesCreateRequest request) {
@@ -272,7 +271,7 @@ public class AsyncRawSharesClient {
     }
 
     /**
-     * The returned share id IS the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<SharesCreate200Response>> create(
             String tenantId, SharesCreateRequest request, RequestOptions requestOptions) {

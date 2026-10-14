@@ -5,18 +5,24 @@ package com.cloudpdf.api.resources.doc.metadata;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.Suppliers;
+import com.cloudpdf.api.resources.doc.metadata.custom.AsyncCustomClient;
 import com.cloudpdf.api.resources.doc.metadata.requests.GetMetadataRequest;
-import com.cloudpdf.api.types.DocMetadataGet200Response;
+import com.cloudpdf.api.types.DocumentMetadata;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class AsyncMetadataClient {
     protected final ClientOptions clientOptions;
 
     private final AsyncRawMetadataClient rawClient;
 
+    protected final Supplier<AsyncCustomClient> customClient;
+
     public AsyncMetadataClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawMetadataClient(clientOptions);
+        this.customClient = Suppliers.memoize(() -> new AsyncCustomClient(clientOptions));
     }
 
     /**
@@ -26,22 +32,24 @@ public class AsyncMetadataClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocMetadataGet200Response> get(String docId, String layerName) {
+    public CompletableFuture<DocumentMetadata> get(String docId, String layerName) {
         return this.rawClient.get(docId, layerName).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocMetadataGet200Response> get(
-            String docId, String layerName, RequestOptions requestOptions) {
+    public CompletableFuture<DocumentMetadata> get(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.get(docId, layerName, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocMetadataGet200Response> get(
-            String docId, String layerName, GetMetadataRequest request) {
+    public CompletableFuture<DocumentMetadata> get(String docId, String layerName, GetMetadataRequest request) {
         return this.rawClient.get(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocMetadataGet200Response> get(
+    public CompletableFuture<DocumentMetadata> get(
             String docId, String layerName, GetMetadataRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(docId, layerName, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public AsyncCustomClient custom() {
+        return this.customClient.get();
     }
 }

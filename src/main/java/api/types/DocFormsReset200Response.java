@@ -10,8 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -19,17 +22,37 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocFormsReset200Response.Builder.class)
 public final class DocFormsReset200Response {
-    private final DocFormsReset200ResponseMeta meta;
+    private final List<FormField> fields;
+
+    private final List<WidgetAnnotation> widgets;
+
+    private final FormMutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocFormsReset200Response(DocFormsReset200ResponseMeta meta, Map<String, Object> additionalProperties) {
+    private DocFormsReset200Response(
+            List<FormField> fields,
+            List<WidgetAnnotation> widgets,
+            FormMutationMeta meta,
+            Map<String, Object> additionalProperties) {
+        this.fields = fields;
+        this.widgets = widgets;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonProperty("fields")
+    public List<FormField> getFields() {
+        return fields;
+    }
+
+    @JsonProperty("widgets")
+    public List<WidgetAnnotation> getWidgets() {
+        return widgets;
+    }
+
     @JsonProperty("meta")
-    public DocFormsReset200ResponseMeta getMeta() {
+    public FormMutationMeta getMeta() {
         return meta;
     }
 
@@ -45,12 +68,12 @@ public final class DocFormsReset200Response {
     }
 
     private boolean equalTo(DocFormsReset200Response other) {
-        return meta.equals(other.meta);
+        return fields.equals(other.fields) && widgets.equals(other.widgets) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.meta);
+        return Objects.hash(this.fields, this.widgets, this.meta);
     }
 
     @java.lang.Override
@@ -63,7 +86,7 @@ public final class DocFormsReset200Response {
     }
 
     public interface MetaStage {
-        _FinalStage meta(@NotNull DocFormsReset200ResponseMeta meta);
+        _FinalStage meta(@NotNull FormMutationMeta meta);
 
         Builder from(DocFormsReset200Response other);
     }
@@ -74,11 +97,27 @@ public final class DocFormsReset200Response {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage fields(List<FormField> fields);
+
+        _FinalStage addFields(FormField fields);
+
+        _FinalStage addAllFields(List<FormField> fields);
+
+        _FinalStage widgets(List<WidgetAnnotation> widgets);
+
+        _FinalStage addWidgets(WidgetAnnotation widgets);
+
+        _FinalStage addAllWidgets(List<WidgetAnnotation> widgets);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MetaStage, _FinalStage {
-        private DocFormsReset200ResponseMeta meta;
+        private FormMutationMeta meta;
+
+        private List<WidgetAnnotation> widgets = new ArrayList<>();
+
+        private List<FormField> fields = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -87,20 +126,70 @@ public final class DocFormsReset200Response {
 
         @java.lang.Override
         public Builder from(DocFormsReset200Response other) {
+            fields(other.getFields());
+            widgets(other.getWidgets());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("meta")
-        public _FinalStage meta(@NotNull DocFormsReset200ResponseMeta meta) {
+        public _FinalStage meta(@NotNull FormMutationMeta meta) {
             this.meta = Objects.requireNonNull(meta, "meta must not be null");
             return this;
         }
 
         @java.lang.Override
+        public _FinalStage addAllWidgets(List<WidgetAnnotation> widgets) {
+            if (widgets != null) {
+                this.widgets.addAll(widgets);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addWidgets(WidgetAnnotation widgets) {
+            this.widgets.add(widgets);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "widgets", nulls = Nulls.SKIP)
+        public _FinalStage widgets(List<WidgetAnnotation> widgets) {
+            this.widgets.clear();
+            if (widgets != null) {
+                this.widgets.addAll(widgets);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addAllFields(List<FormField> fields) {
+            if (fields != null) {
+                this.fields.addAll(fields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addFields(FormField fields) {
+            this.fields.add(fields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fields", nulls = Nulls.SKIP)
+        public _FinalStage fields(List<FormField> fields) {
+            this.fields.clear();
+            if (fields != null) {
+                this.fields.addAll(fields);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public DocFormsReset200Response build() {
-            return new DocFormsReset200Response(meta, additionalProperties);
+            return new DocFormsReset200Response(fields, widgets, meta, additionalProperties);
         }
 
         @java.lang.Override
