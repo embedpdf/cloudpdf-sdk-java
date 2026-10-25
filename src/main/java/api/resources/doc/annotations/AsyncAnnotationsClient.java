@@ -13,6 +13,7 @@ import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsReq
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ReadFileAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.AnnotationList;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
@@ -233,6 +234,48 @@ public class AsyncAnnotationsClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .readAppearance(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(String docId, String layerName, String pageKey, String annotKey) {
+        return this.rawClient.readFile(docId, layerName, pageKey, annotKey).thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return this.rawClient
+                .readFile(docId, layerName, pageKey, annotKey, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotKey, ReadFileAnnotationsRequest request) {
+        return this.rawClient
+                .readFile(docId, layerName, pageKey, annotKey, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            ReadFileAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .readFile(docId, layerName, pageKey, annotKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

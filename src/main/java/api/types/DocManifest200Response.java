@@ -40,6 +40,8 @@ public final class DocManifest200Response {
 
     private final Optional<Integer> formsVersion;
 
+    private final Optional<Integer> outlineVersion;
+
     private final int auditHead;
 
     private final String baseSha;
@@ -66,6 +68,7 @@ public final class DocManifest200Response {
             Optional<Integer> attachmentsVersion,
             Optional<Integer> annotationsVersion,
             Optional<Integer> formsVersion,
+            Optional<Integer> outlineVersion,
             int auditHead,
             String baseSha,
             Optional<Integer> layerVersion,
@@ -82,6 +85,7 @@ public final class DocManifest200Response {
         this.attachmentsVersion = attachmentsVersion;
         this.annotationsVersion = annotationsVersion;
         this.formsVersion = formsVersion;
+        this.outlineVersion = outlineVersion;
         this.auditHead = auditHead;
         this.baseSha = baseSha;
         this.layerVersion = layerVersion;
@@ -126,6 +130,11 @@ public final class DocManifest200Response {
     @JsonProperty("formsVersion")
     public Optional<Integer> getFormsVersion() {
         return formsVersion;
+    }
+
+    @JsonProperty("outlineVersion")
+    public Optional<Integer> getOutlineVersion() {
+        return outlineVersion;
     }
 
     @JsonProperty("auditHead")
@@ -196,6 +205,7 @@ public final class DocManifest200Response {
                 && attachmentsVersion.equals(other.attachmentsVersion)
                 && annotationsVersion.equals(other.annotationsVersion)
                 && formsVersion.equals(other.formsVersion)
+                && outlineVersion.equals(other.outlineVersion)
                 && auditHead == other.auditHead
                 && baseSha.equals(other.baseSha)
                 && layerVersion.equals(other.layerVersion)
@@ -216,6 +226,7 @@ public final class DocManifest200Response {
                 this.attachmentsVersion,
                 this.annotationsVersion,
                 this.formsVersion,
+                this.outlineVersion,
                 this.auditHead,
                 this.baseSha,
                 this.layerVersion,
@@ -280,6 +291,10 @@ public final class DocManifest200Response {
 
         _FinalStage formsVersion(Integer formsVersion);
 
+        _FinalStage outlineVersion(Optional<Integer> outlineVersion);
+
+        _FinalStage outlineVersion(Integer outlineVersion);
+
         _FinalStage layerVersion(Optional<Integer> layerVersion);
 
         _FinalStage layerVersion(Integer layerVersion);
@@ -339,6 +354,8 @@ public final class DocManifest200Response {
 
         private Optional<Integer> layerVersion = Optional.empty();
 
+        private Optional<Integer> outlineVersion = Optional.empty();
+
         private Optional<Integer> formsVersion = Optional.empty();
 
         private Optional<Integer> annotationsVersion = Optional.empty();
@@ -361,6 +378,7 @@ public final class DocManifest200Response {
             attachmentsVersion(other.getAttachmentsVersion());
             annotationsVersion(other.getAnnotationsVersion());
             formsVersion(other.getFormsVersion());
+            outlineVersion(other.getOutlineVersion());
             auditHead(other.getAuditHead());
             baseSha(other.getBaseSha());
             layerVersion(other.getLayerVersion());
@@ -509,6 +527,19 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage outlineVersion(Integer outlineVersion) {
+            this.outlineVersion = Optional.ofNullable(outlineVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "outlineVersion", nulls = Nulls.SKIP)
+        public _FinalStage outlineVersion(Optional<Integer> outlineVersion) {
+            this.outlineVersion = outlineVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage formsVersion(Integer formsVersion) {
             this.formsVersion = Optional.ofNullable(formsVersion);
             return this;
@@ -570,6 +601,7 @@ public final class DocManifest200Response {
                     attachmentsVersion,
                     annotationsVersion,
                     formsVersion,
+                    outlineVersion,
                     auditHead,
                     baseSha,
                     layerVersion,

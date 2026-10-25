@@ -4,21 +4,20 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
-import com.cloudpdf.api.types.EngineErrorPayload;
 import okhttp3.Response;
 
 public final class ContentTooLargeError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final EngineErrorPayload body;
+    private final Object body;
 
-    public ContentTooLargeError(EngineErrorPayload body) {
+    public ContentTooLargeError(Object body) {
         super("ContentTooLargeError", 413, body);
         this.body = body;
     }
 
-    public ContentTooLargeError(EngineErrorPayload body, Response rawResponse) {
+    public ContentTooLargeError(Object body, Response rawResponse) {
         super("ContentTooLargeError", 413, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +26,7 @@ public final class ContentTooLargeError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public EngineErrorPayload body() {
+    public Object body() {
         return this.body;
     }
 }

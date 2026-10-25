@@ -91,7 +91,7 @@ public final class AnnotationFileAttachment {
 
     private final AnnotationFileAttachmentIcon icon;
 
-    private final Optional<AnnotationFileAttachmentFile> file;
+    private final Optional<AttachmentFileInfo> file;
 
     private final Map<String, Object> additionalProperties;
 
@@ -129,7 +129,7 @@ public final class AnnotationFileAttachment {
             String color,
             double opacity,
             AnnotationFileAttachmentIcon icon,
-            Optional<AnnotationFileAttachmentFile> file,
+            Optional<AttachmentFileInfo> file,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
         this.page = page;
@@ -379,7 +379,7 @@ public final class AnnotationFileAttachment {
     }
 
     @JsonIgnore
-    public Optional<AnnotationFileAttachmentFile> getFile() {
+    public Optional<AttachmentFileInfo> getFile() {
         if (file == null) {
             return Optional.empty();
         }
@@ -478,7 +478,7 @@ public final class AnnotationFileAttachment {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("file")
-    private Optional<AnnotationFileAttachmentFile> _getFile() {
+    private Optional<AttachmentFileInfo> _getFile() {
         return file;
     }
 
@@ -749,11 +749,11 @@ public final class AnnotationFileAttachment {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
-        _FinalStage file(Optional<AnnotationFileAttachmentFile> file);
+        _FinalStage file(Optional<AttachmentFileInfo> file);
 
-        _FinalStage file(AnnotationFileAttachmentFile file);
+        _FinalStage file(AttachmentFileInfo file);
 
-        _FinalStage file(Nullable<AnnotationFileAttachmentFile> file);
+        _FinalStage file(Nullable<AttachmentFileInfo> file);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -813,7 +813,7 @@ public final class AnnotationFileAttachment {
 
         private AnnotationFileAttachmentIcon icon;
 
-        private Optional<AnnotationFileAttachmentFile> file = Optional.empty();
+        private Optional<AttachmentFileInfo> file = Optional.empty();
 
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
@@ -1016,7 +1016,7 @@ public final class AnnotationFileAttachment {
         }
 
         @java.lang.Override
-        public _FinalStage file(Nullable<AnnotationFileAttachmentFile> file) {
+        public _FinalStage file(Nullable<AttachmentFileInfo> file) {
             if (file.isNull()) {
                 this.file = null;
             } else if (file.isEmpty()) {
@@ -1028,14 +1028,14 @@ public final class AnnotationFileAttachment {
         }
 
         @java.lang.Override
-        public _FinalStage file(AnnotationFileAttachmentFile file) {
+        public _FinalStage file(AttachmentFileInfo file) {
             this.file = Optional.ofNullable(file);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "file", nulls = Nulls.SKIP)
-        public _FinalStage file(Optional<AnnotationFileAttachmentFile> file) {
+        public _FinalStage file(Optional<AttachmentFileInfo> file) {
             this.file = file;
             return this;
         }

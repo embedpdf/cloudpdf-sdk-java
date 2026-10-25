@@ -7,8 +7,10 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.Suppliers;
 import com.cloudpdf.api.resources.doc.annotations.AnnotationsClient;
+import com.cloudpdf.api.resources.doc.attachments.AttachmentsClient;
 import com.cloudpdf.api.resources.doc.forms.FormsClient;
 import com.cloudpdf.api.resources.doc.metadata.MetadataClient;
+import com.cloudpdf.api.resources.doc.outline.OutlineClient;
 import com.cloudpdf.api.resources.doc.pages.PagesClient;
 import com.cloudpdf.api.resources.doc.redactions.RedactionsClient;
 import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
@@ -33,9 +35,13 @@ public class DocClient {
 
     protected final Supplier<AnnotationsClient> annotationsClient;
 
+    protected final Supplier<AttachmentsClient> attachmentsClient;
+
     protected final Supplier<FormsClient> formsClient;
 
     protected final Supplier<MetadataClient> metadataClient;
+
+    protected final Supplier<OutlineClient> outlineClient;
 
     protected final Supplier<PagesClient> pagesClient;
 
@@ -49,8 +55,10 @@ public class DocClient {
         this.clientOptions = clientOptions;
         this.rawClient = new RawDocClient(clientOptions);
         this.annotationsClient = Suppliers.memoize(() -> new AnnotationsClient(clientOptions));
+        this.attachmentsClient = Suppliers.memoize(() -> new AttachmentsClient(clientOptions));
         this.formsClient = Suppliers.memoize(() -> new FormsClient(clientOptions));
         this.metadataClient = Suppliers.memoize(() -> new MetadataClient(clientOptions));
+        this.outlineClient = Suppliers.memoize(() -> new OutlineClient(clientOptions));
         this.pagesClient = Suppliers.memoize(() -> new PagesClient(clientOptions));
         this.redactionsClient = Suppliers.memoize(() -> new RedactionsClient(clientOptions));
         this.signaturesClient = Suppliers.memoize(() -> new SignaturesClient(clientOptions));
@@ -81,14 +89,14 @@ public class DocClient {
     }
 
     /**
-     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
     public DocChanges200Response changes(String docId, String layerName, DocChangesRequest request) {
         return this.rawClient.changes(docId, layerName, request).body();
     }
 
     /**
-     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
     public DocChanges200Response changes(
             String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
@@ -187,12 +195,20 @@ public class DocClient {
         return this.annotationsClient.get();
     }
 
+    public AttachmentsClient attachments() {
+        return this.attachmentsClient.get();
+    }
+
     public FormsClient forms() {
         return this.formsClient.get();
     }
 
     public MetadataClient metadata() {
         return this.metadataClient.get();
+    }
+
+    public OutlineClient outline() {
+        return this.outlineClient.get();
     }
 
     public PagesClient pages() {
