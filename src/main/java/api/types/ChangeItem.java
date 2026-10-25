@@ -122,6 +122,62 @@ public final class ChangeItem {
         return new ChangeItem(new MetadataUpdateCustomValue(value));
     }
 
+    public static ChangeItem outlineCreate(ChangeItemOutlineCreate value) {
+        return new ChangeItem(new OutlineCreateValue(value));
+    }
+
+    public static ChangeItem outlineUpdate(ChangeItemOutlineUpdate value) {
+        return new ChangeItem(new OutlineUpdateValue(value));
+    }
+
+    public static ChangeItem outlineMove(ChangeItemOutlineMove value) {
+        return new ChangeItem(new OutlineMoveValue(value));
+    }
+
+    public static ChangeItem outlineDelete(ChangeItemOutlineDelete value) {
+        return new ChangeItem(new OutlineDeleteValue(value));
+    }
+
+    public static ChangeItem outlineRestore(ChangeItemOutlineRestore value) {
+        return new ChangeItem(new OutlineRestoreValue(value));
+    }
+
+    public static ChangeItem pagesRotate(ChangeItemPagesRotate value) {
+        return new ChangeItem(new PagesRotateValue(value));
+    }
+
+    public static ChangeItem pagesReorder(ChangeItemPagesReorder value) {
+        return new ChangeItem(new PagesReorderValue(value));
+    }
+
+    public static ChangeItem pagesDelete(ChangeItemPagesDelete value) {
+        return new ChangeItem(new PagesDeleteValue(value));
+    }
+
+    public static ChangeItem pagesInsertBlank(ChangeItemPagesInsertBlank value) {
+        return new ChangeItem(new PagesInsertBlankValue(value));
+    }
+
+    public static ChangeItem pagesInsert(ChangeItemPagesInsert value) {
+        return new ChangeItem(new PagesInsertValue(value));
+    }
+
+    public static ChangeItem pagesRestore(ChangeItemPagesRestore value) {
+        return new ChangeItem(new PagesRestoreValue(value));
+    }
+
+    public static ChangeItem attachmentsCreate(ChangeItemAttachmentsCreate value) {
+        return new ChangeItem(new AttachmentsCreateValue(value));
+    }
+
+    public static ChangeItem attachmentsDelete(ChangeItemAttachmentsDelete value) {
+        return new ChangeItem(new AttachmentsDeleteValue(value));
+    }
+
+    public static ChangeItem attachmentsRestore(ChangeItemAttachmentsRestore value) {
+        return new ChangeItem(new AttachmentsRestoreValue(value));
+    }
+
     public boolean isSkipped() {
         return value instanceof SkippedValue;
     }
@@ -216,6 +272,62 @@ public final class ChangeItem {
 
     public boolean isMetadataUpdateCustom() {
         return value instanceof MetadataUpdateCustomValue;
+    }
+
+    public boolean isOutlineCreate() {
+        return value instanceof OutlineCreateValue;
+    }
+
+    public boolean isOutlineUpdate() {
+        return value instanceof OutlineUpdateValue;
+    }
+
+    public boolean isOutlineMove() {
+        return value instanceof OutlineMoveValue;
+    }
+
+    public boolean isOutlineDelete() {
+        return value instanceof OutlineDeleteValue;
+    }
+
+    public boolean isOutlineRestore() {
+        return value instanceof OutlineRestoreValue;
+    }
+
+    public boolean isPagesRotate() {
+        return value instanceof PagesRotateValue;
+    }
+
+    public boolean isPagesReorder() {
+        return value instanceof PagesReorderValue;
+    }
+
+    public boolean isPagesDelete() {
+        return value instanceof PagesDeleteValue;
+    }
+
+    public boolean isPagesInsertBlank() {
+        return value instanceof PagesInsertBlankValue;
+    }
+
+    public boolean isPagesInsert() {
+        return value instanceof PagesInsertValue;
+    }
+
+    public boolean isPagesRestore() {
+        return value instanceof PagesRestoreValue;
+    }
+
+    public boolean isAttachmentsCreate() {
+        return value instanceof AttachmentsCreateValue;
+    }
+
+    public boolean isAttachmentsDelete() {
+        return value instanceof AttachmentsDeleteValue;
+    }
+
+    public boolean isAttachmentsRestore() {
+        return value instanceof AttachmentsRestoreValue;
     }
 
     public boolean _isUnknown() {
@@ -390,6 +502,104 @@ public final class ChangeItem {
         return Optional.empty();
     }
 
+    public Optional<ChangeItemOutlineCreate> getOutlineCreate() {
+        if (isOutlineCreate()) {
+            return Optional.of(((OutlineCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemOutlineUpdate> getOutlineUpdate() {
+        if (isOutlineUpdate()) {
+            return Optional.of(((OutlineUpdateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemOutlineMove> getOutlineMove() {
+        if (isOutlineMove()) {
+            return Optional.of(((OutlineMoveValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemOutlineDelete> getOutlineDelete() {
+        if (isOutlineDelete()) {
+            return Optional.of(((OutlineDeleteValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemOutlineRestore> getOutlineRestore() {
+        if (isOutlineRestore()) {
+            return Optional.of(((OutlineRestoreValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesRotate> getPagesRotate() {
+        if (isPagesRotate()) {
+            return Optional.of(((PagesRotateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesReorder> getPagesReorder() {
+        if (isPagesReorder()) {
+            return Optional.of(((PagesReorderValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesDelete> getPagesDelete() {
+        if (isPagesDelete()) {
+            return Optional.of(((PagesDeleteValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesInsertBlank> getPagesInsertBlank() {
+        if (isPagesInsertBlank()) {
+            return Optional.of(((PagesInsertBlankValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesInsert> getPagesInsert() {
+        if (isPagesInsert()) {
+            return Optional.of(((PagesInsertValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemPagesRestore> getPagesRestore() {
+        if (isPagesRestore()) {
+            return Optional.of(((PagesRestoreValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemAttachmentsCreate> getAttachmentsCreate() {
+        if (isAttachmentsCreate()) {
+            return Optional.of(((AttachmentsCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemAttachmentsDelete> getAttachmentsDelete() {
+        if (isAttachmentsDelete()) {
+            return Optional.of(((AttachmentsDeleteValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeItemAttachmentsRestore> getAttachmentsRestore() {
+        if (isAttachmentsRestore()) {
+            return Optional.of(((AttachmentsRestoreValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -467,6 +677,34 @@ public final class ChangeItem {
 
         T visitMetadataUpdateCustom(ChangeItemMetadataUpdateCustom metadataUpdateCustom);
 
+        T visitOutlineCreate(ChangeItemOutlineCreate outlineCreate);
+
+        T visitOutlineUpdate(ChangeItemOutlineUpdate outlineUpdate);
+
+        T visitOutlineMove(ChangeItemOutlineMove outlineMove);
+
+        T visitOutlineDelete(ChangeItemOutlineDelete outlineDelete);
+
+        T visitOutlineRestore(ChangeItemOutlineRestore outlineRestore);
+
+        T visitPagesRotate(ChangeItemPagesRotate pagesRotate);
+
+        T visitPagesReorder(ChangeItemPagesReorder pagesReorder);
+
+        T visitPagesDelete(ChangeItemPagesDelete pagesDelete);
+
+        T visitPagesInsertBlank(ChangeItemPagesInsertBlank pagesInsertBlank);
+
+        T visitPagesInsert(ChangeItemPagesInsert pagesInsert);
+
+        T visitPagesRestore(ChangeItemPagesRestore pagesRestore);
+
+        T visitAttachmentsCreate(ChangeItemAttachmentsCreate attachmentsCreate);
+
+        T visitAttachmentsDelete(ChangeItemAttachmentsDelete attachmentsDelete);
+
+        T visitAttachmentsRestore(ChangeItemAttachmentsRestore attachmentsRestore);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -495,7 +733,21 @@ public final class ChangeItem {
         @JsonSubTypes.Type(FormsReorderCalculationsValue.class),
         @JsonSubTypes.Type(FormsUpdateWidgetValue.class),
         @JsonSubTypes.Type(MetadataUpdateValue.class),
-        @JsonSubTypes.Type(MetadataUpdateCustomValue.class)
+        @JsonSubTypes.Type(MetadataUpdateCustomValue.class),
+        @JsonSubTypes.Type(OutlineCreateValue.class),
+        @JsonSubTypes.Type(OutlineUpdateValue.class),
+        @JsonSubTypes.Type(OutlineMoveValue.class),
+        @JsonSubTypes.Type(OutlineDeleteValue.class),
+        @JsonSubTypes.Type(OutlineRestoreValue.class),
+        @JsonSubTypes.Type(PagesRotateValue.class),
+        @JsonSubTypes.Type(PagesReorderValue.class),
+        @JsonSubTypes.Type(PagesDeleteValue.class),
+        @JsonSubTypes.Type(PagesInsertBlankValue.class),
+        @JsonSubTypes.Type(PagesInsertValue.class),
+        @JsonSubTypes.Type(PagesRestoreValue.class),
+        @JsonSubTypes.Type(AttachmentsCreateValue.class),
+        @JsonSubTypes.Type(AttachmentsDeleteValue.class),
+        @JsonSubTypes.Type(AttachmentsRestoreValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -1449,6 +1701,566 @@ public final class ChangeItem {
         }
 
         private boolean equalTo(MetadataUpdateCustomValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("outline.create")
+    @JsonIgnoreProperties("type")
+    private static final class OutlineCreateValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemOutlineCreate value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OutlineCreateValue() {}
+
+        private OutlineCreateValue(ChangeItemOutlineCreate value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOutlineCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OutlineCreateValue && equalTo((OutlineCreateValue) other);
+        }
+
+        private boolean equalTo(OutlineCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("outline.update")
+    @JsonIgnoreProperties("type")
+    private static final class OutlineUpdateValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemOutlineUpdate value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OutlineUpdateValue() {}
+
+        private OutlineUpdateValue(ChangeItemOutlineUpdate value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOutlineUpdate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OutlineUpdateValue && equalTo((OutlineUpdateValue) other);
+        }
+
+        private boolean equalTo(OutlineUpdateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("outline.move")
+    @JsonIgnoreProperties("type")
+    private static final class OutlineMoveValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemOutlineMove value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OutlineMoveValue() {}
+
+        private OutlineMoveValue(ChangeItemOutlineMove value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOutlineMove(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OutlineMoveValue && equalTo((OutlineMoveValue) other);
+        }
+
+        private boolean equalTo(OutlineMoveValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("outline.delete")
+    @JsonIgnoreProperties("type")
+    private static final class OutlineDeleteValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemOutlineDelete value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OutlineDeleteValue() {}
+
+        private OutlineDeleteValue(ChangeItemOutlineDelete value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOutlineDelete(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OutlineDeleteValue && equalTo((OutlineDeleteValue) other);
+        }
+
+        private boolean equalTo(OutlineDeleteValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("outline.restore")
+    @JsonIgnoreProperties("type")
+    private static final class OutlineRestoreValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemOutlineRestore value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OutlineRestoreValue() {}
+
+        private OutlineRestoreValue(ChangeItemOutlineRestore value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOutlineRestore(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OutlineRestoreValue && equalTo((OutlineRestoreValue) other);
+        }
+
+        private boolean equalTo(OutlineRestoreValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.rotate")
+    @JsonIgnoreProperties("type")
+    private static final class PagesRotateValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesRotate value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesRotateValue() {}
+
+        private PagesRotateValue(ChangeItemPagesRotate value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesRotate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesRotateValue && equalTo((PagesRotateValue) other);
+        }
+
+        private boolean equalTo(PagesRotateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.reorder")
+    @JsonIgnoreProperties("type")
+    private static final class PagesReorderValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesReorder value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesReorderValue() {}
+
+        private PagesReorderValue(ChangeItemPagesReorder value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesReorder(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesReorderValue && equalTo((PagesReorderValue) other);
+        }
+
+        private boolean equalTo(PagesReorderValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.delete")
+    @JsonIgnoreProperties("type")
+    private static final class PagesDeleteValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesDelete value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesDeleteValue() {}
+
+        private PagesDeleteValue(ChangeItemPagesDelete value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesDelete(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesDeleteValue && equalTo((PagesDeleteValue) other);
+        }
+
+        private boolean equalTo(PagesDeleteValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.insertBlank")
+    @JsonIgnoreProperties("type")
+    private static final class PagesInsertBlankValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesInsertBlank value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesInsertBlankValue() {}
+
+        private PagesInsertBlankValue(ChangeItemPagesInsertBlank value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesInsertBlank(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesInsertBlankValue && equalTo((PagesInsertBlankValue) other);
+        }
+
+        private boolean equalTo(PagesInsertBlankValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.insert")
+    @JsonIgnoreProperties("type")
+    private static final class PagesInsertValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesInsert value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesInsertValue() {}
+
+        private PagesInsertValue(ChangeItemPagesInsert value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesInsert(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesInsertValue && equalTo((PagesInsertValue) other);
+        }
+
+        private boolean equalTo(PagesInsertValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.restore")
+    @JsonIgnoreProperties("type")
+    private static final class PagesRestoreValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesRestore value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesRestoreValue() {}
+
+        private PagesRestoreValue(ChangeItemPagesRestore value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesRestore(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesRestoreValue && equalTo((PagesRestoreValue) other);
+        }
+
+        private boolean equalTo(PagesRestoreValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("attachments.create")
+    @JsonIgnoreProperties("type")
+    private static final class AttachmentsCreateValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemAttachmentsCreate value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AttachmentsCreateValue() {}
+
+        private AttachmentsCreateValue(ChangeItemAttachmentsCreate value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAttachmentsCreate(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AttachmentsCreateValue && equalTo((AttachmentsCreateValue) other);
+        }
+
+        private boolean equalTo(AttachmentsCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("attachments.delete")
+    @JsonIgnoreProperties("type")
+    private static final class AttachmentsDeleteValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemAttachmentsDelete value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AttachmentsDeleteValue() {}
+
+        private AttachmentsDeleteValue(ChangeItemAttachmentsDelete value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAttachmentsDelete(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AttachmentsDeleteValue && equalTo((AttachmentsDeleteValue) other);
+        }
+
+        private boolean equalTo(AttachmentsDeleteValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("attachments.restore")
+    @JsonIgnoreProperties("type")
+    private static final class AttachmentsRestoreValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemAttachmentsRestore value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AttachmentsRestoreValue() {}
+
+        private AttachmentsRestoreValue(ChangeItemAttachmentsRestore value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAttachmentsRestore(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AttachmentsRestoreValue && equalTo((AttachmentsRestoreValue) other);
+        }
+
+        private boolean equalTo(AttachmentsRestoreValue other) {
             return value.equals(other.value);
         }
 

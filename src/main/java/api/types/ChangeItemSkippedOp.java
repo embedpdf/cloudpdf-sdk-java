@@ -7,21 +7,31 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class ChangeItemSkippedOp {
-    public static final ChangeItemSkippedOp FORMS_UPDATE = new ChangeItemSkippedOp(Value.FORMS_UPDATE, "forms.update");
+    public static final ChangeItemSkippedOp PAGES_INSERT_BLANK =
+            new ChangeItemSkippedOp(Value.PAGES_INSERT_BLANK, "pages.insertBlank");
 
     public static final ChangeItemSkippedOp ANNOTATIONS_DELETE =
             new ChangeItemSkippedOp(Value.ANNOTATIONS_DELETE, "annotations.delete");
 
     public static final ChangeItemSkippedOp FORMS_DELETE = new ChangeItemSkippedOp(Value.FORMS_DELETE, "forms.delete");
 
-    public static final ChangeItemSkippedOp ANNOTATIONS_UPDATE =
-            new ChangeItemSkippedOp(Value.ANNOTATIONS_UPDATE, "annotations.update");
+    public static final ChangeItemSkippedOp PAGES_RESTORE =
+            new ChangeItemSkippedOp(Value.PAGES_RESTORE, "pages.restore");
 
-    public static final ChangeItemSkippedOp ANNOTATIONS_RESTORE =
-            new ChangeItemSkippedOp(Value.ANNOTATIONS_RESTORE, "annotations.restore");
+    public static final ChangeItemSkippedOp OUTLINE_MOVE = new ChangeItemSkippedOp(Value.OUTLINE_MOVE, "outline.move");
+
+    public static final ChangeItemSkippedOp OUTLINE_UPDATE =
+            new ChangeItemSkippedOp(Value.OUTLINE_UPDATE, "outline.update");
+
+    public static final ChangeItemSkippedOp PAGES_ROTATE = new ChangeItemSkippedOp(Value.PAGES_ROTATE, "pages.rotate");
+
+    public static final ChangeItemSkippedOp ATTACHMENTS_DELETE =
+            new ChangeItemSkippedOp(Value.ATTACHMENTS_DELETE, "attachments.delete");
 
     public static final ChangeItemSkippedOp FORMS_SET_APPEARANCE_TEXT =
             new ChangeItemSkippedOp(Value.FORMS_SET_APPEARANCE_TEXT, "forms.setAppearanceText");
+
+    public static final ChangeItemSkippedOp PAGES_DELETE = new ChangeItemSkippedOp(Value.PAGES_DELETE, "pages.delete");
 
     public static final ChangeItemSkippedOp FORMS_SET_VALUE =
             new ChangeItemSkippedOp(Value.FORMS_SET_VALUE, "forms.setValue");
@@ -29,36 +39,25 @@ public final class ChangeItemSkippedOp {
     public static final ChangeItemSkippedOp FORMS_UPDATE_WIDGET =
             new ChangeItemSkippedOp(Value.FORMS_UPDATE_WIDGET, "forms.updateWidget");
 
-    public static final ChangeItemSkippedOp FORMS_RESET = new ChangeItemSkippedOp(Value.FORMS_RESET, "forms.reset");
-
     public static final ChangeItemSkippedOp METADATA_UPDATE_CUSTOM =
             new ChangeItemSkippedOp(Value.METADATA_UPDATE_CUSTOM, "metadata.updateCustom");
 
     public static final ChangeItemSkippedOp FORMS_REORDER_WIDGETS =
             new ChangeItemSkippedOp(Value.FORMS_REORDER_WIDGETS, "forms.reorderWidgets");
 
-    public static final ChangeItemSkippedOp FORMS_ADD_WIDGET =
-            new ChangeItemSkippedOp(Value.FORMS_ADD_WIDGET, "forms.addWidget");
+    public static final ChangeItemSkippedOp OUTLINE_CREATE =
+            new ChangeItemSkippedOp(Value.OUTLINE_CREATE, "outline.create");
 
     public static final ChangeItemSkippedOp FORMS_DELETE_WIDGET =
             new ChangeItemSkippedOp(Value.FORMS_DELETE_WIDGET, "forms.deleteWidget");
 
-    public static final ChangeItemSkippedOp ANNOTATIONS_CREATE =
-            new ChangeItemSkippedOp(Value.ANNOTATIONS_CREATE, "annotations.create");
+    public static final ChangeItemSkippedOp PAGES_REORDER =
+            new ChangeItemSkippedOp(Value.PAGES_REORDER, "pages.reorder");
 
     public static final ChangeItemSkippedOp FORMS_CREATE = new ChangeItemSkippedOp(Value.FORMS_CREATE, "forms.create");
 
-    public static final ChangeItemSkippedOp FORMS_SET_SIGNATURE_APPEARANCE =
-            new ChangeItemSkippedOp(Value.FORMS_SET_SIGNATURE_APPEARANCE, "forms.setSignatureAppearance");
-
-    public static final ChangeItemSkippedOp ANNOTATIONS_REORDER =
-            new ChangeItemSkippedOp(Value.ANNOTATIONS_REORDER, "annotations.reorder");
-
     public static final ChangeItemSkippedOp FORMS_RESTORE =
             new ChangeItemSkippedOp(Value.FORMS_RESTORE, "forms.restore");
-
-    public static final ChangeItemSkippedOp FORMS_SET_DISPLAY =
-            new ChangeItemSkippedOp(Value.FORMS_SET_DISPLAY, "forms.setDisplay");
 
     public static final ChangeItemSkippedOp FORMS_REORDER_CALCULATIONS =
             new ChangeItemSkippedOp(Value.FORMS_REORDER_CALCULATIONS, "forms.reorderCalculations");
@@ -66,8 +65,50 @@ public final class ChangeItemSkippedOp {
     public static final ChangeItemSkippedOp METADATA_UPDATE =
             new ChangeItemSkippedOp(Value.METADATA_UPDATE, "metadata.update");
 
+    public static final ChangeItemSkippedOp ATTACHMENTS_CREATE =
+            new ChangeItemSkippedOp(Value.ATTACHMENTS_CREATE, "attachments.create");
+
     public static final ChangeItemSkippedOp FORMS_REMOVE_WIDGET =
             new ChangeItemSkippedOp(Value.FORMS_REMOVE_WIDGET, "forms.removeWidget");
+
+    public static final ChangeItemSkippedOp OUTLINE_RESTORE =
+            new ChangeItemSkippedOp(Value.OUTLINE_RESTORE, "outline.restore");
+
+    public static final ChangeItemSkippedOp FORMS_UPDATE = new ChangeItemSkippedOp(Value.FORMS_UPDATE, "forms.update");
+
+    public static final ChangeItemSkippedOp OUTLINE_DELETE =
+            new ChangeItemSkippedOp(Value.OUTLINE_DELETE, "outline.delete");
+
+    public static final ChangeItemSkippedOp FORMS_RESTORE_WIDGET =
+            new ChangeItemSkippedOp(Value.FORMS_RESTORE_WIDGET, "forms.restoreWidget");
+
+    public static final ChangeItemSkippedOp ATTACHMENTS_RESTORE =
+            new ChangeItemSkippedOp(Value.ATTACHMENTS_RESTORE, "attachments.restore");
+
+    public static final ChangeItemSkippedOp ANNOTATIONS_UPDATE =
+            new ChangeItemSkippedOp(Value.ANNOTATIONS_UPDATE, "annotations.update");
+
+    public static final ChangeItemSkippedOp ANNOTATIONS_RESTORE =
+            new ChangeItemSkippedOp(Value.ANNOTATIONS_RESTORE, "annotations.restore");
+
+    public static final ChangeItemSkippedOp PAGES_INSERT = new ChangeItemSkippedOp(Value.PAGES_INSERT, "pages.insert");
+
+    public static final ChangeItemSkippedOp FORMS_RESET = new ChangeItemSkippedOp(Value.FORMS_RESET, "forms.reset");
+
+    public static final ChangeItemSkippedOp FORMS_ADD_WIDGET =
+            new ChangeItemSkippedOp(Value.FORMS_ADD_WIDGET, "forms.addWidget");
+
+    public static final ChangeItemSkippedOp ANNOTATIONS_CREATE =
+            new ChangeItemSkippedOp(Value.ANNOTATIONS_CREATE, "annotations.create");
+
+    public static final ChangeItemSkippedOp FORMS_SET_SIGNATURE_APPEARANCE =
+            new ChangeItemSkippedOp(Value.FORMS_SET_SIGNATURE_APPEARANCE, "forms.setSignatureAppearance");
+
+    public static final ChangeItemSkippedOp ANNOTATIONS_REORDER =
+            new ChangeItemSkippedOp(Value.ANNOTATIONS_REORDER, "annotations.reorder");
+
+    public static final ChangeItemSkippedOp FORMS_SET_DISPLAY =
+            new ChangeItemSkippedOp(Value.FORMS_SET_DISPLAY, "forms.setDisplay");
 
     private final Value value;
 
@@ -101,50 +142,80 @@ public final class ChangeItemSkippedOp {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case FORMS_UPDATE:
-                return visitor.visitFormsUpdate();
+            case PAGES_INSERT_BLANK:
+                return visitor.visitPagesInsertBlank();
             case ANNOTATIONS_DELETE:
                 return visitor.visitAnnotationsDelete();
             case FORMS_DELETE:
                 return visitor.visitFormsDelete();
-            case ANNOTATIONS_UPDATE:
-                return visitor.visitAnnotationsUpdate();
-            case ANNOTATIONS_RESTORE:
-                return visitor.visitAnnotationsRestore();
+            case PAGES_RESTORE:
+                return visitor.visitPagesRestore();
+            case OUTLINE_MOVE:
+                return visitor.visitOutlineMove();
+            case OUTLINE_UPDATE:
+                return visitor.visitOutlineUpdate();
+            case PAGES_ROTATE:
+                return visitor.visitPagesRotate();
+            case ATTACHMENTS_DELETE:
+                return visitor.visitAttachmentsDelete();
             case FORMS_SET_APPEARANCE_TEXT:
                 return visitor.visitFormsSetAppearanceText();
+            case PAGES_DELETE:
+                return visitor.visitPagesDelete();
             case FORMS_SET_VALUE:
                 return visitor.visitFormsSetValue();
             case FORMS_UPDATE_WIDGET:
                 return visitor.visitFormsUpdateWidget();
-            case FORMS_RESET:
-                return visitor.visitFormsReset();
             case METADATA_UPDATE_CUSTOM:
                 return visitor.visitMetadataUpdateCustom();
             case FORMS_REORDER_WIDGETS:
                 return visitor.visitFormsReorderWidgets();
-            case FORMS_ADD_WIDGET:
-                return visitor.visitFormsAddWidget();
+            case OUTLINE_CREATE:
+                return visitor.visitOutlineCreate();
             case FORMS_DELETE_WIDGET:
                 return visitor.visitFormsDeleteWidget();
-            case ANNOTATIONS_CREATE:
-                return visitor.visitAnnotationsCreate();
+            case PAGES_REORDER:
+                return visitor.visitPagesReorder();
             case FORMS_CREATE:
                 return visitor.visitFormsCreate();
-            case FORMS_SET_SIGNATURE_APPEARANCE:
-                return visitor.visitFormsSetSignatureAppearance();
-            case ANNOTATIONS_REORDER:
-                return visitor.visitAnnotationsReorder();
             case FORMS_RESTORE:
                 return visitor.visitFormsRestore();
-            case FORMS_SET_DISPLAY:
-                return visitor.visitFormsSetDisplay();
             case FORMS_REORDER_CALCULATIONS:
                 return visitor.visitFormsReorderCalculations();
             case METADATA_UPDATE:
                 return visitor.visitMetadataUpdate();
+            case ATTACHMENTS_CREATE:
+                return visitor.visitAttachmentsCreate();
             case FORMS_REMOVE_WIDGET:
                 return visitor.visitFormsRemoveWidget();
+            case OUTLINE_RESTORE:
+                return visitor.visitOutlineRestore();
+            case FORMS_UPDATE:
+                return visitor.visitFormsUpdate();
+            case OUTLINE_DELETE:
+                return visitor.visitOutlineDelete();
+            case FORMS_RESTORE_WIDGET:
+                return visitor.visitFormsRestoreWidget();
+            case ATTACHMENTS_RESTORE:
+                return visitor.visitAttachmentsRestore();
+            case ANNOTATIONS_UPDATE:
+                return visitor.visitAnnotationsUpdate();
+            case ANNOTATIONS_RESTORE:
+                return visitor.visitAnnotationsRestore();
+            case PAGES_INSERT:
+                return visitor.visitPagesInsert();
+            case FORMS_RESET:
+                return visitor.visitFormsReset();
+            case FORMS_ADD_WIDGET:
+                return visitor.visitFormsAddWidget();
+            case ANNOTATIONS_CREATE:
+                return visitor.visitAnnotationsCreate();
+            case FORMS_SET_SIGNATURE_APPEARANCE:
+                return visitor.visitFormsSetSignatureAppearance();
+            case ANNOTATIONS_REORDER:
+                return visitor.visitAnnotationsReorder();
+            case FORMS_SET_DISPLAY:
+                return visitor.visitFormsSetDisplay();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -154,50 +225,80 @@ public final class ChangeItemSkippedOp {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static ChangeItemSkippedOp valueOf(String value) {
         switch (value) {
-            case "forms.update":
-                return FORMS_UPDATE;
+            case "pages.insertBlank":
+                return PAGES_INSERT_BLANK;
             case "annotations.delete":
                 return ANNOTATIONS_DELETE;
             case "forms.delete":
                 return FORMS_DELETE;
-            case "annotations.update":
-                return ANNOTATIONS_UPDATE;
-            case "annotations.restore":
-                return ANNOTATIONS_RESTORE;
+            case "pages.restore":
+                return PAGES_RESTORE;
+            case "outline.move":
+                return OUTLINE_MOVE;
+            case "outline.update":
+                return OUTLINE_UPDATE;
+            case "pages.rotate":
+                return PAGES_ROTATE;
+            case "attachments.delete":
+                return ATTACHMENTS_DELETE;
             case "forms.setAppearanceText":
                 return FORMS_SET_APPEARANCE_TEXT;
+            case "pages.delete":
+                return PAGES_DELETE;
             case "forms.setValue":
                 return FORMS_SET_VALUE;
             case "forms.updateWidget":
                 return FORMS_UPDATE_WIDGET;
-            case "forms.reset":
-                return FORMS_RESET;
             case "metadata.updateCustom":
                 return METADATA_UPDATE_CUSTOM;
             case "forms.reorderWidgets":
                 return FORMS_REORDER_WIDGETS;
-            case "forms.addWidget":
-                return FORMS_ADD_WIDGET;
+            case "outline.create":
+                return OUTLINE_CREATE;
             case "forms.deleteWidget":
                 return FORMS_DELETE_WIDGET;
-            case "annotations.create":
-                return ANNOTATIONS_CREATE;
+            case "pages.reorder":
+                return PAGES_REORDER;
             case "forms.create":
                 return FORMS_CREATE;
-            case "forms.setSignatureAppearance":
-                return FORMS_SET_SIGNATURE_APPEARANCE;
-            case "annotations.reorder":
-                return ANNOTATIONS_REORDER;
             case "forms.restore":
                 return FORMS_RESTORE;
-            case "forms.setDisplay":
-                return FORMS_SET_DISPLAY;
             case "forms.reorderCalculations":
                 return FORMS_REORDER_CALCULATIONS;
             case "metadata.update":
                 return METADATA_UPDATE;
+            case "attachments.create":
+                return ATTACHMENTS_CREATE;
             case "forms.removeWidget":
                 return FORMS_REMOVE_WIDGET;
+            case "outline.restore":
+                return OUTLINE_RESTORE;
+            case "forms.update":
+                return FORMS_UPDATE;
+            case "outline.delete":
+                return OUTLINE_DELETE;
+            case "forms.restoreWidget":
+                return FORMS_RESTORE_WIDGET;
+            case "attachments.restore":
+                return ATTACHMENTS_RESTORE;
+            case "annotations.update":
+                return ANNOTATIONS_UPDATE;
+            case "annotations.restore":
+                return ANNOTATIONS_RESTORE;
+            case "pages.insert":
+                return PAGES_INSERT;
+            case "forms.reset":
+                return FORMS_RESET;
+            case "forms.addWidget":
+                return FORMS_ADD_WIDGET;
+            case "annotations.create":
+                return ANNOTATIONS_CREATE;
+            case "forms.setSignatureAppearance":
+                return FORMS_SET_SIGNATURE_APPEARANCE;
+            case "annotations.reorder":
+                return ANNOTATIONS_REORDER;
+            case "forms.setDisplay":
+                return FORMS_SET_DISPLAY;
             default:
                 return new ChangeItemSkippedOp(Value.UNKNOWN, value);
         }
@@ -244,9 +345,39 @@ public final class ChangeItemSkippedOp {
 
         METADATA_UPDATE_CUSTOM,
 
+        OUTLINE_CREATE,
+
+        OUTLINE_UPDATE,
+
+        OUTLINE_MOVE,
+
+        OUTLINE_DELETE,
+
+        PAGES_ROTATE,
+
+        PAGES_REORDER,
+
+        PAGES_DELETE,
+
+        PAGES_INSERT_BLANK,
+
+        PAGES_INSERT,
+
+        ATTACHMENTS_CREATE,
+
+        ATTACHMENTS_DELETE,
+
         ANNOTATIONS_RESTORE,
 
         FORMS_RESTORE,
+
+        FORMS_RESTORE_WIDGET,
+
+        OUTLINE_RESTORE,
+
+        PAGES_RESTORE,
+
+        ATTACHMENTS_RESTORE,
 
         UNKNOWN
     }
@@ -292,9 +423,39 @@ public final class ChangeItemSkippedOp {
 
         T visitMetadataUpdateCustom();
 
+        T visitOutlineCreate();
+
+        T visitOutlineUpdate();
+
+        T visitOutlineMove();
+
+        T visitOutlineDelete();
+
+        T visitPagesRotate();
+
+        T visitPagesReorder();
+
+        T visitPagesDelete();
+
+        T visitPagesInsertBlank();
+
+        T visitPagesInsert();
+
+        T visitAttachmentsCreate();
+
+        T visitAttachmentsDelete();
+
         T visitAnnotationsRestore();
 
         T visitFormsRestore();
+
+        T visitFormsRestoreWidget();
+
+        T visitOutlineRestore();
+
+        T visitPagesRestore();
+
+        T visitAttachmentsRestore();
 
         T visitUnknown(String unknownType);
     }

@@ -7,8 +7,10 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.Suppliers;
 import com.cloudpdf.api.resources.doc.annotations.AsyncAnnotationsClient;
+import com.cloudpdf.api.resources.doc.attachments.AsyncAttachmentsClient;
 import com.cloudpdf.api.resources.doc.forms.AsyncFormsClient;
 import com.cloudpdf.api.resources.doc.metadata.AsyncMetadataClient;
+import com.cloudpdf.api.resources.doc.outline.AsyncOutlineClient;
 import com.cloudpdf.api.resources.doc.pages.AsyncPagesClient;
 import com.cloudpdf.api.resources.doc.redactions.AsyncRedactionsClient;
 import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
@@ -34,9 +36,13 @@ public class AsyncDocClient {
 
     protected final Supplier<AsyncAnnotationsClient> annotationsClient;
 
+    protected final Supplier<AsyncAttachmentsClient> attachmentsClient;
+
     protected final Supplier<AsyncFormsClient> formsClient;
 
     protected final Supplier<AsyncMetadataClient> metadataClient;
+
+    protected final Supplier<AsyncOutlineClient> outlineClient;
 
     protected final Supplier<AsyncPagesClient> pagesClient;
 
@@ -50,8 +56,10 @@ public class AsyncDocClient {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawDocClient(clientOptions);
         this.annotationsClient = Suppliers.memoize(() -> new AsyncAnnotationsClient(clientOptions));
+        this.attachmentsClient = Suppliers.memoize(() -> new AsyncAttachmentsClient(clientOptions));
         this.formsClient = Suppliers.memoize(() -> new AsyncFormsClient(clientOptions));
         this.metadataClient = Suppliers.memoize(() -> new AsyncMetadataClient(clientOptions));
+        this.outlineClient = Suppliers.memoize(() -> new AsyncOutlineClient(clientOptions));
         this.pagesClient = Suppliers.memoize(() -> new AsyncPagesClient(clientOptions));
         this.redactionsClient = Suppliers.memoize(() -> new AsyncRedactionsClient(clientOptions));
         this.signaturesClient = Suppliers.memoize(() -> new AsyncSignaturesClient(clientOptions));
@@ -83,14 +91,14 @@ public class AsyncDocClient {
     }
 
     /**
-     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
     public CompletableFuture<DocChanges200Response> changes(String docId, String layerName, DocChangesRequest request) {
         return this.rawClient.changes(docId, layerName, request).thenApply(response -> response.body());
     }
 
     /**
-     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
+     * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
     public CompletableFuture<DocChanges200Response> changes(
             String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
@@ -195,12 +203,20 @@ public class AsyncDocClient {
         return this.annotationsClient.get();
     }
 
+    public AsyncAttachmentsClient attachments() {
+        return this.attachmentsClient.get();
+    }
+
     public AsyncFormsClient forms() {
         return this.formsClient.get();
     }
 
     public AsyncMetadataClient metadata() {
         return this.metadataClient.get();
+    }
+
+    public AsyncOutlineClient outline() {
+        return this.outlineClient.get();
     }
 
     public AsyncPagesClient pages() {

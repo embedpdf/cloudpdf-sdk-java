@@ -14,6 +14,7 @@ import com.cloudpdf.api.core.ResponseBodyInputStream;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.ConflictError;
+import com.cloudpdf.api.errors.ContentTooLargeError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.annotations.requests.CreateAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.DeleteAnnotationsRequest;
@@ -23,6 +24,7 @@ import com.cloudpdf.api.resources.doc.annotations.requests.FlattenAnnotationsReq
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAllAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ListAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotationsRequest;
+import com.cloudpdf.api.resources.doc.annotations.requests.ReadFileAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.AnnotationList;
 import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
@@ -651,6 +653,123 @@ public class RawAnnotationsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CloudPDFClientHttpResponse<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotKey) {
+        return readFile(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                ReadFileAnnotationsRequest.builder().build());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CloudPDFClientHttpResponse<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+        return readFile(
+                docId,
+                layerName,
+                pageKey,
+                annotKey,
+                ReadFileAnnotationsRequest.builder().build(),
+                requestOptions);
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CloudPDFClientHttpResponse<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotKey, ReadFileAnnotationsRequest request) {
+        return readFile(docId, layerName, pageKey, annotKey, request, null);
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CloudPDFClientHttpResponse<InputStream> readFile(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotKey,
+            ReadFileAnnotationsRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("annotations/pages")
+                .addPathSegment(pageKey)
+                .addPathSegments("items")
+                .addPathSegment(annotKey)
+                .addPathSegments("resources")
+                .addPathSegments("file");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try {
+            Response response = client.newCall(okhttpRequest).execute();
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(new ResponseBodyInputStream(response), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 413:
+                        throw new ContentTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {

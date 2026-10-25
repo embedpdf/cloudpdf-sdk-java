@@ -33,6 +33,8 @@ public final class DocManifest200ResponseScopes {
 
     private final DocManifest200ResponseScopesActions actions;
 
+    private final DocManifest200ResponseScopesOutline outline;
+
     private final Map<String, Object> additionalProperties;
 
     private DocManifest200ResponseScopes(
@@ -43,6 +45,7 @@ public final class DocManifest200ResponseScopes {
             DocManifest200ResponseScopesAttachments attachments,
             DocManifest200ResponseScopesMetadata metadata,
             DocManifest200ResponseScopesActions actions,
+            DocManifest200ResponseScopesOutline outline,
             Map<String, Object> additionalProperties) {
         this.content = content;
         this.annotations = annotations;
@@ -51,6 +54,7 @@ public final class DocManifest200ResponseScopes {
         this.attachments = attachments;
         this.metadata = metadata;
         this.actions = actions;
+        this.outline = outline;
         this.additionalProperties = additionalProperties;
     }
 
@@ -89,6 +93,11 @@ public final class DocManifest200ResponseScopes {
         return actions;
     }
 
+    @JsonProperty("outline")
+    public DocManifest200ResponseScopesOutline getOutline() {
+        return outline;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -107,13 +116,21 @@ public final class DocManifest200ResponseScopes {
                 && layout.equals(other.layout)
                 && attachments.equals(other.attachments)
                 && metadata.equals(other.metadata)
-                && actions.equals(other.actions);
+                && actions.equals(other.actions)
+                && outline.equals(other.outline);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.content, this.annotations, this.forms, this.layout, this.attachments, this.metadata, this.actions);
+                this.content,
+                this.annotations,
+                this.forms,
+                this.layout,
+                this.attachments,
+                this.metadata,
+                this.actions,
+                this.outline);
     }
 
     @java.lang.Override
@@ -152,7 +169,11 @@ public final class DocManifest200ResponseScopes {
     }
 
     public interface ActionsStage {
-        _FinalStage actions(@NotNull DocManifest200ResponseScopesActions actions);
+        OutlineStage actions(@NotNull DocManifest200ResponseScopesActions actions);
+    }
+
+    public interface OutlineStage {
+        _FinalStage outline(@NotNull DocManifest200ResponseScopesOutline outline);
     }
 
     public interface _FinalStage {
@@ -172,6 +193,7 @@ public final class DocManifest200ResponseScopes {
                     AttachmentsStage,
                     MetadataStage,
                     ActionsStage,
+                    OutlineStage,
                     _FinalStage {
         private DocManifest200ResponseScopesContent content;
 
@@ -187,6 +209,8 @@ public final class DocManifest200ResponseScopes {
 
         private DocManifest200ResponseScopesActions actions;
 
+        private DocManifest200ResponseScopesOutline outline;
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -201,6 +225,7 @@ public final class DocManifest200ResponseScopes {
             attachments(other.getAttachments());
             metadata(other.getMetadata());
             actions(other.getActions());
+            outline(other.getOutline());
             return this;
         }
 
@@ -248,15 +273,22 @@ public final class DocManifest200ResponseScopes {
 
         @java.lang.Override
         @JsonSetter("actions")
-        public _FinalStage actions(@NotNull DocManifest200ResponseScopesActions actions) {
+        public OutlineStage actions(@NotNull DocManifest200ResponseScopesActions actions) {
             this.actions = Objects.requireNonNull(actions, "actions must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("outline")
+        public _FinalStage outline(@NotNull DocManifest200ResponseScopesOutline outline) {
+            this.outline = Objects.requireNonNull(outline, "outline must not be null");
             return this;
         }
 
         @java.lang.Override
         public DocManifest200ResponseScopes build() {
             return new DocManifest200ResponseScopes(
-                    content, annotations, forms, layout, attachments, metadata, actions, additionalProperties);
+                    content, annotations, forms, layout, attachments, metadata, actions, outline, additionalProperties);
         }
 
         @java.lang.Override

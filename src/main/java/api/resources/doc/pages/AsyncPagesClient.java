@@ -5,32 +5,20 @@ package com.cloudpdf.api.resources.doc.pages;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
-import com.cloudpdf.api.resources.doc.pages.requests.DeletePagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.DocPagesReorderRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.DocPagesSetScaleRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ExtractPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.InsertBlankPagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.InsertPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
-import com.cloudpdf.api.resources.doc.pages.requests.RotatePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ViewportsPagesRequest;
-import com.cloudpdf.api.types.DocPagesDelete200Response;
 import com.cloudpdf.api.types.DocPagesFlatten200Response;
-import com.cloudpdf.api.types.DocPagesInsert200Response;
-import com.cloudpdf.api.types.DocPagesInsertBlank200Response;
 import com.cloudpdf.api.types.DocPagesRemoveName200Response;
-import com.cloudpdf.api.types.DocPagesReorder200Response;
-import com.cloudpdf.api.types.DocPagesRotate200Response;
 import com.cloudpdf.api.types.DocPagesSetName200Response;
 import com.cloudpdf.api.types.DocPagesSetScale200Response;
 import com.cloudpdf.api.types.DocPagesViewports200Response;
-import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import okhttp3.MediaType;
 
 public class AsyncPagesClient {
     protected final ClientOptions clientOptions;
@@ -92,35 +80,15 @@ public class AsyncPagesClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesDelete200Response> delete(
-            String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.delete(docId, layerName, body).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesDelete200Response> delete(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.delete(docId, layerName, body, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesDelete200Response> delete(
-            String docId, String layerName, DeletePagesRequest request) {
-        return this.rawClient.delete(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesDelete200Response> delete(
-            String docId, String layerName, DeletePagesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.delete(docId, layerName, request, requestOptions).thenApply(response -> response.body());
-    }
-
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[], &quot;flatten&quot;?: {&quot;usage&quot;?: &quot;display&quot; | &quot;print&quot;}, &quot;includeAnnotations&quot;?: boolean, &quot;includeFormFields&quot;?: boolean}</code>; the response body is the new PDF. With <code>flatten</code> the copy is the pages as they draw for <code>usage</code> (<code>&quot;print&quot;</code>: a print copy): the annotations and form fields painted in, nothing interactive left, layers in their state for the usage. A flattened copy takes <code>doc.download</code> or <code>doc.download.flattened</code>, and paints only what the caller may read; <code>includeAnnotations</code> and <code>includeFormFields</code> choose what it paints, and are refused without <code>flatten</code>.
      */
     public CompletableFuture<InputStream> extract(String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.extract(docId, layerName, body).thenApply(response -> response.body());
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[], &quot;flatten&quot;?: {&quot;usage&quot;?: &quot;display&quot; | &quot;print&quot;}, &quot;includeAnnotations&quot;?: boolean, &quot;includeFormFields&quot;?: boolean}</code>; the response body is the new PDF. With <code>flatten</code> the copy is the pages as they draw for <code>usage</code> (<code>&quot;print&quot;</code>: a print copy): the annotations and form fields painted in, nothing interactive left, layers in their state for the usage. A flattened copy takes <code>doc.download</code> or <code>doc.download.flattened</code>, and paints only what the caller may read; <code>includeAnnotations</code> and <code>includeFormFields</code> choose what it paints, and are refused without <code>flatten</code>.
      */
     public CompletableFuture<InputStream> extract(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
@@ -128,14 +96,14 @@ public class AsyncPagesClient {
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[], &quot;flatten&quot;?: {&quot;usage&quot;?: &quot;display&quot; | &quot;print&quot;}, &quot;includeAnnotations&quot;?: boolean, &quot;includeFormFields&quot;?: boolean}</code>; the response body is the new PDF. With <code>flatten</code> the copy is the pages as they draw for <code>usage</code> (<code>&quot;print&quot;</code>: a print copy): the annotations and form fields painted in, nothing interactive left, layers in their state for the usage. A flattened copy takes <code>doc.download</code> or <code>doc.download.flattened</code>, and paints only what the caller may read; <code>includeAnnotations</code> and <code>includeFormFields</code> choose what it paints, and are refused without <code>flatten</code>.
      */
     public CompletableFuture<InputStream> extract(String docId, String layerName, ExtractPagesRequest request) {
         return this.rawClient.extract(docId, layerName, request).thenApply(response -> response.body());
     }
 
     /**
-     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[]}</code>; the response body is the new PDF.
+     * A read, not a mutation: the source document is untouched and no event is published. Body is <code>{&quot;pages&quot;: PageRef[], &quot;flatten&quot;?: {&quot;usage&quot;?: &quot;display&quot; | &quot;print&quot;}, &quot;includeAnnotations&quot;?: boolean, &quot;includeFormFields&quot;?: boolean}</code>; the response body is the new PDF. With <code>flatten</code> the copy is the pages as they draw for <code>usage</code> (<code>&quot;print&quot;</code>: a print copy): the annotations and form fields painted in, nothing interactive left, layers in their state for the usage. A flattened copy takes <code>doc.download</code> or <code>doc.download.flattened</code>, and paints only what the caller may read; <code>includeAnnotations</code> and <code>includeFormFields</code> choose what it paints, and are refused without <code>flatten</code>.
      */
     public CompletableFuture<InputStream> extract(
             String docId, String layerName, ExtractPagesRequest request, RequestOptions requestOptions) {
@@ -160,91 +128,6 @@ public class AsyncPagesClient {
     public CompletableFuture<DocPagesFlatten200Response> flatten(
             String docId, String layerName, FlattenPagesRequest request, RequestOptions requestOptions) {
         return this.rawClient.flatten(docId, layerName, request, requestOptions).thenApply(response -> response.body());
-    }
-
-    /**
-     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
-     */
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId, String layerName, File file, InsertPagesRequest request) {
-        return this.rawClient.insert(docId, layerName, file, request).thenApply(response -> response.body());
-    }
-
-    /**
-     * Multipart: a JSON <code>body</code> part <code>{&quot;position&quot;?: PagePosition, &quot;resources&quot;: {&quot;source&quot;: &quot;&lt;key&gt;&quot;}}</code> (position omitted → the end), and the standalone PDF whose pages are copied in as the part <code>resource:&lt;key&gt;</code>. The inserted copies get fresh page object numbers, returned in insertion order.
-     */
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId, String layerName, File file, InsertPagesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .insert(docId, layerName, file, request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId, String layerName, InputStream stream, String filename) {
-        return this.rawClient.insert(docId, layerName, stream, filename).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId, String layerName, InputStream stream, String filename, MediaType mediaType) {
-        return this.rawClient
-                .insert(docId, layerName, stream, filename, mediaType)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId, String layerName, InputStream stream, String filename, RequestOptions requestOptions) {
-        return this.rawClient
-                .insert(docId, layerName, stream, filename, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesInsert200Response> insert(
-            String docId,
-            String layerName,
-            InputStream stream,
-            String filename,
-            MediaType mediaType,
-            RequestOptions requestOptions) {
-        return this.rawClient
-                .insert(docId, layerName, stream, filename, mediaType, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
-     */
-    public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
-            String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.insertBlank(docId, layerName, body).thenApply(response -> response.body());
-    }
-
-    /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
-     */
-    public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient
-                .insertBlank(docId, layerName, body, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
-     */
-    public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
-            String docId, String layerName, InsertBlankPagesRequest request) {
-        return this.rawClient.insertBlank(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    /**
-     * Body is <code>{&quot;size&quot;: {&quot;width&quot;, &quot;height&quot;}, &quot;count&quot;?, &quot;position&quot;?}</code> — size in PDF points, count in [1, 100], <code>position</code> a <code>PagePosition</code> (omitted → the end).
-     */
-    public CompletableFuture<DocPagesInsertBlank200Response> insertBlank(
-            String docId, String layerName, InsertBlankPagesRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .insertBlank(docId, layerName, request, requestOptions)
-                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocPagesSetName200Response> setName(
@@ -287,35 +170,5 @@ public class AsyncPagesClient {
         return this.rawClient
                 .removeName(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesReorder200Response> reorder(
-            String docId, String layerName, DocPagesReorderRequest request) {
-        return this.rawClient.reorder(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesReorder200Response> reorder(
-            String docId, String layerName, DocPagesReorderRequest request, RequestOptions requestOptions) {
-        return this.rawClient.reorder(docId, layerName, request, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesRotate200Response> rotate(
-            String docId, String layerName, Map<String, Object> body) {
-        return this.rawClient.rotate(docId, layerName, body).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesRotate200Response> rotate(
-            String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
-        return this.rawClient.rotate(docId, layerName, body, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesRotate200Response> rotate(
-            String docId, String layerName, RotatePagesRequest request) {
-        return this.rawClient.rotate(docId, layerName, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<DocPagesRotate200Response> rotate(
-            String docId, String layerName, RotatePagesRequest request, RequestOptions requestOptions) {
-        return this.rawClient.rotate(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 }

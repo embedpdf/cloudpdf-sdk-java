@@ -36,6 +36,8 @@ public final class CacheDelta {
 
     private final Optional<Integer> attachmentsVersion;
 
+    private final Optional<Integer> outlineVersion;
+
     private final Optional<Integer> layerVersion;
 
     private final Optional<Boolean> working;
@@ -52,6 +54,7 @@ public final class CacheDelta {
             Optional<Integer> layoutVersion,
             Optional<Integer> metadataVersion,
             Optional<Integer> attachmentsVersion,
+            Optional<Integer> outlineVersion,
             Optional<Integer> layerVersion,
             Optional<Boolean> working,
             List<CacheDeltaPagesItem> pages,
@@ -63,6 +66,7 @@ public final class CacheDelta {
         this.layoutVersion = layoutVersion;
         this.metadataVersion = metadataVersion;
         this.attachmentsVersion = attachmentsVersion;
+        this.outlineVersion = outlineVersion;
         this.layerVersion = layerVersion;
         this.working = working;
         this.pages = pages;
@@ -104,6 +108,11 @@ public final class CacheDelta {
         return attachmentsVersion;
     }
 
+    @JsonProperty("outlineVersion")
+    public Optional<Integer> getOutlineVersion() {
+        return outlineVersion;
+    }
+
     @JsonProperty("layerVersion")
     public Optional<Integer> getLayerVersion() {
         return layerVersion;
@@ -138,6 +147,7 @@ public final class CacheDelta {
                 && layoutVersion.equals(other.layoutVersion)
                 && metadataVersion.equals(other.metadataVersion)
                 && attachmentsVersion.equals(other.attachmentsVersion)
+                && outlineVersion.equals(other.outlineVersion)
                 && layerVersion.equals(other.layerVersion)
                 && working.equals(other.working)
                 && pages.equals(other.pages);
@@ -153,6 +163,7 @@ public final class CacheDelta {
                 this.layoutVersion,
                 this.metadataVersion,
                 this.attachmentsVersion,
+                this.outlineVersion,
                 this.layerVersion,
                 this.working,
                 this.pages);
@@ -204,6 +215,10 @@ public final class CacheDelta {
 
         _FinalStage attachmentsVersion(Integer attachmentsVersion);
 
+        _FinalStage outlineVersion(Optional<Integer> outlineVersion);
+
+        _FinalStage outlineVersion(Integer outlineVersion);
+
         _FinalStage layerVersion(Optional<Integer> layerVersion);
 
         _FinalStage layerVersion(Integer layerVersion);
@@ -231,6 +246,8 @@ public final class CacheDelta {
 
         private Optional<Integer> layerVersion = Optional.empty();
 
+        private Optional<Integer> outlineVersion = Optional.empty();
+
         private Optional<Integer> attachmentsVersion = Optional.empty();
 
         private Optional<Integer> metadataVersion = Optional.empty();
@@ -255,6 +272,7 @@ public final class CacheDelta {
             layoutVersion(other.getLayoutVersion());
             metadataVersion(other.getMetadataVersion());
             attachmentsVersion(other.getAttachmentsVersion());
+            outlineVersion(other.getOutlineVersion());
             layerVersion(other.getLayerVersion());
             working(other.getWorking());
             pages(other.getPages());
@@ -322,6 +340,19 @@ public final class CacheDelta {
         @JsonSetter(value = "layerVersion", nulls = Nulls.SKIP)
         public _FinalStage layerVersion(Optional<Integer> layerVersion) {
             this.layerVersion = layerVersion;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage outlineVersion(Integer outlineVersion) {
+            this.outlineVersion = Optional.ofNullable(outlineVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "outlineVersion", nulls = Nulls.SKIP)
+        public _FinalStage outlineVersion(Optional<Integer> outlineVersion) {
+            this.outlineVersion = outlineVersion;
             return this;
         }
 
@@ -400,6 +431,7 @@ public final class CacheDelta {
                     layoutVersion,
                     metadataVersion,
                     attachmentsVersion,
+                    outlineVersion,
                     layerVersion,
                     working,
                     pages,
