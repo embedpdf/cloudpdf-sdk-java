@@ -14,6 +14,7 @@ import com.cloudpdf.api.resources.doc.outline.AsyncOutlineClient;
 import com.cloudpdf.api.resources.doc.pages.AsyncPagesClient;
 import com.cloudpdf.api.resources.doc.redactions.AsyncRedactionsClient;
 import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
+import com.cloudpdf.api.resources.doc.requests.DocDownloadLinkRequest;
 import com.cloudpdf.api.resources.doc.requests.DownloadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
@@ -22,6 +23,7 @@ import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
 import com.cloudpdf.api.resources.doc.signatures.AsyncSignaturesClient;
 import com.cloudpdf.api.resources.doc.versions.AsyncVersionsClient;
 import com.cloudpdf.api.types.DocChanges200Response;
+import com.cloudpdf.api.types.DocDownloadLink200Response;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
@@ -121,6 +123,39 @@ public class AsyncDocClient {
             String docId, String layerName, DownloadDocRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .download(docId, layerName, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<DocDownloadLink200Response> downloadLink(String docId, String layerName) {
+        return this.rawClient.downloadLink(docId, layerName).thenApply(response -> response.body());
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<DocDownloadLink200Response> downloadLink(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.downloadLink(docId, layerName, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<DocDownloadLink200Response> downloadLink(
+            String docId, String layerName, DocDownloadLinkRequest request) {
+        return this.rawClient.downloadLink(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<DocDownloadLink200Response> downloadLink(
+            String docId, String layerName, DocDownloadLinkRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .downloadLink(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

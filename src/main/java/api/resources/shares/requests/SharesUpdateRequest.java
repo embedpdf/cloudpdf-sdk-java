@@ -6,6 +6,8 @@ package com.cloudpdf.api.resources.shares.requests;
 import com.cloudpdf.api.core.Nullable;
 import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
+import com.cloudpdf.api.resources.shares.types.SharesUpdateRequestLayerMode;
+import com.cloudpdf.api.resources.shares.types.SharesUpdateRequestVisitorIdentity;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,6 +26,16 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SharesUpdateRequest.Builder.class)
 public final class SharesUpdateRequest {
+    private final Optional<SharesUpdateRequestLayerMode> layerMode;
+
+    private final Optional<String> layerName;
+
+    private final Optional<Boolean> keepVisitorLayers;
+
+    private final Optional<Integer> visitorIdleSeconds;
+
+    private final Optional<SharesUpdateRequestVisitorIdentity> visitorIdentity;
+
     private final Optional<List<String>> scope;
 
     private final Optional<List<String>> origins;
@@ -39,6 +51,11 @@ public final class SharesUpdateRequest {
     private final Map<String, Object> additionalProperties;
 
     private SharesUpdateRequest(
+            Optional<SharesUpdateRequestLayerMode> layerMode,
+            Optional<String> layerName,
+            Optional<Boolean> keepVisitorLayers,
+            Optional<Integer> visitorIdleSeconds,
+            Optional<SharesUpdateRequestVisitorIdentity> visitorIdentity,
             Optional<List<String>> scope,
             Optional<List<String>> origins,
             Optional<String> password,
@@ -46,6 +63,11 @@ public final class SharesUpdateRequest {
             Optional<Boolean> disabled,
             Optional<Integer> expiresAt,
             Map<String, Object> additionalProperties) {
+        this.layerMode = layerMode;
+        this.layerName = layerName;
+        this.keepVisitorLayers = keepVisitorLayers;
+        this.visitorIdleSeconds = visitorIdleSeconds;
+        this.visitorIdentity = visitorIdentity;
         this.scope = scope;
         this.origins = origins;
         this.password = password;
@@ -53,6 +75,37 @@ public final class SharesUpdateRequest {
         this.disabled = disabled;
         this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
+    }
+
+    @JsonProperty("layerMode")
+    public Optional<SharesUpdateRequestLayerMode> getLayerMode() {
+        return layerMode;
+    }
+
+    @JsonProperty("layerName")
+    public Optional<String> getLayerName() {
+        return layerName;
+    }
+
+    @JsonProperty("keepVisitorLayers")
+    public Optional<Boolean> getKeepVisitorLayers() {
+        return keepVisitorLayers;
+    }
+
+    @JsonIgnore
+    public Optional<Integer> getVisitorIdleSeconds() {
+        if (visitorIdleSeconds == null) {
+            return Optional.empty();
+        }
+        return visitorIdleSeconds;
+    }
+
+    @JsonIgnore
+    public Optional<SharesUpdateRequestVisitorIdentity> getVisitorIdentity() {
+        if (visitorIdentity == null) {
+            return Optional.empty();
+        }
+        return visitorIdentity;
     }
 
     @JsonProperty("scope")
@@ -95,6 +148,18 @@ public final class SharesUpdateRequest {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdleSeconds")
+    private Optional<Integer> _getVisitorIdleSeconds() {
+        return visitorIdleSeconds;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdentity")
+    private Optional<SharesUpdateRequestVisitorIdentity> _getVisitorIdentity() {
+        return visitorIdentity;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("origins")
     private Optional<List<String>> _getOrigins() {
         return origins;
@@ -124,7 +189,12 @@ public final class SharesUpdateRequest {
     }
 
     private boolean equalTo(SharesUpdateRequest other) {
-        return scope.equals(other.scope)
+        return layerMode.equals(other.layerMode)
+                && layerName.equals(other.layerName)
+                && keepVisitorLayers.equals(other.keepVisitorLayers)
+                && visitorIdleSeconds.equals(other.visitorIdleSeconds)
+                && visitorIdentity.equals(other.visitorIdentity)
+                && scope.equals(other.scope)
                 && origins.equals(other.origins)
                 && password.equals(other.password)
                 && sessionTtlSeconds.equals(other.sessionTtlSeconds)
@@ -135,7 +205,17 @@ public final class SharesUpdateRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.scope, this.origins, this.password, this.sessionTtlSeconds, this.disabled, this.expiresAt);
+                this.layerMode,
+                this.layerName,
+                this.keepVisitorLayers,
+                this.visitorIdleSeconds,
+                this.visitorIdentity,
+                this.scope,
+                this.origins,
+                this.password,
+                this.sessionTtlSeconds,
+                this.disabled,
+                this.expiresAt);
     }
 
     @java.lang.Override
@@ -149,6 +229,16 @@ public final class SharesUpdateRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<SharesUpdateRequestLayerMode> layerMode = Optional.empty();
+
+        private Optional<String> layerName = Optional.empty();
+
+        private Optional<Boolean> keepVisitorLayers = Optional.empty();
+
+        private Optional<Integer> visitorIdleSeconds = Optional.empty();
+
+        private Optional<SharesUpdateRequestVisitorIdentity> visitorIdentity = Optional.empty();
+
         private Optional<List<String>> scope = Optional.empty();
 
         private Optional<List<String>> origins = Optional.empty();
@@ -167,12 +257,94 @@ public final class SharesUpdateRequest {
         private Builder() {}
 
         public Builder from(SharesUpdateRequest other) {
+            layerMode(other.getLayerMode());
+            layerName(other.getLayerName());
+            keepVisitorLayers(other.getKeepVisitorLayers());
+            visitorIdleSeconds(other.getVisitorIdleSeconds());
+            visitorIdentity(other.getVisitorIdentity());
             scope(other.getScope());
             origins(other.getOrigins());
             password(other.getPassword());
             sessionTtlSeconds(other.getSessionTtlSeconds());
             disabled(other.getDisabled());
             expiresAt(other.getExpiresAt());
+            return this;
+        }
+
+        @JsonSetter(value = "layerMode", nulls = Nulls.SKIP)
+        public Builder layerMode(Optional<SharesUpdateRequestLayerMode> layerMode) {
+            this.layerMode = layerMode;
+            return this;
+        }
+
+        public Builder layerMode(SharesUpdateRequestLayerMode layerMode) {
+            this.layerMode = Optional.ofNullable(layerMode);
+            return this;
+        }
+
+        @JsonSetter(value = "layerName", nulls = Nulls.SKIP)
+        public Builder layerName(Optional<String> layerName) {
+            this.layerName = layerName;
+            return this;
+        }
+
+        public Builder layerName(String layerName) {
+            this.layerName = Optional.ofNullable(layerName);
+            return this;
+        }
+
+        @JsonSetter(value = "keepVisitorLayers", nulls = Nulls.SKIP)
+        public Builder keepVisitorLayers(Optional<Boolean> keepVisitorLayers) {
+            this.keepVisitorLayers = keepVisitorLayers;
+            return this;
+        }
+
+        public Builder keepVisitorLayers(Boolean keepVisitorLayers) {
+            this.keepVisitorLayers = Optional.ofNullable(keepVisitorLayers);
+            return this;
+        }
+
+        @JsonSetter(value = "visitorIdleSeconds", nulls = Nulls.SKIP)
+        public Builder visitorIdleSeconds(Optional<Integer> visitorIdleSeconds) {
+            this.visitorIdleSeconds = visitorIdleSeconds;
+            return this;
+        }
+
+        public Builder visitorIdleSeconds(Integer visitorIdleSeconds) {
+            this.visitorIdleSeconds = Optional.ofNullable(visitorIdleSeconds);
+            return this;
+        }
+
+        public Builder visitorIdleSeconds(Nullable<Integer> visitorIdleSeconds) {
+            if (visitorIdleSeconds.isNull()) {
+                this.visitorIdleSeconds = null;
+            } else if (visitorIdleSeconds.isEmpty()) {
+                this.visitorIdleSeconds = Optional.empty();
+            } else {
+                this.visitorIdleSeconds = Optional.of(visitorIdleSeconds.get());
+            }
+            return this;
+        }
+
+        @JsonSetter(value = "visitorIdentity", nulls = Nulls.SKIP)
+        public Builder visitorIdentity(Optional<SharesUpdateRequestVisitorIdentity> visitorIdentity) {
+            this.visitorIdentity = visitorIdentity;
+            return this;
+        }
+
+        public Builder visitorIdentity(SharesUpdateRequestVisitorIdentity visitorIdentity) {
+            this.visitorIdentity = Optional.ofNullable(visitorIdentity);
+            return this;
+        }
+
+        public Builder visitorIdentity(Nullable<SharesUpdateRequestVisitorIdentity> visitorIdentity) {
+            if (visitorIdentity.isNull()) {
+                this.visitorIdentity = null;
+            } else if (visitorIdentity.isEmpty()) {
+                this.visitorIdentity = Optional.empty();
+            } else {
+                this.visitorIdentity = Optional.of(visitorIdentity.get());
+            }
             return this;
         }
 
@@ -277,7 +449,18 @@ public final class SharesUpdateRequest {
 
         public SharesUpdateRequest build() {
             return new SharesUpdateRequest(
-                    scope, origins, password, sessionTtlSeconds, disabled, expiresAt, additionalProperties);
+                    layerMode,
+                    layerName,
+                    keepVisitorLayers,
+                    visitorIdleSeconds,
+                    visitorIdentity,
+                    scope,
+                    origins,
+                    password,
+                    sessionTtlSeconds,
+                    disabled,
+                    expiresAt,
+                    additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

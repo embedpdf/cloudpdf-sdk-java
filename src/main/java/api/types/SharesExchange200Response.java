@@ -25,15 +25,27 @@ public final class SharesExchange200Response {
 
     private final String layerName;
 
+    private final SharesExchange200ResponseLayerMode layerMode;
+
+    private final SharesExchange200ResponseVisitor visitor;
+
     private final double expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
     private SharesExchange200Response(
-            String token, String docId, String layerName, double expiresAt, Map<String, Object> additionalProperties) {
+            String token,
+            String docId,
+            String layerName,
+            SharesExchange200ResponseLayerMode layerMode,
+            SharesExchange200ResponseVisitor visitor,
+            double expiresAt,
+            Map<String, Object> additionalProperties) {
         this.token = token;
         this.docId = docId;
         this.layerName = layerName;
+        this.layerMode = layerMode;
+        this.visitor = visitor;
         this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
     }
@@ -51,6 +63,16 @@ public final class SharesExchange200Response {
     @JsonProperty("layerName")
     public String getLayerName() {
         return layerName;
+    }
+
+    @JsonProperty("layerMode")
+    public SharesExchange200ResponseLayerMode getLayerMode() {
+        return layerMode;
+    }
+
+    @JsonProperty("visitor")
+    public SharesExchange200ResponseVisitor getVisitor() {
+        return visitor;
     }
 
     @JsonProperty("expiresAt")
@@ -73,12 +95,14 @@ public final class SharesExchange200Response {
         return token.equals(other.token)
                 && docId.equals(other.docId)
                 && layerName.equals(other.layerName)
+                && layerMode.equals(other.layerMode)
+                && visitor.equals(other.visitor)
                 && expiresAt == other.expiresAt;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.token, this.docId, this.layerName, this.expiresAt);
+        return Objects.hash(this.token, this.docId, this.layerName, this.layerMode, this.visitor, this.expiresAt);
     }
 
     @java.lang.Override
@@ -101,7 +125,15 @@ public final class SharesExchange200Response {
     }
 
     public interface LayerNameStage {
-        ExpiresAtStage layerName(@NotNull String layerName);
+        LayerModeStage layerName(@NotNull String layerName);
+    }
+
+    public interface LayerModeStage {
+        VisitorStage layerMode(@NotNull SharesExchange200ResponseLayerMode layerMode);
+    }
+
+    public interface VisitorStage {
+        ExpiresAtStage visitor(@NotNull SharesExchange200ResponseVisitor visitor);
     }
 
     public interface ExpiresAtStage {
@@ -117,12 +149,23 @@ public final class SharesExchange200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TokenStage, DocIdStage, LayerNameStage, ExpiresAtStage, _FinalStage {
+    public static final class Builder
+            implements TokenStage,
+                    DocIdStage,
+                    LayerNameStage,
+                    LayerModeStage,
+                    VisitorStage,
+                    ExpiresAtStage,
+                    _FinalStage {
         private String token;
 
         private String docId;
 
         private String layerName;
+
+        private SharesExchange200ResponseLayerMode layerMode;
+
+        private SharesExchange200ResponseVisitor visitor;
 
         private double expiresAt;
 
@@ -136,6 +179,8 @@ public final class SharesExchange200Response {
             token(other.getToken());
             docId(other.getDocId());
             layerName(other.getLayerName());
+            layerMode(other.getLayerMode());
+            visitor(other.getVisitor());
             expiresAt(other.getExpiresAt());
             return this;
         }
@@ -156,8 +201,22 @@ public final class SharesExchange200Response {
 
         @java.lang.Override
         @JsonSetter("layerName")
-        public ExpiresAtStage layerName(@NotNull String layerName) {
+        public LayerModeStage layerName(@NotNull String layerName) {
             this.layerName = Objects.requireNonNull(layerName, "layerName must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("layerMode")
+        public VisitorStage layerMode(@NotNull SharesExchange200ResponseLayerMode layerMode) {
+            this.layerMode = Objects.requireNonNull(layerMode, "layerMode must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("visitor")
+        public ExpiresAtStage visitor(@NotNull SharesExchange200ResponseVisitor visitor) {
+            this.visitor = Objects.requireNonNull(visitor, "visitor must not be null");
             return this;
         }
 
@@ -170,7 +229,8 @@ public final class SharesExchange200Response {
 
         @java.lang.Override
         public SharesExchange200Response build() {
-            return new SharesExchange200Response(token, docId, layerName, expiresAt, additionalProperties);
+            return new SharesExchange200Response(
+                    token, docId, layerName, layerMode, visitor, expiresAt, additionalProperties);
         }
 
         @java.lang.Override

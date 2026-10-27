@@ -32,7 +32,15 @@ public final class SharesList200ResponseSharesItem {
 
     private final String docId;
 
-    private final String layerName;
+    private final SharesList200ResponseSharesItemLayerMode layerMode;
+
+    private final Optional<String> layerName;
+
+    private final boolean keepVisitorLayers;
+
+    private final Optional<Double> visitorIdleSeconds;
+
+    private final Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity;
 
     private final List<String> scope;
 
@@ -43,6 +51,8 @@ public final class SharesList200ResponseSharesItem {
     private final double sessionTtlSeconds;
 
     private final boolean disabled;
+
+    private final Optional<Double> archivedAt;
 
     private final Optional<Double> expiresAt;
 
@@ -62,12 +72,17 @@ public final class SharesList200ResponseSharesItem {
             String id,
             String tenantId,
             String docId,
-            String layerName,
+            SharesList200ResponseSharesItemLayerMode layerMode,
+            Optional<String> layerName,
+            boolean keepVisitorLayers,
+            Optional<Double> visitorIdleSeconds,
+            Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity,
             List<String> scope,
             Optional<List<String>> origins,
             boolean passwordProtected,
             double sessionTtlSeconds,
             boolean disabled,
+            Optional<Double> archivedAt,
             Optional<Double> expiresAt,
             double exchangeCount,
             Optional<Double> lastExchangedAt,
@@ -78,12 +93,17 @@ public final class SharesList200ResponseSharesItem {
         this.id = id;
         this.tenantId = tenantId;
         this.docId = docId;
+        this.layerMode = layerMode;
         this.layerName = layerName;
+        this.keepVisitorLayers = keepVisitorLayers;
+        this.visitorIdleSeconds = visitorIdleSeconds;
+        this.visitorIdentity = visitorIdentity;
         this.scope = scope;
         this.origins = origins;
         this.passwordProtected = passwordProtected;
         this.sessionTtlSeconds = sessionTtlSeconds;
         this.disabled = disabled;
+        this.archivedAt = archivedAt;
         this.expiresAt = expiresAt;
         this.exchangeCount = exchangeCount;
         this.lastExchangedAt = lastExchangedAt;
@@ -108,9 +128,38 @@ public final class SharesList200ResponseSharesItem {
         return docId;
     }
 
-    @JsonProperty("layerName")
-    public String getLayerName() {
+    @JsonProperty("layerMode")
+    public SharesList200ResponseSharesItemLayerMode getLayerMode() {
+        return layerMode;
+    }
+
+    @JsonIgnore
+    public Optional<String> getLayerName() {
+        if (layerName == null) {
+            return Optional.empty();
+        }
         return layerName;
+    }
+
+    @JsonProperty("keepVisitorLayers")
+    public boolean getKeepVisitorLayers() {
+        return keepVisitorLayers;
+    }
+
+    @JsonIgnore
+    public Optional<Double> getVisitorIdleSeconds() {
+        if (visitorIdleSeconds == null) {
+            return Optional.empty();
+        }
+        return visitorIdleSeconds;
+    }
+
+    @JsonIgnore
+    public Optional<SharesList200ResponseSharesItemVisitorIdentity> getVisitorIdentity() {
+        if (visitorIdentity == null) {
+            return Optional.empty();
+        }
+        return visitorIdentity;
     }
 
     @JsonProperty("scope")
@@ -139,6 +188,14 @@ public final class SharesList200ResponseSharesItem {
     @JsonProperty("disabled")
     public boolean getDisabled() {
         return disabled;
+    }
+
+    @JsonIgnore
+    public Optional<Double> getArchivedAt() {
+        if (archivedAt == null) {
+            return Optional.empty();
+        }
+        return archivedAt;
     }
 
     @JsonIgnore
@@ -178,9 +235,33 @@ public final class SharesList200ResponseSharesItem {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("layerName")
+    private Optional<String> _getLayerName() {
+        return layerName;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdleSeconds")
+    private Optional<Double> _getVisitorIdleSeconds() {
+        return visitorIdleSeconds;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdentity")
+    private Optional<SharesList200ResponseSharesItemVisitorIdentity> _getVisitorIdentity() {
+        return visitorIdentity;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("origins")
     private Optional<List<String>> _getOrigins() {
         return origins;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("archivedAt")
+    private Optional<Double> _getArchivedAt() {
+        return archivedAt;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -210,12 +291,17 @@ public final class SharesList200ResponseSharesItem {
         return id.equals(other.id)
                 && tenantId.equals(other.tenantId)
                 && docId.equals(other.docId)
+                && layerMode.equals(other.layerMode)
                 && layerName.equals(other.layerName)
+                && keepVisitorLayers == other.keepVisitorLayers
+                && visitorIdleSeconds.equals(other.visitorIdleSeconds)
+                && visitorIdentity.equals(other.visitorIdentity)
                 && scope.equals(other.scope)
                 && origins.equals(other.origins)
                 && passwordProtected == other.passwordProtected
                 && sessionTtlSeconds == other.sessionTtlSeconds
                 && disabled == other.disabled
+                && archivedAt.equals(other.archivedAt)
                 && expiresAt.equals(other.expiresAt)
                 && exchangeCount == other.exchangeCount
                 && lastExchangedAt.equals(other.lastExchangedAt)
@@ -230,12 +316,17 @@ public final class SharesList200ResponseSharesItem {
                 this.id,
                 this.tenantId,
                 this.docId,
+                this.layerMode,
                 this.layerName,
+                this.keepVisitorLayers,
+                this.visitorIdleSeconds,
+                this.visitorIdentity,
                 this.scope,
                 this.origins,
                 this.passwordProtected,
                 this.sessionTtlSeconds,
                 this.disabled,
+                this.archivedAt,
                 this.expiresAt,
                 this.exchangeCount,
                 this.lastExchangedAt,
@@ -264,11 +355,15 @@ public final class SharesList200ResponseSharesItem {
     }
 
     public interface DocIdStage {
-        LayerNameStage docId(@NotNull String docId);
+        LayerModeStage docId(@NotNull String docId);
     }
 
-    public interface LayerNameStage {
-        PasswordProtectedStage layerName(@NotNull String layerName);
+    public interface LayerModeStage {
+        KeepVisitorLayersStage layerMode(@NotNull SharesList200ResponseSharesItemLayerMode layerMode);
+    }
+
+    public interface KeepVisitorLayersStage {
+        PasswordProtectedStage keepVisitorLayers(boolean keepVisitorLayers);
     }
 
     public interface PasswordProtectedStage {
@@ -306,6 +401,24 @@ public final class SharesList200ResponseSharesItem {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage layerName(Optional<String> layerName);
+
+        _FinalStage layerName(String layerName);
+
+        _FinalStage layerName(Nullable<String> layerName);
+
+        _FinalStage visitorIdleSeconds(Optional<Double> visitorIdleSeconds);
+
+        _FinalStage visitorIdleSeconds(Double visitorIdleSeconds);
+
+        _FinalStage visitorIdleSeconds(Nullable<Double> visitorIdleSeconds);
+
+        _FinalStage visitorIdentity(Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity);
+
+        _FinalStage visitorIdentity(SharesList200ResponseSharesItemVisitorIdentity visitorIdentity);
+
+        _FinalStage visitorIdentity(Nullable<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity);
+
         _FinalStage scope(List<String> scope);
 
         _FinalStage addScope(String scope);
@@ -317,6 +430,12 @@ public final class SharesList200ResponseSharesItem {
         _FinalStage origins(List<String> origins);
 
         _FinalStage origins(Nullable<List<String>> origins);
+
+        _FinalStage archivedAt(Optional<Double> archivedAt);
+
+        _FinalStage archivedAt(Double archivedAt);
+
+        _FinalStage archivedAt(Nullable<Double> archivedAt);
 
         _FinalStage expiresAt(Optional<Double> expiresAt);
 
@@ -336,7 +455,8 @@ public final class SharesList200ResponseSharesItem {
             implements IdStage,
                     TenantIdStage,
                     DocIdStage,
-                    LayerNameStage,
+                    LayerModeStage,
+                    KeepVisitorLayersStage,
                     PasswordProtectedStage,
                     SessionTtlSecondsStage,
                     DisabledStage,
@@ -351,7 +471,9 @@ public final class SharesList200ResponseSharesItem {
 
         private String docId;
 
-        private String layerName;
+        private SharesList200ResponseSharesItemLayerMode layerMode;
+
+        private boolean keepVisitorLayers;
 
         private boolean passwordProtected;
 
@@ -371,9 +493,17 @@ public final class SharesList200ResponseSharesItem {
 
         private Optional<Double> expiresAt = Optional.empty();
 
+        private Optional<Double> archivedAt = Optional.empty();
+
         private Optional<List<String>> origins = Optional.empty();
 
         private List<String> scope = new ArrayList<>();
+
+        private Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity = Optional.empty();
+
+        private Optional<Double> visitorIdleSeconds = Optional.empty();
+
+        private Optional<String> layerName = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -385,12 +515,17 @@ public final class SharesList200ResponseSharesItem {
             id(other.getId());
             tenantId(other.getTenantId());
             docId(other.getDocId());
+            layerMode(other.getLayerMode());
             layerName(other.getLayerName());
+            keepVisitorLayers(other.getKeepVisitorLayers());
+            visitorIdleSeconds(other.getVisitorIdleSeconds());
+            visitorIdentity(other.getVisitorIdentity());
             scope(other.getScope());
             origins(other.getOrigins());
             passwordProtected(other.getPasswordProtected());
             sessionTtlSeconds(other.getSessionTtlSeconds());
             disabled(other.getDisabled());
+            archivedAt(other.getArchivedAt());
             expiresAt(other.getExpiresAt());
             exchangeCount(other.getExchangeCount());
             lastExchangedAt(other.getLastExchangedAt());
@@ -416,15 +551,22 @@ public final class SharesList200ResponseSharesItem {
 
         @java.lang.Override
         @JsonSetter("docId")
-        public LayerNameStage docId(@NotNull String docId) {
+        public LayerModeStage docId(@NotNull String docId) {
             this.docId = Objects.requireNonNull(docId, "docId must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("layerName")
-        public PasswordProtectedStage layerName(@NotNull String layerName) {
-            this.layerName = Objects.requireNonNull(layerName, "layerName must not be null");
+        @JsonSetter("layerMode")
+        public KeepVisitorLayersStage layerMode(@NotNull SharesList200ResponseSharesItemLayerMode layerMode) {
+            this.layerMode = Objects.requireNonNull(layerMode, "layerMode must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("keepVisitorLayers")
+        public PasswordProtectedStage keepVisitorLayers(boolean keepVisitorLayers) {
+            this.keepVisitorLayers = keepVisitorLayers;
             return this;
         }
 
@@ -528,6 +670,31 @@ public final class SharesList200ResponseSharesItem {
         }
 
         @java.lang.Override
+        public _FinalStage archivedAt(Nullable<Double> archivedAt) {
+            if (archivedAt.isNull()) {
+                this.archivedAt = null;
+            } else if (archivedAt.isEmpty()) {
+                this.archivedAt = Optional.empty();
+            } else {
+                this.archivedAt = Optional.of(archivedAt.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage archivedAt(Double archivedAt) {
+            this.archivedAt = Optional.ofNullable(archivedAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "archivedAt", nulls = Nulls.SKIP)
+        public _FinalStage archivedAt(Optional<Double> archivedAt) {
+            this.archivedAt = archivedAt;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage origins(Nullable<List<String>> origins) {
             if (origins.isNull()) {
                 this.origins = null;
@@ -577,17 +744,97 @@ public final class SharesList200ResponseSharesItem {
         }
 
         @java.lang.Override
+        public _FinalStage visitorIdentity(Nullable<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity) {
+            if (visitorIdentity.isNull()) {
+                this.visitorIdentity = null;
+            } else if (visitorIdentity.isEmpty()) {
+                this.visitorIdentity = Optional.empty();
+            } else {
+                this.visitorIdentity = Optional.of(visitorIdentity.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdentity(SharesList200ResponseSharesItemVisitorIdentity visitorIdentity) {
+            this.visitorIdentity = Optional.ofNullable(visitorIdentity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorIdentity", nulls = Nulls.SKIP)
+        public _FinalStage visitorIdentity(Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity) {
+            this.visitorIdentity = visitorIdentity;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdleSeconds(Nullable<Double> visitorIdleSeconds) {
+            if (visitorIdleSeconds.isNull()) {
+                this.visitorIdleSeconds = null;
+            } else if (visitorIdleSeconds.isEmpty()) {
+                this.visitorIdleSeconds = Optional.empty();
+            } else {
+                this.visitorIdleSeconds = Optional.of(visitorIdleSeconds.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdleSeconds(Double visitorIdleSeconds) {
+            this.visitorIdleSeconds = Optional.ofNullable(visitorIdleSeconds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorIdleSeconds", nulls = Nulls.SKIP)
+        public _FinalStage visitorIdleSeconds(Optional<Double> visitorIdleSeconds) {
+            this.visitorIdleSeconds = visitorIdleSeconds;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage layerName(Nullable<String> layerName) {
+            if (layerName.isNull()) {
+                this.layerName = null;
+            } else if (layerName.isEmpty()) {
+                this.layerName = Optional.empty();
+            } else {
+                this.layerName = Optional.of(layerName.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage layerName(String layerName) {
+            this.layerName = Optional.ofNullable(layerName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "layerName", nulls = Nulls.SKIP)
+        public _FinalStage layerName(Optional<String> layerName) {
+            this.layerName = layerName;
+            return this;
+        }
+
+        @java.lang.Override
         public SharesList200ResponseSharesItem build() {
             return new SharesList200ResponseSharesItem(
                     id,
                     tenantId,
                     docId,
+                    layerMode,
                     layerName,
+                    keepVisitorLayers,
+                    visitorIdleSeconds,
+                    visitorIdentity,
                     scope,
                     origins,
                     passwordProtected,
                     sessionTtlSeconds,
                     disabled,
+                    archivedAt,
                     expiresAt,
                     exchangeCount,
                     lastExchangedAt,

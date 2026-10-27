@@ -13,10 +13,12 @@ import com.cloudpdf.api.core.QueryStringMapper;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
+import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.GoneError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.errors.UnprocessableEntityError;
+import com.cloudpdf.api.resources.shares.requests.ArchiveSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.DeleteSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.GetSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.ListSharesRequest;
@@ -24,6 +26,7 @@ import com.cloudpdf.api.resources.shares.requests.SharesCreateRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesExchangeRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesUpdateRequest;
 import com.cloudpdf.api.types.AdminErrorPayload;
+import com.cloudpdf.api.types.SharesArchive200Response;
 import com.cloudpdf.api.types.SharesCreate200Response;
 import com.cloudpdf.api.types.SharesExchange200Response;
 import com.cloudpdf.api.types.SharesGet200Response;
@@ -51,7 +54,7 @@ public class AsyncRawSharesClient {
     }
 
     /**
-     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. Mounted only when the deployment can sign (HS256 mode).
+     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. A link that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the link asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A link that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any link. Mounted only when the deployment can sign (HS256 mode).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<SharesExchange200Response>> exchange(
             SharesExchangeRequest request) {
@@ -59,7 +62,7 @@ public class AsyncRawSharesClient {
     }
 
     /**
-     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. Mounted only when the deployment can sign (HS256 mode).
+     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. A link that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the link asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A link that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any link. Mounted only when the deployment can sign (HS256 mode).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<SharesExchange200Response>> exchange(
             SharesExchangeRequest request, RequestOptions requestOptions) {
@@ -196,6 +199,10 @@ public class AsyncRawSharesClient {
         if (request.getDocId().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "docId", request.getDocId().get(), false);
+        }
+        if (request.getArchived().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "archived", request.getArchived().get(), false);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -509,10 +516,17 @@ public class AsyncRawSharesClient {
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     try {
-                        if (response.code() == 404) {
-                            future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
-                            return;
+                        switch (response.code()) {
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 409:
+                                future.completeExceptionally(new ConflictError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
                         }
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error
@@ -616,6 +630,112 @@ public class AsyncRawSharesClient {
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
+                            case 409:
+                                future.completeExceptionally(new ConflictError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<SharesArchive200Response>> archive(
+            String tenantId, String shareId) {
+        return archive(tenantId, shareId, ArchiveSharesRequest.builder().build());
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<SharesArchive200Response>> archive(
+            String tenantId, String shareId, RequestOptions requestOptions) {
+        return archive(tenantId, shareId, ArchiveSharesRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<SharesArchive200Response>> archive(
+            String tenantId, String shareId, ArchiveSharesRequest request) {
+        return archive(tenantId, shareId, request, null);
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<SharesArchive200Response>> archive(
+            String tenantId, String shareId, ArchiveSharesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("shares")
+                .addPathSegment(shareId)
+                .addPathSegments("archive");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", RequestBody.create("", null))
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<SharesArchive200Response>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, SharesArchive200Response.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        if (response.code() == 404) {
+                            future.completeExceptionally(new NotFoundError(
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                            return;
                         }
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error

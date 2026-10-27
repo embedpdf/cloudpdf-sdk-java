@@ -5,6 +5,8 @@ package com.cloudpdf.api.resources.documents;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.Suppliers;
+import com.cloudpdf.api.resources.documents.layers.AsyncLayersClient;
 import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
@@ -23,6 +25,7 @@ import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
 import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 import okhttp3.MediaType;
 
 public class AsyncDocumentsClient {
@@ -30,9 +33,12 @@ public class AsyncDocumentsClient {
 
     private final AsyncRawDocumentsClient rawClient;
 
+    protected final Supplier<AsyncLayersClient> layersClient;
+
     public AsyncDocumentsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new AsyncRawDocumentsClient(clientOptions);
+        this.layersClient = Suppliers.memoize(() -> new AsyncLayersClient(clientOptions));
     }
 
     /**
@@ -209,5 +215,9 @@ public class AsyncDocumentsClient {
     public CompletableFuture<DocumentsInit200Response> init(
             String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         return this.rawClient.init(tenantId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    public AsyncLayersClient layers() {
+        return this.layersClient.get();
     }
 }

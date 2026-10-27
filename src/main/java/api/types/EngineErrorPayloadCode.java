@@ -35,6 +35,12 @@ public final class EngineErrorPayloadCode {
 
     public static final EngineErrorPayloadCode NETWORK = new EngineErrorPayloadCode(Value.NETWORK, "Network");
 
+    public static final EngineErrorPayloadCode LAYER_DELETED =
+            new EngineErrorPayloadCode(Value.LAYER_DELETED, "LayerDeleted");
+
+    public static final EngineErrorPayloadCode VISITOR_IDENTITY_REQUIRED =
+            new EngineErrorPayloadCode(Value.VISITOR_IDENTITY_REQUIRED, "VisitorIdentityRequired");
+
     public static final EngineErrorPayloadCode DOC_PASSWORD_INCORRECT =
             new EngineErrorPayloadCode(Value.DOC_PASSWORD_INCORRECT, "DocPasswordIncorrect");
 
@@ -142,6 +148,10 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
+            case LAYER_DELETED:
+                return visitor.visitLayerDeleted();
+            case VISITOR_IDENTITY_REQUIRED:
+                return visitor.visitVisitorIdentityRequired();
             case DOC_PASSWORD_INCORRECT:
                 return visitor.visitDocPasswordIncorrect();
             case LAYER_VERSION_CONFLICT:
@@ -209,6 +219,10 @@ public final class EngineErrorPayloadCode {
                 return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
+            case "LayerDeleted":
+                return LAYER_DELETED;
+            case "VisitorIdentityRequired":
+                return VISITOR_IDENTITY_REQUIRED;
             case "DocPasswordIncorrect":
                 return DOC_PASSWORD_INCORRECT;
             case "LayerVersionConflict":
@@ -309,6 +323,10 @@ public final class EngineErrorPayloadCode {
 
         IDEMPOTENCY_KEY_REUSED,
 
+        LAYER_DELETED,
+
+        VISITOR_IDENTITY_REQUIRED,
+
         _UNKNOWN
     }
 
@@ -370,6 +388,10 @@ public final class EngineErrorPayloadCode {
         T visitUndoUnavailable();
 
         T visitIdempotencyKeyReused();
+
+        T visitLayerDeleted();
+
+        T visitVisitorIdentityRequired();
 
         T visitUnknown(String unknownType);
     }
