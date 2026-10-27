@@ -4,6 +4,7 @@
 package com.cloudpdf.api.resources.shares.requests;
 
 import com.cloudpdf.api.core.ObjectMappers;
+import com.cloudpdf.api.resources.shares.types.SharesExchangeRequestVisitorIdentity;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,12 +26,26 @@ public final class SharesExchangeRequest {
 
     private final Optional<String> password;
 
+    private final Optional<String> visitorHandle;
+
+    private final Optional<Boolean> restart;
+
+    private final Optional<SharesExchangeRequestVisitorIdentity> visitorIdentity;
+
     private final Map<String, Object> additionalProperties;
 
     private SharesExchangeRequest(
-            String shareToken, Optional<String> password, Map<String, Object> additionalProperties) {
+            String shareToken,
+            Optional<String> password,
+            Optional<String> visitorHandle,
+            Optional<Boolean> restart,
+            Optional<SharesExchangeRequestVisitorIdentity> visitorIdentity,
+            Map<String, Object> additionalProperties) {
         this.shareToken = shareToken;
         this.password = password;
+        this.visitorHandle = visitorHandle;
+        this.restart = restart;
+        this.visitorIdentity = visitorIdentity;
         this.additionalProperties = additionalProperties;
     }
 
@@ -42,6 +57,21 @@ public final class SharesExchangeRequest {
     @JsonProperty("password")
     public Optional<String> getPassword() {
         return password;
+    }
+
+    @JsonProperty("visitorHandle")
+    public Optional<String> getVisitorHandle() {
+        return visitorHandle;
+    }
+
+    @JsonProperty("restart")
+    public Optional<Boolean> getRestart() {
+        return restart;
+    }
+
+    @JsonProperty("visitorIdentity")
+    public Optional<SharesExchangeRequestVisitorIdentity> getVisitorIdentity() {
+        return visitorIdentity;
     }
 
     @java.lang.Override
@@ -56,12 +86,16 @@ public final class SharesExchangeRequest {
     }
 
     private boolean equalTo(SharesExchangeRequest other) {
-        return shareToken.equals(other.shareToken) && password.equals(other.password);
+        return shareToken.equals(other.shareToken)
+                && password.equals(other.password)
+                && visitorHandle.equals(other.visitorHandle)
+                && restart.equals(other.restart)
+                && visitorIdentity.equals(other.visitorIdentity);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.shareToken, this.password);
+        return Objects.hash(this.shareToken, this.password, this.visitorHandle, this.restart, this.visitorIdentity);
     }
 
     @java.lang.Override
@@ -89,11 +123,29 @@ public final class SharesExchangeRequest {
         _FinalStage password(Optional<String> password);
 
         _FinalStage password(String password);
+
+        _FinalStage visitorHandle(Optional<String> visitorHandle);
+
+        _FinalStage visitorHandle(String visitorHandle);
+
+        _FinalStage restart(Optional<Boolean> restart);
+
+        _FinalStage restart(Boolean restart);
+
+        _FinalStage visitorIdentity(Optional<SharesExchangeRequestVisitorIdentity> visitorIdentity);
+
+        _FinalStage visitorIdentity(SharesExchangeRequestVisitorIdentity visitorIdentity);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ShareTokenStage, _FinalStage {
         private String shareToken;
+
+        private Optional<SharesExchangeRequestVisitorIdentity> visitorIdentity = Optional.empty();
+
+        private Optional<Boolean> restart = Optional.empty();
+
+        private Optional<String> visitorHandle = Optional.empty();
 
         private Optional<String> password = Optional.empty();
 
@@ -106,6 +158,9 @@ public final class SharesExchangeRequest {
         public Builder from(SharesExchangeRequest other) {
             shareToken(other.getShareToken());
             password(other.getPassword());
+            visitorHandle(other.getVisitorHandle());
+            restart(other.getRestart());
+            visitorIdentity(other.getVisitorIdentity());
             return this;
         }
 
@@ -113,6 +168,45 @@ public final class SharesExchangeRequest {
         @JsonSetter("shareToken")
         public _FinalStage shareToken(@NotNull String shareToken) {
             this.shareToken = Objects.requireNonNull(shareToken, "shareToken must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdentity(SharesExchangeRequestVisitorIdentity visitorIdentity) {
+            this.visitorIdentity = Optional.ofNullable(visitorIdentity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorIdentity", nulls = Nulls.SKIP)
+        public _FinalStage visitorIdentity(Optional<SharesExchangeRequestVisitorIdentity> visitorIdentity) {
+            this.visitorIdentity = visitorIdentity;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage restart(Boolean restart) {
+            this.restart = Optional.ofNullable(restart);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "restart", nulls = Nulls.SKIP)
+        public _FinalStage restart(Optional<Boolean> restart) {
+            this.restart = restart;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorHandle(String visitorHandle) {
+            this.visitorHandle = Optional.ofNullable(visitorHandle);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorHandle", nulls = Nulls.SKIP)
+        public _FinalStage visitorHandle(Optional<String> visitorHandle) {
+            this.visitorHandle = visitorHandle;
             return this;
         }
 
@@ -131,7 +225,8 @@ public final class SharesExchangeRequest {
 
         @java.lang.Override
         public SharesExchangeRequest build() {
-            return new SharesExchangeRequest(shareToken, password, additionalProperties);
+            return new SharesExchangeRequest(
+                    shareToken, password, visitorHandle, restart, visitorIdentity, additionalProperties);
         }
 
         @java.lang.Override

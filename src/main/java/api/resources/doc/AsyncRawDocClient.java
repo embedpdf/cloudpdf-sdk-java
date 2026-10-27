@@ -16,16 +16,20 @@ import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.ContentTooLargeError;
 import com.cloudpdf.api.errors.NotFoundError;
+import com.cloudpdf.api.errors.NotImplementedError;
 import com.cloudpdf.api.resources.doc.requests.DocChangesRequest;
+import com.cloudpdf.api.resources.doc.requests.DocDownloadLinkRequest;
 import com.cloudpdf.api.resources.doc.requests.DownloadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
 import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
 import com.cloudpdf.api.types.DocChanges200Response;
+import com.cloudpdf.api.types.DocDownloadLink200Response;
 import com.cloudpdf.api.types.DocHead200Response;
 import com.cloudpdf.api.types.DocManifest200Response;
 import com.cloudpdf.api.types.DocText200Response;
+import com.cloudpdf.api.types.EngineErrorPayload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -320,6 +324,128 @@ public class AsyncRawDocClient {
                             future.completeExceptionally(new NotFoundError(
                                     ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
                             return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocDownloadLink200Response>> downloadLink(
+            String docId, String layerName) {
+        return downloadLink(docId, layerName, DocDownloadLinkRequest.builder().build());
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocDownloadLink200Response>> downloadLink(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return downloadLink(docId, layerName, DocDownloadLinkRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocDownloadLink200Response>> downloadLink(
+            String docId, String layerName, DocDownloadLinkRequest request) {
+        return downloadLink(docId, layerName, request, null);
+    }
+
+    /**
+     * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocDownloadLink200Response>> downloadLink(
+            String docId, String layerName, DocDownloadLinkRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("download-link");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<DocDownloadLink200Response>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DocDownloadLink200Response.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 501:
+                                future.completeExceptionally(new NotImplementedError(
+                                        ObjectMappers.JSON_MAPPER.readValue(
+                                                responseBodyString, EngineErrorPayload.class),
+                                        response));
+                                return;
                         }
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error

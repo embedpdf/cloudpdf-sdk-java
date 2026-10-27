@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,11 +25,18 @@ public final class AdminErrorPayloadError {
 
     private final String message;
 
+    private final Optional<Map<String, Object>> details;
+
     private final Map<String, Object> additionalProperties;
 
-    private AdminErrorPayloadError(String code, String message, Map<String, Object> additionalProperties) {
+    private AdminErrorPayloadError(
+            String code,
+            String message,
+            Optional<Map<String, Object>> details,
+            Map<String, Object> additionalProperties) {
         this.code = code;
         this.message = message;
+        this.details = details;
         this.additionalProperties = additionalProperties;
     }
 
@@ -39,6 +48,11 @@ public final class AdminErrorPayloadError {
     @JsonProperty("message")
     public String getMessage() {
         return message;
+    }
+
+    @JsonProperty("details")
+    public Optional<Map<String, Object>> getDetails() {
+        return details;
     }
 
     @java.lang.Override
@@ -53,12 +67,12 @@ public final class AdminErrorPayloadError {
     }
 
     private boolean equalTo(AdminErrorPayloadError other) {
-        return code.equals(other.code) && message.equals(other.message);
+        return code.equals(other.code) && message.equals(other.message) && details.equals(other.details);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.code, this.message);
+        return Objects.hash(this.code, this.message, this.details);
     }
 
     @java.lang.Override
@@ -86,6 +100,10 @@ public final class AdminErrorPayloadError {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        _FinalStage details(Optional<Map<String, Object>> details);
+
+        _FinalStage details(Map<String, Object> details);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,6 +111,8 @@ public final class AdminErrorPayloadError {
         private String code;
 
         private String message;
+
+        private Optional<Map<String, Object>> details = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -103,6 +123,7 @@ public final class AdminErrorPayloadError {
         public Builder from(AdminErrorPayloadError other) {
             code(other.getCode());
             message(other.getMessage());
+            details(other.getDetails());
             return this;
         }
 
@@ -121,8 +142,21 @@ public final class AdminErrorPayloadError {
         }
 
         @java.lang.Override
+        public _FinalStage details(Map<String, Object> details) {
+            this.details = Optional.ofNullable(details);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "details", nulls = Nulls.SKIP)
+        public _FinalStage details(Optional<Map<String, Object>> details) {
+            this.details = details;
+            return this;
+        }
+
+        @java.lang.Override
         public AdminErrorPayloadError build() {
-            return new AdminErrorPayloadError(code, message, additionalProperties);
+            return new AdminErrorPayloadError(code, message, details, additionalProperties);
         }
 
         @java.lang.Override

@@ -3,9 +3,14 @@
  */
 package com.cloudpdf.api.resources.shares.requests;
 
+import com.cloudpdf.api.core.Nullable;
+import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
+import com.cloudpdf.api.resources.shares.types.SharesCreateRequestLayerMode;
+import com.cloudpdf.api.resources.shares.types.SharesCreateRequestVisitorIdentity;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +30,15 @@ import org.jetbrains.annotations.NotNull;
 public final class SharesCreateRequest {
     private final String docId;
 
+    private final Optional<SharesCreateRequestLayerMode> layerMode;
+
     private final Optional<String> layerName;
+
+    private final Optional<Boolean> keepVisitorLayers;
+
+    private final Optional<Integer> visitorIdleSeconds;
+
+    private final Optional<SharesCreateRequestVisitorIdentity> visitorIdentity;
 
     private final List<String> scope;
 
@@ -41,7 +54,11 @@ public final class SharesCreateRequest {
 
     private SharesCreateRequest(
             String docId,
+            Optional<SharesCreateRequestLayerMode> layerMode,
             Optional<String> layerName,
+            Optional<Boolean> keepVisitorLayers,
+            Optional<Integer> visitorIdleSeconds,
+            Optional<SharesCreateRequestVisitorIdentity> visitorIdentity,
             List<String> scope,
             Optional<List<String>> origins,
             Optional<String> password,
@@ -49,7 +66,11 @@ public final class SharesCreateRequest {
             Optional<Integer> expiresAt,
             Map<String, Object> additionalProperties) {
         this.docId = docId;
+        this.layerMode = layerMode;
         this.layerName = layerName;
+        this.keepVisitorLayers = keepVisitorLayers;
+        this.visitorIdleSeconds = visitorIdleSeconds;
+        this.visitorIdentity = visitorIdentity;
         this.scope = scope;
         this.origins = origins;
         this.password = password;
@@ -63,9 +84,35 @@ public final class SharesCreateRequest {
         return docId;
     }
 
+    @JsonProperty("layerMode")
+    public Optional<SharesCreateRequestLayerMode> getLayerMode() {
+        return layerMode;
+    }
+
     @JsonProperty("layerName")
     public Optional<String> getLayerName() {
         return layerName;
+    }
+
+    @JsonProperty("keepVisitorLayers")
+    public Optional<Boolean> getKeepVisitorLayers() {
+        return keepVisitorLayers;
+    }
+
+    @JsonIgnore
+    public Optional<Integer> getVisitorIdleSeconds() {
+        if (visitorIdleSeconds == null) {
+            return Optional.empty();
+        }
+        return visitorIdleSeconds;
+    }
+
+    @JsonIgnore
+    public Optional<SharesCreateRequestVisitorIdentity> getVisitorIdentity() {
+        if (visitorIdentity == null) {
+            return Optional.empty();
+        }
+        return visitorIdentity;
     }
 
     @JsonProperty("scope")
@@ -93,6 +140,18 @@ public final class SharesCreateRequest {
         return expiresAt;
     }
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdleSeconds")
+    private Optional<Integer> _getVisitorIdleSeconds() {
+        return visitorIdleSeconds;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("visitorIdentity")
+    private Optional<SharesCreateRequestVisitorIdentity> _getVisitorIdentity() {
+        return visitorIdentity;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -106,7 +165,11 @@ public final class SharesCreateRequest {
 
     private boolean equalTo(SharesCreateRequest other) {
         return docId.equals(other.docId)
+                && layerMode.equals(other.layerMode)
                 && layerName.equals(other.layerName)
+                && keepVisitorLayers.equals(other.keepVisitorLayers)
+                && visitorIdleSeconds.equals(other.visitorIdleSeconds)
+                && visitorIdentity.equals(other.visitorIdentity)
                 && scope.equals(other.scope)
                 && origins.equals(other.origins)
                 && password.equals(other.password)
@@ -118,7 +181,11 @@ public final class SharesCreateRequest {
     public int hashCode() {
         return Objects.hash(
                 this.docId,
+                this.layerMode,
                 this.layerName,
+                this.keepVisitorLayers,
+                this.visitorIdleSeconds,
+                this.visitorIdentity,
                 this.scope,
                 this.origins,
                 this.password,
@@ -148,9 +215,29 @@ public final class SharesCreateRequest {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        _FinalStage layerMode(Optional<SharesCreateRequestLayerMode> layerMode);
+
+        _FinalStage layerMode(SharesCreateRequestLayerMode layerMode);
+
         _FinalStage layerName(Optional<String> layerName);
 
         _FinalStage layerName(String layerName);
+
+        _FinalStage keepVisitorLayers(Optional<Boolean> keepVisitorLayers);
+
+        _FinalStage keepVisitorLayers(Boolean keepVisitorLayers);
+
+        _FinalStage visitorIdleSeconds(Optional<Integer> visitorIdleSeconds);
+
+        _FinalStage visitorIdleSeconds(Integer visitorIdleSeconds);
+
+        _FinalStage visitorIdleSeconds(Nullable<Integer> visitorIdleSeconds);
+
+        _FinalStage visitorIdentity(Optional<SharesCreateRequestVisitorIdentity> visitorIdentity);
+
+        _FinalStage visitorIdentity(SharesCreateRequestVisitorIdentity visitorIdentity);
+
+        _FinalStage visitorIdentity(Nullable<SharesCreateRequestVisitorIdentity> visitorIdentity);
 
         _FinalStage scope(List<String> scope);
 
@@ -189,7 +276,15 @@ public final class SharesCreateRequest {
 
         private List<String> scope = new ArrayList<>();
 
+        private Optional<SharesCreateRequestVisitorIdentity> visitorIdentity = Optional.empty();
+
+        private Optional<Integer> visitorIdleSeconds = Optional.empty();
+
+        private Optional<Boolean> keepVisitorLayers = Optional.empty();
+
         private Optional<String> layerName = Optional.empty();
+
+        private Optional<SharesCreateRequestLayerMode> layerMode = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -199,7 +294,11 @@ public final class SharesCreateRequest {
         @java.lang.Override
         public Builder from(SharesCreateRequest other) {
             docId(other.getDocId());
+            layerMode(other.getLayerMode());
             layerName(other.getLayerName());
+            keepVisitorLayers(other.getKeepVisitorLayers());
+            visitorIdleSeconds(other.getVisitorIdleSeconds());
+            visitorIdentity(other.getVisitorIdentity());
             scope(other.getScope());
             origins(other.getOrigins());
             password(other.getPassword());
@@ -292,6 +391,69 @@ public final class SharesCreateRequest {
         }
 
         @java.lang.Override
+        public _FinalStage visitorIdentity(Nullable<SharesCreateRequestVisitorIdentity> visitorIdentity) {
+            if (visitorIdentity.isNull()) {
+                this.visitorIdentity = null;
+            } else if (visitorIdentity.isEmpty()) {
+                this.visitorIdentity = Optional.empty();
+            } else {
+                this.visitorIdentity = Optional.of(visitorIdentity.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdentity(SharesCreateRequestVisitorIdentity visitorIdentity) {
+            this.visitorIdentity = Optional.ofNullable(visitorIdentity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorIdentity", nulls = Nulls.SKIP)
+        public _FinalStage visitorIdentity(Optional<SharesCreateRequestVisitorIdentity> visitorIdentity) {
+            this.visitorIdentity = visitorIdentity;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdleSeconds(Nullable<Integer> visitorIdleSeconds) {
+            if (visitorIdleSeconds.isNull()) {
+                this.visitorIdleSeconds = null;
+            } else if (visitorIdleSeconds.isEmpty()) {
+                this.visitorIdleSeconds = Optional.empty();
+            } else {
+                this.visitorIdleSeconds = Optional.of(visitorIdleSeconds.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage visitorIdleSeconds(Integer visitorIdleSeconds) {
+            this.visitorIdleSeconds = Optional.ofNullable(visitorIdleSeconds);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "visitorIdleSeconds", nulls = Nulls.SKIP)
+        public _FinalStage visitorIdleSeconds(Optional<Integer> visitorIdleSeconds) {
+            this.visitorIdleSeconds = visitorIdleSeconds;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage keepVisitorLayers(Boolean keepVisitorLayers) {
+            this.keepVisitorLayers = Optional.ofNullable(keepVisitorLayers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "keepVisitorLayers", nulls = Nulls.SKIP)
+        public _FinalStage keepVisitorLayers(Optional<Boolean> keepVisitorLayers) {
+            this.keepVisitorLayers = keepVisitorLayers;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage layerName(String layerName) {
             this.layerName = Optional.ofNullable(layerName);
             return this;
@@ -305,9 +467,33 @@ public final class SharesCreateRequest {
         }
 
         @java.lang.Override
+        public _FinalStage layerMode(SharesCreateRequestLayerMode layerMode) {
+            this.layerMode = Optional.ofNullable(layerMode);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "layerMode", nulls = Nulls.SKIP)
+        public _FinalStage layerMode(Optional<SharesCreateRequestLayerMode> layerMode) {
+            this.layerMode = layerMode;
+            return this;
+        }
+
+        @java.lang.Override
         public SharesCreateRequest build() {
             return new SharesCreateRequest(
-                    docId, layerName, scope, origins, password, sessionTtlSeconds, expiresAt, additionalProperties);
+                    docId,
+                    layerMode,
+                    layerName,
+                    keepVisitorLayers,
+                    visitorIdleSeconds,
+                    visitorIdentity,
+                    scope,
+                    origins,
+                    password,
+                    sessionTtlSeconds,
+                    expiresAt,
+                    additionalProperties);
         }
 
         @java.lang.Override

@@ -26,16 +26,20 @@ public final class ListSharesRequest {
 
     private final Optional<String> docId;
 
+    private final Optional<Boolean> archived;
+
     private final Map<String, Object> additionalProperties;
 
     private ListSharesRequest(
             Optional<Integer> limit,
             Optional<String> cursor,
             Optional<String> docId,
+            Optional<Boolean> archived,
             Map<String, Object> additionalProperties) {
         this.limit = limit;
         this.cursor = cursor;
         this.docId = docId;
+        this.archived = archived;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +58,11 @@ public final class ListSharesRequest {
         return docId;
     }
 
+    @JsonProperty("archived")
+    public Optional<Boolean> getArchived() {
+        return archived;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -66,12 +75,15 @@ public final class ListSharesRequest {
     }
 
     private boolean equalTo(ListSharesRequest other) {
-        return limit.equals(other.limit) && cursor.equals(other.cursor) && docId.equals(other.docId);
+        return limit.equals(other.limit)
+                && cursor.equals(other.cursor)
+                && docId.equals(other.docId)
+                && archived.equals(other.archived);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.cursor, this.docId);
+        return Objects.hash(this.limit, this.cursor, this.docId, this.archived);
     }
 
     @java.lang.Override
@@ -91,6 +103,8 @@ public final class ListSharesRequest {
 
         private Optional<String> docId = Optional.empty();
 
+        private Optional<Boolean> archived = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -100,6 +114,7 @@ public final class ListSharesRequest {
             limit(other.getLimit());
             cursor(other.getCursor());
             docId(other.getDocId());
+            archived(other.getArchived());
             return this;
         }
 
@@ -136,8 +151,19 @@ public final class ListSharesRequest {
             return this;
         }
 
+        @JsonSetter(value = "archived", nulls = Nulls.SKIP)
+        public Builder archived(Optional<Boolean> archived) {
+            this.archived = archived;
+            return this;
+        }
+
+        public Builder archived(Boolean archived) {
+            this.archived = Optional.ofNullable(archived);
+            return this;
+        }
+
         public ListSharesRequest build() {
-            return new ListSharesRequest(limit, cursor, docId, additionalProperties);
+            return new ListSharesRequest(limit, cursor, docId, archived, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -5,26 +5,34 @@ package com.cloudpdf.api.resources.shares;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.Suppliers;
+import com.cloudpdf.api.resources.shares.requests.ArchiveSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.DeleteSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.GetSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.ListSharesRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesCreateRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesExchangeRequest;
 import com.cloudpdf.api.resources.shares.requests.SharesUpdateRequest;
+import com.cloudpdf.api.resources.shares.visitors.VisitorsClient;
+import com.cloudpdf.api.types.SharesArchive200Response;
 import com.cloudpdf.api.types.SharesCreate200Response;
 import com.cloudpdf.api.types.SharesExchange200Response;
 import com.cloudpdf.api.types.SharesGet200Response;
 import com.cloudpdf.api.types.SharesList200Response;
 import com.cloudpdf.api.types.SharesUpdate200Response;
+import java.util.function.Supplier;
 
 public class SharesClient {
     protected final ClientOptions clientOptions;
 
     private final RawSharesClient rawClient;
 
+    protected final Supplier<VisitorsClient> visitorsClient;
+
     public SharesClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawSharesClient(clientOptions);
+        this.visitorsClient = Suppliers.memoize(() -> new VisitorsClient(clientOptions));
     }
 
     /**
@@ -35,14 +43,14 @@ public class SharesClient {
     }
 
     /**
-     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. Mounted only when the deployment can sign (HS256 mode).
+     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. A link that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the link asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A link that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any link. Mounted only when the deployment can sign (HS256 mode).
      */
     public SharesExchange200Response exchange(SharesExchangeRequest request) {
         return this.rawClient.exchange(request).body();
     }
 
     /**
-     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. Mounted only when the deployment can sign (HS256 mode).
+     * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until <code>password</code> is supplied. A link that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the link asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A link that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any link. Mounted only when the deployment can sign (HS256 mode).
      */
     public SharesExchange200Response exchange(SharesExchangeRequest request, RequestOptions requestOptions) {
         return this.rawClient.exchange(request, requestOptions).body();
@@ -126,5 +134,40 @@ public class SharesClient {
     public SharesUpdate200Response update(
             String tenantId, String shareId, SharesUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient.update(tenantId, shareId, request, requestOptions).body();
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public SharesArchive200Response archive(String tenantId, String shareId) {
+        return this.rawClient.archive(tenantId, shareId).body();
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public SharesArchive200Response archive(String tenantId, String shareId, RequestOptions requestOptions) {
+        return this.rawClient.archive(tenantId, shareId, requestOptions).body();
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public SharesArchive200Response archive(String tenantId, String shareId, ArchiveSharesRequest request) {
+        return this.rawClient.archive(tenantId, shareId, request).body();
+    }
+
+    /**
+     * Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (<code>disabled</code>) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+     */
+    public SharesArchive200Response archive(
+            String tenantId, String shareId, ArchiveSharesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .archive(tenantId, shareId, request, requestOptions)
+                .body();
+    }
+
+    public VisitorsClient visitors() {
+        return this.visitorsClient.get();
     }
 }

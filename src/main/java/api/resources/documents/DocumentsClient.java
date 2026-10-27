@@ -5,6 +5,8 @@ package com.cloudpdf.api.resources.documents;
 
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
+import com.cloudpdf.api.core.Suppliers;
+import com.cloudpdf.api.resources.documents.layers.LayersClient;
 import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
@@ -22,6 +24,7 @@ import com.cloudpdf.api.types.DocumentsList200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
 import java.io.File;
 import java.io.InputStream;
+import java.util.function.Supplier;
 import okhttp3.MediaType;
 
 public class DocumentsClient {
@@ -29,9 +32,12 @@ public class DocumentsClient {
 
     private final RawDocumentsClient rawClient;
 
+    protected final Supplier<LayersClient> layersClient;
+
     public DocumentsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.rawClient = new RawDocumentsClient(clientOptions);
+        this.layersClient = Suppliers.memoize(() -> new LayersClient(clientOptions));
     }
 
     /**
@@ -203,5 +209,9 @@ public class DocumentsClient {
 
     public DocumentsInit200Response init(String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         return this.rawClient.init(tenantId, request, requestOptions).body();
+    }
+
+    public LayersClient layers() {
+        return this.layersClient.get();
     }
 }
