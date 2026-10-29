@@ -811,6 +811,14 @@ client.shares().create(
 <dl>
 <dd>
 
+**identity:** `Optional<Identity>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **scope:** `List<String>` 
     
 </dd>
@@ -1046,6 +1054,14 @@ client.shares().update(
 <dd>
 
 **visitorIdentity:** `Optional<SharesUpdateRequestVisitorIdentity>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**identity:** `Optional<Identity>` 
     
 </dd>
 </dl>
@@ -1620,7 +1636,39 @@ client.documents().list(
 <dl>
 <dd>
 
-**state:** `Optional<ListDocumentsRequestState>` 
+**state:** `Optional<ListDocumentsRequestState>` — Only documents in this state. Without it, every state except deleting.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**q:** `Optional<String>` — Only documents whose name contains this text, ignoring case.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `Optional<String>` — Only documents directly in this folder (root: the top level). Without it, documents in every folder.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**sort:** `Optional<ListDocumentsRequestSort>` — createdAt (default), name (ignoring case), or size (stored bytes; 0 while pending).
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**order:** `Optional<ListDocumentsRequestOrder>` — Defaults to the reading order of the sort: A to Z for name, newest and largest first otherwise.
     
 </dd>
 </dl>
@@ -1729,6 +1777,83 @@ client.documents().delete(
 <dd>
 
 **id:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.update(tenantId, id, request) -> DocumentsUpdate200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A document that is being deleted answers 404.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.documents().update(
+    "tenantId",
+    "id",
+    DocumentsUpdateRequest
+        .builder()
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**id:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` — What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.
     
 </dd>
 </dl>
@@ -2059,6 +2184,22 @@ client.documents().importFrom(
 <dl>
 <dd>
 
+**name:** `Optional<String>` — What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `Optional<String>` — A folder id, or root for the top level.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **metadata:** `Optional<Map<String, Object>>` 
     
 </dd>
@@ -2162,6 +2303,22 @@ client.documents().init(
 <dl>
 <dd>
 
+**name:** `Optional<String>` — What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `Optional<String>` — A folder id, or root for the top level.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **metadata:** `Optional<Map<String, Object>>` 
     
 </dd>
@@ -2203,6 +2360,443 @@ client.documents().init(
 <dd>
 
 **uploadPreference:** `Optional<DocumentsInitRequestUploadPreference>` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Folders
+<details><summary><code>client.folders.list(tenantId) -> FoldersList200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().list(
+    "tenantId",
+    ListFoldersRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**limit:** `Optional<Integer>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**cursor:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parentId:** `Optional<String>` — Only the folders directly in this folder (root: the top level). Without it, every folder.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.folders.create(tenantId, request) -> FoldersCreate200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+409 Conflict carries `details.reason`: `name-taken` (a sibling has the name, ignoring case; `details.name`) or `too-deep` (folders nest at most 100 levels; `details.maxDepth`). 404 when the parent folder does not exist.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().create(
+    "tenantId",
+    FoldersCreateRequest
+        .builder()
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` — What people call the folder: 1 to 255 characters, no control characters, no leading or trailing whitespace, and unique among the folder's siblings, ignoring case.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**parentId:** `Optional<String>` — A folder id, or root for the top level.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.folders.get(tenantId, folderId) -> FoldersGet200Response</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().get(
+    "tenantId",
+    "folderId",
+    GetFoldersRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.folders.delete(tenantId, folderId)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Without recursive, a folder with anything inside is refused: 409 Conflict with `details.reason` `not-empty` and what it holds, counted over every level below, in `details.folders` and `details.documents`. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().delete(
+    "tenantId",
+    "folderId",
+    DeleteFoldersRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**recursive:** `Optional<Boolean>` — true deletes everything in the folder too. Never the default.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.folders.update(tenantId, folderId, request) -> FoldersUpdate200Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+409 Conflict with `details.reason` `name-taken` when a sibling has the name, ignoring case.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().update(
+    "tenantId",
+    "folderId",
+    FoldersUpdateRequest
+        .builder()
+        .name("name")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `String` — What people call the folder: 1 to 255 characters, no control characters, no leading or trailing whitespace, and unique among the folder's siblings, ignoring case.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.folders.moveInto(tenantId, folderId, request)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in `details.documentIds` and `details.folderIds`. 409 Conflict carries `details.reason`: `cycle` (the destination is a moved folder or inside one; `details.folderId`), `too-deep` (the move would nest folders deeper than 100 levels; `details.maxDepth`) or `name-taken` (a moved folder's name is taken in the destination, ignoring case; `details.name`).
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.folders().moveInto(
+    "tenantId",
+    "folderId",
+    FoldersMoveIntoRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**tenantId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderId:** `String` — A folder id, or root for the top level.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentIds:** `Optional<List<String>>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**folderIds:** `Optional<List<String>>` 
     
 </dd>
 </dl>
@@ -4959,7 +5553,7 @@ client.doc().signatures().cancel(
 <dl>
 <dd>
 
-`cms` is the detached CMS over the prepared digest, base64. `expectedVersion` must be what prepare returned. Idempotent by signing id: the same CMS again answers `already-completed`. Every layer of the document then sits over the new version; refetch the manifest after a completion.
+`cms` is the detached CMS over the prepared digest, base64. `expectedVersion` must be what prepare returned. Idempotent by signing id: the same CMS again answers `already-completed`. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
 </dd>
 </dl>
 </dd>
@@ -5168,7 +5762,7 @@ client.doc().signatures().analysis(
 <dl>
 <dd>
 
-Multipart: a JSON `body` part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as `resources: { appearance: '<key>' }`, and that PDF as the part `resource:<key>`. A certification (`certify.permission`) additionally requires `doc.sign.certify`. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+Multipart: a JSON `body` part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as `resources: { appearance: '<key>' }`, and that PDF as the part `resource:<key>`. A certification (`certify.permission`) additionally requires `doc.sign.certify`. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
 </dd>
 </dl>
 </dd>
@@ -5234,7 +5828,7 @@ client.doc().signatures().prepare(
 </details>
 
 ## Doc Versions
-<details><summary><code>client.doc.versions.list(docId) -> DocVersionsList200Response</code></summary>
+<details><summary><code>client.doc.versions.list(docId, layerName) -> DocVersionsList200Response</code></summary>
 <dl>
 <dd>
 
@@ -5246,7 +5840,7 @@ client.doc().signatures().prepare(
 <dl>
 <dd>
 
-Every completed signature publishes a new version. Never cached: the list grows.
+Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
 </dd>
 </dl>
 </dd>
@@ -5263,6 +5857,7 @@ Every completed signature publishes a new version. Never cached: the list grows.
 ```java
 client.doc().versions().list(
     "docId",
+    "layerName",
     ListVersionsRequest
         .builder()
         .build()
@@ -5289,6 +5884,14 @@ client.doc().versions().list(
 <dl>
 <dd>
 
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
     
 </dd>
@@ -5301,7 +5904,7 @@ client.doc().versions().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.analysis(docId, sha) -> DocVersionsAnalysis200Response</code></summary>
+<details><summary><code>client.doc.versions.analysis(docId, layerName, sha) -> DocVersionsAnalysis200Response</code></summary>
 <dl>
 <dd>
 
@@ -5313,7 +5916,7 @@ client.doc().versions().list(
 <dl>
 <dd>
 
-Exactly one of `since.signature` / `since.revision`; `until=<revision>` defaults to the last. The same answer for every layer and every caller.
+Exactly one of `since.signature` / `since.revision`; `until=<revision>` defaults to the last. The same answer for every caller.
 </dd>
 </dl>
 </dd>
@@ -5330,6 +5933,7 @@ Exactly one of `since.signature` / `since.revision`; `until=<revision>` defaults
 ```java
 client.doc().versions().analysis(
     "docId",
+    "layerName",
     "sha",
     AnalysisVersionsRequest
         .builder()
@@ -5350,6 +5954,14 @@ client.doc().versions().analysis(
 <dd>
 
 **docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
     
 </dd>
 </dl>
@@ -5417,7 +6029,7 @@ client.doc().versions().analysis(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.download(docId, sha) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.download(docId, layerName, sha) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -5432,6 +6044,7 @@ client.doc().versions().analysis(
 ```java
 client.doc().versions().download(
     "docId",
+    "layerName",
     "sha",
     DownloadVersionsRequest
         .builder()
@@ -5459,6 +6072,14 @@ client.doc().versions().download(
 <dl>
 <dd>
 
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **sha:** `String` 
     
 </dd>
@@ -5479,7 +6100,7 @@ client.doc().versions().download(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.revision(docId, sha, index) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.revision(docId, layerName, sha, index) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -5494,6 +6115,7 @@ client.doc().versions().download(
 ```java
 client.doc().versions().revision(
     "docId",
+    "layerName",
     "sha",
     1,
     RevisionVersionsRequest
@@ -5515,6 +6137,14 @@ client.doc().versions().revision(
 <dd>
 
 **docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
     
 </dd>
 </dl>
@@ -5550,7 +6180,7 @@ client.doc().versions().revision(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatures(docId, sha) -> DocVersionsSignatures200Response</code></summary>
+<details><summary><code>client.doc.versions.signatures(docId, layerName, sha) -> DocVersionsSignatures200Response</code></summary>
 <dl>
 <dd>
 
@@ -5565,6 +6195,7 @@ client.doc().versions().revision(
 ```java
 client.doc().versions().signatures(
     "docId",
+    "layerName",
     "sha",
     SignaturesVersionsRequest
         .builder()
@@ -5592,6 +6223,14 @@ client.doc().versions().signatures(
 <dl>
 <dd>
 
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **sha:** `String` 
     
 </dd>
@@ -5612,7 +6251,7 @@ client.doc().versions().signatures(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatureContents(docId, sha, fieldKey) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.signatureContents(docId, layerName, sha, fieldKey) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -5641,6 +6280,7 @@ client.doc().versions().signatures(
 ```java
 client.doc().versions().signatureContents(
     "docId",
+    "layerName",
     "sha",
     "fieldKey",
     SignatureContentsVersionsRequest
@@ -5662,6 +6302,14 @@ client.doc().versions().signatureContents(
 <dd>
 
 **docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
     
 </dd>
 </dl>
@@ -5697,7 +6345,7 @@ client.doc().versions().signatureContents(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatureDigest(docId, sha, fieldKey, algorithm) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.signatureDigest(docId, layerName, sha, fieldKey, algorithm) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -5726,6 +6374,7 @@ What a CMS verifier compares its message digest to.
 ```java
 client.doc().versions().signatureDigest(
     "docId",
+    "layerName",
     "sha",
     "fieldKey",
     SignatureDigestVersionsRequestAlgorithm.SHA1,
@@ -5748,6 +6397,14 @@ client.doc().versions().signatureDigest(
 <dd>
 
 **docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
     
 </dd>
 </dl>

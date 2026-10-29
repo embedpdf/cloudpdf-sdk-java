@@ -11,6 +11,7 @@ import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsInitRequest;
+import com.cloudpdf.api.resources.documents.requests.DocumentsUpdateRequest;
 import com.cloudpdf.api.resources.documents.requests.DownloadDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
@@ -21,6 +22,7 @@ import com.cloudpdf.api.types.DocumentsGet200Response;
 import com.cloudpdf.api.types.DocumentsImportFrom200Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
+import com.cloudpdf.api.types.DocumentsUpdate200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
 import java.io.File;
 import java.io.InputStream;
@@ -97,6 +99,22 @@ public class AsyncDocumentsClient {
     public CompletableFuture<Void> delete(
             String tenantId, String id, DeleteDocumentsRequest request, RequestOptions requestOptions) {
         return this.rawClient.delete(tenantId, id, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * A document that is being deleted answers 404.
+     */
+    public CompletableFuture<DocumentsUpdate200Response> update(
+            String tenantId, String id, DocumentsUpdateRequest request) {
+        return this.rawClient.update(tenantId, id, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * A document that is being deleted answers 404.
+     */
+    public CompletableFuture<DocumentsUpdate200Response> update(
+            String tenantId, String id, DocumentsUpdateRequest request, RequestOptions requestOptions) {
+        return this.rawClient.update(tenantId, id, request, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocumentsCommit200Response> commit(

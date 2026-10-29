@@ -93,7 +93,7 @@ public class SignaturesClient {
     }
 
     /**
-     * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. Every layer of the document then sits over the new version; refetch the manifest after a completion.
+     * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
     public DocSignaturesComplete200Response complete(
             String docId, String layerName, String signingId, DocSignaturesCompleteRequest request) {
@@ -101,7 +101,7 @@ public class SignaturesClient {
     }
 
     /**
-     * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. Every layer of the document then sits over the new version; refetch the manifest after a completion.
+     * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
     public DocSignaturesComplete200Response complete(
             String docId,
@@ -147,7 +147,7 @@ public class SignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public DocSignaturesPrepare200Response prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
@@ -155,7 +155,7 @@ public class SignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A layer behind the document head cannot sign (StaleBase).
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public DocSignaturesPrepare200Response prepare(
             String docId,

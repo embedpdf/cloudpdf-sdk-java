@@ -29,6 +29,10 @@ public final class DocumentsImportFromRequest {
 
     private final Optional<DocumentsImportFromRequestExpected> expected;
 
+    private final Optional<String> name;
+
+    private final Optional<String> folderId;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final Optional<String> idempotencyKey;
@@ -44,6 +48,8 @@ public final class DocumentsImportFromRequest {
     private DocumentsImportFromRequest(
             DocumentsImportFromRequestSource source,
             Optional<DocumentsImportFromRequestExpected> expected,
+            Optional<String> name,
+            Optional<String> folderId,
             Optional<Map<String, Object>> metadata,
             Optional<String> idempotencyKey,
             Optional<DocumentsImportFromRequestDedupMode> dedupMode,
@@ -52,6 +58,8 @@ public final class DocumentsImportFromRequest {
             Map<String, Object> additionalProperties) {
         this.source = source;
         this.expected = expected;
+        this.name = name;
+        this.folderId = folderId;
         this.metadata = metadata;
         this.idempotencyKey = idempotencyKey;
         this.dedupMode = dedupMode;
@@ -74,6 +82,22 @@ public final class DocumentsImportFromRequest {
     @JsonProperty("expected")
     public Optional<DocumentsImportFromRequestExpected> getExpected() {
         return expected;
+    }
+
+    /**
+     * @return What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
+    /**
+     * @return A folder id, or root for the top level.
+     */
+    @JsonProperty("folderId")
+    public Optional<String> getFolderId() {
+        return folderId;
     }
 
     @JsonProperty("metadata")
@@ -124,6 +148,8 @@ public final class DocumentsImportFromRequest {
     private boolean equalTo(DocumentsImportFromRequest other) {
         return source.equals(other.source)
                 && expected.equals(other.expected)
+                && name.equals(other.name)
+                && folderId.equals(other.folderId)
                 && metadata.equals(other.metadata)
                 && idempotencyKey.equals(other.idempotencyKey)
                 && dedupMode.equals(other.dedupMode)
@@ -134,7 +160,15 @@ public final class DocumentsImportFromRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.source, this.expected, this.metadata, this.idempotencyKey, this.dedupMode, this.docId, this.mode);
+                this.source,
+                this.expected,
+                this.name,
+                this.folderId,
+                this.metadata,
+                this.idempotencyKey,
+                this.dedupMode,
+                this.docId,
+                this.mode);
     }
 
     @java.lang.Override
@@ -168,6 +202,20 @@ public final class DocumentsImportFromRequest {
         _FinalStage expected(Optional<DocumentsImportFromRequestExpected> expected);
 
         _FinalStage expected(DocumentsImportFromRequestExpected expected);
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
+
+        /**
+         * <p>A folder id, or root for the top level.</p>
+         */
+        _FinalStage folderId(Optional<String> folderId);
+
+        _FinalStage folderId(String folderId);
 
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
@@ -213,6 +261,10 @@ public final class DocumentsImportFromRequest {
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
+        private Optional<String> folderId = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
+
         private Optional<DocumentsImportFromRequestExpected> expected = Optional.empty();
 
         @JsonAnySetter
@@ -224,6 +276,8 @@ public final class DocumentsImportFromRequest {
         public Builder from(DocumentsImportFromRequest other) {
             source(other.getSource());
             expected(other.getExpected());
+            name(other.getName());
+            folderId(other.getFolderId());
             metadata(other.getMetadata());
             idempotencyKey(other.getIdempotencyKey());
             dedupMode(other.getDedupMode());
@@ -330,6 +384,46 @@ public final class DocumentsImportFromRequest {
         }
 
         /**
+         * <p>A folder id, or root for the top level.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage folderId(String folderId) {
+            this.folderId = Optional.ofNullable(folderId);
+            return this;
+        }
+
+        /**
+         * <p>A folder id, or root for the top level.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "folderId", nulls = Nulls.SKIP)
+        public _FinalStage folderId(Optional<String> folderId) {
+            this.folderId = folderId;
+            return this;
+        }
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        /**
          * <p>Integrity pins, enforced when present. When absent, the server-observed values become authoritative.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -352,7 +446,16 @@ public final class DocumentsImportFromRequest {
         @java.lang.Override
         public DocumentsImportFromRequest build() {
             return new DocumentsImportFromRequest(
-                    source, expected, metadata, idempotencyKey, dedupMode, docId, mode, additionalProperties);
+                    source,
+                    expected,
+                    name,
+                    folderId,
+                    metadata,
+                    idempotencyKey,
+                    dedupMode,
+                    docId,
+                    mode,
+                    additionalProperties);
         }
 
         @java.lang.Override

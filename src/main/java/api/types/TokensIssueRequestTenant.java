@@ -24,17 +24,14 @@ import org.jetbrains.annotations.NotNull;
 public final class TokensIssueRequestTenant {
     private final String sub;
 
-    private final List<TokensIssueRequestTenantScopeItem> scope;
+    private final List<String> scope;
 
     private final int expiresIn;
 
     private final Map<String, Object> additionalProperties;
 
     private TokensIssueRequestTenant(
-            String sub,
-            List<TokensIssueRequestTenantScopeItem> scope,
-            int expiresIn,
-            Map<String, Object> additionalProperties) {
+            String sub, List<String> scope, int expiresIn, Map<String, Object> additionalProperties) {
         this.sub = sub;
         this.scope = scope;
         this.expiresIn = expiresIn;
@@ -47,7 +44,7 @@ public final class TokensIssueRequestTenant {
     }
 
     @JsonProperty("scope")
-    public List<TokensIssueRequestTenantScopeItem> getScope() {
+    public List<String> getScope() {
         return scope;
     }
 
@@ -102,11 +99,11 @@ public final class TokensIssueRequestTenant {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage scope(List<TokensIssueRequestTenantScopeItem> scope);
+        _FinalStage scope(List<String> scope);
 
-        _FinalStage addScope(TokensIssueRequestTenantScopeItem scope);
+        _FinalStage addScope(String scope);
 
-        _FinalStage addAllScope(List<TokensIssueRequestTenantScopeItem> scope);
+        _FinalStage addAllScope(List<String> scope);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -115,7 +112,7 @@ public final class TokensIssueRequestTenant {
 
         private int expiresIn;
 
-        private List<TokensIssueRequestTenantScopeItem> scope = new ArrayList<>();
+        private List<String> scope = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -145,7 +142,7 @@ public final class TokensIssueRequestTenant {
         }
 
         @java.lang.Override
-        public _FinalStage addAllScope(List<TokensIssueRequestTenantScopeItem> scope) {
+        public _FinalStage addAllScope(List<String> scope) {
             if (scope != null) {
                 this.scope.addAll(scope);
             }
@@ -153,14 +150,14 @@ public final class TokensIssueRequestTenant {
         }
 
         @java.lang.Override
-        public _FinalStage addScope(TokensIssueRequestTenantScopeItem scope) {
+        public _FinalStage addScope(String scope) {
             this.scope.add(scope);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "scope", nulls = Nulls.SKIP)
-        public _FinalStage scope(List<TokensIssueRequestTenantScopeItem> scope) {
+        public _FinalStage scope(List<String> scope) {
             this.scope.clear();
             if (scope != null) {
                 this.scope.addAll(scope);

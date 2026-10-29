@@ -8,6 +8,7 @@ import com.cloudpdf.api.core.Suppliers;
 import com.cloudpdf.api.resources.deployment.DeploymentClient;
 import com.cloudpdf.api.resources.doc.DocClient;
 import com.cloudpdf.api.resources.documents.DocumentsClient;
+import com.cloudpdf.api.resources.folders.FoldersClient;
 import com.cloudpdf.api.resources.shares.SharesClient;
 import com.cloudpdf.api.resources.tenants.TenantsClient;
 import com.cloudpdf.api.resources.tokens.TokensClient;
@@ -26,6 +27,8 @@ public class CloudPDFClient {
 
     protected final Supplier<DocumentsClient> documentsClient;
 
+    protected final Supplier<FoldersClient> foldersClient;
+
     protected final Supplier<TokensClient> tokensClient;
 
     public CloudPDFClient(ClientOptions clientOptions) {
@@ -35,6 +38,7 @@ public class CloudPDFClient {
         this.sharesClient = Suppliers.memoize(() -> new SharesClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.documentsClient = Suppliers.memoize(() -> new DocumentsClient(clientOptions));
+        this.foldersClient = Suppliers.memoize(() -> new FoldersClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new TokensClient(clientOptions));
     }
 
@@ -56,6 +60,10 @@ public class CloudPDFClient {
 
     public DocumentsClient documents() {
         return this.documentsClient.get();
+    }
+
+    public FoldersClient folders() {
+        return this.foldersClient.get();
     }
 
     public TokensClient tokens() {

@@ -23,6 +23,7 @@ import com.cloudpdf.api.resources.documents.requests.DeleteDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsCommitRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsImportFromRequest;
 import com.cloudpdf.api.resources.documents.requests.DocumentsInitRequest;
+import com.cloudpdf.api.resources.documents.requests.DocumentsUpdateRequest;
 import com.cloudpdf.api.resources.documents.requests.DownloadDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
@@ -34,6 +35,7 @@ import com.cloudpdf.api.types.DocumentsGet200Response;
 import com.cloudpdf.api.types.DocumentsImportFrom200Response;
 import com.cloudpdf.api.types.DocumentsInit200Response;
 import com.cloudpdf.api.types.DocumentsList200Response;
+import com.cloudpdf.api.types.DocumentsUpdate200Response;
 import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
@@ -87,6 +89,21 @@ public class RawDocumentsClient {
         if (request.getState().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "state", request.getState().get(), false);
+        }
+        if (request.getQ().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "q", request.getQ().get(), false);
+        }
+        if (request.getFolderId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "folderId", request.getFolderId().get(), false);
+        }
+        if (request.getSort().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "sort", request.getSort().get(), false);
+        }
+        if (request.getOrder().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "order", request.getOrder().get(), false);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -266,6 +283,90 @@ public class RawDocumentsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
                 switch (response.code()) {
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * A document that is being deleted answers 404.
+     */
+    public CloudPDFClientHttpResponse<DocumentsUpdate200Response> update(
+            String tenantId, String id, DocumentsUpdateRequest request) {
+        return update(tenantId, id, request, null);
+    }
+
+    /**
+     * A document that is being deleted answers 404.
+     */
+    public CloudPDFClientHttpResponse<DocumentsUpdate200Response> update(
+            String tenantId, String id, DocumentsUpdateRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("documents")
+                .addPathSegment(id);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentsUpdate200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 403:
                         throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);

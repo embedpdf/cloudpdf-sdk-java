@@ -8,6 +8,7 @@ import com.cloudpdf.api.core.Suppliers;
 import com.cloudpdf.api.resources.deployment.AsyncDeploymentClient;
 import com.cloudpdf.api.resources.doc.AsyncDocClient;
 import com.cloudpdf.api.resources.documents.AsyncDocumentsClient;
+import com.cloudpdf.api.resources.folders.AsyncFoldersClient;
 import com.cloudpdf.api.resources.shares.AsyncSharesClient;
 import com.cloudpdf.api.resources.tenants.AsyncTenantsClient;
 import com.cloudpdf.api.resources.tokens.AsyncTokensClient;
@@ -26,6 +27,8 @@ public class AsyncCloudPDFClient {
 
     protected final Supplier<AsyncDocumentsClient> documentsClient;
 
+    protected final Supplier<AsyncFoldersClient> foldersClient;
+
     protected final Supplier<AsyncTokensClient> tokensClient;
 
     public AsyncCloudPDFClient(ClientOptions clientOptions) {
@@ -35,6 +38,7 @@ public class AsyncCloudPDFClient {
         this.sharesClient = Suppliers.memoize(() -> new AsyncSharesClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new AsyncTenantsClient(clientOptions));
         this.documentsClient = Suppliers.memoize(() -> new AsyncDocumentsClient(clientOptions));
+        this.foldersClient = Suppliers.memoize(() -> new AsyncFoldersClient(clientOptions));
         this.tokensClient = Suppliers.memoize(() -> new AsyncTokensClient(clientOptions));
     }
 
@@ -56,6 +60,10 @@ public class AsyncCloudPDFClient {
 
     public AsyncDocumentsClient documents() {
         return this.documentsClient.get();
+    }
+
+    public AsyncFoldersClient folders() {
+        return this.foldersClient.get();
     }
 
     public AsyncTokensClient tokens() {
