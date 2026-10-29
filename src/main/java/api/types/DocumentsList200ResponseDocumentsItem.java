@@ -28,6 +28,10 @@ public final class DocumentsList200ResponseDocumentsItem {
 
     private final String tenantId;
 
+    private final String name;
+
+    private final String folderId;
+
     private final DocumentsList200ResponseDocumentsItemState state;
 
     private final Optional<String> baseSha;
@@ -55,6 +59,8 @@ public final class DocumentsList200ResponseDocumentsItem {
     private DocumentsList200ResponseDocumentsItem(
             String id,
             String tenantId,
+            String name,
+            String folderId,
             DocumentsList200ResponseDocumentsItemState state,
             Optional<String> baseSha,
             Optional<Double> storageSizeBytes,
@@ -69,6 +75,8 @@ public final class DocumentsList200ResponseDocumentsItem {
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.tenantId = tenantId;
+        this.name = name;
+        this.folderId = folderId;
         this.state = state;
         this.baseSha = baseSha;
         this.storageSizeBytes = storageSizeBytes;
@@ -91,6 +99,19 @@ public final class DocumentsList200ResponseDocumentsItem {
     @JsonProperty("tenantId")
     public String getTenantId() {
         return tenantId;
+    }
+
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return The folder the document is in, or root.
+     */
+    @JsonProperty("folderId")
+    public String getFolderId() {
+        return folderId;
     }
 
     @JsonProperty("state")
@@ -226,6 +247,8 @@ public final class DocumentsList200ResponseDocumentsItem {
     private boolean equalTo(DocumentsList200ResponseDocumentsItem other) {
         return id.equals(other.id)
                 && tenantId.equals(other.tenantId)
+                && name.equals(other.name)
+                && folderId.equals(other.folderId)
                 && state.equals(other.state)
                 && baseSha.equals(other.baseSha)
                 && storageSizeBytes.equals(other.storageSizeBytes)
@@ -244,6 +267,8 @@ public final class DocumentsList200ResponseDocumentsItem {
         return Objects.hash(
                 this.id,
                 this.tenantId,
+                this.name,
+                this.folderId,
                 this.state,
                 this.baseSha,
                 this.storageSizeBytes,
@@ -273,7 +298,18 @@ public final class DocumentsList200ResponseDocumentsItem {
     }
 
     public interface TenantIdStage {
-        StateStage tenantId(@NotNull String tenantId);
+        NameStage tenantId(@NotNull String tenantId);
+    }
+
+    public interface NameStage {
+        FolderIdStage name(@NotNull String name);
+    }
+
+    public interface FolderIdStage {
+        /**
+         * <p>The folder the document is in, or root.</p>
+         */
+        StateStage folderId(@NotNull String folderId);
     }
 
     public interface StateStage {
@@ -344,10 +380,21 @@ public final class DocumentsList200ResponseDocumentsItem {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements IdStage, TenantIdStage, StateStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
+            implements IdStage,
+                    TenantIdStage,
+                    NameStage,
+                    FolderIdStage,
+                    StateStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    _FinalStage {
         private String id;
 
         private String tenantId;
+
+        private String name;
+
+        private String folderId;
 
         private DocumentsList200ResponseDocumentsItemState state;
 
@@ -380,6 +427,8 @@ public final class DocumentsList200ResponseDocumentsItem {
         public Builder from(DocumentsList200ResponseDocumentsItem other) {
             id(other.getId());
             tenantId(other.getTenantId());
+            name(other.getName());
+            folderId(other.getFolderId());
             state(other.getState());
             baseSha(other.getBaseSha());
             storageSizeBytes(other.getStorageSizeBytes());
@@ -403,8 +452,26 @@ public final class DocumentsList200ResponseDocumentsItem {
 
         @java.lang.Override
         @JsonSetter("tenantId")
-        public StateStage tenantId(@NotNull String tenantId) {
+        public NameStage tenantId(@NotNull String tenantId) {
             this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("name")
+        public FolderIdStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The folder the document is in, or root.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("folderId")
+        public StateStage folderId(@NotNull String folderId) {
+            this.folderId = Objects.requireNonNull(folderId, "folderId must not be null");
             return this;
         }
 
@@ -623,6 +690,8 @@ public final class DocumentsList200ResponseDocumentsItem {
             return new DocumentsList200ResponseDocumentsItem(
                     id,
                     tenantId,
+                    name,
+                    folderId,
                     state,
                     baseSha,
                     storageSizeBytes,

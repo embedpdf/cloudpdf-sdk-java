@@ -36,128 +36,160 @@ public class VersionsClient {
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId) {
-        return this.rawClient.list(docId).body();
+    public DocVersionsList200Response list(String docId, String layerName) {
+        return this.rawClient.list(docId, layerName).body();
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, RequestOptions requestOptions) {
-        return this.rawClient.list(docId, requestOptions).body();
+    public DocVersionsList200Response list(String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, requestOptions).body();
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, ListVersionsRequest request) {
-        return this.rawClient.list(docId, request).body();
+    public DocVersionsList200Response list(String docId, String layerName, ListVersionsRequest request) {
+        return this.rawClient.list(docId, layerName, request).body();
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, ListVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(docId, request, requestOptions).body();
+    public DocVersionsList200Response list(
+            String docId, String layerName, ListVersionsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, request, requestOptions).body();
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public DocVersionsAnalysis200Response analysis(String docId, String sha) {
-        return this.rawClient.analysis(docId, sha).body();
+    public DocVersionsAnalysis200Response analysis(String docId, String layerName, String sha) {
+        return this.rawClient.analysis(docId, layerName, sha).body();
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
-     */
-    public DocVersionsAnalysis200Response analysis(String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.analysis(docId, sha, requestOptions).body();
-    }
-
-    /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
-     */
-    public DocVersionsAnalysis200Response analysis(String docId, String sha, AnalysisVersionsRequest request) {
-        return this.rawClient.analysis(docId, sha, request).body();
-    }
-
-    /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public DocVersionsAnalysis200Response analysis(
-            String docId, String sha, AnalysisVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.analysis(docId, sha, request, requestOptions).body();
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.analysis(docId, layerName, sha, requestOptions).body();
     }
 
-    public InputStream download(String docId, String sha) {
-        return this.rawClient.download(docId, sha).body();
+    /**
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     */
+    public DocVersionsAnalysis200Response analysis(
+            String docId, String layerName, String sha, AnalysisVersionsRequest request) {
+        return this.rawClient.analysis(docId, layerName, sha, request).body();
     }
 
-    public InputStream download(String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.download(docId, sha, requestOptions).body();
-    }
-
-    public InputStream download(String docId, String sha, DownloadVersionsRequest request) {
-        return this.rawClient.download(docId, sha, request).body();
-    }
-
-    public InputStream download(
-            String docId, String sha, DownloadVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.download(docId, sha, request, requestOptions).body();
-    }
-
-    public InputStream revision(String docId, String sha, int index) {
-        return this.rawClient.revision(docId, sha, index).body();
-    }
-
-    public InputStream revision(String docId, String sha, int index, RequestOptions requestOptions) {
-        return this.rawClient.revision(docId, sha, index, requestOptions).body();
-    }
-
-    public InputStream revision(String docId, String sha, int index, RevisionVersionsRequest request) {
-        return this.rawClient.revision(docId, sha, index, request).body();
-    }
-
-    public InputStream revision(
-            String docId, String sha, int index, RevisionVersionsRequest request, RequestOptions requestOptions) {
+    /**
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     */
+    public DocVersionsAnalysis200Response analysis(
+            String docId,
+            String layerName,
+            String sha,
+            AnalysisVersionsRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .revision(docId, sha, index, request, requestOptions)
+                .analysis(docId, layerName, sha, request, requestOptions)
                 .body();
     }
 
-    public DocVersionsSignatures200Response signatures(String docId, String sha) {
-        return this.rawClient.signatures(docId, sha).body();
+    public InputStream download(String docId, String layerName, String sha) {
+        return this.rawClient.download(docId, layerName, sha).body();
     }
 
-    public DocVersionsSignatures200Response signatures(String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.signatures(docId, sha, requestOptions).body();
+    public InputStream download(String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.download(docId, layerName, sha, requestOptions).body();
     }
 
-    public DocVersionsSignatures200Response signatures(String docId, String sha, SignaturesVersionsRequest request) {
-        return this.rawClient.signatures(docId, sha, request).body();
+    public InputStream download(String docId, String layerName, String sha, DownloadVersionsRequest request) {
+        return this.rawClient.download(docId, layerName, sha, request).body();
+    }
+
+    public InputStream download(
+            String docId,
+            String layerName,
+            String sha,
+            DownloadVersionsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .download(docId, layerName, sha, request, requestOptions)
+                .body();
+    }
+
+    public InputStream revision(String docId, String layerName, String sha, int index) {
+        return this.rawClient.revision(docId, layerName, sha, index).body();
+    }
+
+    public InputStream revision(String docId, String layerName, String sha, int index, RequestOptions requestOptions) {
+        return this.rawClient
+                .revision(docId, layerName, sha, index, requestOptions)
+                .body();
+    }
+
+    public InputStream revision(
+            String docId, String layerName, String sha, int index, RevisionVersionsRequest request) {
+        return this.rawClient.revision(docId, layerName, sha, index, request).body();
+    }
+
+    public InputStream revision(
+            String docId,
+            String layerName,
+            String sha,
+            int index,
+            RevisionVersionsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .revision(docId, layerName, sha, index, request, requestOptions)
+                .body();
+    }
+
+    public DocVersionsSignatures200Response signatures(String docId, String layerName, String sha) {
+        return this.rawClient.signatures(docId, layerName, sha).body();
     }
 
     public DocVersionsSignatures200Response signatures(
-            String docId, String sha, SignaturesVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.signatures(docId, sha, request, requestOptions).body();
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.signatures(docId, layerName, sha, requestOptions).body();
     }
 
-    /**
-     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
-     */
-    public InputStream signatureContents(String docId, String sha, String fieldKey) {
-        return this.rawClient.signatureContents(docId, sha, fieldKey).body();
+    public DocVersionsSignatures200Response signatures(
+            String docId, String layerName, String sha, SignaturesVersionsRequest request) {
+        return this.rawClient.signatures(docId, layerName, sha, request).body();
     }
 
-    /**
-     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
-     */
-    public InputStream signatureContents(String docId, String sha, String fieldKey, RequestOptions requestOptions) {
+    public DocVersionsSignatures200Response signatures(
+            String docId,
+            String layerName,
+            String sha,
+            SignaturesVersionsRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, sha, fieldKey, requestOptions)
+                .signatures(docId, layerName, sha, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
+     */
+    public InputStream signatureContents(String docId, String layerName, String sha, String fieldKey) {
+        return this.rawClient.signatureContents(docId, layerName, sha, fieldKey).body();
+    }
+
+    /**
+     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
+     */
+    public InputStream signatureContents(
+            String docId, String layerName, String sha, String fieldKey, RequestOptions requestOptions) {
+        return this.rawClient
+                .signatureContents(docId, layerName, sha, fieldKey, requestOptions)
                 .body();
     }
 
@@ -165,8 +197,10 @@ public class VersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public InputStream signatureContents(
-            String docId, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
-        return this.rawClient.signatureContents(docId, sha, fieldKey, request).body();
+            String docId, String layerName, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
+        return this.rawClient
+                .signatureContents(docId, layerName, sha, fieldKey, request)
+                .body();
     }
 
     /**
@@ -174,12 +208,13 @@ public class VersionsClient {
      */
     public InputStream signatureContents(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureContentsVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, sha, fieldKey, request, requestOptions)
+                .signatureContents(docId, layerName, sha, fieldKey, request, requestOptions)
                 .body();
     }
 
@@ -187,8 +222,14 @@ public class VersionsClient {
      * What a CMS verifier compares its message digest to.
      */
     public InputStream signatureDigest(
-            String docId, String sha, String fieldKey, SignatureDigestVersionsRequestAlgorithm algorithm) {
-        return this.rawClient.signatureDigest(docId, sha, fieldKey, algorithm).body();
+            String docId,
+            String layerName,
+            String sha,
+            String fieldKey,
+            SignatureDigestVersionsRequestAlgorithm algorithm) {
+        return this.rawClient
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm)
+                .body();
     }
 
     /**
@@ -196,12 +237,13 @@ public class VersionsClient {
      */
     public InputStream signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, requestOptions)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, requestOptions)
                 .body();
     }
 
@@ -210,12 +252,13 @@ public class VersionsClient {
      */
     public InputStream signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, request)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request)
                 .body();
     }
 
@@ -224,13 +267,14 @@ public class VersionsClient {
      */
     public InputStream signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, request, requestOptions)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request, requestOptions)
                 .body();
     }
 }

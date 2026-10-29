@@ -27,6 +27,10 @@ public final class DocumentsInitRequest {
 
     private final String contentSha256;
 
+    private final Optional<String> name;
+
+    private final Optional<String> folderId;
+
     private final Optional<Map<String, Object>> metadata;
 
     private final Optional<String> idempotencyKey;
@@ -44,6 +48,8 @@ public final class DocumentsInitRequest {
     private DocumentsInitRequest(
             double contentLength,
             String contentSha256,
+            Optional<String> name,
+            Optional<String> folderId,
             Optional<Map<String, Object>> metadata,
             Optional<String> idempotencyKey,
             Optional<DocumentsInitRequestDedupMode> dedupMode,
@@ -53,6 +59,8 @@ public final class DocumentsInitRequest {
             Map<String, Object> additionalProperties) {
         this.contentLength = contentLength;
         this.contentSha256 = contentSha256;
+        this.name = name;
+        this.folderId = folderId;
         this.metadata = metadata;
         this.idempotencyKey = idempotencyKey;
         this.dedupMode = dedupMode;
@@ -70,6 +78,22 @@ public final class DocumentsInitRequest {
     @JsonProperty("contentSha256")
     public String getContentSha256() {
         return contentSha256;
+    }
+
+    /**
+     * @return What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
+    /**
+     * @return A folder id, or root for the top level.
+     */
+    @JsonProperty("folderId")
+    public Optional<String> getFolderId() {
+        return folderId;
     }
 
     @JsonProperty("metadata")
@@ -119,6 +143,8 @@ public final class DocumentsInitRequest {
     private boolean equalTo(DocumentsInitRequest other) {
         return contentLength == other.contentLength
                 && contentSha256.equals(other.contentSha256)
+                && name.equals(other.name)
+                && folderId.equals(other.folderId)
                 && metadata.equals(other.metadata)
                 && idempotencyKey.equals(other.idempotencyKey)
                 && dedupMode.equals(other.dedupMode)
@@ -132,6 +158,8 @@ public final class DocumentsInitRequest {
         return Objects.hash(
                 this.contentLength,
                 this.contentSha256,
+                this.name,
+                this.folderId,
                 this.metadata,
                 this.idempotencyKey,
                 this.dedupMode,
@@ -165,6 +193,20 @@ public final class DocumentsInitRequest {
         _FinalStage additionalProperty(String key, Object value);
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
+
+        /**
+         * <p>A folder id, or root for the top level.</p>
+         */
+        _FinalStage folderId(Optional<String> folderId);
+
+        _FinalStage folderId(String folderId);
 
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
@@ -212,6 +254,10 @@ public final class DocumentsInitRequest {
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
+        private Optional<String> folderId = Optional.empty();
+
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -221,6 +267,8 @@ public final class DocumentsInitRequest {
         public Builder from(DocumentsInitRequest other) {
             contentLength(other.getContentLength());
             contentSha256(other.getContentSha256());
+            name(other.getName());
+            folderId(other.getFolderId());
             metadata(other.getMetadata());
             idempotencyKey(other.getIdempotencyKey());
             dedupMode(other.getDedupMode());
@@ -329,11 +377,53 @@ public final class DocumentsInitRequest {
             return this;
         }
 
+        /**
+         * <p>A folder id, or root for the top level.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage folderId(String folderId) {
+            this.folderId = Optional.ofNullable(folderId);
+            return this;
+        }
+
+        /**
+         * <p>A folder id, or root for the top level.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "folderId", nulls = Nulls.SKIP)
+        public _FinalStage folderId(Optional<String> folderId) {
+            this.folderId = folderId;
+            return this;
+        }
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>What people call the document: shown in dashboards, searched and sorted by. 1 to 255 characters, no control characters, no leading or trailing whitespace. Names need not be unique.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public DocumentsInitRequest build() {
             return new DocumentsInitRequest(
                     contentLength,
                     contentSha256,
+                    name,
+                    folderId,
                     metadata,
                     idempotencyKey,
                     dedupMode,

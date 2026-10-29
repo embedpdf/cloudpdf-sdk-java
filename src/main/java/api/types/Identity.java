@@ -18,8 +18,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = TokensIssueRequestDocIdentity.Builder.class)
-public final class TokensIssueRequestDocIdentity {
+@JsonDeserialize(builder = Identity.Builder.class)
+public final class Identity {
     private final Optional<String> userId;
 
     private final Optional<String> displayName;
@@ -36,7 +36,7 @@ public final class TokensIssueRequestDocIdentity {
 
     private final Map<String, Object> additionalProperties;
 
-    private TokensIssueRequestDocIdentity(
+    private Identity(
             Optional<String> userId,
             Optional<String> displayName,
             Optional<String> email,
@@ -93,7 +93,7 @@ public final class TokensIssueRequestDocIdentity {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof TokensIssueRequestDocIdentity && equalTo((TokensIssueRequestDocIdentity) other);
+        return other instanceof Identity && equalTo((Identity) other);
     }
 
     @JsonAnyGetter
@@ -101,7 +101,7 @@ public final class TokensIssueRequestDocIdentity {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(TokensIssueRequestDocIdentity other) {
+    private boolean equalTo(Identity other) {
         return userId.equals(other.userId)
                 && displayName.equals(other.displayName)
                 && email.equals(other.email)
@@ -153,7 +153,7 @@ public final class TokensIssueRequestDocIdentity {
 
         private Builder() {}
 
-        public Builder from(TokensIssueRequestDocIdentity other) {
+        public Builder from(Identity other) {
             userId(other.getUserId());
             displayName(other.getDisplayName());
             email(other.getEmail());
@@ -241,8 +241,8 @@ public final class TokensIssueRequestDocIdentity {
             return this;
         }
 
-        public TokensIssueRequestDocIdentity build() {
-            return new TokensIssueRequestDocIdentity(
+        public Identity build() {
+            return new Identity(
                     userId, displayName, email, title, organization, organizationalUnit, groupId, additionalProperties);
         }
 

@@ -37,135 +37,166 @@ public class AsyncVersionsClient {
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<DocVersionsList200Response> list(String docId) {
-        return this.rawClient.list(docId).thenApply(response -> response.body());
+    public CompletableFuture<DocVersionsList200Response> list(String docId, String layerName) {
+        return this.rawClient.list(docId, layerName).thenApply(response -> response.body());
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
-     */
-    public CompletableFuture<DocVersionsList200Response> list(String docId, RequestOptions requestOptions) {
-        return this.rawClient.list(docId, requestOptions).thenApply(response -> response.body());
-    }
-
-    /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
-     */
-    public CompletableFuture<DocVersionsList200Response> list(String docId, ListVersionsRequest request) {
-        return this.rawClient.list(docId, request).thenApply(response -> response.body());
-    }
-
-    /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
     public CompletableFuture<DocVersionsList200Response> list(
-            String docId, ListVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(docId, request, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<DocVersionsAnalysis200Response> analysis(String docId, String sha) {
-        return this.rawClient.analysis(docId, sha).thenApply(response -> response.body());
+    public CompletableFuture<DocVersionsList200Response> list(
+            String docId, String layerName, ListVersionsRequest request) {
+        return this.rawClient.list(docId, layerName, request).thenApply(response -> response.body());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
+     */
+    public CompletableFuture<DocVersionsList200Response> list(
+            String docId, String layerName, ListVersionsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.list(docId, layerName, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     */
+    public CompletableFuture<DocVersionsAnalysis200Response> analysis(String docId, String layerName, String sha) {
+        return this.rawClient.analysis(docId, layerName, sha).thenApply(response -> response.body());
+    }
+
+    /**
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CompletableFuture<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.analysis(docId, sha, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.analysis(docId, layerName, sha, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CompletableFuture<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, AnalysisVersionsRequest request) {
-        return this.rawClient.analysis(docId, sha, request).thenApply(response -> response.body());
+            String docId, String layerName, String sha, AnalysisVersionsRequest request) {
+        return this.rawClient.analysis(docId, layerName, sha, request).thenApply(response -> response.body());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CompletableFuture<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, AnalysisVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.analysis(docId, sha, request, requestOptions).thenApply(response -> response.body());
+            String docId,
+            String layerName,
+            String sha,
+            AnalysisVersionsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .analysis(docId, layerName, sha, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<InputStream> download(String docId, String sha) {
-        return this.rawClient.download(docId, sha).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> download(String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.download(docId, sha, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> download(String docId, String sha, DownloadVersionsRequest request) {
-        return this.rawClient.download(docId, sha, request).thenApply(response -> response.body());
+    public CompletableFuture<InputStream> download(String docId, String layerName, String sha) {
+        return this.rawClient.download(docId, layerName, sha).thenApply(response -> response.body());
     }
 
     public CompletableFuture<InputStream> download(
-            String docId, String sha, DownloadVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.download(docId, sha, request, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.download(docId, layerName, sha, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<InputStream> revision(String docId, String sha, int index) {
-        return this.rawClient.revision(docId, sha, index).thenApply(response -> response.body());
+    public CompletableFuture<InputStream> download(
+            String docId, String layerName, String sha, DownloadVersionsRequest request) {
+        return this.rawClient.download(docId, layerName, sha, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<InputStream> revision(String docId, String sha, int index, RequestOptions requestOptions) {
-        return this.rawClient.revision(docId, sha, index, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> revision(
-            String docId, String sha, int index, RevisionVersionsRequest request) {
-        return this.rawClient.revision(docId, sha, index, request).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> revision(
-            String docId, String sha, int index, RevisionVersionsRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<InputStream> download(
+            String docId,
+            String layerName,
+            String sha,
+            DownloadVersionsRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .revision(docId, sha, index, request, requestOptions)
+                .download(docId, layerName, sha, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocVersionsSignatures200Response> signatures(String docId, String sha) {
-        return this.rawClient.signatures(docId, sha).thenApply(response -> response.body());
+    public CompletableFuture<InputStream> revision(String docId, String layerName, String sha, int index) {
+        return this.rawClient.revision(docId, layerName, sha, index).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> revision(
+            String docId, String layerName, String sha, int index, RequestOptions requestOptions) {
+        return this.rawClient
+                .revision(docId, layerName, sha, index, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> revision(
+            String docId, String layerName, String sha, int index, RevisionVersionsRequest request) {
+        return this.rawClient.revision(docId, layerName, sha, index, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> revision(
+            String docId,
+            String layerName,
+            String sha,
+            int index,
+            RevisionVersionsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .revision(docId, layerName, sha, index, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<DocVersionsSignatures200Response> signatures(String docId, String layerName, String sha) {
+        return this.rawClient.signatures(docId, layerName, sha).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, RequestOptions requestOptions) {
-        return this.rawClient.signatures(docId, sha, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return this.rawClient.signatures(docId, layerName, sha, requestOptions).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, SignaturesVersionsRequest request) {
-        return this.rawClient.signatures(docId, sha, request).thenApply(response -> response.body());
+            String docId, String layerName, String sha, SignaturesVersionsRequest request) {
+        return this.rawClient.signatures(docId, layerName, sha, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, SignaturesVersionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.signatures(docId, sha, request, requestOptions).thenApply(response -> response.body());
-    }
-
-    /**
-     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
-     */
-    public CompletableFuture<InputStream> signatureContents(String docId, String sha, String fieldKey) {
-        return this.rawClient.signatureContents(docId, sha, fieldKey).thenApply(response -> response.body());
+            String docId,
+            String layerName,
+            String sha,
+            SignaturesVersionsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .signatures(docId, layerName, sha, request, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     /**
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CompletableFuture<InputStream> signatureContents(
-            String docId, String sha, String fieldKey, RequestOptions requestOptions) {
+            String docId, String layerName, String sha, String fieldKey) {
+        return this.rawClient.signatureContents(docId, layerName, sha, fieldKey).thenApply(response -> response.body());
+    }
+
+    /**
+     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
+     */
+    public CompletableFuture<InputStream> signatureContents(
+            String docId, String layerName, String sha, String fieldKey, RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, sha, fieldKey, requestOptions)
+                .signatureContents(docId, layerName, sha, fieldKey, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -173,8 +204,10 @@ public class AsyncVersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CompletableFuture<InputStream> signatureContents(
-            String docId, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
-        return this.rawClient.signatureContents(docId, sha, fieldKey, request).thenApply(response -> response.body());
+            String docId, String layerName, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
+        return this.rawClient
+                .signatureContents(docId, layerName, sha, fieldKey, request)
+                .thenApply(response -> response.body());
     }
 
     /**
@@ -182,12 +215,13 @@ public class AsyncVersionsClient {
      */
     public CompletableFuture<InputStream> signatureContents(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureContentsVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, sha, fieldKey, request, requestOptions)
+                .signatureContents(docId, layerName, sha, fieldKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -195,8 +229,14 @@ public class AsyncVersionsClient {
      * What a CMS verifier compares its message digest to.
      */
     public CompletableFuture<InputStream> signatureDigest(
-            String docId, String sha, String fieldKey, SignatureDigestVersionsRequestAlgorithm algorithm) {
-        return this.rawClient.signatureDigest(docId, sha, fieldKey, algorithm).thenApply(response -> response.body());
+            String docId,
+            String layerName,
+            String sha,
+            String fieldKey,
+            SignatureDigestVersionsRequestAlgorithm algorithm) {
+        return this.rawClient
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm)
+                .thenApply(response -> response.body());
     }
 
     /**
@@ -204,12 +244,13 @@ public class AsyncVersionsClient {
      */
     public CompletableFuture<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, requestOptions)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -218,12 +259,13 @@ public class AsyncVersionsClient {
      */
     public CompletableFuture<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, request)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request)
                 .thenApply(response -> response.body());
     }
 
@@ -232,13 +274,14 @@ public class AsyncVersionsClient {
      */
     public CompletableFuture<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, sha, fieldKey, algorithm, request, requestOptions)
+                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

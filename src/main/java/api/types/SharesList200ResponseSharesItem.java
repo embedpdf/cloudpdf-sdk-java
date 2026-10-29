@@ -42,6 +42,8 @@ public final class SharesList200ResponseSharesItem {
 
     private final Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity;
 
+    private final Optional<Identity> identity;
+
     private final List<String> scope;
 
     private final Optional<List<String>> origins;
@@ -77,6 +79,7 @@ public final class SharesList200ResponseSharesItem {
             boolean keepVisitorLayers,
             Optional<Double> visitorIdleSeconds,
             Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity,
+            Optional<Identity> identity,
             List<String> scope,
             Optional<List<String>> origins,
             boolean passwordProtected,
@@ -98,6 +101,7 @@ public final class SharesList200ResponseSharesItem {
         this.keepVisitorLayers = keepVisitorLayers;
         this.visitorIdleSeconds = visitorIdleSeconds;
         this.visitorIdentity = visitorIdentity;
+        this.identity = identity;
         this.scope = scope;
         this.origins = origins;
         this.passwordProtected = passwordProtected;
@@ -160,6 +164,14 @@ public final class SharesList200ResponseSharesItem {
             return Optional.empty();
         }
         return visitorIdentity;
+    }
+
+    @JsonIgnore
+    public Optional<Identity> getIdentity() {
+        if (identity == null) {
+            return Optional.empty();
+        }
+        return identity;
     }
 
     @JsonProperty("scope")
@@ -253,6 +265,12 @@ public final class SharesList200ResponseSharesItem {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("identity")
+    private Optional<Identity> _getIdentity() {
+        return identity;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("origins")
     private Optional<List<String>> _getOrigins() {
         return origins;
@@ -296,6 +314,7 @@ public final class SharesList200ResponseSharesItem {
                 && keepVisitorLayers == other.keepVisitorLayers
                 && visitorIdleSeconds.equals(other.visitorIdleSeconds)
                 && visitorIdentity.equals(other.visitorIdentity)
+                && identity.equals(other.identity)
                 && scope.equals(other.scope)
                 && origins.equals(other.origins)
                 && passwordProtected == other.passwordProtected
@@ -321,6 +340,7 @@ public final class SharesList200ResponseSharesItem {
                 this.keepVisitorLayers,
                 this.visitorIdleSeconds,
                 this.visitorIdentity,
+                this.identity,
                 this.scope,
                 this.origins,
                 this.passwordProtected,
@@ -419,6 +439,12 @@ public final class SharesList200ResponseSharesItem {
 
         _FinalStage visitorIdentity(Nullable<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity);
 
+        _FinalStage identity(Optional<Identity> identity);
+
+        _FinalStage identity(Identity identity);
+
+        _FinalStage identity(Nullable<Identity> identity);
+
         _FinalStage scope(List<String> scope);
 
         _FinalStage addScope(String scope);
@@ -499,6 +525,8 @@ public final class SharesList200ResponseSharesItem {
 
         private List<String> scope = new ArrayList<>();
 
+        private Optional<Identity> identity = Optional.empty();
+
         private Optional<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity = Optional.empty();
 
         private Optional<Double> visitorIdleSeconds = Optional.empty();
@@ -520,6 +548,7 @@ public final class SharesList200ResponseSharesItem {
             keepVisitorLayers(other.getKeepVisitorLayers());
             visitorIdleSeconds(other.getVisitorIdleSeconds());
             visitorIdentity(other.getVisitorIdentity());
+            identity(other.getIdentity());
             scope(other.getScope());
             origins(other.getOrigins());
             passwordProtected(other.getPasswordProtected());
@@ -744,6 +773,31 @@ public final class SharesList200ResponseSharesItem {
         }
 
         @java.lang.Override
+        public _FinalStage identity(Nullable<Identity> identity) {
+            if (identity.isNull()) {
+                this.identity = null;
+            } else if (identity.isEmpty()) {
+                this.identity = Optional.empty();
+            } else {
+                this.identity = Optional.of(identity.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage identity(Identity identity) {
+            this.identity = Optional.ofNullable(identity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "identity", nulls = Nulls.SKIP)
+        public _FinalStage identity(Optional<Identity> identity) {
+            this.identity = identity;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage visitorIdentity(Nullable<SharesList200ResponseSharesItemVisitorIdentity> visitorIdentity) {
             if (visitorIdentity.isNull()) {
                 this.visitorIdentity = null;
@@ -829,6 +883,7 @@ public final class SharesList200ResponseSharesItem {
                     keepVisitorLayers,
                     visitorIdleSeconds,
                     visitorIdentity,
+                    identity,
                     scope,
                     origins,
                     passwordProtected,

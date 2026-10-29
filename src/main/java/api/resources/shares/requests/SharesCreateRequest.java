@@ -8,6 +8,7 @@ import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.cloudpdf.api.resources.shares.types.SharesCreateRequestLayerMode;
 import com.cloudpdf.api.resources.shares.types.SharesCreateRequestVisitorIdentity;
+import com.cloudpdf.api.types.Identity;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,6 +41,8 @@ public final class SharesCreateRequest {
 
     private final Optional<SharesCreateRequestVisitorIdentity> visitorIdentity;
 
+    private final Optional<Identity> identity;
+
     private final List<String> scope;
 
     private final Optional<List<String>> origins;
@@ -59,6 +62,7 @@ public final class SharesCreateRequest {
             Optional<Boolean> keepVisitorLayers,
             Optional<Integer> visitorIdleSeconds,
             Optional<SharesCreateRequestVisitorIdentity> visitorIdentity,
+            Optional<Identity> identity,
             List<String> scope,
             Optional<List<String>> origins,
             Optional<String> password,
@@ -71,6 +75,7 @@ public final class SharesCreateRequest {
         this.keepVisitorLayers = keepVisitorLayers;
         this.visitorIdleSeconds = visitorIdleSeconds;
         this.visitorIdentity = visitorIdentity;
+        this.identity = identity;
         this.scope = scope;
         this.origins = origins;
         this.password = password;
@@ -115,6 +120,14 @@ public final class SharesCreateRequest {
         return visitorIdentity;
     }
 
+    @JsonIgnore
+    public Optional<Identity> getIdentity() {
+        if (identity == null) {
+            return Optional.empty();
+        }
+        return identity;
+    }
+
     @JsonProperty("scope")
     public List<String> getScope() {
         return scope;
@@ -152,6 +165,12 @@ public final class SharesCreateRequest {
         return visitorIdentity;
     }
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("identity")
+    private Optional<Identity> _getIdentity() {
+        return identity;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -170,6 +189,7 @@ public final class SharesCreateRequest {
                 && keepVisitorLayers.equals(other.keepVisitorLayers)
                 && visitorIdleSeconds.equals(other.visitorIdleSeconds)
                 && visitorIdentity.equals(other.visitorIdentity)
+                && identity.equals(other.identity)
                 && scope.equals(other.scope)
                 && origins.equals(other.origins)
                 && password.equals(other.password)
@@ -186,6 +206,7 @@ public final class SharesCreateRequest {
                 this.keepVisitorLayers,
                 this.visitorIdleSeconds,
                 this.visitorIdentity,
+                this.identity,
                 this.scope,
                 this.origins,
                 this.password,
@@ -239,6 +260,12 @@ public final class SharesCreateRequest {
 
         _FinalStage visitorIdentity(Nullable<SharesCreateRequestVisitorIdentity> visitorIdentity);
 
+        _FinalStage identity(Optional<Identity> identity);
+
+        _FinalStage identity(Identity identity);
+
+        _FinalStage identity(Nullable<Identity> identity);
+
         _FinalStage scope(List<String> scope);
 
         _FinalStage addScope(String scope);
@@ -276,6 +303,8 @@ public final class SharesCreateRequest {
 
         private List<String> scope = new ArrayList<>();
 
+        private Optional<Identity> identity = Optional.empty();
+
         private Optional<SharesCreateRequestVisitorIdentity> visitorIdentity = Optional.empty();
 
         private Optional<Integer> visitorIdleSeconds = Optional.empty();
@@ -299,6 +328,7 @@ public final class SharesCreateRequest {
             keepVisitorLayers(other.getKeepVisitorLayers());
             visitorIdleSeconds(other.getVisitorIdleSeconds());
             visitorIdentity(other.getVisitorIdentity());
+            identity(other.getIdentity());
             scope(other.getScope());
             origins(other.getOrigins());
             password(other.getPassword());
@@ -387,6 +417,31 @@ public final class SharesCreateRequest {
             if (scope != null) {
                 this.scope.addAll(scope);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage identity(Nullable<Identity> identity) {
+            if (identity.isNull()) {
+                this.identity = null;
+            } else if (identity.isEmpty()) {
+                this.identity = Optional.empty();
+            } else {
+                this.identity = Optional.of(identity.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage identity(Identity identity) {
+            this.identity = Optional.ofNullable(identity);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "identity", nulls = Nulls.SKIP)
+        public _FinalStage identity(Optional<Identity> identity) {
+            this.identity = identity;
             return this;
         }
 
@@ -488,6 +543,7 @@ public final class SharesCreateRequest {
                     keepVisitorLayers,
                     visitorIdleSeconds,
                     visitorIdentity,
+                    identity,
                     scope,
                     origins,
                     password,

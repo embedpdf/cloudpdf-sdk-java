@@ -31,7 +31,7 @@ public final class TokensIssueRequestDoc {
 
     private final List<String> scope;
 
-    private final Optional<TokensIssueRequestDocIdentity> identity;
+    private final Optional<Identity> identity;
 
     private final Optional<List<String>> origins;
 
@@ -44,7 +44,7 @@ public final class TokensIssueRequestDoc {
             String docId,
             Optional<String> layerName,
             List<String> scope,
-            Optional<TokensIssueRequestDocIdentity> identity,
+            Optional<Identity> identity,
             Optional<List<String>> origins,
             int expiresIn,
             Map<String, Object> additionalProperties) {
@@ -79,7 +79,7 @@ public final class TokensIssueRequestDoc {
     }
 
     @JsonProperty("identity")
-    public Optional<TokensIssueRequestDocIdentity> getIdentity() {
+    public Optional<Identity> getIdentity() {
         return identity;
     }
 
@@ -160,9 +160,9 @@ public final class TokensIssueRequestDoc {
 
         _FinalStage addAllScope(List<String> scope);
 
-        _FinalStage identity(Optional<TokensIssueRequestDocIdentity> identity);
+        _FinalStage identity(Optional<Identity> identity);
 
-        _FinalStage identity(TokensIssueRequestDocIdentity identity);
+        _FinalStage identity(Identity identity);
 
         _FinalStage origins(Optional<List<String>> origins);
 
@@ -179,7 +179,7 @@ public final class TokensIssueRequestDoc {
 
         private Optional<List<String>> origins = Optional.empty();
 
-        private Optional<TokensIssueRequestDocIdentity> identity = Optional.empty();
+        private Optional<Identity> identity = Optional.empty();
 
         private List<String> scope = new ArrayList<>();
 
@@ -237,14 +237,14 @@ public final class TokensIssueRequestDoc {
         }
 
         @java.lang.Override
-        public _FinalStage identity(TokensIssueRequestDocIdentity identity) {
+        public _FinalStage identity(Identity identity) {
             this.identity = Optional.ofNullable(identity);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "identity", nulls = Nulls.SKIP)
-        public _FinalStage identity(Optional<TokensIssueRequestDocIdentity> identity) {
+        public _FinalStage identity(Optional<Identity> identity) {
             this.identity = identity;
             return this;
         }

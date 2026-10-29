@@ -4,6 +4,8 @@
 package com.cloudpdf.api.resources.documents.requests;
 
 import com.cloudpdf.api.core.ObjectMappers;
+import com.cloudpdf.api.resources.documents.types.ListDocumentsRequestOrder;
+import com.cloudpdf.api.resources.documents.types.ListDocumentsRequestSort;
 import com.cloudpdf.api.resources.documents.types.ListDocumentsRequestState;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -27,16 +29,32 @@ public final class ListDocumentsRequest {
 
     private final Optional<ListDocumentsRequestState> state;
 
+    private final Optional<String> q;
+
+    private final Optional<String> folderId;
+
+    private final Optional<ListDocumentsRequestSort> sort;
+
+    private final Optional<ListDocumentsRequestOrder> order;
+
     private final Map<String, Object> additionalProperties;
 
     private ListDocumentsRequest(
             Optional<Integer> limit,
             Optional<String> cursor,
             Optional<ListDocumentsRequestState> state,
+            Optional<String> q,
+            Optional<String> folderId,
+            Optional<ListDocumentsRequestSort> sort,
+            Optional<ListDocumentsRequestOrder> order,
             Map<String, Object> additionalProperties) {
         this.limit = limit;
         this.cursor = cursor;
         this.state = state;
+        this.q = q;
+        this.folderId = folderId;
+        this.sort = sort;
+        this.order = order;
         this.additionalProperties = additionalProperties;
     }
 
@@ -50,9 +68,44 @@ public final class ListDocumentsRequest {
         return cursor;
     }
 
+    /**
+     * @return Only documents in this state. Without it, every state except deleting.
+     */
     @JsonProperty("state")
     public Optional<ListDocumentsRequestState> getState() {
         return state;
+    }
+
+    /**
+     * @return Only documents whose name contains this text, ignoring case.
+     */
+    @JsonProperty("q")
+    public Optional<String> getQ() {
+        return q;
+    }
+
+    /**
+     * @return Only documents directly in this folder (root: the top level). Without it, documents in every folder.
+     */
+    @JsonProperty("folderId")
+    public Optional<String> getFolderId() {
+        return folderId;
+    }
+
+    /**
+     * @return createdAt (default), name (ignoring case), or size (stored bytes; 0 while pending).
+     */
+    @JsonProperty("sort")
+    public Optional<ListDocumentsRequestSort> getSort() {
+        return sort;
+    }
+
+    /**
+     * @return Defaults to the reading order of the sort: A to Z for name, newest and largest first otherwise.
+     */
+    @JsonProperty("order")
+    public Optional<ListDocumentsRequestOrder> getOrder() {
+        return order;
     }
 
     @java.lang.Override
@@ -67,12 +120,18 @@ public final class ListDocumentsRequest {
     }
 
     private boolean equalTo(ListDocumentsRequest other) {
-        return limit.equals(other.limit) && cursor.equals(other.cursor) && state.equals(other.state);
+        return limit.equals(other.limit)
+                && cursor.equals(other.cursor)
+                && state.equals(other.state)
+                && q.equals(other.q)
+                && folderId.equals(other.folderId)
+                && sort.equals(other.sort)
+                && order.equals(other.order);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.cursor, this.state);
+        return Objects.hash(this.limit, this.cursor, this.state, this.q, this.folderId, this.sort, this.order);
     }
 
     @java.lang.Override
@@ -92,6 +151,14 @@ public final class ListDocumentsRequest {
 
         private Optional<ListDocumentsRequestState> state = Optional.empty();
 
+        private Optional<String> q = Optional.empty();
+
+        private Optional<String> folderId = Optional.empty();
+
+        private Optional<ListDocumentsRequestSort> sort = Optional.empty();
+
+        private Optional<ListDocumentsRequestOrder> order = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -101,6 +168,10 @@ public final class ListDocumentsRequest {
             limit(other.getLimit());
             cursor(other.getCursor());
             state(other.getState());
+            q(other.getQ());
+            folderId(other.getFolderId());
+            sort(other.getSort());
+            order(other.getOrder());
             return this;
         }
 
@@ -126,6 +197,9 @@ public final class ListDocumentsRequest {
             return this;
         }
 
+        /**
+         * <p>Only documents in this state. Without it, every state except deleting.</p>
+         */
         @JsonSetter(value = "state", nulls = Nulls.SKIP)
         public Builder state(Optional<ListDocumentsRequestState> state) {
             this.state = state;
@@ -137,8 +211,64 @@ public final class ListDocumentsRequest {
             return this;
         }
 
+        /**
+         * <p>Only documents whose name contains this text, ignoring case.</p>
+         */
+        @JsonSetter(value = "q", nulls = Nulls.SKIP)
+        public Builder q(Optional<String> q) {
+            this.q = q;
+            return this;
+        }
+
+        public Builder q(String q) {
+            this.q = Optional.ofNullable(q);
+            return this;
+        }
+
+        /**
+         * <p>Only documents directly in this folder (root: the top level). Without it, documents in every folder.</p>
+         */
+        @JsonSetter(value = "folderId", nulls = Nulls.SKIP)
+        public Builder folderId(Optional<String> folderId) {
+            this.folderId = folderId;
+            return this;
+        }
+
+        public Builder folderId(String folderId) {
+            this.folderId = Optional.ofNullable(folderId);
+            return this;
+        }
+
+        /**
+         * <p>createdAt (default), name (ignoring case), or size (stored bytes; 0 while pending).</p>
+         */
+        @JsonSetter(value = "sort", nulls = Nulls.SKIP)
+        public Builder sort(Optional<ListDocumentsRequestSort> sort) {
+            this.sort = sort;
+            return this;
+        }
+
+        public Builder sort(ListDocumentsRequestSort sort) {
+            this.sort = Optional.ofNullable(sort);
+            return this;
+        }
+
+        /**
+         * <p>Defaults to the reading order of the sort: A to Z for name, newest and largest first otherwise.</p>
+         */
+        @JsonSetter(value = "order", nulls = Nulls.SKIP)
+        public Builder order(Optional<ListDocumentsRequestOrder> order) {
+            this.order = order;
+            return this;
+        }
+
+        public Builder order(ListDocumentsRequestOrder order) {
+            this.order = Optional.ofNullable(order);
+            return this;
+        }
+
         public ListDocumentsRequest build() {
-            return new ListDocumentsRequest(limit, cursor, state, additionalProperties);
+            return new ListDocumentsRequest(limit, cursor, state, q, folderId, sort, order, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

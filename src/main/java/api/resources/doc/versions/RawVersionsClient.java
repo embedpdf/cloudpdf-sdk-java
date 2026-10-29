@@ -43,35 +43,39 @@ public class RawVersionsClient {
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(String docId) {
-        return list(docId, ListVersionsRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(String docId, String layerName) {
+        return list(docId, layerName, ListVersionsRequest.builder().build());
     }
 
     /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
-     */
-    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(String docId, RequestOptions requestOptions) {
-        return list(docId, ListVersionsRequest.builder().build(), requestOptions);
-    }
-
-    /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
-     */
-    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(String docId, ListVersionsRequest request) {
-        return list(docId, request, null);
-    }
-
-    /**
-     * Every completed signature publishes a new version. Never cached: the list grows.
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
     public CloudPDFClientHttpResponse<DocVersionsList200Response> list(
-            String docId, ListVersionsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, RequestOptions requestOptions) {
+        return list(docId, layerName, ListVersionsRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
+     */
+    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(
+            String docId, String layerName, ListVersionsRequest request) {
+        return list(docId, layerName, request, null);
+    }
+
+    /**
+     * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
+     */
+    public CloudPDFClientHttpResponse<DocVersionsList200Response> list(
+            String docId, String layerName, ListVersionsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions");
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -128,37 +132,44 @@ public class RawVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public CloudPDFClientHttpResponse<DocVersionsAnalysis200Response> analysis(String docId, String sha) {
-        return analysis(docId, sha, AnalysisVersionsRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocVersionsAnalysis200Response> analysis(
+            String docId, String layerName, String sha) {
+        return analysis(docId, layerName, sha, AnalysisVersionsRequest.builder().build());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, RequestOptions requestOptions) {
-        return analysis(docId, sha, AnalysisVersionsRequest.builder().build(), requestOptions);
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return analysis(docId, layerName, sha, AnalysisVersionsRequest.builder().build(), requestOptions);
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, AnalysisVersionsRequest request) {
-        return analysis(docId, sha, request, null);
+            String docId, String layerName, String sha, AnalysisVersionsRequest request) {
+        return analysis(docId, layerName, sha, request, null);
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every layer and every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysis200Response> analysis(
-            String docId, String sha, AnalysisVersionsRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String sha,
+            AnalysisVersionsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/analysis")
                 .addPathSegment(sha);
         if (request.getSinceSignature().isPresent()) {
@@ -239,24 +250,32 @@ public class RawVersionsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<InputStream> download(String docId, String sha) {
-        return download(docId, sha, DownloadVersionsRequest.builder().build());
-    }
-
-    public CloudPDFClientHttpResponse<InputStream> download(String docId, String sha, RequestOptions requestOptions) {
-        return download(docId, sha, DownloadVersionsRequest.builder().build(), requestOptions);
-    }
-
-    public CloudPDFClientHttpResponse<InputStream> download(String docId, String sha, DownloadVersionsRequest request) {
-        return download(docId, sha, request, null);
+    public CloudPDFClientHttpResponse<InputStream> download(String docId, String layerName, String sha) {
+        return download(docId, layerName, sha, DownloadVersionsRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<InputStream> download(
-            String docId, String sha, DownloadVersionsRequest request, RequestOptions requestOptions) {
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return download(docId, layerName, sha, DownloadVersionsRequest.builder().build(), requestOptions);
+    }
+
+    public CloudPDFClientHttpResponse<InputStream> download(
+            String docId, String layerName, String sha, DownloadVersionsRequest request) {
+        return download(docId, layerName, sha, request, null);
+    }
+
+    public CloudPDFClientHttpResponse<InputStream> download(
+            String docId,
+            String layerName,
+            String sha,
+            DownloadVersionsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/download")
                 .addPathSegment(sha);
         if (requestOptions != null) {
@@ -312,26 +331,35 @@ public class RawVersionsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<InputStream> revision(String docId, String sha, int index) {
-        return revision(docId, sha, index, RevisionVersionsRequest.builder().build());
+    public CloudPDFClientHttpResponse<InputStream> revision(String docId, String layerName, String sha, int index) {
+        return revision(
+                docId, layerName, sha, index, RevisionVersionsRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<InputStream> revision(
-            String docId, String sha, int index, RequestOptions requestOptions) {
-        return revision(docId, sha, index, RevisionVersionsRequest.builder().build(), requestOptions);
+            String docId, String layerName, String sha, int index, RequestOptions requestOptions) {
+        return revision(
+                docId, layerName, sha, index, RevisionVersionsRequest.builder().build(), requestOptions);
     }
 
     public CloudPDFClientHttpResponse<InputStream> revision(
-            String docId, String sha, int index, RevisionVersionsRequest request) {
-        return revision(docId, sha, index, request, null);
+            String docId, String layerName, String sha, int index, RevisionVersionsRequest request) {
+        return revision(docId, layerName, sha, index, request, null);
     }
 
     public CloudPDFClientHttpResponse<InputStream> revision(
-            String docId, String sha, int index, RevisionVersionsRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String sha,
+            int index,
+            RevisionVersionsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/revisions")
                 .addPathSegment(sha)
                 .addPathSegment(Integer.toString(index));
@@ -388,26 +416,35 @@ public class RawVersionsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocVersionsSignatures200Response> signatures(String docId, String sha) {
-        return signatures(docId, sha, SignaturesVersionsRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocVersionsSignatures200Response> signatures(
+            String docId, String layerName, String sha) {
+        return signatures(
+                docId, layerName, sha, SignaturesVersionsRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, RequestOptions requestOptions) {
-        return signatures(docId, sha, SignaturesVersionsRequest.builder().build(), requestOptions);
+            String docId, String layerName, String sha, RequestOptions requestOptions) {
+        return signatures(
+                docId, layerName, sha, SignaturesVersionsRequest.builder().build(), requestOptions);
     }
 
     public CloudPDFClientHttpResponse<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, SignaturesVersionsRequest request) {
-        return signatures(docId, sha, request, null);
+            String docId, String layerName, String sha, SignaturesVersionsRequest request) {
+        return signatures(docId, layerName, sha, request, null);
     }
 
     public CloudPDFClientHttpResponse<DocVersionsSignatures200Response> signatures(
-            String docId, String sha, SignaturesVersionsRequest request, RequestOptions requestOptions) {
+            String docId,
+            String layerName,
+            String sha,
+            SignaturesVersionsRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
                 .addPathSegment(sha);
         if (requestOptions != null) {
@@ -467,26 +504,36 @@ public class RawVersionsClient {
     /**
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
-    public CloudPDFClientHttpResponse<InputStream> signatureContents(String docId, String sha, String fieldKey) {
+    public CloudPDFClientHttpResponse<InputStream> signatureContents(
+            String docId, String layerName, String sha, String fieldKey) {
         return signatureContents(
-                docId, sha, fieldKey, SignatureContentsVersionsRequest.builder().build());
+                docId,
+                layerName,
+                sha,
+                fieldKey,
+                SignatureContentsVersionsRequest.builder().build());
     }
 
     /**
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CloudPDFClientHttpResponse<InputStream> signatureContents(
-            String docId, String sha, String fieldKey, RequestOptions requestOptions) {
+            String docId, String layerName, String sha, String fieldKey, RequestOptions requestOptions) {
         return signatureContents(
-                docId, sha, fieldKey, SignatureContentsVersionsRequest.builder().build(), requestOptions);
+                docId,
+                layerName,
+                sha,
+                fieldKey,
+                SignatureContentsVersionsRequest.builder().build(),
+                requestOptions);
     }
 
     /**
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CloudPDFClientHttpResponse<InputStream> signatureContents(
-            String docId, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
-        return signatureContents(docId, sha, fieldKey, request, null);
+            String docId, String layerName, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
+        return signatureContents(docId, layerName, sha, fieldKey, request, null);
     }
 
     /**
@@ -494,6 +541,7 @@ public class RawVersionsClient {
      */
     public CloudPDFClientHttpResponse<InputStream> signatureContents(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureContentsVersionsRequest request,
@@ -502,6 +550,8 @@ public class RawVersionsClient {
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
                 .addPathSegment(sha)
                 .addPathSegment(fieldKey)
@@ -563,9 +613,14 @@ public class RawVersionsClient {
      * What a CMS verifier compares its message digest to.
      */
     public CloudPDFClientHttpResponse<InputStream> signatureDigest(
-            String docId, String sha, String fieldKey, SignatureDigestVersionsRequestAlgorithm algorithm) {
+            String docId,
+            String layerName,
+            String sha,
+            String fieldKey,
+            SignatureDigestVersionsRequestAlgorithm algorithm) {
         return signatureDigest(
                 docId,
+                layerName,
                 sha,
                 fieldKey,
                 algorithm,
@@ -577,12 +632,14 @@ public class RawVersionsClient {
      */
     public CloudPDFClientHttpResponse<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             RequestOptions requestOptions) {
         return signatureDigest(
                 docId,
+                layerName,
                 sha,
                 fieldKey,
                 algorithm,
@@ -595,11 +652,12 @@ public class RawVersionsClient {
      */
     public CloudPDFClientHttpResponse<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request) {
-        return signatureDigest(docId, sha, fieldKey, algorithm, request, null);
+        return signatureDigest(docId, layerName, sha, fieldKey, algorithm, request, null);
     }
 
     /**
@@ -607,6 +665,7 @@ public class RawVersionsClient {
      */
     public CloudPDFClientHttpResponse<InputStream> signatureDigest(
             String docId,
+            String layerName,
             String sha,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
@@ -616,6 +675,8 @@ public class RawVersionsClient {
                 .newBuilder()
                 .addPathSegments("v1/docs")
                 .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
                 .addPathSegment(sha)
                 .addPathSegment(fieldKey)

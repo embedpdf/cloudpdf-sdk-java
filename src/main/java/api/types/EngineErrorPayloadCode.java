@@ -9,8 +9,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class EngineErrorPayloadCode {
     public static final EngineErrorPayloadCode UNKNOWN = new EngineErrorPayloadCode(Value.UNKNOWN, "Unknown");
 
-    public static final EngineErrorPayloadCode STALE_BASE = new EngineErrorPayloadCode(Value.STALE_BASE, "StaleBase");
-
     public static final EngineErrorPayloadCode RUNTIME_UNAVAILABLE =
             new EngineErrorPayloadCode(Value.RUNTIME_UNAVAILABLE, "RuntimeUnavailable");
 
@@ -128,8 +126,6 @@ public final class EngineErrorPayloadCode {
         switch (value) {
             case UNKNOWN:
                 return visitor.visitUnknown();
-            case STALE_BASE:
-                return visitor.visitStaleBase();
             case RUNTIME_UNAVAILABLE:
                 return visitor.visitRuntimeUnavailable();
             case UNAUTHENTICATED:
@@ -199,8 +195,6 @@ public final class EngineErrorPayloadCode {
         switch (value) {
             case "Unknown":
                 return UNKNOWN;
-            case "StaleBase":
-                return STALE_BASE;
             case "RuntimeUnavailable":
                 return RUNTIME_UNAVAILABLE;
             case "Unauthenticated":
@@ -309,8 +303,6 @@ public final class EngineErrorPayloadCode {
 
         PROTECTED_DOCUMENT,
 
-        STALE_BASE,
-
         PAYLOAD_TOO_LARGE,
 
         OBJECT_NUMBER_UNAVAILABLE,
@@ -374,8 +366,6 @@ public final class EngineErrorPayloadCode {
         T visitSignatureRefused();
 
         T visitProtectedDocument();
-
-        T visitStaleBase();
 
         T visitPayloadTooLarge();
 

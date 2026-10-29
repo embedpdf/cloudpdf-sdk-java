@@ -22,24 +22,24 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocVersionsList200Response.Builder.class)
 public final class DocVersionsList200Response {
-    private final String head;
+    private final String baseSha;
 
     private final List<DocVersionsList200ResponseVersionsItem> versions;
 
     private final Map<String, Object> additionalProperties;
 
     private DocVersionsList200Response(
-            String head,
+            String baseSha,
             List<DocVersionsList200ResponseVersionsItem> versions,
             Map<String, Object> additionalProperties) {
-        this.head = head;
+        this.baseSha = baseSha;
         this.versions = versions;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("head")
-    public String getHead() {
-        return head;
+    @JsonProperty("baseSha")
+    public String getBaseSha() {
+        return baseSha;
     }
 
     @JsonProperty("versions")
@@ -59,12 +59,12 @@ public final class DocVersionsList200Response {
     }
 
     private boolean equalTo(DocVersionsList200Response other) {
-        return head.equals(other.head) && versions.equals(other.versions);
+        return baseSha.equals(other.baseSha) && versions.equals(other.versions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.head, this.versions);
+        return Objects.hash(this.baseSha, this.versions);
     }
 
     @java.lang.Override
@@ -72,12 +72,12 @@ public final class DocVersionsList200Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static HeadStage builder() {
+    public static BaseShaStage builder() {
         return new Builder();
     }
 
-    public interface HeadStage {
-        _FinalStage head(@NotNull String head);
+    public interface BaseShaStage {
+        _FinalStage baseSha(@NotNull String baseSha);
 
         Builder from(DocVersionsList200Response other);
     }
@@ -97,8 +97,8 @@ public final class DocVersionsList200Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements HeadStage, _FinalStage {
-        private String head;
+    public static final class Builder implements BaseShaStage, _FinalStage {
+        private String baseSha;
 
         private List<DocVersionsList200ResponseVersionsItem> versions = new ArrayList<>();
 
@@ -109,15 +109,15 @@ public final class DocVersionsList200Response {
 
         @java.lang.Override
         public Builder from(DocVersionsList200Response other) {
-            head(other.getHead());
+            baseSha(other.getBaseSha());
             versions(other.getVersions());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("head")
-        public _FinalStage head(@NotNull String head) {
-            this.head = Objects.requireNonNull(head, "head must not be null");
+        @JsonSetter("baseSha")
+        public _FinalStage baseSha(@NotNull String baseSha) {
+            this.baseSha = Objects.requireNonNull(baseSha, "baseSha must not be null");
             return this;
         }
 
@@ -147,7 +147,7 @@ public final class DocVersionsList200Response {
 
         @java.lang.Override
         public DocVersionsList200Response build() {
-            return new DocVersionsList200Response(head, versions, additionalProperties);
+            return new DocVersionsList200Response(baseSha, versions, additionalProperties);
         }
 
         @java.lang.Override
