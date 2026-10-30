@@ -24,18 +24,18 @@ public final class ListLayersRequest {
 
     private final Optional<String> cursor;
 
-    private final Optional<String> shareId;
+    private final Optional<String> grantId;
 
     private final Map<String, Object> additionalProperties;
 
     private ListLayersRequest(
             Optional<Integer> limit,
             Optional<String> cursor,
-            Optional<String> shareId,
+            Optional<String> grantId,
             Map<String, Object> additionalProperties) {
         this.limit = limit;
         this.cursor = cursor;
-        this.shareId = shareId;
+        this.grantId = grantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,9 +49,9 @@ public final class ListLayersRequest {
         return cursor;
     }
 
-    @JsonProperty("shareId")
-    public Optional<String> getShareId() {
-        return shareId;
+    @JsonProperty("grantId")
+    public Optional<String> getGrantId() {
+        return grantId;
     }
 
     @java.lang.Override
@@ -66,12 +66,12 @@ public final class ListLayersRequest {
     }
 
     private boolean equalTo(ListLayersRequest other) {
-        return limit.equals(other.limit) && cursor.equals(other.cursor) && shareId.equals(other.shareId);
+        return limit.equals(other.limit) && cursor.equals(other.cursor) && grantId.equals(other.grantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.cursor, this.shareId);
+        return Objects.hash(this.limit, this.cursor, this.grantId);
     }
 
     @java.lang.Override
@@ -89,7 +89,7 @@ public final class ListLayersRequest {
 
         private Optional<String> cursor = Optional.empty();
 
-        private Optional<String> shareId = Optional.empty();
+        private Optional<String> grantId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -99,7 +99,7 @@ public final class ListLayersRequest {
         public Builder from(ListLayersRequest other) {
             limit(other.getLimit());
             cursor(other.getCursor());
-            shareId(other.getShareId());
+            grantId(other.getGrantId());
             return this;
         }
 
@@ -125,19 +125,19 @@ public final class ListLayersRequest {
             return this;
         }
 
-        @JsonSetter(value = "shareId", nulls = Nulls.SKIP)
-        public Builder shareId(Optional<String> shareId) {
-            this.shareId = shareId;
+        @JsonSetter(value = "grantId", nulls = Nulls.SKIP)
+        public Builder grantId(Optional<String> grantId) {
+            this.grantId = grantId;
             return this;
         }
 
-        public Builder shareId(String shareId) {
-            this.shareId = Optional.ofNullable(shareId);
+        public Builder grantId(String grantId) {
+            this.grantId = Optional.ofNullable(grantId);
             return this;
         }
 
         public ListLayersRequest build() {
-            return new ListLayersRequest(limit, cursor, shareId, additionalProperties);
+            return new ListLayersRequest(limit, cursor, grantId, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

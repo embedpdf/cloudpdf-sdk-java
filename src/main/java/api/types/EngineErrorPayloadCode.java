@@ -20,6 +20,9 @@ public final class EngineErrorPayloadCode {
     public static final EngineErrorPayloadCode DOC_OPEN_FAILED =
             new EngineErrorPayloadCode(Value.DOC_OPEN_FAILED, "DocOpenFailed");
 
+    public static final EngineErrorPayloadCode GRANT_PASSPHRASE_REQUIRED =
+            new EngineErrorPayloadCode(Value.GRANT_PASSPHRASE_REQUIRED, "GrantPassphraseRequired");
+
     public static final EngineErrorPayloadCode NOT_FOUND = new EngineErrorPayloadCode(Value.NOT_FOUND, "NotFound");
 
     public static final EngineErrorPayloadCode IDEMPOTENCY_KEY_REUSED =
@@ -27,9 +30,6 @@ public final class EngineErrorPayloadCode {
 
     public static final EngineErrorPayloadCode INVALID_ARG =
             new EngineErrorPayloadCode(Value.INVALID_ARG, "InvalidArg");
-
-    public static final EngineErrorPayloadCode SHARE_PASSWORD_REQUIRED =
-            new EngineErrorPayloadCode(Value.SHARE_PASSWORD_REQUIRED, "SharePasswordRequired");
 
     public static final EngineErrorPayloadCode NETWORK = new EngineErrorPayloadCode(Value.NETWORK, "Network");
 
@@ -134,14 +134,14 @@ public final class EngineErrorPayloadCode {
                 return visitor.visitForbidden();
             case DOC_OPEN_FAILED:
                 return visitor.visitDocOpenFailed();
+            case GRANT_PASSPHRASE_REQUIRED:
+                return visitor.visitGrantPassphraseRequired();
             case NOT_FOUND:
                 return visitor.visitNotFound();
             case IDEMPOTENCY_KEY_REUSED:
                 return visitor.visitIdempotencyKeyReused();
             case INVALID_ARG:
                 return visitor.visitInvalidArg();
-            case SHARE_PASSWORD_REQUIRED:
-                return visitor.visitSharePasswordRequired();
             case NETWORK:
                 return visitor.visitNetwork();
             case LAYER_DELETED:
@@ -203,14 +203,14 @@ public final class EngineErrorPayloadCode {
                 return FORBIDDEN;
             case "DocOpenFailed":
                 return DOC_OPEN_FAILED;
+            case "GrantPassphraseRequired":
+                return GRANT_PASSPHRASE_REQUIRED;
             case "NotFound":
                 return NOT_FOUND;
             case "IdempotencyKeyReused":
                 return IDEMPOTENCY_KEY_REUSED;
             case "InvalidArg":
                 return INVALID_ARG;
-            case "SharePasswordRequired":
-                return SHARE_PASSWORD_REQUIRED;
             case "Network":
                 return NETWORK;
             case "LayerDeleted":
@@ -271,7 +271,7 @@ public final class EngineErrorPayloadCode {
 
         DOC_PASSWORD_INCORRECT,
 
-        SHARE_PASSWORD_REQUIRED,
+        GRANT_PASSPHRASE_REQUIRED,
 
         ABORTED,
 
@@ -335,7 +335,7 @@ public final class EngineErrorPayloadCode {
 
         T visitDocPasswordIncorrect();
 
-        T visitSharePasswordRequired();
+        T visitGrantPassphraseRequired();
 
         T visitAborted();
 

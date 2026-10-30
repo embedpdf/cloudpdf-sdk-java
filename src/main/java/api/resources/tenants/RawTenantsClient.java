@@ -484,28 +484,28 @@ public class RawTenantsClient {
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId) {
         return usage(tenantId, UsageTenantsRequest.builder().build());
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, RequestOptions requestOptions) {
         return usage(tenantId, UsageTenantsRequest.builder().build(), requestOptions);
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, UsageTenantsRequest request) {
         return usage(tenantId, request, null);
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(
             String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {

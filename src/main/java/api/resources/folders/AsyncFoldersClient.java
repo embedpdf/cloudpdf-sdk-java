@@ -85,28 +85,28 @@ public class AsyncFoldersClient {
     }
 
     /**
-     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its grants at once; their stored files and grants are removed in the background. Uploads into those folders that have not committed cannot commit.
      */
     public CompletableFuture<Void> delete(String tenantId, String folderId) {
         return this.rawClient.delete(tenantId, folderId).thenApply(response -> response.body());
     }
 
     /**
-     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its grants at once; their stored files and grants are removed in the background. Uploads into those folders that have not committed cannot commit.
      */
     public CompletableFuture<Void> delete(String tenantId, String folderId, RequestOptions requestOptions) {
         return this.rawClient.delete(tenantId, folderId, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its grants at once; their stored files and grants are removed in the background. Uploads into those folders that have not committed cannot commit.
      */
     public CompletableFuture<Void> delete(String tenantId, String folderId, DeleteFoldersRequest request) {
         return this.rawClient.delete(tenantId, folderId, request).thenApply(response -> response.body());
     }
 
     /**
-     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+     * Without recursive, a folder with anything inside is refused: 409 Conflict with <code>details.reason</code> <code>not-empty</code> and what it holds, counted over every level below, in <code>details.folders</code> and <code>details.documents</code>. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its grants at once; their stored files and grants are removed in the background. Uploads into those folders that have not committed cannot commit.
      */
     public CompletableFuture<Void> delete(
             String tenantId, String folderId, DeleteFoldersRequest request, RequestOptions requestOptions) {

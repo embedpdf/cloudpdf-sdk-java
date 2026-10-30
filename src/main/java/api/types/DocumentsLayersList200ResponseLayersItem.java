@@ -28,7 +28,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
 
     private final String layerName;
 
-    private final Optional<String> shareId;
+    private final Optional<String> grantId;
 
     private final Optional<String> visitorId;
 
@@ -45,7 +45,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
     private DocumentsLayersList200ResponseLayersItem(
             String docId,
             String layerName,
-            Optional<String> shareId,
+            Optional<String> grantId,
             Optional<String> visitorId,
             Optional<Double> storageSizeBytes,
             double createdAt,
@@ -54,7 +54,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
             Map<String, Object> additionalProperties) {
         this.docId = docId;
         this.layerName = layerName;
-        this.shareId = shareId;
+        this.grantId = grantId;
         this.visitorId = visitorId;
         this.storageSizeBytes = storageSizeBytes;
         this.createdAt = createdAt;
@@ -74,11 +74,11 @@ public final class DocumentsLayersList200ResponseLayersItem {
     }
 
     @JsonIgnore
-    public Optional<String> getShareId() {
-        if (shareId == null) {
+    public Optional<String> getGrantId() {
+        if (grantId == null) {
             return Optional.empty();
         }
-        return shareId;
+        return grantId;
     }
 
     @JsonIgnore
@@ -116,9 +116,9 @@ public final class DocumentsLayersList200ResponseLayersItem {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("shareId")
-    private Optional<String> _getShareId() {
-        return shareId;
+    @JsonProperty("grantId")
+    private Optional<String> _getGrantId() {
+        return grantId;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -154,7 +154,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
     private boolean equalTo(DocumentsLayersList200ResponseLayersItem other) {
         return docId.equals(other.docId)
                 && layerName.equals(other.layerName)
-                && shareId.equals(other.shareId)
+                && grantId.equals(other.grantId)
                 && visitorId.equals(other.visitorId)
                 && storageSizeBytes.equals(other.storageSizeBytes)
                 && createdAt == other.createdAt
@@ -167,7 +167,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
         return Objects.hash(
                 this.docId,
                 this.layerName,
-                this.shareId,
+                this.grantId,
                 this.visitorId,
                 this.storageSizeBytes,
                 this.createdAt,
@@ -209,11 +209,11 @@ public final class DocumentsLayersList200ResponseLayersItem {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage shareId(Optional<String> shareId);
+        _FinalStage grantId(Optional<String> grantId);
 
-        _FinalStage shareId(String shareId);
+        _FinalStage grantId(String grantId);
 
-        _FinalStage shareId(Nullable<String> shareId);
+        _FinalStage grantId(Nullable<String> grantId);
 
         _FinalStage visitorId(Optional<String> visitorId);
 
@@ -251,7 +251,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
 
         private Optional<String> visitorId = Optional.empty();
 
-        private Optional<String> shareId = Optional.empty();
+        private Optional<String> grantId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -262,7 +262,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
         public Builder from(DocumentsLayersList200ResponseLayersItem other) {
             docId(other.getDocId());
             layerName(other.getLayerName());
-            shareId(other.getShareId());
+            grantId(other.getGrantId());
             visitorId(other.getVisitorId());
             storageSizeBytes(other.getStorageSizeBytes());
             createdAt(other.getCreatedAt());
@@ -375,27 +375,27 @@ public final class DocumentsLayersList200ResponseLayersItem {
         }
 
         @java.lang.Override
-        public _FinalStage shareId(Nullable<String> shareId) {
-            if (shareId.isNull()) {
-                this.shareId = null;
-            } else if (shareId.isEmpty()) {
-                this.shareId = Optional.empty();
+        public _FinalStage grantId(Nullable<String> grantId) {
+            if (grantId.isNull()) {
+                this.grantId = null;
+            } else if (grantId.isEmpty()) {
+                this.grantId = Optional.empty();
             } else {
-                this.shareId = Optional.of(shareId.get());
+                this.grantId = Optional.of(grantId.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage shareId(String shareId) {
-            this.shareId = Optional.ofNullable(shareId);
+        public _FinalStage grantId(String grantId) {
+            this.grantId = Optional.ofNullable(grantId);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "shareId", nulls = Nulls.SKIP)
-        public _FinalStage shareId(Optional<String> shareId) {
-            this.shareId = shareId;
+        @JsonSetter(value = "grantId", nulls = Nulls.SKIP)
+        public _FinalStage grantId(Optional<String> grantId) {
+            this.grantId = grantId;
             return this;
         }
 
@@ -404,7 +404,7 @@ public final class DocumentsLayersList200ResponseLayersItem {
             return new DocumentsLayersList200ResponseLayersItem(
                     docId,
                     layerName,
-                    shareId,
+                    grantId,
                     visitorId,
                     storageSizeBytes,
                     createdAt,
