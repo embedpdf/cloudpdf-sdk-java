@@ -70,9 +70,9 @@ public class AsyncRawLayersClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "cursor", request.getCursor().get(), false);
         }
-        if (request.getShareId().isPresent()) {
+        if (request.getGrantId().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "shareId", request.getShareId().get(), false);
+                    httpUrl, "grantId", request.getGrantId().get(), false);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {

@@ -9,7 +9,7 @@ import com.cloudpdf.api.resources.deployment.DeploymentClient;
 import com.cloudpdf.api.resources.doc.DocClient;
 import com.cloudpdf.api.resources.documents.DocumentsClient;
 import com.cloudpdf.api.resources.folders.FoldersClient;
-import com.cloudpdf.api.resources.shares.SharesClient;
+import com.cloudpdf.api.resources.grants.GrantsClient;
 import com.cloudpdf.api.resources.tenants.TenantsClient;
 import com.cloudpdf.api.resources.tokens.TokensClient;
 import java.util.function.Supplier;
@@ -21,7 +21,7 @@ public class CloudPDFClient {
 
     protected final Supplier<DocClient> docClient;
 
-    protected final Supplier<SharesClient> sharesClient;
+    protected final Supplier<GrantsClient> grantsClient;
 
     protected final Supplier<TenantsClient> tenantsClient;
 
@@ -35,7 +35,7 @@ public class CloudPDFClient {
         this.clientOptions = clientOptions;
         this.deploymentClient = Suppliers.memoize(() -> new DeploymentClient(clientOptions));
         this.docClient = Suppliers.memoize(() -> new DocClient(clientOptions));
-        this.sharesClient = Suppliers.memoize(() -> new SharesClient(clientOptions));
+        this.grantsClient = Suppliers.memoize(() -> new GrantsClient(clientOptions));
         this.tenantsClient = Suppliers.memoize(() -> new TenantsClient(clientOptions));
         this.documentsClient = Suppliers.memoize(() -> new DocumentsClient(clientOptions));
         this.foldersClient = Suppliers.memoize(() -> new FoldersClient(clientOptions));
@@ -50,8 +50,8 @@ public class CloudPDFClient {
         return this.docClient.get();
     }
 
-    public SharesClient shares() {
-        return this.sharesClient.get();
+    public GrantsClient grants() {
+        return this.grantsClient.get();
     }
 
     public TenantsClient tenants() {

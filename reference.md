@@ -535,8 +535,8 @@ client.doc().text(
 </dl>
 </details>
 
-## Shares
-<details><summary><code>client.shares.exchange(request) -> SharesExchange200Response</code></summary>
+## Grants
+<details><summary><code>client.grants.exchange(request) -> GrantsExchange200Response</code></summary>
 <dl>
 <dd>
 
@@ -548,7 +548,7 @@ client.doc().text(
 <dl>
 <dd>
 
-Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, revoked, and disabled tokens are indistinguishable (404). Passphrase-protected grants return 422 SharePasswordRequired until `password` is supplied. A link that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; `error.details` carries `fields` (what the link asks), `missing`, `invalid`, `purpose` and `privacyUrl`. A link that asks before the first change issues the session at once with `visitor.identityRequest`, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any link. Mounted only when the deployment can sign (HS256 mode).
+Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until `passphrase` is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; `error.details` carries `fields` (what the grant asks), `missing`, `invalid`, `purpose` and `privacyUrl`. A grant that asks before the first change issues the session at once with `visitor.identityRequest`, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
 </dd>
 </dl>
 </dd>
@@ -563,10 +563,10 @@ Unauthenticated, but requires a browser Origin header, checked against the grant
 <dd>
 
 ```java
-client.shares().exchange(
-    SharesExchangeRequest
+client.grants().exchange(
+    GrantsExchangeRequest
         .builder()
-        .shareToken("shareToken")
+        .grant("grant")
         .build()
 );
 ```
@@ -583,7 +583,7 @@ client.shares().exchange(
 <dl>
 <dd>
 
-**shareToken:** `String` 
+**grant:** `String` 
     
 </dd>
 </dl>
@@ -591,7 +591,7 @@ client.shares().exchange(
 <dl>
 <dd>
 
-**password:** `Optional<String>` 
+**passphrase:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -615,7 +615,7 @@ client.shares().exchange(
 <dl>
 <dd>
 
-**visitorIdentity:** `Optional<SharesExchangeRequestVisitorIdentity>` 
+**visitorIdentity:** `Optional<GrantsExchangeRequestVisitorIdentity>` 
     
 </dd>
 </dl>
@@ -627,7 +627,7 @@ client.shares().exchange(
 </dl>
 </details>
 
-<details><summary><code>client.shares.list(tenantId) -> SharesList200Response</code></summary>
+<details><summary><code>client.grants.list(tenantId) -> GrantsList200Response</code></summary>
 <dl>
 <dd>
 
@@ -640,9 +640,9 @@ client.shares().exchange(
 <dd>
 
 ```java
-client.shares().list(
+client.grants().list(
     "tenantId",
-    ListSharesRequest
+    ListGrantsRequest
         .builder()
         .build()
 );
@@ -704,7 +704,7 @@ client.shares().list(
 </dl>
 </details>
 
-<details><summary><code>client.shares.create(tenantId, request) -> SharesCreate200Response</code></summary>
+<details><summary><code>client.grants.create(tenantId, request) -> GrantsCreate200Response</code></summary>
 <dl>
 <dd>
 
@@ -716,7 +716,7 @@ client.shares().list(
 <dl>
 <dd>
 
-The returned share id is the public share token. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
 </dd>
 </dl>
 </dd>
@@ -731,9 +731,9 @@ The returned share id is the public share token. Mounted only when the deploymen
 <dd>
 
 ```java
-client.shares().create(
+client.grants().create(
     "tenantId",
-    SharesCreateRequest
+    GrantsCreateRequest
         .builder()
         .docId("docId")
         .scope(
@@ -771,7 +771,15 @@ client.shares().create(
 <dl>
 <dd>
 
-**layerMode:** `Optional<SharesCreateRequestLayerMode>` 
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerMode:** `Optional<GrantsCreateRequestLayerMode>` 
     
 </dd>
 </dl>
@@ -803,7 +811,7 @@ client.shares().create(
 <dl>
 <dd>
 
-**visitorIdentity:** `Optional<SharesCreateRequestVisitorIdentity>` 
+**visitorIdentity:** `Optional<GrantsCreateRequestVisitorIdentity>` 
     
 </dd>
 </dl>
@@ -835,7 +843,7 @@ client.shares().create(
 <dl>
 <dd>
 
-**password:** `Optional<String>` 
+**passphrase:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -863,7 +871,7 @@ client.shares().create(
 </dl>
 </details>
 
-<details><summary><code>client.shares.get(tenantId, shareId) -> SharesGet200Response</code></summary>
+<details><summary><code>client.grants.get(tenantId, grantId) -> GrantsGet200Response</code></summary>
 <dl>
 <dd>
 
@@ -876,10 +884,10 @@ client.shares().create(
 <dd>
 
 ```java
-client.shares().get(
+client.grants().get(
     "tenantId",
-    "shareId",
-    GetSharesRequest
+    "grantId",
+    GetGrantsRequest
         .builder()
         .build()
 );
@@ -905,7 +913,7 @@ client.shares().get(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>
@@ -917,7 +925,7 @@ client.shares().get(
 </dl>
 </details>
 
-<details><summary><code>client.shares.delete(tenantId, shareId)</code></summary>
+<details><summary><code>client.grants.delete(tenantId, grantId)</code></summary>
 <dl>
 <dd>
 
@@ -930,10 +938,10 @@ client.shares().get(
 <dd>
 
 ```java
-client.shares().delete(
+client.grants().delete(
     "tenantId",
-    "shareId",
-    DeleteSharesRequest
+    "grantId",
+    DeleteGrantsRequest
         .builder()
         .build()
 );
@@ -959,7 +967,7 @@ client.shares().delete(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>
@@ -971,7 +979,7 @@ client.shares().delete(
 </dl>
 </details>
 
-<details><summary><code>client.shares.update(tenantId, shareId, request) -> SharesUpdate200Response</code></summary>
+<details><summary><code>client.grants.update(tenantId, grantId, request) -> GrantsUpdate200Response</code></summary>
 <dl>
 <dd>
 
@@ -984,10 +992,10 @@ client.shares().delete(
 <dd>
 
 ```java
-client.shares().update(
+client.grants().update(
     "tenantId",
-    "shareId",
-    SharesUpdateRequest
+    "grantId",
+    GrantsUpdateRequest
         .builder()
         .build()
 );
@@ -1013,7 +1021,7 @@ client.shares().update(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>
@@ -1021,7 +1029,15 @@ client.shares().update(
 <dl>
 <dd>
 
-**layerMode:** `Optional<SharesUpdateRequestLayerMode>` 
+**name:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerMode:** `Optional<GrantsUpdateRequestLayerMode>` 
     
 </dd>
 </dl>
@@ -1053,7 +1069,7 @@ client.shares().update(
 <dl>
 <dd>
 
-**visitorIdentity:** `Optional<SharesUpdateRequestVisitorIdentity>` 
+**visitorIdentity:** `Optional<GrantsUpdateRequestVisitorIdentity>` 
     
 </dd>
 </dl>
@@ -1085,7 +1101,7 @@ client.shares().update(
 <dl>
 <dd>
 
-**password:** `Optional<String>` 
+**passphrase:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -1121,7 +1137,7 @@ client.shares().update(
 </dl>
 </details>
 
-<details><summary><code>client.shares.archive(tenantId, shareId) -> SharesArchive200Response</code></summary>
+<details><summary><code>client.grants.archive(tenantId, grantId) -> GrantsArchive200Response</code></summary>
 <dl>
 <dd>
 
@@ -1133,7 +1149,7 @@ client.shares().update(
 <dl>
 <dd>
 
-Archiving is final: an archived link never exchanges again, and to share again you create a new link. Pausing (`disabled`) is the reversible stop. An archived link no longer counts as using its shared layer, so that layer can be deleted.
+Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (`disabled`) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
 </dd>
 </dl>
 </dd>
@@ -1148,10 +1164,10 @@ Archiving is final: an archived link never exchanges again, and to share again y
 <dd>
 
 ```java
-client.shares().archive(
+client.grants().archive(
     "tenantId",
-    "shareId",
-    ArchiveSharesRequest
+    "grantId",
+    ArchiveGrantsRequest
         .builder()
         .build()
 );
@@ -1177,7 +1193,7 @@ client.shares().archive(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>
@@ -1523,7 +1539,7 @@ client.tenants().suspend(
 <dl>
 <dd>
 
-Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
 </dd>
 </dl>
 </dd>
@@ -2583,7 +2599,7 @@ client.folders().get(
 <dl>
 <dd>
 
-Without recursive, a folder with anything inside is refused: 409 Conflict with `details.reason` `not-empty` and what it holds, counted over every level below, in `details.folders` and `details.documents`. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its share links at once; their stored files and links are removed in the background. Uploads into those folders that have not committed cannot commit.
+Without recursive, a folder with anything inside is refused: 409 Conflict with `details.reason` `not-empty` and what it holds, counted over every level below, in `details.folders` and `details.documents`. With recursive=true, the folder and every folder under it go at once, and every document in them stops opening, leaves every list and stops answering its grants at once; their stored files and grants are removed in the background. Uploads into those folders that have not committed cannot commit.
 </dd>
 </dl>
 </dd>
@@ -6578,7 +6594,7 @@ client.documents().layers().list(
 <dl>
 <dd>
 
-**shareId:** `Optional<String>` 
+**grantId:** `Optional<String>` 
     
 </dd>
 </dl>
@@ -6653,8 +6669,8 @@ client.documents().layers().delete(
 </dl>
 </details>
 
-## Shares Visitors
-<details><summary><code>client.shares.visitors.list(tenantId, shareId) -> SharesVisitorsList200Response</code></summary>
+## Grants Visitors
+<details><summary><code>client.grants.visitors.list(tenantId, grantId) -> GrantsVisitorsList200Response</code></summary>
 <dl>
 <dd>
 
@@ -6666,7 +6682,7 @@ client.documents().layers().delete(
 <dl>
 <dd>
 
-An archived link's visitors are listed too.
+An archived grant's visitors are listed too.
 </dd>
 </dl>
 </dd>
@@ -6681,9 +6697,9 @@ An archived link's visitors are listed too.
 <dd>
 
 ```java
-client.shares().visitors().list(
+client.grants().visitors().list(
     "tenantId",
-    "shareId",
+    "grantId",
     ListVisitorsRequest
         .builder()
         .build()
@@ -6710,7 +6726,7 @@ client.shares().visitors().list(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>
@@ -6738,7 +6754,7 @@ client.shares().visitors().list(
 </dl>
 </details>
 
-<details><summary><code>client.shares.visitors.delete(tenantId, shareId, visitorId)</code></summary>
+<details><summary><code>client.grants.visitors.delete(tenantId, grantId, visitorId)</code></summary>
 <dl>
 <dd>
 
@@ -6765,9 +6781,9 @@ Their handle brings them back as a new visitor, who is asked again. Deleting a v
 <dd>
 
 ```java
-client.shares().visitors().delete(
+client.grants().visitors().delete(
     "tenantId",
-    "shareId",
+    "grantId",
     "visitorId",
     DeleteVisitorsRequest
         .builder()
@@ -6795,7 +6811,7 @@ client.shares().visitors().delete(
 <dl>
 <dd>
 
-**shareId:** `String` 
+**grantId:** `String` 
     
 </dd>
 </dl>

@@ -147,28 +147,28 @@ public class TenantsClient {
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public TenantsUsage200Response usage(String tenantId) {
         return this.rawClient.usage(tenantId).body();
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public TenantsUsage200Response usage(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, requestOptions).body();
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request) {
         return this.rawClient.usage(tenantId, request).body();
     }
 
     /**
-     * Facts only — no limits or billing state. Views count share exchanges plus authorized /v1/access grants, deduplicated across the two.
+     * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
     public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, request, requestOptions).body();
