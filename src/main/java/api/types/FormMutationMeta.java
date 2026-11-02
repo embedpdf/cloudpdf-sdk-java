@@ -34,6 +34,8 @@ public final class FormMutationMeta {
 
     private final boolean undoable;
 
+    private final Optional<List<String>> missingCharacters;
+
     private final List<FormFieldRef> changedFields;
 
     private final List<FormWidget> changedWidgets;
@@ -47,6 +49,7 @@ public final class FormMutationMeta {
             Optional<CacheDelta> cacheDelta,
             String opId,
             boolean undoable,
+            Optional<List<String>> missingCharacters,
             List<FormFieldRef> changedFields,
             List<FormWidget> changedWidgets,
             List<FormWidget> redrawnWidgets,
@@ -55,6 +58,7 @@ public final class FormMutationMeta {
         this.cacheDelta = cacheDelta;
         this.opId = opId;
         this.undoable = undoable;
+        this.missingCharacters = missingCharacters;
         this.changedFields = changedFields;
         this.changedWidgets = changedWidgets;
         this.redrawnWidgets = redrawnWidgets;
@@ -82,6 +86,11 @@ public final class FormMutationMeta {
     @JsonProperty("undoable")
     public boolean getUndoable() {
         return undoable;
+    }
+
+    @JsonProperty("missingCharacters")
+    public Optional<List<String>> getMissingCharacters() {
+        return missingCharacters;
     }
 
     @JsonProperty("changedFields")
@@ -121,6 +130,7 @@ public final class FormMutationMeta {
                 && cacheDelta.equals(other.cacheDelta)
                 && opId.equals(other.opId)
                 && undoable == other.undoable
+                && missingCharacters.equals(other.missingCharacters)
                 && changedFields.equals(other.changedFields)
                 && changedWidgets.equals(other.changedWidgets)
                 && redrawnWidgets.equals(other.redrawnWidgets);
@@ -133,6 +143,7 @@ public final class FormMutationMeta {
                 this.cacheDelta,
                 this.opId,
                 this.undoable,
+                this.missingCharacters,
                 this.changedFields,
                 this.changedWidgets,
                 this.redrawnWidgets);
@@ -176,6 +187,10 @@ public final class FormMutationMeta {
 
         _FinalStage cacheDelta(Nullable<CacheDelta> cacheDelta);
 
+        _FinalStage missingCharacters(Optional<List<String>> missingCharacters);
+
+        _FinalStage missingCharacters(List<String> missingCharacters);
+
         _FinalStage changedFields(List<FormFieldRef> changedFields);
 
         _FinalStage addChangedFields(FormFieldRef changedFields);
@@ -207,6 +222,8 @@ public final class FormMutationMeta {
 
         private List<FormFieldRef> changedFields = new ArrayList<>();
 
+        private Optional<List<String>> missingCharacters = Optional.empty();
+
         private Optional<CacheDelta> cacheDelta = Optional.empty();
 
         private List<PageRef> affectedPages = new ArrayList<>();
@@ -222,6 +239,7 @@ public final class FormMutationMeta {
             cacheDelta(other.getCacheDelta());
             opId(other.getOpId());
             undoable(other.getUndoable());
+            missingCharacters(other.getMissingCharacters());
             changedFields(other.getChangedFields());
             changedWidgets(other.getChangedWidgets());
             redrawnWidgets(other.getRedrawnWidgets());
@@ -315,6 +333,19 @@ public final class FormMutationMeta {
         }
 
         @java.lang.Override
+        public _FinalStage missingCharacters(List<String> missingCharacters) {
+            this.missingCharacters = Optional.ofNullable(missingCharacters);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "missingCharacters", nulls = Nulls.SKIP)
+        public _FinalStage missingCharacters(Optional<List<String>> missingCharacters) {
+            this.missingCharacters = missingCharacters;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage cacheDelta(Nullable<CacheDelta> cacheDelta) {
             if (cacheDelta.isNull()) {
                 this.cacheDelta = null;
@@ -370,6 +401,7 @@ public final class FormMutationMeta {
                     cacheDelta,
                     opId,
                     undoable,
+                    missingCharacters,
                     changedFields,
                     changedWidgets,
                     redrawnWidgets,

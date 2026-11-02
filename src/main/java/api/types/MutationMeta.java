@@ -34,6 +34,8 @@ public final class MutationMeta {
 
     private final boolean undoable;
 
+    private final Optional<List<String>> missingCharacters;
+
     private final Map<String, Object> additionalProperties;
 
     private MutationMeta(
@@ -41,11 +43,13 @@ public final class MutationMeta {
             Optional<CacheDelta> cacheDelta,
             String opId,
             boolean undoable,
+            Optional<List<String>> missingCharacters,
             Map<String, Object> additionalProperties) {
         this.affectedPages = affectedPages;
         this.cacheDelta = cacheDelta;
         this.opId = opId;
         this.undoable = undoable;
+        this.missingCharacters = missingCharacters;
         this.additionalProperties = additionalProperties;
     }
 
@@ -72,6 +76,11 @@ public final class MutationMeta {
         return undoable;
     }
 
+    @JsonProperty("missingCharacters")
+    public Optional<List<String>> getMissingCharacters() {
+        return missingCharacters;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("cacheDelta")
     private Optional<CacheDelta> _getCacheDelta() {
@@ -93,12 +102,13 @@ public final class MutationMeta {
         return affectedPages.equals(other.affectedPages)
                 && cacheDelta.equals(other.cacheDelta)
                 && opId.equals(other.opId)
-                && undoable == other.undoable;
+                && undoable == other.undoable
+                && missingCharacters.equals(other.missingCharacters);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.affectedPages, this.cacheDelta, this.opId, this.undoable);
+        return Objects.hash(this.affectedPages, this.cacheDelta, this.opId, this.undoable, this.missingCharacters);
     }
 
     @java.lang.Override
@@ -138,6 +148,10 @@ public final class MutationMeta {
         _FinalStage cacheDelta(CacheDelta cacheDelta);
 
         _FinalStage cacheDelta(Nullable<CacheDelta> cacheDelta);
+
+        _FinalStage missingCharacters(Optional<List<String>> missingCharacters);
+
+        _FinalStage missingCharacters(List<String> missingCharacters);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -145,6 +159,8 @@ public final class MutationMeta {
         private String opId;
 
         private boolean undoable;
+
+        private Optional<List<String>> missingCharacters = Optional.empty();
 
         private Optional<CacheDelta> cacheDelta = Optional.empty();
 
@@ -161,6 +177,7 @@ public final class MutationMeta {
             cacheDelta(other.getCacheDelta());
             opId(other.getOpId());
             undoable(other.getUndoable());
+            missingCharacters(other.getMissingCharacters());
             return this;
         }
 
@@ -175,6 +192,19 @@ public final class MutationMeta {
         @JsonSetter("undoable")
         public _FinalStage undoable(boolean undoable) {
             this.undoable = undoable;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage missingCharacters(List<String> missingCharacters) {
+            this.missingCharacters = Optional.ofNullable(missingCharacters);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "missingCharacters", nulls = Nulls.SKIP)
+        public _FinalStage missingCharacters(Optional<List<String>> missingCharacters) {
+            this.missingCharacters = missingCharacters;
             return this;
         }
 
@@ -229,7 +259,7 @@ public final class MutationMeta {
 
         @java.lang.Override
         public MutationMeta build() {
-            return new MutationMeta(affectedPages, cacheDelta, opId, undoable, additionalProperties);
+            return new MutationMeta(affectedPages, cacheDelta, opId, undoable, missingCharacters, additionalProperties);
         }
 
         @java.lang.Override

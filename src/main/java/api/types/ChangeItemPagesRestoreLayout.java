@@ -25,6 +25,8 @@ public final class ChangeItemPagesRestoreLayout {
 
     private final List<ChangeItemPagesRestoreLayoutPagesItem> pages;
 
+    private final List<ChangeItemPagesRestoreLayoutLabelsItem> labels;
+
     private final List<ChangeItemPagesRestoreLayoutNamedPagesItem> namedPages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class ChangeItemPagesRestoreLayout {
     private ChangeItemPagesRestoreLayout(
             int pageCount,
             List<ChangeItemPagesRestoreLayoutPagesItem> pages,
+            List<ChangeItemPagesRestoreLayoutLabelsItem> labels,
             List<ChangeItemPagesRestoreLayoutNamedPagesItem> namedPages,
             Map<String, Object> additionalProperties) {
         this.pageCount = pageCount;
         this.pages = pages;
+        this.labels = labels;
         this.namedPages = namedPages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class ChangeItemPagesRestoreLayout {
     @JsonProperty("pages")
     public List<ChangeItemPagesRestoreLayoutPagesItem> getPages() {
         return pages;
+    }
+
+    @JsonProperty("labels")
+    public List<ChangeItemPagesRestoreLayoutLabelsItem> getLabels() {
+        return labels;
     }
 
     @JsonProperty("namedPages")
@@ -67,12 +76,15 @@ public final class ChangeItemPagesRestoreLayout {
     }
 
     private boolean equalTo(ChangeItemPagesRestoreLayout other) {
-        return pageCount == other.pageCount && pages.equals(other.pages) && namedPages.equals(other.namedPages);
+        return pageCount == other.pageCount
+                && pages.equals(other.pages)
+                && labels.equals(other.labels)
+                && namedPages.equals(other.namedPages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageCount, this.pages, this.namedPages);
+        return Objects.hash(this.pageCount, this.pages, this.labels, this.namedPages);
     }
 
     @java.lang.Override
@@ -103,6 +115,12 @@ public final class ChangeItemPagesRestoreLayout {
 
         _FinalStage addAllPages(List<ChangeItemPagesRestoreLayoutPagesItem> pages);
 
+        _FinalStage labels(List<ChangeItemPagesRestoreLayoutLabelsItem> labels);
+
+        _FinalStage addLabels(ChangeItemPagesRestoreLayoutLabelsItem labels);
+
+        _FinalStage addAllLabels(List<ChangeItemPagesRestoreLayoutLabelsItem> labels);
+
         _FinalStage namedPages(List<ChangeItemPagesRestoreLayoutNamedPagesItem> namedPages);
 
         _FinalStage addNamedPages(ChangeItemPagesRestoreLayoutNamedPagesItem namedPages);
@@ -116,6 +134,8 @@ public final class ChangeItemPagesRestoreLayout {
 
         private List<ChangeItemPagesRestoreLayoutNamedPagesItem> namedPages = new ArrayList<>();
 
+        private List<ChangeItemPagesRestoreLayoutLabelsItem> labels = new ArrayList<>();
+
         private List<ChangeItemPagesRestoreLayoutPagesItem> pages = new ArrayList<>();
 
         @JsonAnySetter
@@ -127,6 +147,7 @@ public final class ChangeItemPagesRestoreLayout {
         public Builder from(ChangeItemPagesRestoreLayout other) {
             pageCount(other.getPageCount());
             pages(other.getPages());
+            labels(other.getLabels());
             namedPages(other.getNamedPages());
             return this;
         }
@@ -163,6 +184,30 @@ public final class ChangeItemPagesRestoreLayout {
         }
 
         @java.lang.Override
+        public _FinalStage addAllLabels(List<ChangeItemPagesRestoreLayoutLabelsItem> labels) {
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addLabels(ChangeItemPagesRestoreLayoutLabelsItem labels) {
+            this.labels.add(labels);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "labels", nulls = Nulls.SKIP)
+        public _FinalStage labels(List<ChangeItemPagesRestoreLayoutLabelsItem> labels) {
+            this.labels.clear();
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPages(List<ChangeItemPagesRestoreLayoutPagesItem> pages) {
             if (pages != null) {
                 this.pages.addAll(pages);
@@ -188,7 +233,7 @@ public final class ChangeItemPagesRestoreLayout {
 
         @java.lang.Override
         public ChangeItemPagesRestoreLayout build() {
-            return new ChangeItemPagesRestoreLayout(pageCount, pages, namedPages, additionalProperties);
+            return new ChangeItemPagesRestoreLayout(pageCount, pages, labels, namedPages, additionalProperties);
         }
 
         @java.lang.Override

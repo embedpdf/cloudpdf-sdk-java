@@ -8,6 +8,7 @@ The official Java SDK for the CloudPDF API.
 
 - [Reference](#reference)
 - [Usage](#usage)
+- [Environments](#environments)
 - [Base Url](#base-url)
 - [Exception Handling](#exception-handling)
 - [Advanced](#advanced)
@@ -58,6 +59,20 @@ public class Example {
         );
     }
 }
+```
+
+## Environments
+
+This SDK allows you to configure different environments for API requests.
+
+```java
+import com.cloudpdf.CloudPDFClient;
+import com.cloudpdf.core.Environment;
+
+CloudPDFClient client = CloudPDFClient
+    .builder()
+    .environment(Environment.Saas)
+    .build();
 ```
 
 ## Base Url

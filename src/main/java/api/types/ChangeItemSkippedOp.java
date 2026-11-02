@@ -56,6 +56,8 @@ public final class ChangeItemSkippedOp {
 
     public static final ChangeItemSkippedOp FORMS_CREATE = new ChangeItemSkippedOp(Value.FORMS_CREATE, "forms.create");
 
+    public static final ChangeItemSkippedOp PAGES_COPY = new ChangeItemSkippedOp(Value.PAGES_COPY, "pages.copy");
+
     public static final ChangeItemSkippedOp FORMS_RESTORE =
             new ChangeItemSkippedOp(Value.FORMS_RESTORE, "forms.restore");
 
@@ -178,6 +180,8 @@ public final class ChangeItemSkippedOp {
                 return visitor.visitPagesReorder();
             case FORMS_CREATE:
                 return visitor.visitFormsCreate();
+            case PAGES_COPY:
+                return visitor.visitPagesCopy();
             case FORMS_RESTORE:
                 return visitor.visitFormsRestore();
             case FORMS_REORDER_CALCULATIONS:
@@ -261,6 +265,8 @@ public final class ChangeItemSkippedOp {
                 return PAGES_REORDER;
             case "forms.create":
                 return FORMS_CREATE;
+            case "pages.copy":
+                return PAGES_COPY;
             case "forms.restore":
                 return FORMS_RESTORE;
             case "forms.reorderCalculations":
@@ -363,6 +369,8 @@ public final class ChangeItemSkippedOp {
 
         PAGES_INSERT,
 
+        PAGES_COPY,
+
         ATTACHMENTS_CREATE,
 
         ATTACHMENTS_DELETE,
@@ -440,6 +448,8 @@ public final class ChangeItemSkippedOp {
         T visitPagesInsertBlank();
 
         T visitPagesInsert();
+
+        T visitPagesCopy();
 
         T visitAttachmentsCreate();
 

@@ -716,7 +716,7 @@ client.grants().list(
 <dl>
 <dd>
 
-The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
 </dd>
 </dl>
 </dd>
@@ -1885,6 +1885,20 @@ client.documents().update(
 <dl>
 <dd>
 
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+An upload token commits only the documents it started; any other document answers 404.
+</dd>
+</dl>
+</dd>
+</dl>
+
 #### 🔌 Usage
 
 <dl>
@@ -2064,7 +2078,7 @@ client.documents().thumbnail(
 <dl>
 <dd>
 
-This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
 </dd>
 </dl>
 </dd>
@@ -2263,6 +2277,20 @@ client.documents().importFrom(
 <details><summary><code>client.documents.init(tenantId, request) -> DocumentsInit200Response</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -2837,7 +2865,7 @@ client.folders().moveInto(
 <dl>
 <dd>
 
-kind "tenant" requires the API token — authority mints only downward. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
+Authority mints only downward: kind "doc" gives only document permissions the caller holds itself, kind "tenant" requires the API token, and kind "upload" requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
 </dd>
 </dl>
 </dd>
@@ -4050,6 +4078,152 @@ client.doc().attachments().list(
 <dd>
 
 **documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Doc Fonts
+<details><summary><code>client.doc.fonts.list(docId, layerName) -> FontList</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().fonts().list(
+    "docId",
+    "layerName",
+    ListFontsRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.fonts.resolve(docId, layerName, request) -> FontResolution</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().fonts().resolve(
+    "docId",
+    "layerName",
+    ResolveFontsRequest
+        .builder()
+        .body(
+            FontResolveRequest
+                .builder()
+                .runs(
+                    Arrays.asList(
+                        FontResolveRun
+                            .builder()
+                            .text("text")
+                            .build()
+                    )
+                )
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `FontResolveRequest` 
     
 </dd>
 </dl>
@@ -6445,6 +6619,163 @@ client.doc().versions().signatureDigest(
 <dd>
 
 **algorithm:** `SignatureDigestVersionsRequestAlgorithm` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## Doc Fonts Programs
+<details><summary><code>client.doc.fonts.programs.download(docId, layerName, displayHash) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (`canDownload: false`) is not found.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().fonts().programs().download(
+    "docId",
+    "layerName",
+    "displayHash",
+    DownloadProgramsRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**displayHash:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**documentPassword:** `Optional<String>` — Base64-encoded password for an encrypted document. Valid only with the API token (403 anywhere else). An encrypted document answers 422 DocPasswordRequired when the header is absent. Viewer doc JWTs use the SDK password-session flow instead.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.doc.fonts.programs.get(docId, layerName, displayHash) -> FontProgramInfo</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.doc().fonts().programs().get(
+    "docId",
+    "layerName",
+    "displayHash",
+    GetProgramsRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**docId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**layerName:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**displayHash:** `String` 
     
 </dd>
 </dl>

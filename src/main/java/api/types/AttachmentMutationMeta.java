@@ -34,6 +34,8 @@ public final class AttachmentMutationMeta {
 
     private final boolean undoable;
 
+    private final Optional<List<String>> missingCharacters;
+
     private final List<AttachmentRef> changed;
 
     private final Map<String, Object> additionalProperties;
@@ -43,12 +45,14 @@ public final class AttachmentMutationMeta {
             Optional<CacheDelta> cacheDelta,
             String opId,
             boolean undoable,
+            Optional<List<String>> missingCharacters,
             List<AttachmentRef> changed,
             Map<String, Object> additionalProperties) {
         this.affectedPages = affectedPages;
         this.cacheDelta = cacheDelta;
         this.opId = opId;
         this.undoable = undoable;
+        this.missingCharacters = missingCharacters;
         this.changed = changed;
         this.additionalProperties = additionalProperties;
     }
@@ -74,6 +78,11 @@ public final class AttachmentMutationMeta {
     @JsonProperty("undoable")
     public boolean getUndoable() {
         return undoable;
+    }
+
+    @JsonProperty("missingCharacters")
+    public Optional<List<String>> getMissingCharacters() {
+        return missingCharacters;
     }
 
     @JsonProperty("changed")
@@ -103,12 +112,14 @@ public final class AttachmentMutationMeta {
                 && cacheDelta.equals(other.cacheDelta)
                 && opId.equals(other.opId)
                 && undoable == other.undoable
+                && missingCharacters.equals(other.missingCharacters)
                 && changed.equals(other.changed);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.affectedPages, this.cacheDelta, this.opId, this.undoable, this.changed);
+        return Objects.hash(
+                this.affectedPages, this.cacheDelta, this.opId, this.undoable, this.missingCharacters, this.changed);
     }
 
     @java.lang.Override
@@ -149,6 +160,10 @@ public final class AttachmentMutationMeta {
 
         _FinalStage cacheDelta(Nullable<CacheDelta> cacheDelta);
 
+        _FinalStage missingCharacters(Optional<List<String>> missingCharacters);
+
+        _FinalStage missingCharacters(List<String> missingCharacters);
+
         _FinalStage changed(List<AttachmentRef> changed);
 
         _FinalStage addChanged(AttachmentRef changed);
@@ -163,6 +178,8 @@ public final class AttachmentMutationMeta {
         private boolean undoable;
 
         private List<AttachmentRef> changed = new ArrayList<>();
+
+        private Optional<List<String>> missingCharacters = Optional.empty();
 
         private Optional<CacheDelta> cacheDelta = Optional.empty();
 
@@ -179,6 +196,7 @@ public final class AttachmentMutationMeta {
             cacheDelta(other.getCacheDelta());
             opId(other.getOpId());
             undoable(other.getUndoable());
+            missingCharacters(other.getMissingCharacters());
             changed(other.getChanged());
             return this;
         }
@@ -218,6 +236,19 @@ public final class AttachmentMutationMeta {
             if (changed != null) {
                 this.changed.addAll(changed);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage missingCharacters(List<String> missingCharacters) {
+            this.missingCharacters = Optional.ofNullable(missingCharacters);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "missingCharacters", nulls = Nulls.SKIP)
+        public _FinalStage missingCharacters(Optional<List<String>> missingCharacters) {
+            this.missingCharacters = missingCharacters;
             return this;
         }
 
@@ -272,7 +303,8 @@ public final class AttachmentMutationMeta {
 
         @java.lang.Override
         public AttachmentMutationMeta build() {
-            return new AttachmentMutationMeta(affectedPages, cacheDelta, opId, undoable, changed, additionalProperties);
+            return new AttachmentMutationMeta(
+                    affectedPages, cacheDelta, opId, undoable, missingCharacters, changed, additionalProperties);
         }
 
         @java.lang.Override

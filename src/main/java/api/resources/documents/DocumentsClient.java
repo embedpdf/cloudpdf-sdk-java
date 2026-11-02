@@ -113,10 +113,16 @@ public class DocumentsClient {
         return this.rawClient.update(tenantId, id, request, requestOptions).body();
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public DocumentsCommit200Response commit(String tenantId, String id, DocumentsCommitRequest request) {
         return this.rawClient.commit(tenantId, id, request).body();
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public DocumentsCommit200Response commit(
             String tenantId, String id, DocumentsCommitRequest request, RequestOptions requestOptions) {
         return this.rawClient.commit(tenantId, id, request, requestOptions).body();
@@ -157,7 +163,7 @@ public class DocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public DocumentsUploadProxy200Response uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
@@ -165,7 +171,7 @@ public class DocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public DocumentsUploadProxy200Response uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
@@ -220,10 +226,16 @@ public class DocumentsClient {
         return this.rawClient.importFrom(tenantId, request, requestOptions).body();
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public DocumentsInit200Response init(String tenantId, DocumentsInitRequest request) {
         return this.rawClient.init(tenantId, request).body();
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public DocumentsInit200Response init(String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         return this.rawClient.init(tenantId, request, requestOptions).body();
     }

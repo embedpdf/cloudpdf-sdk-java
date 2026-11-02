@@ -270,7 +270,7 @@ public class AsyncRawGrantsClient {
     }
 
     /**
-     * The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreate200Response>> create(
             String tenantId, GrantsCreateRequest request) {
@@ -278,7 +278,7 @@ public class AsyncRawGrantsClient {
     }
 
     /**
-     * The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreate200Response>> create(
             String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
@@ -622,6 +622,11 @@ public class AsyncRawGrantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;

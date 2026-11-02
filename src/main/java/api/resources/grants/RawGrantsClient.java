@@ -222,14 +222,14 @@ public class RawGrantsClient {
     }
 
     /**
-     * The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CloudPDFClientHttpResponse<GrantsCreate200Response> create(String tenantId, GrantsCreateRequest request) {
         return create(tenantId, request, null);
     }
 
     /**
-     * The returned id is what a link page or an embed opens. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
+     * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
     public CloudPDFClientHttpResponse<GrantsCreate200Response> create(
             String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
@@ -512,6 +512,9 @@ public class RawGrantsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 403:
+                        throw new ForbiddenError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 404:
                         throw new NotFoundError(
