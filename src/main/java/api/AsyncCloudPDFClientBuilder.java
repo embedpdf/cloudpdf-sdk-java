@@ -26,7 +26,7 @@ public class AsyncCloudPDFClientBuilder {
 
     private String token = null;
 
-    private Environment environment;
+    private Environment environment = Environment.SAAS;
 
     private OkHttpClient httpClient;
 
@@ -37,6 +37,11 @@ public class AsyncCloudPDFClientBuilder {
      */
     public AsyncCloudPDFClientBuilder token(String token) {
         this.token = token;
+        return this;
+    }
+
+    public AsyncCloudPDFClientBuilder environment(Environment environment) {
+        this.environment = environment;
         return this;
     }
 

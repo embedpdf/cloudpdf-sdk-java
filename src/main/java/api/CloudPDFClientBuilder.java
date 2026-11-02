@@ -26,7 +26,7 @@ public class CloudPDFClientBuilder {
 
     private String token = null;
 
-    private Environment environment;
+    private Environment environment = Environment.SAAS;
 
     private OkHttpClient httpClient;
 
@@ -37,6 +37,11 @@ public class CloudPDFClientBuilder {
      */
     public CloudPDFClientBuilder token(String token) {
         this.token = token;
+        return this;
+    }
+
+    public CloudPDFClientBuilder environment(Environment environment) {
+        this.environment = environment;
         return this;
     }
 

@@ -387,11 +387,17 @@ public class RawDocumentsClient {
         }
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CloudPDFClientHttpResponse<DocumentsCommit200Response> commit(
             String tenantId, String id, DocumentsCommitRequest request) {
         return commit(tenantId, id, request, null);
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CloudPDFClientHttpResponse<DocumentsCommit200Response> commit(
             String tenantId, String id, DocumentsCommitRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -611,7 +617,7 @@ public class RawDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CloudPDFClientHttpResponse<DocumentsUploadProxy200Response> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
@@ -619,7 +625,7 @@ public class RawDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CloudPDFClientHttpResponse<DocumentsUploadProxy200Response> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
@@ -676,6 +682,9 @@ public class RawDocumentsClient {
                     case 400:
                         throw new BadRequestError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 409:
                         throw new ConflictError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -725,6 +734,9 @@ public class RawDocumentsClient {
                     case 400:
                         throw new BadRequestError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 409:
                         throw new ConflictError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
@@ -773,6 +785,9 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 409:
                         throw new ConflictError(
@@ -839,6 +854,9 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 409:
                         throw new ConflictError(
@@ -910,6 +928,9 @@ public class RawDocumentsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                     case 409:
                         throw new ConflictError(
@@ -1013,10 +1034,16 @@ public class RawDocumentsClient {
         }
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CloudPDFClientHttpResponse<DocumentsInit200Response> init(String tenantId, DocumentsInitRequest request) {
         return init(tenantId, request, null);
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CloudPDFClientHttpResponse<DocumentsInit200Response> init(
             String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -1066,9 +1093,13 @@ public class RawDocumentsClient {
                         response);
             }
             try {
-                if (response.code() == 400) {
-                    throw new BadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 403:
+                        throw new ForbiddenError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
