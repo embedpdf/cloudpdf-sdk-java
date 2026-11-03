@@ -10,9 +10,9 @@
     "base-exception-class-name": "CloudPDFException",
     "base-api-exception-class-name": "CloudPDFApiException"
   },
-  "originGitCommit": "0606e988ebff3773183ef02e0a820c36b3a25f8d",
+  "originGitCommit": "3283147ded32fc15c426768f75557a4d95943d84",
   "originGitCommitIsDirty": false,
   "invokedBy": "ci",
-  "requestedVersion": "3.0.0-alpha.19",
+  "requestedVersion": "3.0.0-alpha.21",
   "ciProvider": "github"
 }

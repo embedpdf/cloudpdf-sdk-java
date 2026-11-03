@@ -42,6 +42,10 @@ public final class DocManifest200Response {
 
     private final Optional<Integer> outlineVersion;
 
+    private final Optional<Integer> fontsVersion;
+
+    private final String serverFonts;
+
     private final int auditHead;
 
     private final String baseSha;
@@ -69,6 +73,8 @@ public final class DocManifest200Response {
             Optional<Integer> annotationsVersion,
             Optional<Integer> formsVersion,
             Optional<Integer> outlineVersion,
+            Optional<Integer> fontsVersion,
+            String serverFonts,
             int auditHead,
             String baseSha,
             Optional<Integer> layerVersion,
@@ -86,6 +92,8 @@ public final class DocManifest200Response {
         this.annotationsVersion = annotationsVersion;
         this.formsVersion = formsVersion;
         this.outlineVersion = outlineVersion;
+        this.fontsVersion = fontsVersion;
+        this.serverFonts = serverFonts;
         this.auditHead = auditHead;
         this.baseSha = baseSha;
         this.layerVersion = layerVersion;
@@ -135,6 +143,16 @@ public final class DocManifest200Response {
     @JsonProperty("outlineVersion")
     public Optional<Integer> getOutlineVersion() {
         return outlineVersion;
+    }
+
+    @JsonProperty("fontsVersion")
+    public Optional<Integer> getFontsVersion() {
+        return fontsVersion;
+    }
+
+    @JsonProperty("serverFonts")
+    public String getServerFonts() {
+        return serverFonts;
     }
 
     @JsonProperty("auditHead")
@@ -206,6 +224,8 @@ public final class DocManifest200Response {
                 && annotationsVersion.equals(other.annotationsVersion)
                 && formsVersion.equals(other.formsVersion)
                 && outlineVersion.equals(other.outlineVersion)
+                && fontsVersion.equals(other.fontsVersion)
+                && serverFonts.equals(other.serverFonts)
                 && auditHead == other.auditHead
                 && baseSha.equals(other.baseSha)
                 && layerVersion.equals(other.layerVersion)
@@ -227,6 +247,8 @@ public final class DocManifest200Response {
                 this.annotationsVersion,
                 this.formsVersion,
                 this.outlineVersion,
+                this.fontsVersion,
+                this.serverFonts,
                 this.auditHead,
                 this.baseSha,
                 this.layerVersion,
@@ -257,7 +279,11 @@ public final class DocManifest200Response {
     }
 
     public interface MetadataVersionStage {
-        AuditHeadStage metadataVersion(int metadataVersion);
+        ServerFontsStage metadataVersion(int metadataVersion);
+    }
+
+    public interface ServerFontsStage {
+        AuditHeadStage serverFonts(@NotNull String serverFonts);
     }
 
     public interface AuditHeadStage {
@@ -295,6 +321,10 @@ public final class DocManifest200Response {
 
         _FinalStage outlineVersion(Integer outlineVersion);
 
+        _FinalStage fontsVersion(Optional<Integer> fontsVersion);
+
+        _FinalStage fontsVersion(Integer fontsVersion);
+
         _FinalStage layerVersion(Optional<Integer> layerVersion);
 
         _FinalStage layerVersion(Integer layerVersion);
@@ -329,6 +359,7 @@ public final class DocManifest200Response {
             implements DocVersionStage,
                     LayoutVersionStage,
                     MetadataVersionStage,
+                    ServerFontsStage,
                     AuditHeadStage,
                     BaseShaStage,
                     _FinalStage {
@@ -337,6 +368,8 @@ public final class DocManifest200Response {
         private int layoutVersion;
 
         private int metadataVersion;
+
+        private String serverFonts;
 
         private int auditHead;
 
@@ -353,6 +386,8 @@ public final class DocManifest200Response {
         private Optional<Boolean> working = Optional.empty();
 
         private Optional<Integer> layerVersion = Optional.empty();
+
+        private Optional<Integer> fontsVersion = Optional.empty();
 
         private Optional<Integer> outlineVersion = Optional.empty();
 
@@ -379,6 +414,8 @@ public final class DocManifest200Response {
             annotationsVersion(other.getAnnotationsVersion());
             formsVersion(other.getFormsVersion());
             outlineVersion(other.getOutlineVersion());
+            fontsVersion(other.getFontsVersion());
+            serverFonts(other.getServerFonts());
             auditHead(other.getAuditHead());
             baseSha(other.getBaseSha());
             layerVersion(other.getLayerVersion());
@@ -406,8 +443,15 @@ public final class DocManifest200Response {
 
         @java.lang.Override
         @JsonSetter("metadataVersion")
-        public AuditHeadStage metadataVersion(int metadataVersion) {
+        public ServerFontsStage metadataVersion(int metadataVersion) {
             this.metadataVersion = metadataVersion;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("serverFonts")
+        public AuditHeadStage serverFonts(@NotNull String serverFonts) {
+            this.serverFonts = Objects.requireNonNull(serverFonts, "serverFonts must not be null");
             return this;
         }
 
@@ -527,6 +571,19 @@ public final class DocManifest200Response {
         }
 
         @java.lang.Override
+        public _FinalStage fontsVersion(Integer fontsVersion) {
+            this.fontsVersion = Optional.ofNullable(fontsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fontsVersion", nulls = Nulls.SKIP)
+        public _FinalStage fontsVersion(Optional<Integer> fontsVersion) {
+            this.fontsVersion = fontsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage outlineVersion(Integer outlineVersion) {
             this.outlineVersion = Optional.ofNullable(outlineVersion);
             return this;
@@ -602,6 +659,8 @@ public final class DocManifest200Response {
                     annotationsVersion,
                     formsVersion,
                     outlineVersion,
+                    fontsVersion,
+                    serverFonts,
                     auditHead,
                     baseSha,
                     layerVersion,

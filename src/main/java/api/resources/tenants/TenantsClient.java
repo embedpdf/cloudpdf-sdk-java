@@ -11,10 +11,12 @@ import com.cloudpdf.api.resources.tenants.requests.ListTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.ResumeTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
+import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
 import com.cloudpdf.api.types.TenantsCreate200Response;
 import com.cloudpdf.api.types.TenantsGet200Response;
 import com.cloudpdf.api.types.TenantsList200Response;
+import com.cloudpdf.api.types.TenantsUpdate200Response;
 import com.cloudpdf.api.types.TenantsUsage200Response;
 
 public class TenantsClient {
@@ -100,6 +102,21 @@ public class TenantsClient {
      */
     public void delete(String tenantId, DeleteTenantsRequest request, RequestOptions requestOptions) {
         this.rawClient.delete(tenantId, request, requestOptions).body();
+    }
+
+    /**
+     * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
+     */
+    public TenantsUpdate200Response update(String tenantId, TenantsUpdateRequest request) {
+        return this.rawClient.update(tenantId, request).body();
+    }
+
+    /**
+     * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
+     */
+    public TenantsUpdate200Response update(
+            String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
+        return this.rawClient.update(tenantId, request, requestOptions).body();
     }
 
     public void resume(String tenantId) {

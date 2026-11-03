@@ -25,6 +25,8 @@ public final class ChangeItemPagesReorderLayout {
 
     private final List<ChangeItemPagesReorderLayoutPagesItem> pages;
 
+    private final List<ChangeItemPagesReorderLayoutLabelsItem> labels;
+
     private final List<ChangeItemPagesReorderLayoutNamedPagesItem> namedPages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class ChangeItemPagesReorderLayout {
     private ChangeItemPagesReorderLayout(
             int pageCount,
             List<ChangeItemPagesReorderLayoutPagesItem> pages,
+            List<ChangeItemPagesReorderLayoutLabelsItem> labels,
             List<ChangeItemPagesReorderLayoutNamedPagesItem> namedPages,
             Map<String, Object> additionalProperties) {
         this.pageCount = pageCount;
         this.pages = pages;
+        this.labels = labels;
         this.namedPages = namedPages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class ChangeItemPagesReorderLayout {
     @JsonProperty("pages")
     public List<ChangeItemPagesReorderLayoutPagesItem> getPages() {
         return pages;
+    }
+
+    @JsonProperty("labels")
+    public List<ChangeItemPagesReorderLayoutLabelsItem> getLabels() {
+        return labels;
     }
 
     @JsonProperty("namedPages")
@@ -67,12 +76,15 @@ public final class ChangeItemPagesReorderLayout {
     }
 
     private boolean equalTo(ChangeItemPagesReorderLayout other) {
-        return pageCount == other.pageCount && pages.equals(other.pages) && namedPages.equals(other.namedPages);
+        return pageCount == other.pageCount
+                && pages.equals(other.pages)
+                && labels.equals(other.labels)
+                && namedPages.equals(other.namedPages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageCount, this.pages, this.namedPages);
+        return Objects.hash(this.pageCount, this.pages, this.labels, this.namedPages);
     }
 
     @java.lang.Override
@@ -103,6 +115,12 @@ public final class ChangeItemPagesReorderLayout {
 
         _FinalStage addAllPages(List<ChangeItemPagesReorderLayoutPagesItem> pages);
 
+        _FinalStage labels(List<ChangeItemPagesReorderLayoutLabelsItem> labels);
+
+        _FinalStage addLabels(ChangeItemPagesReorderLayoutLabelsItem labels);
+
+        _FinalStage addAllLabels(List<ChangeItemPagesReorderLayoutLabelsItem> labels);
+
         _FinalStage namedPages(List<ChangeItemPagesReorderLayoutNamedPagesItem> namedPages);
 
         _FinalStage addNamedPages(ChangeItemPagesReorderLayoutNamedPagesItem namedPages);
@@ -116,6 +134,8 @@ public final class ChangeItemPagesReorderLayout {
 
         private List<ChangeItemPagesReorderLayoutNamedPagesItem> namedPages = new ArrayList<>();
 
+        private List<ChangeItemPagesReorderLayoutLabelsItem> labels = new ArrayList<>();
+
         private List<ChangeItemPagesReorderLayoutPagesItem> pages = new ArrayList<>();
 
         @JsonAnySetter
@@ -127,6 +147,7 @@ public final class ChangeItemPagesReorderLayout {
         public Builder from(ChangeItemPagesReorderLayout other) {
             pageCount(other.getPageCount());
             pages(other.getPages());
+            labels(other.getLabels());
             namedPages(other.getNamedPages());
             return this;
         }
@@ -163,6 +184,30 @@ public final class ChangeItemPagesReorderLayout {
         }
 
         @java.lang.Override
+        public _FinalStage addAllLabels(List<ChangeItemPagesReorderLayoutLabelsItem> labels) {
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addLabels(ChangeItemPagesReorderLayoutLabelsItem labels) {
+            this.labels.add(labels);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "labels", nulls = Nulls.SKIP)
+        public _FinalStage labels(List<ChangeItemPagesReorderLayoutLabelsItem> labels) {
+            this.labels.clear();
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPages(List<ChangeItemPagesReorderLayoutPagesItem> pages) {
             if (pages != null) {
                 this.pages.addAll(pages);
@@ -188,7 +233,7 @@ public final class ChangeItemPagesReorderLayout {
 
         @java.lang.Override
         public ChangeItemPagesReorderLayout build() {
-            return new ChangeItemPagesReorderLayout(pageCount, pages, namedPages, additionalProperties);
+            return new ChangeItemPagesReorderLayout(pageCount, pages, labels, namedPages, additionalProperties);
         }
 
         @java.lang.Override

@@ -34,12 +34,20 @@ public final class TokensIssueRequest {
         return new TokensIssueRequest(new TenantValue(value));
     }
 
+    public static TokensIssueRequest upload(TokensIssueRequestUpload value) {
+        return new TokensIssueRequest(new UploadValue(value));
+    }
+
     public boolean isDoc() {
         return value instanceof DocValue;
     }
 
     public boolean isTenant() {
         return value instanceof TenantValue;
+    }
+
+    public boolean isUpload() {
+        return value instanceof UploadValue;
     }
 
     public boolean _isUnknown() {
@@ -56,6 +64,13 @@ public final class TokensIssueRequest {
     public Optional<TokensIssueRequestTenant> getTenant() {
         if (isTenant()) {
             return Optional.of(((TenantValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<TokensIssueRequestUpload> getUpload() {
+        if (isUpload()) {
+            return Optional.of(((UploadValue) value).value);
         }
         return Optional.empty();
     }
@@ -93,11 +108,17 @@ public final class TokensIssueRequest {
 
         T visitTenant(TokensIssueRequestTenant tenant);
 
+        T visitUpload(TokensIssueRequestUpload upload);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(DocValue.class), @JsonSubTypes.Type(TenantValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(DocValue.class),
+        @JsonSubTypes.Type(TenantValue.class),
+        @JsonSubTypes.Type(UploadValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -169,6 +190,46 @@ public final class TokensIssueRequest {
         }
 
         private boolean equalTo(TenantValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "TokensIssueRequest{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("upload")
+    @JsonIgnoreProperties("kind")
+    private static final class UploadValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
+        private TokensIssueRequestUpload value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private UploadValue() {}
+
+        private UploadValue(TokensIssueRequestUpload value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitUpload(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof UploadValue && equalTo((UploadValue) other);
+        }
+
+        private boolean equalTo(UploadValue other) {
             return value.equals(other.value);
         }
 

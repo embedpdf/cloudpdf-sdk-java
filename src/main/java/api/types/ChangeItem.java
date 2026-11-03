@@ -162,6 +162,10 @@ public final class ChangeItem {
         return new ChangeItem(new PagesInsertValue(value));
     }
 
+    public static ChangeItem pagesCopy(ChangeItemPagesCopy value) {
+        return new ChangeItem(new PagesCopyValue(value));
+    }
+
     public static ChangeItem pagesRestore(ChangeItemPagesRestore value) {
         return new ChangeItem(new PagesRestoreValue(value));
     }
@@ -312,6 +316,10 @@ public final class ChangeItem {
 
     public boolean isPagesInsert() {
         return value instanceof PagesInsertValue;
+    }
+
+    public boolean isPagesCopy() {
+        return value instanceof PagesCopyValue;
     }
 
     public boolean isPagesRestore() {
@@ -572,6 +580,13 @@ public final class ChangeItem {
         return Optional.empty();
     }
 
+    public Optional<ChangeItemPagesCopy> getPagesCopy() {
+        if (isPagesCopy()) {
+            return Optional.of(((PagesCopyValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<ChangeItemPagesRestore> getPagesRestore() {
         if (isPagesRestore()) {
             return Optional.of(((PagesRestoreValue) value).value);
@@ -697,6 +712,8 @@ public final class ChangeItem {
 
         T visitPagesInsert(ChangeItemPagesInsert pagesInsert);
 
+        T visitPagesCopy(ChangeItemPagesCopy pagesCopy);
+
         T visitPagesRestore(ChangeItemPagesRestore pagesRestore);
 
         T visitAttachmentsCreate(ChangeItemAttachmentsCreate attachmentsCreate);
@@ -744,6 +761,7 @@ public final class ChangeItem {
         @JsonSubTypes.Type(PagesDeleteValue.class),
         @JsonSubTypes.Type(PagesInsertBlankValue.class),
         @JsonSubTypes.Type(PagesInsertValue.class),
+        @JsonSubTypes.Type(PagesCopyValue.class),
         @JsonSubTypes.Type(PagesRestoreValue.class),
         @JsonSubTypes.Type(AttachmentsCreateValue.class),
         @JsonSubTypes.Type(AttachmentsDeleteValue.class),
@@ -2101,6 +2119,46 @@ public final class ChangeItem {
         }
 
         private boolean equalTo(PagesInsertValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.copy")
+    @JsonIgnoreProperties("type")
+    private static final class PagesCopyValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesCopy value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesCopyValue() {}
+
+        private PagesCopyValue(ChangeItemPagesCopy value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesCopy(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesCopyValue && equalTo((PagesCopyValue) other);
+        }
+
+        private boolean equalTo(PagesCopyValue other) {
             return value.equals(other.value);
         }
 

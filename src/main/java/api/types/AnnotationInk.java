@@ -35,6 +35,8 @@ public final class AnnotationInk {
 
     private final Optional<String> appearanceState;
 
+    private final Optional<List<Integer>> structurePosition;
+
     private final Optional<String> nm;
 
     private final AnnotationInkRect rect;
@@ -110,6 +112,7 @@ public final class AnnotationInk {
             PageRef page,
             boolean hasAppearance,
             Optional<String> appearanceState,
+            Optional<List<Integer>> structurePosition,
             Optional<String> nm,
             AnnotationInkRect rect,
             Optional<String> contents,
@@ -149,6 +152,7 @@ public final class AnnotationInk {
         this.page = page;
         this.hasAppearance = hasAppearance;
         this.appearanceState = appearanceState;
+        this.structurePosition = structurePosition;
         this.nm = nm;
         this.rect = rect;
         this.contents = contents;
@@ -207,6 +211,14 @@ public final class AnnotationInk {
             return Optional.empty();
         }
         return appearanceState;
+    }
+
+    @JsonIgnore
+    public Optional<List<Integer>> getStructurePosition() {
+        if (structurePosition == null) {
+            return Optional.empty();
+        }
+        return structurePosition;
     }
 
     @JsonIgnore
@@ -437,6 +449,12 @@ public final class AnnotationInk {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("structurePosition")
+    private Optional<List<Integer>> _getStructurePosition() {
+        return structurePosition;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("nm")
     private Optional<String> _getNm() {
         return nm;
@@ -554,6 +572,7 @@ public final class AnnotationInk {
                 && page.equals(other.page)
                 && hasAppearance == other.hasAppearance
                 && appearanceState.equals(other.appearanceState)
+                && structurePosition.equals(other.structurePosition)
                 && nm.equals(other.nm)
                 && rect.equals(other.rect)
                 && contents.equals(other.contents)
@@ -597,6 +616,7 @@ public final class AnnotationInk {
                 this.page,
                 this.hasAppearance,
                 this.appearanceState,
+                this.structurePosition,
                 this.nm,
                 this.rect,
                 this.contents,
@@ -732,6 +752,12 @@ public final class AnnotationInk {
         _FinalStage appearanceState(String appearanceState);
 
         _FinalStage appearanceState(Nullable<String> appearanceState);
+
+        _FinalStage structurePosition(Optional<List<Integer>> structurePosition);
+
+        _FinalStage structurePosition(List<Integer> structurePosition);
+
+        _FinalStage structurePosition(Nullable<List<Integer>> structurePosition);
 
         _FinalStage nm(Optional<String> nm);
 
@@ -938,6 +964,8 @@ public final class AnnotationInk {
 
         private Optional<String> nm = Optional.empty();
 
+        private Optional<List<Integer>> structurePosition = Optional.empty();
+
         private Optional<String> appearanceState = Optional.empty();
 
         @JsonAnySetter
@@ -951,6 +979,7 @@ public final class AnnotationInk {
             page(other.getPage());
             hasAppearance(other.getHasAppearance());
             appearanceState(other.getAppearanceState());
+            structurePosition(other.getStructurePosition());
             nm(other.getNm());
             rect(other.getRect());
             contents(other.getContents());
@@ -1571,6 +1600,31 @@ public final class AnnotationInk {
         }
 
         @java.lang.Override
+        public _FinalStage structurePosition(Nullable<List<Integer>> structurePosition) {
+            if (structurePosition.isNull()) {
+                this.structurePosition = null;
+            } else if (structurePosition.isEmpty()) {
+                this.structurePosition = Optional.empty();
+            } else {
+                this.structurePosition = Optional.of(structurePosition.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage structurePosition(List<Integer> structurePosition) {
+            this.structurePosition = Optional.ofNullable(structurePosition);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "structurePosition", nulls = Nulls.SKIP)
+        public _FinalStage structurePosition(Optional<List<Integer>> structurePosition) {
+            this.structurePosition = structurePosition;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage appearanceState(Nullable<String> appearanceState) {
             if (appearanceState.isNull()) {
                 this.appearanceState = null;
@@ -1602,6 +1656,7 @@ public final class AnnotationInk {
                     page,
                     hasAppearance,
                     appearanceState,
+                    structurePosition,
                     nm,
                     rect,
                     contents,

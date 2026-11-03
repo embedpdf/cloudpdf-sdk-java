@@ -1,12 +1,12 @@
 {
   "language": "java",
-  "canonicalVersion": "3.0.0-next.19",
-  "sdkVersion": "3.0.0-alpha.19",
+  "canonicalVersion": "3.0.0-next.21",
+  "sdkVersion": "3.0.0-alpha.21",
   "source": {
     "repository": "embedpdf/embed-pdf-viewer",
     "openapi": "cloudpdf/contract/openapi.json",
-    "openapiSha256": "e88e02ed71f422ad08b2393abeda474e8dcf6707b6e753af74ba2f40da8e7d6b",
-    "gitCommit": "0606e988ebff3773183ef02e0a820c36b3a25f8d",
+    "openapiSha256": "f85648401f5c683a32e2b50acc3d753df9f4ce06df8492e5d2b599beceb0e788",
+    "gitCommit": "3283147ded32fc15c426768f75557a4d95943d84",
     "gitCommitIsDirty": false
   },
   "fern": {

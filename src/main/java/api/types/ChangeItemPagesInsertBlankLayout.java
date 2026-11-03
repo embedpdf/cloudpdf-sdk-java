@@ -25,6 +25,8 @@ public final class ChangeItemPagesInsertBlankLayout {
 
     private final List<ChangeItemPagesInsertBlankLayoutPagesItem> pages;
 
+    private final List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels;
+
     private final List<ChangeItemPagesInsertBlankLayoutNamedPagesItem> namedPages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class ChangeItemPagesInsertBlankLayout {
     private ChangeItemPagesInsertBlankLayout(
             int pageCount,
             List<ChangeItemPagesInsertBlankLayoutPagesItem> pages,
+            List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels,
             List<ChangeItemPagesInsertBlankLayoutNamedPagesItem> namedPages,
             Map<String, Object> additionalProperties) {
         this.pageCount = pageCount;
         this.pages = pages;
+        this.labels = labels;
         this.namedPages = namedPages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class ChangeItemPagesInsertBlankLayout {
     @JsonProperty("pages")
     public List<ChangeItemPagesInsertBlankLayoutPagesItem> getPages() {
         return pages;
+    }
+
+    @JsonProperty("labels")
+    public List<ChangeItemPagesInsertBlankLayoutLabelsItem> getLabels() {
+        return labels;
     }
 
     @JsonProperty("namedPages")
@@ -67,12 +76,15 @@ public final class ChangeItemPagesInsertBlankLayout {
     }
 
     private boolean equalTo(ChangeItemPagesInsertBlankLayout other) {
-        return pageCount == other.pageCount && pages.equals(other.pages) && namedPages.equals(other.namedPages);
+        return pageCount == other.pageCount
+                && pages.equals(other.pages)
+                && labels.equals(other.labels)
+                && namedPages.equals(other.namedPages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageCount, this.pages, this.namedPages);
+        return Objects.hash(this.pageCount, this.pages, this.labels, this.namedPages);
     }
 
     @java.lang.Override
@@ -103,6 +115,12 @@ public final class ChangeItemPagesInsertBlankLayout {
 
         _FinalStage addAllPages(List<ChangeItemPagesInsertBlankLayoutPagesItem> pages);
 
+        _FinalStage labels(List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels);
+
+        _FinalStage addLabels(ChangeItemPagesInsertBlankLayoutLabelsItem labels);
+
+        _FinalStage addAllLabels(List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels);
+
         _FinalStage namedPages(List<ChangeItemPagesInsertBlankLayoutNamedPagesItem> namedPages);
 
         _FinalStage addNamedPages(ChangeItemPagesInsertBlankLayoutNamedPagesItem namedPages);
@@ -116,6 +134,8 @@ public final class ChangeItemPagesInsertBlankLayout {
 
         private List<ChangeItemPagesInsertBlankLayoutNamedPagesItem> namedPages = new ArrayList<>();
 
+        private List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels = new ArrayList<>();
+
         private List<ChangeItemPagesInsertBlankLayoutPagesItem> pages = new ArrayList<>();
 
         @JsonAnySetter
@@ -127,6 +147,7 @@ public final class ChangeItemPagesInsertBlankLayout {
         public Builder from(ChangeItemPagesInsertBlankLayout other) {
             pageCount(other.getPageCount());
             pages(other.getPages());
+            labels(other.getLabels());
             namedPages(other.getNamedPages());
             return this;
         }
@@ -163,6 +184,30 @@ public final class ChangeItemPagesInsertBlankLayout {
         }
 
         @java.lang.Override
+        public _FinalStage addAllLabels(List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels) {
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addLabels(ChangeItemPagesInsertBlankLayoutLabelsItem labels) {
+            this.labels.add(labels);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "labels", nulls = Nulls.SKIP)
+        public _FinalStage labels(List<ChangeItemPagesInsertBlankLayoutLabelsItem> labels) {
+            this.labels.clear();
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPages(List<ChangeItemPagesInsertBlankLayoutPagesItem> pages) {
             if (pages != null) {
                 this.pages.addAll(pages);
@@ -188,7 +233,7 @@ public final class ChangeItemPagesInsertBlankLayout {
 
         @java.lang.Override
         public ChangeItemPagesInsertBlankLayout build() {
-            return new ChangeItemPagesInsertBlankLayout(pageCount, pages, namedPages, additionalProperties);
+            return new ChangeItemPagesInsertBlankLayout(pageCount, pages, labels, namedPages, additionalProperties);
         }
 
         @java.lang.Override
