@@ -4,6 +4,8 @@
 package com.cloudpdf.api.core;
 
 public final class Environment {
+    public static final Environment SAAS = new Environment("https://engine.cloudpdf.com");
+
     private final String url;
 
     private Environment(String url) {

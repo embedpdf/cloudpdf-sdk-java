@@ -467,11 +467,17 @@ public class AsyncRawDocumentsClient {
         return future;
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsCommit200Response>> commit(
             String tenantId, String id, DocumentsCommitRequest request) {
         return commit(tenantId, id, request, null);
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsCommit200Response>> commit(
             String tenantId, String id, DocumentsCommitRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -746,7 +752,7 @@ public class AsyncRawDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsUploadProxy200Response>> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
@@ -754,7 +760,7 @@ public class AsyncRawDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsUploadProxy200Response>> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
@@ -816,6 +822,11 @@ public class AsyncRawDocumentsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
@@ -888,6 +899,11 @@ public class AsyncRawDocumentsClient {
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
@@ -954,6 +970,11 @@ public class AsyncRawDocumentsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
@@ -1040,6 +1061,11 @@ public class AsyncRawDocumentsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
@@ -1131,6 +1157,11 @@ public class AsyncRawDocumentsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
                                         response));
                                 return;
@@ -1270,11 +1301,17 @@ public class AsyncRawDocumentsClient {
         return future;
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsInit200Response>> init(
             String tenantId, DocumentsInitRequest request) {
         return init(tenantId, request, null);
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CompletableFuture<CloudPDFClientHttpResponse<DocumentsInit200Response>> init(
             String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -1328,10 +1365,17 @@ public class AsyncRawDocumentsClient {
                         return;
                     }
                     try {
-                        if (response.code() == 400) {
-                            future.completeExceptionally(new BadRequestError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
-                            return;
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
+                            case 403:
+                                future.completeExceptionally(new ForbiddenError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        response));
+                                return;
                         }
                     } catch (JsonProcessingException ignored) {
                         // unable to map error response, throwing generic error

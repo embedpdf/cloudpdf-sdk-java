@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,14 +26,18 @@ public final class ChangeOpPagesInsert {
 
     private final Optional<PagePosition> position;
 
+    private final Optional<List<Integer>> objectNumbers;
+
     private final Map<String, Object> additionalProperties;
 
     private ChangeOpPagesInsert(
             ChangeOpPagesInsertResources resources,
             Optional<PagePosition> position,
+            Optional<List<Integer>> objectNumbers,
             Map<String, Object> additionalProperties) {
         this.resources = resources;
         this.position = position;
+        this.objectNumbers = objectNumbers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -44,6 +49,11 @@ public final class ChangeOpPagesInsert {
     @JsonProperty("position")
     public Optional<PagePosition> getPosition() {
         return position;
+    }
+
+    @JsonProperty("objectNumbers")
+    public Optional<List<Integer>> getObjectNumbers() {
+        return objectNumbers;
     }
 
     @java.lang.Override
@@ -58,12 +68,14 @@ public final class ChangeOpPagesInsert {
     }
 
     private boolean equalTo(ChangeOpPagesInsert other) {
-        return resources.equals(other.resources) && position.equals(other.position);
+        return resources.equals(other.resources)
+                && position.equals(other.position)
+                && objectNumbers.equals(other.objectNumbers);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.resources, this.position);
+        return Objects.hash(this.resources, this.position, this.objectNumbers);
     }
 
     @java.lang.Override
@@ -91,11 +103,17 @@ public final class ChangeOpPagesInsert {
         _FinalStage position(Optional<PagePosition> position);
 
         _FinalStage position(PagePosition position);
+
+        _FinalStage objectNumbers(Optional<List<Integer>> objectNumbers);
+
+        _FinalStage objectNumbers(List<Integer> objectNumbers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ResourcesStage, _FinalStage {
         private ChangeOpPagesInsertResources resources;
+
+        private Optional<List<Integer>> objectNumbers = Optional.empty();
 
         private Optional<PagePosition> position = Optional.empty();
 
@@ -108,6 +126,7 @@ public final class ChangeOpPagesInsert {
         public Builder from(ChangeOpPagesInsert other) {
             resources(other.getResources());
             position(other.getPosition());
+            objectNumbers(other.getObjectNumbers());
             return this;
         }
 
@@ -115,6 +134,19 @@ public final class ChangeOpPagesInsert {
         @JsonSetter("resources")
         public _FinalStage resources(@NotNull ChangeOpPagesInsertResources resources) {
             this.resources = Objects.requireNonNull(resources, "resources must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage objectNumbers(List<Integer> objectNumbers) {
+            this.objectNumbers = Optional.ofNullable(objectNumbers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "objectNumbers", nulls = Nulls.SKIP)
+        public _FinalStage objectNumbers(Optional<List<Integer>> objectNumbers) {
+            this.objectNumbers = objectNumbers;
             return this;
         }
 
@@ -133,7 +165,7 @@ public final class ChangeOpPagesInsert {
 
         @java.lang.Override
         public ChangeOpPagesInsert build() {
-            return new ChangeOpPagesInsert(resources, position, additionalProperties);
+            return new ChangeOpPagesInsert(resources, position, objectNumbers, additionalProperties);
         }
 
         @java.lang.Override

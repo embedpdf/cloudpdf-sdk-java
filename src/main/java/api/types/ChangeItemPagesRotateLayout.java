@@ -25,6 +25,8 @@ public final class ChangeItemPagesRotateLayout {
 
     private final List<ChangeItemPagesRotateLayoutPagesItem> pages;
 
+    private final List<ChangeItemPagesRotateLayoutLabelsItem> labels;
+
     private final List<ChangeItemPagesRotateLayoutNamedPagesItem> namedPages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class ChangeItemPagesRotateLayout {
     private ChangeItemPagesRotateLayout(
             int pageCount,
             List<ChangeItemPagesRotateLayoutPagesItem> pages,
+            List<ChangeItemPagesRotateLayoutLabelsItem> labels,
             List<ChangeItemPagesRotateLayoutNamedPagesItem> namedPages,
             Map<String, Object> additionalProperties) {
         this.pageCount = pageCount;
         this.pages = pages;
+        this.labels = labels;
         this.namedPages = namedPages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class ChangeItemPagesRotateLayout {
     @JsonProperty("pages")
     public List<ChangeItemPagesRotateLayoutPagesItem> getPages() {
         return pages;
+    }
+
+    @JsonProperty("labels")
+    public List<ChangeItemPagesRotateLayoutLabelsItem> getLabels() {
+        return labels;
     }
 
     @JsonProperty("namedPages")
@@ -67,12 +76,15 @@ public final class ChangeItemPagesRotateLayout {
     }
 
     private boolean equalTo(ChangeItemPagesRotateLayout other) {
-        return pageCount == other.pageCount && pages.equals(other.pages) && namedPages.equals(other.namedPages);
+        return pageCount == other.pageCount
+                && pages.equals(other.pages)
+                && labels.equals(other.labels)
+                && namedPages.equals(other.namedPages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageCount, this.pages, this.namedPages);
+        return Objects.hash(this.pageCount, this.pages, this.labels, this.namedPages);
     }
 
     @java.lang.Override
@@ -103,6 +115,12 @@ public final class ChangeItemPagesRotateLayout {
 
         _FinalStage addAllPages(List<ChangeItemPagesRotateLayoutPagesItem> pages);
 
+        _FinalStage labels(List<ChangeItemPagesRotateLayoutLabelsItem> labels);
+
+        _FinalStage addLabels(ChangeItemPagesRotateLayoutLabelsItem labels);
+
+        _FinalStage addAllLabels(List<ChangeItemPagesRotateLayoutLabelsItem> labels);
+
         _FinalStage namedPages(List<ChangeItemPagesRotateLayoutNamedPagesItem> namedPages);
 
         _FinalStage addNamedPages(ChangeItemPagesRotateLayoutNamedPagesItem namedPages);
@@ -116,6 +134,8 @@ public final class ChangeItemPagesRotateLayout {
 
         private List<ChangeItemPagesRotateLayoutNamedPagesItem> namedPages = new ArrayList<>();
 
+        private List<ChangeItemPagesRotateLayoutLabelsItem> labels = new ArrayList<>();
+
         private List<ChangeItemPagesRotateLayoutPagesItem> pages = new ArrayList<>();
 
         @JsonAnySetter
@@ -127,6 +147,7 @@ public final class ChangeItemPagesRotateLayout {
         public Builder from(ChangeItemPagesRotateLayout other) {
             pageCount(other.getPageCount());
             pages(other.getPages());
+            labels(other.getLabels());
             namedPages(other.getNamedPages());
             return this;
         }
@@ -163,6 +184,30 @@ public final class ChangeItemPagesRotateLayout {
         }
 
         @java.lang.Override
+        public _FinalStage addAllLabels(List<ChangeItemPagesRotateLayoutLabelsItem> labels) {
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addLabels(ChangeItemPagesRotateLayoutLabelsItem labels) {
+            this.labels.add(labels);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "labels", nulls = Nulls.SKIP)
+        public _FinalStage labels(List<ChangeItemPagesRotateLayoutLabelsItem> labels) {
+            this.labels.clear();
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPages(List<ChangeItemPagesRotateLayoutPagesItem> pages) {
             if (pages != null) {
                 this.pages.addAll(pages);
@@ -188,7 +233,7 @@ public final class ChangeItemPagesRotateLayout {
 
         @java.lang.Override
         public ChangeItemPagesRotateLayout build() {
-            return new ChangeItemPagesRotateLayout(pageCount, pages, namedPages, additionalProperties);
+            return new ChangeItemPagesRotateLayout(pageCount, pages, labels, namedPages, additionalProperties);
         }
 
         @java.lang.Override

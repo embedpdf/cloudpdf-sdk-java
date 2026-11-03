@@ -8,6 +8,7 @@ import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.core.Suppliers;
 import com.cloudpdf.api.resources.doc.annotations.AnnotationsClient;
 import com.cloudpdf.api.resources.doc.attachments.AttachmentsClient;
+import com.cloudpdf.api.resources.doc.fonts.FontsClient;
 import com.cloudpdf.api.resources.doc.forms.FormsClient;
 import com.cloudpdf.api.resources.doc.metadata.MetadataClient;
 import com.cloudpdf.api.resources.doc.outline.OutlineClient;
@@ -39,6 +40,8 @@ public class DocClient {
 
     protected final Supplier<AttachmentsClient> attachmentsClient;
 
+    protected final Supplier<FontsClient> fontsClient;
+
     protected final Supplier<FormsClient> formsClient;
 
     protected final Supplier<MetadataClient> metadataClient;
@@ -58,6 +61,7 @@ public class DocClient {
         this.rawClient = new RawDocClient(clientOptions);
         this.annotationsClient = Suppliers.memoize(() -> new AnnotationsClient(clientOptions));
         this.attachmentsClient = Suppliers.memoize(() -> new AttachmentsClient(clientOptions));
+        this.fontsClient = Suppliers.memoize(() -> new FontsClient(clientOptions));
         this.formsClient = Suppliers.memoize(() -> new FormsClient(clientOptions));
         this.metadataClient = Suppliers.memoize(() -> new MetadataClient(clientOptions));
         this.outlineClient = Suppliers.memoize(() -> new OutlineClient(clientOptions));
@@ -230,6 +234,10 @@ public class DocClient {
 
     public AttachmentsClient attachments() {
         return this.attachmentsClient.get();
+    }
+
+    public FontsClient fonts() {
+        return this.fontsClient.get();
     }
 
     public FormsClient forms() {

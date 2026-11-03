@@ -25,6 +25,8 @@ public final class DocPagesSetName200ResponseLayout {
 
     private final List<DocPagesSetName200ResponseLayoutPagesItem> pages;
 
+    private final List<DocPagesSetName200ResponseLayoutLabelsItem> labels;
+
     private final List<DocPagesSetName200ResponseLayoutNamedPagesItem> namedPages;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class DocPagesSetName200ResponseLayout {
     private DocPagesSetName200ResponseLayout(
             int pageCount,
             List<DocPagesSetName200ResponseLayoutPagesItem> pages,
+            List<DocPagesSetName200ResponseLayoutLabelsItem> labels,
             List<DocPagesSetName200ResponseLayoutNamedPagesItem> namedPages,
             Map<String, Object> additionalProperties) {
         this.pageCount = pageCount;
         this.pages = pages;
+        this.labels = labels;
         this.namedPages = namedPages;
         this.additionalProperties = additionalProperties;
     }
@@ -48,6 +52,11 @@ public final class DocPagesSetName200ResponseLayout {
     @JsonProperty("pages")
     public List<DocPagesSetName200ResponseLayoutPagesItem> getPages() {
         return pages;
+    }
+
+    @JsonProperty("labels")
+    public List<DocPagesSetName200ResponseLayoutLabelsItem> getLabels() {
+        return labels;
     }
 
     @JsonProperty("namedPages")
@@ -67,12 +76,15 @@ public final class DocPagesSetName200ResponseLayout {
     }
 
     private boolean equalTo(DocPagesSetName200ResponseLayout other) {
-        return pageCount == other.pageCount && pages.equals(other.pages) && namedPages.equals(other.namedPages);
+        return pageCount == other.pageCount
+                && pages.equals(other.pages)
+                && labels.equals(other.labels)
+                && namedPages.equals(other.namedPages);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.pageCount, this.pages, this.namedPages);
+        return Objects.hash(this.pageCount, this.pages, this.labels, this.namedPages);
     }
 
     @java.lang.Override
@@ -103,6 +115,12 @@ public final class DocPagesSetName200ResponseLayout {
 
         _FinalStage addAllPages(List<DocPagesSetName200ResponseLayoutPagesItem> pages);
 
+        _FinalStage labels(List<DocPagesSetName200ResponseLayoutLabelsItem> labels);
+
+        _FinalStage addLabels(DocPagesSetName200ResponseLayoutLabelsItem labels);
+
+        _FinalStage addAllLabels(List<DocPagesSetName200ResponseLayoutLabelsItem> labels);
+
         _FinalStage namedPages(List<DocPagesSetName200ResponseLayoutNamedPagesItem> namedPages);
 
         _FinalStage addNamedPages(DocPagesSetName200ResponseLayoutNamedPagesItem namedPages);
@@ -116,6 +134,8 @@ public final class DocPagesSetName200ResponseLayout {
 
         private List<DocPagesSetName200ResponseLayoutNamedPagesItem> namedPages = new ArrayList<>();
 
+        private List<DocPagesSetName200ResponseLayoutLabelsItem> labels = new ArrayList<>();
+
         private List<DocPagesSetName200ResponseLayoutPagesItem> pages = new ArrayList<>();
 
         @JsonAnySetter
@@ -127,6 +147,7 @@ public final class DocPagesSetName200ResponseLayout {
         public Builder from(DocPagesSetName200ResponseLayout other) {
             pageCount(other.getPageCount());
             pages(other.getPages());
+            labels(other.getLabels());
             namedPages(other.getNamedPages());
             return this;
         }
@@ -163,6 +184,30 @@ public final class DocPagesSetName200ResponseLayout {
         }
 
         @java.lang.Override
+        public _FinalStage addAllLabels(List<DocPagesSetName200ResponseLayoutLabelsItem> labels) {
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage addLabels(DocPagesSetName200ResponseLayoutLabelsItem labels) {
+            this.labels.add(labels);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "labels", nulls = Nulls.SKIP)
+        public _FinalStage labels(List<DocPagesSetName200ResponseLayoutLabelsItem> labels) {
+            this.labels.clear();
+            if (labels != null) {
+                this.labels.addAll(labels);
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage addAllPages(List<DocPagesSetName200ResponseLayoutPagesItem> pages) {
             if (pages != null) {
                 this.pages.addAll(pages);
@@ -188,7 +233,7 @@ public final class DocPagesSetName200ResponseLayout {
 
         @java.lang.Override
         public DocPagesSetName200ResponseLayout build() {
-            return new DocPagesSetName200ResponseLayout(pageCount, pages, namedPages, additionalProperties);
+            return new DocPagesSetName200ResponseLayout(pageCount, pages, labels, namedPages, additionalProperties);
         }
 
         @java.lang.Override

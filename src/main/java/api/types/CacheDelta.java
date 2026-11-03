@@ -38,6 +38,8 @@ public final class CacheDelta {
 
     private final Optional<Integer> outlineVersion;
 
+    private final Optional<Integer> fontsVersion;
+
     private final Optional<Integer> layerVersion;
 
     private final Optional<Boolean> working;
@@ -55,6 +57,7 @@ public final class CacheDelta {
             Optional<Integer> metadataVersion,
             Optional<Integer> attachmentsVersion,
             Optional<Integer> outlineVersion,
+            Optional<Integer> fontsVersion,
             Optional<Integer> layerVersion,
             Optional<Boolean> working,
             List<CacheDeltaPagesItem> pages,
@@ -67,6 +70,7 @@ public final class CacheDelta {
         this.metadataVersion = metadataVersion;
         this.attachmentsVersion = attachmentsVersion;
         this.outlineVersion = outlineVersion;
+        this.fontsVersion = fontsVersion;
         this.layerVersion = layerVersion;
         this.working = working;
         this.pages = pages;
@@ -113,6 +117,11 @@ public final class CacheDelta {
         return outlineVersion;
     }
 
+    @JsonProperty("fontsVersion")
+    public Optional<Integer> getFontsVersion() {
+        return fontsVersion;
+    }
+
     @JsonProperty("layerVersion")
     public Optional<Integer> getLayerVersion() {
         return layerVersion;
@@ -148,6 +157,7 @@ public final class CacheDelta {
                 && metadataVersion.equals(other.metadataVersion)
                 && attachmentsVersion.equals(other.attachmentsVersion)
                 && outlineVersion.equals(other.outlineVersion)
+                && fontsVersion.equals(other.fontsVersion)
                 && layerVersion.equals(other.layerVersion)
                 && working.equals(other.working)
                 && pages.equals(other.pages);
@@ -164,6 +174,7 @@ public final class CacheDelta {
                 this.metadataVersion,
                 this.attachmentsVersion,
                 this.outlineVersion,
+                this.fontsVersion,
                 this.layerVersion,
                 this.working,
                 this.pages);
@@ -219,6 +230,10 @@ public final class CacheDelta {
 
         _FinalStage outlineVersion(Integer outlineVersion);
 
+        _FinalStage fontsVersion(Optional<Integer> fontsVersion);
+
+        _FinalStage fontsVersion(Integer fontsVersion);
+
         _FinalStage layerVersion(Optional<Integer> layerVersion);
 
         _FinalStage layerVersion(Integer layerVersion);
@@ -245,6 +260,8 @@ public final class CacheDelta {
         private Optional<Boolean> working = Optional.empty();
 
         private Optional<Integer> layerVersion = Optional.empty();
+
+        private Optional<Integer> fontsVersion = Optional.empty();
 
         private Optional<Integer> outlineVersion = Optional.empty();
 
@@ -273,6 +290,7 @@ public final class CacheDelta {
             metadataVersion(other.getMetadataVersion());
             attachmentsVersion(other.getAttachmentsVersion());
             outlineVersion(other.getOutlineVersion());
+            fontsVersion(other.getFontsVersion());
             layerVersion(other.getLayerVersion());
             working(other.getWorking());
             pages(other.getPages());
@@ -340,6 +358,19 @@ public final class CacheDelta {
         @JsonSetter(value = "layerVersion", nulls = Nulls.SKIP)
         public _FinalStage layerVersion(Optional<Integer> layerVersion) {
             this.layerVersion = layerVersion;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage fontsVersion(Integer fontsVersion) {
+            this.fontsVersion = Optional.ofNullable(fontsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "fontsVersion", nulls = Nulls.SKIP)
+        public _FinalStage fontsVersion(Optional<Integer> fontsVersion) {
+            this.fontsVersion = fontsVersion;
             return this;
         }
 
@@ -432,6 +463,7 @@ public final class CacheDelta {
                     metadataVersion,
                     attachmentsVersion,
                     outlineVersion,
+                    fontsVersion,
                     layerVersion,
                     working,
                     pages,

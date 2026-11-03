@@ -20,10 +20,12 @@ import com.cloudpdf.api.resources.tenants.requests.ListTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.ResumeTenantsRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
+import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
 import com.cloudpdf.api.types.TenantsCreate200Response;
 import com.cloudpdf.api.types.TenantsGet200Response;
 import com.cloudpdf.api.types.TenantsList200Response;
+import com.cloudpdf.api.types.TenantsUpdate200Response;
 import com.cloudpdf.api.types.TenantsUsage200Response;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -315,6 +317,84 @@ public class RawTenantsClient {
                 if (response.code() == 404) {
                     throw new NotFoundError(
                             ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+            throw new CloudPDFApiException(
+                    "Error with status code " + response.code(), response.code(), errorBody, response);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e);
+        } catch (IOException e) {
+            throw new CloudPDFException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
+     */
+    public CloudPDFClientHttpResponse<TenantsUpdate200Response> update(String tenantId, TenantsUpdateRequest request) {
+        return update(tenantId, request, null);
+    }
+
+    /**
+     * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
+     */
+    public CloudPDFClientHttpResponse<TenantsUpdate200Response> update(
+            String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/tenants")
+                .addPathSegment(tenantId);
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CloudPDFException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            if (response.isSuccessful()) {
+                return new CloudPDFClientHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUpdate200Response.class),
+                        response);
+            }
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

@@ -33,6 +33,8 @@ public final class AnnotationDraftLine {
 
     private final Optional<Object> appearanceState;
 
+    private final Optional<Object> structurePosition;
+
     private final Optional<String> nm;
 
     private final Optional<AnnotationDraftLineRect> rect;
@@ -122,6 +124,7 @@ public final class AnnotationDraftLine {
             Optional<Object> page,
             Optional<Object> hasAppearance,
             Optional<Object> appearanceState,
+            Optional<Object> structurePosition,
             Optional<String> nm,
             Optional<AnnotationDraftLineRect> rect,
             Optional<String> contents,
@@ -168,6 +171,7 @@ public final class AnnotationDraftLine {
         this.page = page;
         this.hasAppearance = hasAppearance;
         this.appearanceState = appearanceState;
+        this.structurePosition = structurePosition;
         this.nm = nm;
         this.rect = rect;
         this.contents = contents;
@@ -230,6 +234,11 @@ public final class AnnotationDraftLine {
     @JsonProperty("appearanceState")
     public Optional<Object> getAppearanceState() {
         return appearanceState;
+    }
+
+    @JsonProperty("structurePosition")
+    public Optional<Object> getStructurePosition() {
+        return structurePosition;
     }
 
     @JsonIgnore
@@ -570,6 +579,7 @@ public final class AnnotationDraftLine {
                 && page.equals(other.page)
                 && hasAppearance.equals(other.hasAppearance)
                 && appearanceState.equals(other.appearanceState)
+                && structurePosition.equals(other.structurePosition)
                 && nm.equals(other.nm)
                 && rect.equals(other.rect)
                 && contents.equals(other.contents)
@@ -620,6 +630,7 @@ public final class AnnotationDraftLine {
                 this.page,
                 this.hasAppearance,
                 this.appearanceState,
+                this.structurePosition,
                 this.nm,
                 this.rect,
                 this.contents,
@@ -700,6 +711,10 @@ public final class AnnotationDraftLine {
         _FinalStage appearanceState(Optional<Object> appearanceState);
 
         _FinalStage appearanceState(Object appearanceState);
+
+        _FinalStage structurePosition(Optional<Object> structurePosition);
+
+        _FinalStage structurePosition(Object structurePosition);
 
         _FinalStage nm(Optional<String> nm);
 
@@ -972,6 +987,8 @@ public final class AnnotationDraftLine {
 
         private Optional<String> nm = Optional.empty();
 
+        private Optional<Object> structurePosition = Optional.empty();
+
         private Optional<Object> appearanceState = Optional.empty();
 
         private Optional<Object> hasAppearance = Optional.empty();
@@ -991,6 +1008,7 @@ public final class AnnotationDraftLine {
             page(other.getPage());
             hasAppearance(other.getHasAppearance());
             appearanceState(other.getAppearanceState());
+            structurePosition(other.getStructurePosition());
             nm(other.getNm());
             rect(other.getRect());
             contents(other.getContents());
@@ -1719,6 +1737,19 @@ public final class AnnotationDraftLine {
         }
 
         @java.lang.Override
+        public _FinalStage structurePosition(Object structurePosition) {
+            this.structurePosition = Optional.ofNullable(structurePosition);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "structurePosition", nulls = Nulls.SKIP)
+        public _FinalStage structurePosition(Optional<Object> structurePosition) {
+            this.structurePosition = structurePosition;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage appearanceState(Object appearanceState) {
             this.appearanceState = Optional.ofNullable(appearanceState);
             return this;
@@ -1777,6 +1808,7 @@ public final class AnnotationDraftLine {
                     page,
                     hasAppearance,
                     appearanceState,
+                    structurePosition,
                     nm,
                     rect,
                     contents,

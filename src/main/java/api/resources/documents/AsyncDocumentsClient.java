@@ -117,11 +117,17 @@ public class AsyncDocumentsClient {
         return this.rawClient.update(tenantId, id, request, requestOptions).thenApply(response -> response.body());
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CompletableFuture<DocumentsCommit200Response> commit(
             String tenantId, String id, DocumentsCommitRequest request) {
         return this.rawClient.commit(tenantId, id, request).thenApply(response -> response.body());
     }
 
+    /**
+     * An upload token commits only the documents it started; any other document answers 404.
+     */
     public CompletableFuture<DocumentsCommit200Response> commit(
             String tenantId, String id, DocumentsCommitRequest request, RequestOptions requestOptions) {
         return this.rawClient.commit(tenantId, id, request, requestOptions).thenApply(response -> response.body());
@@ -162,7 +168,7 @@ public class AsyncDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CompletableFuture<DocumentsUploadProxy200Response> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
@@ -170,7 +176,7 @@ public class AsyncDocumentsClient {
     }
 
     /**
-     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available.
+     * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
     public CompletableFuture<DocumentsUploadProxy200Response> uploadProxy(
             String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
@@ -226,10 +232,16 @@ public class AsyncDocumentsClient {
         return this.rawClient.importFrom(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CompletableFuture<DocumentsInit200Response> init(String tenantId, DocumentsInitRequest request) {
         return this.rawClient.init(tenantId, request).thenApply(response -> response.body());
     }
 
+    /**
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     */
     public CompletableFuture<DocumentsInit200Response> init(
             String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         return this.rawClient.init(tenantId, request, requestOptions).thenApply(response -> response.body());

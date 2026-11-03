@@ -31,6 +31,8 @@ public final class AnnotationPatchPopup {
 
     private final Optional<Object> appearanceState;
 
+    private final Optional<Object> structurePosition;
+
     private final Optional<String> nm;
 
     private final Optional<AnnotationPatchPopupRect> rect;
@@ -94,6 +96,7 @@ public final class AnnotationPatchPopup {
             Optional<Object> page,
             Optional<Object> hasAppearance,
             Optional<Object> appearanceState,
+            Optional<Object> structurePosition,
             Optional<String> nm,
             Optional<AnnotationPatchPopupRect> rect,
             Optional<String> contents,
@@ -127,6 +130,7 @@ public final class AnnotationPatchPopup {
         this.page = page;
         this.hasAppearance = hasAppearance;
         this.appearanceState = appearanceState;
+        this.structurePosition = structurePosition;
         this.nm = nm;
         this.rect = rect;
         this.contents = contents;
@@ -176,6 +180,11 @@ public final class AnnotationPatchPopup {
     @JsonProperty("appearanceState")
     public Optional<Object> getAppearanceState() {
         return appearanceState;
+    }
+
+    @JsonProperty("structurePosition")
+    public Optional<Object> getStructurePosition() {
+        return structurePosition;
     }
 
     @JsonIgnore
@@ -388,6 +397,7 @@ public final class AnnotationPatchPopup {
                 && page.equals(other.page)
                 && hasAppearance.equals(other.hasAppearance)
                 && appearanceState.equals(other.appearanceState)
+                && structurePosition.equals(other.structurePosition)
                 && nm.equals(other.nm)
                 && rect.equals(other.rect)
                 && contents.equals(other.contents)
@@ -425,6 +435,7 @@ public final class AnnotationPatchPopup {
                 this.page,
                 this.hasAppearance,
                 this.appearanceState,
+                this.structurePosition,
                 this.nm,
                 this.rect,
                 this.contents,
@@ -473,6 +484,8 @@ public final class AnnotationPatchPopup {
         private Optional<Object> hasAppearance = Optional.empty();
 
         private Optional<Object> appearanceState = Optional.empty();
+
+        private Optional<Object> structurePosition = Optional.empty();
 
         private Optional<String> nm = Optional.empty();
 
@@ -540,6 +553,7 @@ public final class AnnotationPatchPopup {
             page(other.getPage());
             hasAppearance(other.getHasAppearance());
             appearanceState(other.getAppearanceState());
+            structurePosition(other.getStructurePosition());
             nm(other.getNm());
             rect(other.getRect());
             contents(other.getContents());
@@ -612,6 +626,17 @@ public final class AnnotationPatchPopup {
 
         public Builder appearanceState(Object appearanceState) {
             this.appearanceState = Optional.ofNullable(appearanceState);
+            return this;
+        }
+
+        @JsonSetter(value = "structurePosition", nulls = Nulls.SKIP)
+        public Builder structurePosition(Optional<Object> structurePosition) {
+            this.structurePosition = structurePosition;
+            return this;
+        }
+
+        public Builder structurePosition(Object structurePosition) {
+            this.structurePosition = Optional.ofNullable(structurePosition);
             return this;
         }
 
@@ -995,6 +1020,7 @@ public final class AnnotationPatchPopup {
                     page,
                     hasAppearance,
                     appearanceState,
+                    structurePosition,
                     nm,
                     rect,
                     contents,
