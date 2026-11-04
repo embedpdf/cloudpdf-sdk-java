@@ -6,6 +6,7 @@ package com.cloudpdf.api.resources.deployment;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.types.DeploymentLicenseStatusResponse;
+import com.cloudpdf.api.types.DeploymentModulesResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncDeploymentClient {
@@ -31,5 +32,19 @@ public class AsyncDeploymentClient {
 
     public CompletableFuture<DeploymentLicenseStatusResponse> licenseStatus(RequestOptions requestOptions) {
         return this.rawClient.licenseStatus(requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * What each module declares, for a dashboard or a script that lists modules, offers their permissions in its dialogs and shows their meters. Which tenants may use one is in their <code>features</code> (<code>tenants.get</code>); what it costs, if anything, is the operator's.
+     */
+    public CompletableFuture<DeploymentModulesResponse> modules() {
+        return this.rawClient.modules().thenApply(response -> response.body());
+    }
+
+    /**
+     * What each module declares, for a dashboard or a script that lists modules, offers their permissions in its dialogs and shows their meters. Which tenants may use one is in their <code>features</code> (<code>tenants.get</code>); what it costs, if anything, is the operator's.
+     */
+    public CompletableFuture<DeploymentModulesResponse> modules(RequestOptions requestOptions) {
+        return this.rawClient.modules(requestOptions).thenApply(response -> response.body());
     }
 }

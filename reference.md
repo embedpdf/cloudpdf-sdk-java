@@ -25,6 +25,45 @@ client.deployment().licenseStatus();
 </dl>
 </details>
 
+<details><summary><code>client.deployment.modules() -> DeploymentModulesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+What each module declares, for a dashboard or a script that lists modules, offers their permissions in its dialogs and shows their meters. Which tenants may use one is in their `features` (`tenants.get`); what it costs, if anything, is the operator's.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.deployment().modules();
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Doc
 <details><summary><code>client.doc.head(docId) -> DocHead200Response</code></summary>
 <dl>
@@ -1658,6 +1697,22 @@ client.tenants().usage(
 <dd>
 
 **period:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**from:** `Optional<String>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**to:** `Optional<String>` 
     
 </dd>
 </dl>

@@ -88,6 +88,8 @@ public final class AnnotationStamp {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final Optional<RichTextDocument> richText;
+
     private final AnnotationStampBox box;
 
     private final Optional<Double> rotation;
@@ -132,6 +134,7 @@ public final class AnnotationStamp {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            Optional<RichTextDocument> richText,
             AnnotationStampBox box,
             Optional<Double> rotation,
             Optional<String> name,
@@ -169,6 +172,7 @@ public final class AnnotationStamp {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.box = box;
         this.rotation = rotation;
         this.name = name;
@@ -380,6 +384,14 @@ public final class AnnotationStamp {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("box")
     public AnnotationStampBox getBox() {
         return box;
@@ -511,6 +523,12 @@ public final class AnnotationStamp {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
     private Optional<Double> _getRotation() {
         return rotation;
@@ -571,6 +589,7 @@ public final class AnnotationStamp {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && box.equals(other.box)
                 && rotation.equals(other.rotation)
                 && name.equals(other.name)
@@ -612,6 +631,7 @@ public final class AnnotationStamp {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.box,
                 this.rotation,
                 this.name,
@@ -801,6 +821,12 @@ public final class AnnotationStamp {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
         _FinalStage rotation(Optional<Double> rotation);
 
         _FinalStage rotation(Double rotation);
@@ -880,6 +906,8 @@ public final class AnnotationStamp {
 
         private Optional<Double> rotation = Optional.empty();
 
+        private Optional<RichTextDocument> richText = Optional.empty();
+
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> importedBy = Optional.empty();
@@ -950,6 +978,7 @@ public final class AnnotationStamp {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             box(other.getBox());
             rotation(other.getRotation());
             name(other.getName());
@@ -1149,6 +1178,31 @@ public final class AnnotationStamp {
         @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
         public _FinalStage rotation(Optional<Double> rotation) {
             this.rotation = rotation;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1586,6 +1640,7 @@ public final class AnnotationStamp {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     box,
                     rotation,
                     name,

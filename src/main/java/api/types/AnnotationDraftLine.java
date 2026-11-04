@@ -87,6 +87,8 @@ public final class AnnotationDraftLine {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<String> color;
 
     private final Optional<Double> opacity;
@@ -151,6 +153,7 @@ public final class AnnotationDraftLine {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<String> color,
             Optional<Double> opacity,
             Optional<Double> strokeWidth,
@@ -198,6 +201,7 @@ public final class AnnotationDraftLine {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.strokeWidth = strokeWidth;
@@ -386,8 +390,19 @@ public final class AnnotationDraftLine {
         return actions;
     }
 
-    @JsonProperty("color")
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
+    @JsonIgnore
     public Optional<String> getColor() {
+        if (color == null) {
+            return Optional.empty();
+        }
         return color;
     }
 
@@ -516,6 +531,18 @@ public final class AnnotationDraftLine {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("color")
+    private Optional<String> _getColor() {
+        return color;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("dashArray")
     private Optional<List<Double>> _getDashArray() {
         return dashArray;
@@ -606,6 +633,7 @@ public final class AnnotationDraftLine {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity.equals(other.opacity)
                 && strokeWidth.equals(other.strokeWidth)
@@ -657,6 +685,7 @@ public final class AnnotationDraftLine {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.strokeWidth,
@@ -830,9 +859,17 @@ public final class AnnotationDraftLine {
 
         _FinalStage actions(Object actions);
 
+        _FinalStage richText(Optional<RichTextDocumentInput> richText);
+
+        _FinalStage richText(RichTextDocumentInput richText);
+
+        _FinalStage richText(Nullable<RichTextDocumentInput> richText);
+
         _FinalStage color(Optional<String> color);
 
         _FinalStage color(String color);
+
+        _FinalStage color(Nullable<String> color);
 
         _FinalStage opacity(Optional<Double> opacity);
 
@@ -935,6 +972,8 @@ public final class AnnotationDraftLine {
 
         private Optional<String> color = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<Object> actions = Optional.empty();
 
         private Optional<Object> importedBy = Optional.empty();
@@ -1035,6 +1074,7 @@ public final class AnnotationDraftLine {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             strokeWidth(other.getStrokeWidth());
@@ -1326,6 +1366,18 @@ public final class AnnotationDraftLine {
         }
 
         @java.lang.Override
+        public _FinalStage color(Nullable<String> color) {
+            if (color.isNull()) {
+                this.color = null;
+            } else if (color.isEmpty()) {
+                this.color = Optional.empty();
+            } else {
+                this.color = Optional.of(color.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage color(String color) {
             this.color = Optional.ofNullable(color);
             return this;
@@ -1335,6 +1387,31 @@ public final class AnnotationDraftLine {
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public _FinalStage color(Optional<String> color) {
             this.color = color;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1835,6 +1912,7 @@ public final class AnnotationDraftLine {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     strokeWidth,

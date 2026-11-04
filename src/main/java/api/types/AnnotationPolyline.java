@@ -89,7 +89,9 @@ public final class AnnotationPolyline {
 
     private final Optional<PdfAnnotationActions> actions;
 
-    private final String color;
+    private final Optional<RichTextDocument> richText;
+
+    private final Optional<String> color;
 
     private final double opacity;
 
@@ -149,7 +151,8 @@ public final class AnnotationPolyline {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
-            String color,
+            Optional<RichTextDocument> richText,
+            Optional<String> color,
             double opacity,
             double strokeWidth,
             AnnotationPolylineBorderStyle borderStyle,
@@ -194,6 +197,7 @@ public final class AnnotationPolyline {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.strokeWidth = strokeWidth;
@@ -413,8 +417,19 @@ public final class AnnotationPolyline {
         return actions;
     }
 
-    @JsonProperty("color")
-    public String getColor() {
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
+    @JsonIgnore
+    public Optional<String> getColor() {
+        if (color == null) {
+            return Optional.empty();
+        }
         return color;
     }
 
@@ -596,6 +611,18 @@ public final class AnnotationPolyline {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("color")
+    private Optional<String> _getColor() {
+        return color;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("dashArray")
     private Optional<List<Double>> _getDashArray() {
         return dashArray;
@@ -680,6 +707,7 @@ public final class AnnotationPolyline {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && strokeWidth == other.strokeWidth
@@ -729,6 +757,7 @@ public final class AnnotationPolyline {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.strokeWidth,
@@ -812,11 +841,7 @@ public final class AnnotationPolyline {
     }
 
     public interface LockedContentsStage {
-        ColorStage lockedContents(boolean lockedContents);
-    }
-
-    public interface ColorStage {
-        OpacityStage color(@NotNull String color);
+        OpacityStage lockedContents(boolean lockedContents);
     }
 
     public interface OpacityStage {
@@ -938,6 +963,18 @@ public final class AnnotationPolyline {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
+        _FinalStage color(Optional<String> color);
+
+        _FinalStage color(String color);
+
+        _FinalStage color(Nullable<String> color);
+
         _FinalStage dashArray(Optional<List<Double>> dashArray);
 
         _FinalStage dashArray(List<Double> dashArray);
@@ -1004,7 +1041,6 @@ public final class AnnotationPolyline {
                     LockedStage,
                     ToggleNoViewStage,
                     LockedContentsStage,
-                    ColorStage,
                     OpacityStage,
                     StrokeWidthStage,
                     BorderStyleStage,
@@ -1040,8 +1076,6 @@ public final class AnnotationPolyline {
 
         private boolean lockedContents;
 
-        private String color;
-
         private double opacity;
 
         private double strokeWidth;
@@ -1065,6 +1099,10 @@ public final class AnnotationPolyline {
         private Optional<String> interiorColor = Optional.empty();
 
         private Optional<List<Double>> dashArray = Optional.empty();
+
+        private Optional<String> color = Optional.empty();
+
+        private Optional<RichTextDocument> richText = Optional.empty();
 
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
@@ -1136,6 +1174,7 @@ public final class AnnotationPolyline {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             strokeWidth(other.getStrokeWidth());
@@ -1252,15 +1291,8 @@ public final class AnnotationPolyline {
 
         @java.lang.Override
         @JsonSetter("lockedContents")
-        public ColorStage lockedContents(boolean lockedContents) {
+        public OpacityStage lockedContents(boolean lockedContents) {
             this.lockedContents = lockedContents;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("color")
-        public OpacityStage color(@NotNull String color) {
-            this.color = Objects.requireNonNull(color, "color must not be null");
             return this;
         }
 
@@ -1488,6 +1520,56 @@ public final class AnnotationPolyline {
         @JsonSetter(value = "dashArray", nulls = Nulls.SKIP)
         public _FinalStage dashArray(Optional<List<Double>> dashArray) {
             this.dashArray = dashArray;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage color(Nullable<String> color) {
+            if (color.isNull()) {
+                this.color = null;
+            } else if (color.isEmpty()) {
+                this.color = Optional.empty();
+            } else {
+                this.color = Optional.of(color.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage color(String color) {
+            this.color = Optional.ofNullable(color);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "color", nulls = Nulls.SKIP)
+        public _FinalStage color(Optional<String> color) {
+            this.color = color;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1925,6 +2007,7 @@ public final class AnnotationPolyline {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     strokeWidth,

@@ -88,6 +88,8 @@ public final class AnnotationFileAttachment {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final Optional<RichTextDocument> richText;
+
     private final String color;
 
     private final double opacity;
@@ -130,6 +132,7 @@ public final class AnnotationFileAttachment {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            Optional<RichTextDocument> richText,
             String color,
             double opacity,
             AnnotationFileAttachmentIcon icon,
@@ -166,6 +169,7 @@ public final class AnnotationFileAttachment {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.icon = icon;
@@ -376,6 +380,14 @@ public final class AnnotationFileAttachment {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public String getColor() {
         return color;
@@ -496,6 +508,12 @@ public final class AnnotationFileAttachment {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("file")
     private Optional<AttachmentFileInfo> _getFile() {
         return file;
@@ -544,6 +562,7 @@ public final class AnnotationFileAttachment {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && icon.equals(other.icon)
@@ -584,6 +603,7 @@ public final class AnnotationFileAttachment {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.icon,
@@ -776,6 +796,12 @@ public final class AnnotationFileAttachment {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
         _FinalStage file(Optional<AttachmentFileInfo> file);
 
         _FinalStage file(AttachmentFileInfo file);
@@ -841,6 +867,8 @@ public final class AnnotationFileAttachment {
         private AnnotationFileAttachmentIcon icon;
 
         private Optional<AttachmentFileInfo> file = Optional.empty();
+
+        private Optional<RichTextDocument> richText = Optional.empty();
 
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
@@ -912,6 +940,7 @@ public final class AnnotationFileAttachment {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             icon(other.getIcon());
@@ -1067,6 +1096,31 @@ public final class AnnotationFileAttachment {
         @JsonSetter(value = "file", nulls = Nulls.SKIP)
         public _FinalStage file(Optional<AttachmentFileInfo> file) {
             this.file = file;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1504,6 +1558,7 @@ public final class AnnotationFileAttachment {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     icon,

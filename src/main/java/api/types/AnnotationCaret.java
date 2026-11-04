@@ -88,6 +88,8 @@ public final class AnnotationCaret {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final Optional<RichTextDocument> richText;
+
     private final String color;
 
     private final double opacity;
@@ -132,6 +134,7 @@ public final class AnnotationCaret {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            Optional<RichTextDocument> richText,
             String color,
             double opacity,
             AnnotationCaretBox box,
@@ -169,6 +172,7 @@ public final class AnnotationCaret {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.box = box;
@@ -380,6 +384,14 @@ public final class AnnotationCaret {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public String getColor() {
         return color;
@@ -508,6 +520,12 @@ public final class AnnotationCaret {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
     private Optional<Double> _getRotation() {
         return rotation;
@@ -562,6 +580,7 @@ public final class AnnotationCaret {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && box.equals(other.box)
@@ -603,6 +622,7 @@ public final class AnnotationCaret {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.box,
@@ -796,6 +816,12 @@ public final class AnnotationCaret {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
         _FinalStage rotation(Optional<Double> rotation);
 
         _FinalStage rotation(Double rotation);
@@ -870,6 +896,8 @@ public final class AnnotationCaret {
 
         private Optional<Double> rotation = Optional.empty();
 
+        private Optional<RichTextDocument> richText = Optional.empty();
+
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> importedBy = Optional.empty();
@@ -940,6 +968,7 @@ public final class AnnotationCaret {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             box(other.getBox());
@@ -1121,6 +1150,31 @@ public final class AnnotationCaret {
         @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
         public _FinalStage rotation(Optional<Double> rotation) {
             this.rotation = rotation;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1558,6 +1612,7 @@ public final class AnnotationCaret {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     box,

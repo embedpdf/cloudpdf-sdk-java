@@ -85,6 +85,8 @@ public final class AnnotationPatchFileAttachment {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<String> color;
 
     private final Optional<Double> opacity;
@@ -127,6 +129,7 @@ public final class AnnotationPatchFileAttachment {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<String> color,
             Optional<Double> opacity,
             Optional<AnnotationPatchFileAttachmentIcon> icon,
@@ -163,6 +166,7 @@ public final class AnnotationPatchFileAttachment {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.icon = icon;
@@ -340,6 +344,14 @@ public final class AnnotationPatchFileAttachment {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public Optional<String> getColor() {
         return color;
@@ -394,6 +406,12 @@ public final class AnnotationPatchFileAttachment {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("file")
     private Optional<AnnotationPatchFileAttachmentFile> _getFile() {
         return file;
@@ -442,6 +460,7 @@ public final class AnnotationPatchFileAttachment {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity.equals(other.opacity)
                 && icon.equals(other.icon)
@@ -482,6 +501,7 @@ public final class AnnotationPatchFileAttachment {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.icon,
@@ -561,6 +581,8 @@ public final class AnnotationPatchFileAttachment {
 
         private Optional<Object> actions = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<String> color = Optional.empty();
 
         private Optional<Double> opacity = Optional.empty();
@@ -606,6 +628,7 @@ public final class AnnotationPatchFileAttachment {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             icon(other.getIcon());
@@ -1009,6 +1032,28 @@ public final class AnnotationPatchFileAttachment {
             return this;
         }
 
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public Builder richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
+            return this;
+        }
+
+        public Builder richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        public Builder richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public Builder color(Optional<String> color) {
             this.color = color;
@@ -1097,6 +1142,7 @@ public final class AnnotationPatchFileAttachment {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     icon,

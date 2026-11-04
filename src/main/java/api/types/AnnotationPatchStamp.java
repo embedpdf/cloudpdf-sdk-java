@@ -85,6 +85,8 @@ public final class AnnotationPatchStamp {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<AnnotationPatchStampBox> box;
 
     private final Optional<Double> rotation;
@@ -129,6 +131,7 @@ public final class AnnotationPatchStamp {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<AnnotationPatchStampBox> box,
             Optional<Double> rotation,
             Optional<String> name,
@@ -166,6 +169,7 @@ public final class AnnotationPatchStamp {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.box = box;
         this.rotation = rotation;
         this.name = name;
@@ -344,6 +348,14 @@ public final class AnnotationPatchStamp {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("box")
     public Optional<AnnotationPatchStampBox> getBox() {
         return box;
@@ -409,6 +421,12 @@ public final class AnnotationPatchStamp {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
     private Optional<Double> _getRotation() {
         return rotation;
@@ -469,6 +487,7 @@ public final class AnnotationPatchStamp {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && box.equals(other.box)
                 && rotation.equals(other.rotation)
                 && name.equals(other.name)
@@ -510,6 +529,7 @@ public final class AnnotationPatchStamp {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.box,
                 this.rotation,
                 this.name,
@@ -590,6 +610,8 @@ public final class AnnotationPatchStamp {
 
         private Optional<Object> actions = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<AnnotationPatchStampBox> box = Optional.empty();
 
         private Optional<Double> rotation = Optional.empty();
@@ -637,6 +659,7 @@ public final class AnnotationPatchStamp {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             box(other.getBox());
             rotation(other.getRotation());
             name(other.getName());
@@ -1041,6 +1064,28 @@ public final class AnnotationPatchStamp {
             return this;
         }
 
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public Builder richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
+            return this;
+        }
+
+        public Builder richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        public Builder richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "box", nulls = Nulls.SKIP)
         public Builder box(Optional<AnnotationPatchStampBox> box) {
             this.box = box;
@@ -1162,6 +1207,7 @@ public final class AnnotationPatchStamp {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     box,
                     rotation,
                     name,

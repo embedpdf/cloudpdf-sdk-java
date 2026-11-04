@@ -85,6 +85,8 @@ public final class AnnotationDraftCaret {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<String> color;
 
     private final Optional<Double> opacity;
@@ -129,6 +131,7 @@ public final class AnnotationDraftCaret {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<String> color,
             Optional<Double> opacity,
             Optional<AnnotationDraftCaretBox> box,
@@ -166,6 +169,7 @@ public final class AnnotationDraftCaret {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.box = box;
@@ -344,6 +348,14 @@ public final class AnnotationDraftCaret {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public Optional<String> getColor() {
         return color;
@@ -406,6 +418,12 @@ public final class AnnotationDraftCaret {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
     private Optional<Double> _getRotation() {
         return rotation;
@@ -460,6 +478,7 @@ public final class AnnotationDraftCaret {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity.equals(other.opacity)
                 && box.equals(other.box)
@@ -501,6 +520,7 @@ public final class AnnotationDraftCaret {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.box,
@@ -581,6 +601,8 @@ public final class AnnotationDraftCaret {
 
         private Optional<Object> actions = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<String> color = Optional.empty();
 
         private Optional<Double> opacity = Optional.empty();
@@ -628,6 +650,7 @@ public final class AnnotationDraftCaret {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             box(other.getBox());
@@ -1032,6 +1055,28 @@ public final class AnnotationDraftCaret {
             return this;
         }
 
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public Builder richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
+            return this;
+        }
+
+        public Builder richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        public Builder richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public Builder color(Optional<String> color) {
             this.color = color;
@@ -1142,6 +1187,7 @@ public final class AnnotationDraftCaret {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     box,

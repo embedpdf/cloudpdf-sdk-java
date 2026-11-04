@@ -22,16 +22,36 @@ import java.util.Optional;
 public final class UsageTenantsRequest {
     private final Optional<String> period;
 
+    private final Optional<String> from;
+
+    private final Optional<String> to;
+
     private final Map<String, Object> additionalProperties;
 
-    private UsageTenantsRequest(Optional<String> period, Map<String, Object> additionalProperties) {
+    private UsageTenantsRequest(
+            Optional<String> period,
+            Optional<String> from,
+            Optional<String> to,
+            Map<String, Object> additionalProperties) {
         this.period = period;
+        this.from = from;
+        this.to = to;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("period")
     public Optional<String> getPeriod() {
         return period;
+    }
+
+    @JsonProperty("from")
+    public Optional<String> getFrom() {
+        return from;
+    }
+
+    @JsonProperty("to")
+    public Optional<String> getTo() {
+        return to;
     }
 
     @java.lang.Override
@@ -46,12 +66,12 @@ public final class UsageTenantsRequest {
     }
 
     private boolean equalTo(UsageTenantsRequest other) {
-        return period.equals(other.period);
+        return period.equals(other.period) && from.equals(other.from) && to.equals(other.to);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.period);
+        return Objects.hash(this.period, this.from, this.to);
     }
 
     @java.lang.Override
@@ -67,6 +87,10 @@ public final class UsageTenantsRequest {
     public static final class Builder {
         private Optional<String> period = Optional.empty();
 
+        private Optional<String> from = Optional.empty();
+
+        private Optional<String> to = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -74,6 +98,8 @@ public final class UsageTenantsRequest {
 
         public Builder from(UsageTenantsRequest other) {
             period(other.getPeriod());
+            from(other.getFrom());
+            to(other.getTo());
             return this;
         }
 
@@ -88,8 +114,30 @@ public final class UsageTenantsRequest {
             return this;
         }
 
+        @JsonSetter(value = "from", nulls = Nulls.SKIP)
+        public Builder from(Optional<String> from) {
+            this.from = from;
+            return this;
+        }
+
+        public Builder from(String from) {
+            this.from = Optional.ofNullable(from);
+            return this;
+        }
+
+        @JsonSetter(value = "to", nulls = Nulls.SKIP)
+        public Builder to(Optional<String> to) {
+            this.to = to;
+            return this;
+        }
+
+        public Builder to(String to) {
+            this.to = Optional.ofNullable(to);
+            return this;
+        }
+
         public UsageTenantsRequest build() {
-            return new UsageTenantsRequest(period, additionalProperties);
+            return new UsageTenantsRequest(period, from, to, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

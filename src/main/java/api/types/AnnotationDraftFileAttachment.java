@@ -86,6 +86,8 @@ public final class AnnotationDraftFileAttachment {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<String> color;
 
     private final Optional<Double> opacity;
@@ -128,6 +130,7 @@ public final class AnnotationDraftFileAttachment {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<String> color,
             Optional<Double> opacity,
             Optional<AnnotationDraftFileAttachmentIcon> icon,
@@ -164,6 +167,7 @@ public final class AnnotationDraftFileAttachment {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.icon = icon;
@@ -341,6 +345,14 @@ public final class AnnotationDraftFileAttachment {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public Optional<String> getColor() {
         return color;
@@ -395,6 +407,12 @@ public final class AnnotationDraftFileAttachment {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("file")
     private Optional<AnnotationDraftFileAttachmentFile> _getFile() {
         return file;
@@ -443,6 +461,7 @@ public final class AnnotationDraftFileAttachment {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity.equals(other.opacity)
                 && icon.equals(other.icon)
@@ -483,6 +502,7 @@ public final class AnnotationDraftFileAttachment {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.icon,
@@ -641,6 +661,12 @@ public final class AnnotationDraftFileAttachment {
 
         _FinalStage actions(Object actions);
 
+        _FinalStage richText(Optional<RichTextDocumentInput> richText);
+
+        _FinalStage richText(RichTextDocumentInput richText);
+
+        _FinalStage richText(Nullable<RichTextDocumentInput> richText);
+
         _FinalStage color(Optional<String> color);
 
         _FinalStage color(String color);
@@ -671,6 +697,8 @@ public final class AnnotationDraftFileAttachment {
         private Optional<Double> opacity = Optional.empty();
 
         private Optional<String> color = Optional.empty();
+
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
 
         private Optional<Object> actions = Optional.empty();
 
@@ -770,6 +798,7 @@ public final class AnnotationDraftFileAttachment {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             icon(other.getIcon());
@@ -845,6 +874,31 @@ public final class AnnotationDraftFileAttachment {
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public _FinalStage color(Optional<String> color) {
             this.color = color;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1332,6 +1386,7 @@ public final class AnnotationDraftFileAttachment {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     icon,
