@@ -86,6 +86,8 @@ public final class AnnotationDraftFreeText {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<AnnotationDraftFreeTextBox> box;
 
     private final Optional<Double> rotation;
@@ -99,8 +101,6 @@ public final class AnnotationDraftFreeText {
     private final Optional<AnnotationDraftFreeTextTextAlign> textAlign;
 
     private final Optional<AnnotationDraftFreeTextVerticalAlign> verticalAlign;
-
-    private final Optional<AnnotationDraftFreeTextRichText> richText;
 
     private final Optional<String> color;
 
@@ -156,6 +156,7 @@ public final class AnnotationDraftFreeText {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<AnnotationDraftFreeTextBox> box,
             Optional<Double> rotation,
             Optional<AnnotationDraftFreeTextIntent> intent,
@@ -163,7 +164,6 @@ public final class AnnotationDraftFreeText {
             Optional<Double> fontSize,
             Optional<AnnotationDraftFreeTextTextAlign> textAlign,
             Optional<AnnotationDraftFreeTextVerticalAlign> verticalAlign,
-            Optional<AnnotationDraftFreeTextRichText> richText,
             Optional<String> color,
             Optional<String> fontColor,
             Optional<String> interiorColor,
@@ -206,6 +206,7 @@ public final class AnnotationDraftFreeText {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.box = box;
         this.rotation = rotation;
         this.intent = intent;
@@ -213,7 +214,6 @@ public final class AnnotationDraftFreeText {
         this.fontSize = fontSize;
         this.textAlign = textAlign;
         this.verticalAlign = verticalAlign;
-        this.richText = richText;
         this.color = color;
         this.fontColor = fontColor;
         this.interiorColor = interiorColor;
@@ -397,6 +397,11 @@ public final class AnnotationDraftFreeText {
         return actions;
     }
 
+    @JsonProperty("richText")
+    public Optional<RichTextDocumentInput> getRichText() {
+        return richText;
+    }
+
     @JsonProperty("box")
     public Optional<AnnotationDraftFreeTextBox> getBox() {
         return box;
@@ -433,11 +438,6 @@ public final class AnnotationDraftFreeText {
     @JsonProperty("verticalAlign")
     public Optional<AnnotationDraftFreeTextVerticalAlign> getVerticalAlign() {
         return verticalAlign;
-    }
-
-    @JsonProperty("richText")
-    public Optional<AnnotationDraftFreeTextRichText> getRichText() {
-        return richText;
     }
 
     @JsonProperty("color")
@@ -614,6 +614,7 @@ public final class AnnotationDraftFreeText {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && box.equals(other.box)
                 && rotation.equals(other.rotation)
                 && intent.equals(other.intent)
@@ -621,7 +622,6 @@ public final class AnnotationDraftFreeText {
                 && fontSize.equals(other.fontSize)
                 && textAlign.equals(other.textAlign)
                 && verticalAlign.equals(other.verticalAlign)
-                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && fontColor.equals(other.fontColor)
                 && interiorColor.equals(other.interiorColor)
@@ -668,6 +668,7 @@ public final class AnnotationDraftFreeText {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.box,
                 this.rotation,
                 this.intent,
@@ -675,7 +676,6 @@ public final class AnnotationDraftFreeText {
                 this.fontSize,
                 this.textAlign,
                 this.verticalAlign,
-                this.richText,
                 this.color,
                 this.fontColor,
                 this.interiorColor,
@@ -761,6 +761,8 @@ public final class AnnotationDraftFreeText {
 
         private Optional<Object> actions = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<AnnotationDraftFreeTextBox> box = Optional.empty();
 
         private Optional<Double> rotation = Optional.empty();
@@ -774,8 +776,6 @@ public final class AnnotationDraftFreeText {
         private Optional<AnnotationDraftFreeTextTextAlign> textAlign = Optional.empty();
 
         private Optional<AnnotationDraftFreeTextVerticalAlign> verticalAlign = Optional.empty();
-
-        private Optional<AnnotationDraftFreeTextRichText> richText = Optional.empty();
 
         private Optional<String> color = Optional.empty();
 
@@ -834,6 +834,7 @@ public final class AnnotationDraftFreeText {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             box(other.getBox());
             rotation(other.getRotation());
             intent(other.getIntent());
@@ -841,7 +842,6 @@ public final class AnnotationDraftFreeText {
             fontSize(other.getFontSize());
             textAlign(other.getTextAlign());
             verticalAlign(other.getVerticalAlign());
-            richText(other.getRichText());
             color(other.getColor());
             fontColor(other.getFontColor());
             interiorColor(other.getInteriorColor());
@@ -1251,6 +1251,17 @@ public final class AnnotationDraftFreeText {
             return this;
         }
 
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public Builder richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
+            return this;
+        }
+
+        public Builder richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
         @JsonSetter(value = "box", nulls = Nulls.SKIP)
         public Builder box(Optional<AnnotationDraftFreeTextBox> box) {
             this.box = box;
@@ -1336,17 +1347,6 @@ public final class AnnotationDraftFreeText {
 
         public Builder verticalAlign(AnnotationDraftFreeTextVerticalAlign verticalAlign) {
             this.verticalAlign = Optional.ofNullable(verticalAlign);
-            return this;
-        }
-
-        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
-        public Builder richText(Optional<AnnotationDraftFreeTextRichText> richText) {
-            this.richText = richText;
-            return this;
-        }
-
-        public Builder richText(AnnotationDraftFreeTextRichText richText) {
-            this.richText = Optional.ofNullable(richText);
             return this;
         }
 
@@ -1548,6 +1548,7 @@ public final class AnnotationDraftFreeText {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     box,
                     rotation,
                     intent,
@@ -1555,7 +1556,6 @@ public final class AnnotationDraftFreeText {
                     fontSize,
                     textAlign,
                     verticalAlign,
-                    richText,
                     color,
                     fontColor,
                     interiorColor,

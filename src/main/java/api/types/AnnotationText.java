@@ -88,6 +88,8 @@ public final class AnnotationText {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final Optional<RichTextDocument> richText;
+
     private final String color;
 
     private final double opacity;
@@ -134,6 +136,7 @@ public final class AnnotationText {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            Optional<RichTextDocument> richText,
             String color,
             double opacity,
             AnnotationTextIcon icon,
@@ -172,6 +175,7 @@ public final class AnnotationText {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.icon = icon;
@@ -384,6 +388,14 @@ public final class AnnotationText {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public String getColor() {
         return color;
@@ -517,6 +529,12 @@ public final class AnnotationText {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("state")
     private Optional<String> _getState() {
         return state;
@@ -571,6 +589,7 @@ public final class AnnotationText {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && icon.equals(other.icon)
@@ -613,6 +632,7 @@ public final class AnnotationText {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.icon,
@@ -811,6 +831,12 @@ public final class AnnotationText {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
         _FinalStage state(Optional<String> state);
 
         _FinalStage state(String state);
@@ -888,6 +914,8 @@ public final class AnnotationText {
 
         private Optional<String> state = Optional.empty();
 
+        private Optional<RichTextDocument> richText = Optional.empty();
+
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
         private Optional<String> importedBy = Optional.empty();
@@ -958,6 +986,7 @@ public final class AnnotationText {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             icon(other.getIcon());
@@ -1147,6 +1176,31 @@ public final class AnnotationText {
         @JsonSetter(value = "state", nulls = Nulls.SKIP)
         public _FinalStage state(Optional<String> state) {
             this.state = state;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1584,6 +1638,7 @@ public final class AnnotationText {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     icon,

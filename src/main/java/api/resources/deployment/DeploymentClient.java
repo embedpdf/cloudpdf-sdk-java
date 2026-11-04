@@ -6,6 +6,7 @@ package com.cloudpdf.api.resources.deployment;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.types.DeploymentLicenseStatusResponse;
+import com.cloudpdf.api.types.DeploymentModulesResponse;
 
 public class DeploymentClient {
     protected final ClientOptions clientOptions;
@@ -30,5 +31,19 @@ public class DeploymentClient {
 
     public DeploymentLicenseStatusResponse licenseStatus(RequestOptions requestOptions) {
         return this.rawClient.licenseStatus(requestOptions).body();
+    }
+
+    /**
+     * What each module declares, for a dashboard or a script that lists modules, offers their permissions in its dialogs and shows their meters. Which tenants may use one is in their <code>features</code> (<code>tenants.get</code>); what it costs, if anything, is the operator's.
+     */
+    public DeploymentModulesResponse modules() {
+        return this.rawClient.modules().body();
+    }
+
+    /**
+     * What each module declares, for a dashboard or a script that lists modules, offers their permissions in its dialogs and shows their meters. Which tenants may use one is in their <code>features</code> (<code>tenants.get</code>); what it costs, if anything, is the operator's.
+     */
+    public DeploymentModulesResponse modules(RequestOptions requestOptions) {
+        return this.rawClient.modules(requestOptions).body();
     }
 }

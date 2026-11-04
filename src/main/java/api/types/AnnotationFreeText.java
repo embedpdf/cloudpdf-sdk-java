@@ -88,6 +88,8 @@ public final class AnnotationFreeText {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final RichTextDocument richText;
+
     private final AnnotationFreeTextBox box;
 
     private final Optional<Double> rotation;
@@ -101,8 +103,6 @@ public final class AnnotationFreeText {
     private final AnnotationFreeTextTextAlign textAlign;
 
     private final AnnotationFreeTextVerticalAlign verticalAlign;
-
-    private final AnnotationFreeTextRichText richText;
 
     private final String color;
 
@@ -158,6 +158,7 @@ public final class AnnotationFreeText {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            RichTextDocument richText,
             AnnotationFreeTextBox box,
             Optional<Double> rotation,
             AnnotationFreeTextIntent intent,
@@ -165,7 +166,6 @@ public final class AnnotationFreeText {
             double fontSize,
             AnnotationFreeTextTextAlign textAlign,
             AnnotationFreeTextVerticalAlign verticalAlign,
-            AnnotationFreeTextRichText richText,
             String color,
             String fontColor,
             Optional<String> interiorColor,
@@ -208,6 +208,7 @@ public final class AnnotationFreeText {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.box = box;
         this.rotation = rotation;
         this.intent = intent;
@@ -215,7 +216,6 @@ public final class AnnotationFreeText {
         this.fontSize = fontSize;
         this.textAlign = textAlign;
         this.verticalAlign = verticalAlign;
-        this.richText = richText;
         this.color = color;
         this.fontColor = fontColor;
         this.interiorColor = interiorColor;
@@ -432,6 +432,11 @@ public final class AnnotationFreeText {
         return actions;
     }
 
+    @JsonProperty("richText")
+    public RichTextDocument getRichText() {
+        return richText;
+    }
+
     @JsonProperty("box")
     public AnnotationFreeTextBox getBox() {
         return box;
@@ -468,11 +473,6 @@ public final class AnnotationFreeText {
     @JsonProperty("verticalAlign")
     public AnnotationFreeTextVerticalAlign getVerticalAlign() {
         return verticalAlign;
-    }
-
-    @JsonProperty("richText")
-    public AnnotationFreeTextRichText getRichText() {
-        return richText;
     }
 
     @JsonProperty("color")
@@ -715,6 +715,7 @@ public final class AnnotationFreeText {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && box.equals(other.box)
                 && rotation.equals(other.rotation)
                 && intent.equals(other.intent)
@@ -722,7 +723,6 @@ public final class AnnotationFreeText {
                 && fontSize == other.fontSize
                 && textAlign.equals(other.textAlign)
                 && verticalAlign.equals(other.verticalAlign)
-                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && fontColor.equals(other.fontColor)
                 && interiorColor.equals(other.interiorColor)
@@ -769,6 +769,7 @@ public final class AnnotationFreeText {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.box,
                 this.rotation,
                 this.intent,
@@ -776,7 +777,6 @@ public final class AnnotationFreeText {
                 this.fontSize,
                 this.textAlign,
                 this.verticalAlign,
-                this.richText,
                 this.color,
                 this.fontColor,
                 this.interiorColor,
@@ -857,7 +857,11 @@ public final class AnnotationFreeText {
     }
 
     public interface LockedContentsStage {
-        BoxStage lockedContents(boolean lockedContents);
+        RichTextStage lockedContents(boolean lockedContents);
+    }
+
+    public interface RichTextStage {
+        BoxStage richText(@NotNull RichTextDocument richText);
     }
 
     public interface BoxStage {
@@ -881,11 +885,7 @@ public final class AnnotationFreeText {
     }
 
     public interface VerticalAlignStage {
-        RichTextStage verticalAlign(@NotNull AnnotationFreeTextVerticalAlign verticalAlign);
-    }
-
-    public interface RichTextStage {
-        ColorStage richText(@NotNull AnnotationFreeTextRichText richText);
+        ColorStage verticalAlign(@NotNull AnnotationFreeTextVerticalAlign verticalAlign);
     }
 
     public interface ColorStage {
@@ -1065,13 +1065,13 @@ public final class AnnotationFreeText {
                     LockedStage,
                     ToggleNoViewStage,
                     LockedContentsStage,
+                    RichTextStage,
                     BoxStage,
                     IntentStage,
                     FontFamilyStage,
                     FontSizeStage,
                     TextAlignStage,
                     VerticalAlignStage,
-                    RichTextStage,
                     ColorStage,
                     FontColorStage,
                     OpacityStage,
@@ -1108,6 +1108,8 @@ public final class AnnotationFreeText {
 
         private boolean lockedContents;
 
+        private RichTextDocument richText;
+
         private AnnotationFreeTextBox box;
 
         private AnnotationFreeTextIntent intent;
@@ -1119,8 +1121,6 @@ public final class AnnotationFreeText {
         private AnnotationFreeTextTextAlign textAlign;
 
         private AnnotationFreeTextVerticalAlign verticalAlign;
-
-        private AnnotationFreeTextRichText richText;
 
         private String color;
 
@@ -1214,6 +1214,7 @@ public final class AnnotationFreeText {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             box(other.getBox());
             rotation(other.getRotation());
             intent(other.getIntent());
@@ -1221,7 +1222,6 @@ public final class AnnotationFreeText {
             fontSize(other.getFontSize());
             textAlign(other.getTextAlign());
             verticalAlign(other.getVerticalAlign());
-            richText(other.getRichText());
             color(other.getColor());
             fontColor(other.getFontColor());
             interiorColor(other.getInteriorColor());
@@ -1335,8 +1335,15 @@ public final class AnnotationFreeText {
 
         @java.lang.Override
         @JsonSetter("lockedContents")
-        public BoxStage lockedContents(boolean lockedContents) {
+        public RichTextStage lockedContents(boolean lockedContents) {
             this.lockedContents = lockedContents;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("richText")
+        public BoxStage richText(@NotNull RichTextDocument richText) {
+            this.richText = Objects.requireNonNull(richText, "richText must not be null");
             return this;
         }
 
@@ -1377,15 +1384,8 @@ public final class AnnotationFreeText {
 
         @java.lang.Override
         @JsonSetter("verticalAlign")
-        public RichTextStage verticalAlign(@NotNull AnnotationFreeTextVerticalAlign verticalAlign) {
+        public ColorStage verticalAlign(@NotNull AnnotationFreeTextVerticalAlign verticalAlign) {
             this.verticalAlign = Objects.requireNonNull(verticalAlign, "verticalAlign must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("richText")
-        public ColorStage richText(@NotNull AnnotationFreeTextRichText richText) {
-            this.richText = Objects.requireNonNull(richText, "richText must not be null");
             return this;
         }
 
@@ -2008,6 +2008,7 @@ public final class AnnotationFreeText {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     box,
                     rotation,
                     intent,
@@ -2015,7 +2016,6 @@ public final class AnnotationFreeText {
                     fontSize,
                     textAlign,
                     verticalAlign,
-                    richText,
                     color,
                     fontColor,
                     interiorColor,

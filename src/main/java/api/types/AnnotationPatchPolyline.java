@@ -86,6 +86,8 @@ public final class AnnotationPatchPolyline {
 
     private final Optional<Object> actions;
 
+    private final Optional<RichTextDocumentInput> richText;
+
     private final Optional<String> color;
 
     private final Optional<Double> opacity;
@@ -146,6 +148,7 @@ public final class AnnotationPatchPolyline {
             Optional<Object> modifiedBy,
             Optional<Object> importedBy,
             Optional<Object> actions,
+            Optional<RichTextDocumentInput> richText,
             Optional<String> color,
             Optional<Double> opacity,
             Optional<Double> strokeWidth,
@@ -191,6 +194,7 @@ public final class AnnotationPatchPolyline {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.strokeWidth = strokeWidth;
@@ -377,8 +381,19 @@ public final class AnnotationPatchPolyline {
         return actions;
     }
 
-    @JsonProperty("color")
+    @JsonIgnore
+    public Optional<RichTextDocumentInput> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
+    @JsonIgnore
     public Optional<String> getColor() {
+        if (color == null) {
+            return Optional.empty();
+        }
         return color;
     }
 
@@ -494,6 +509,18 @@ public final class AnnotationPatchPolyline {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocumentInput> _getRichText() {
+        return richText;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("color")
+    private Optional<String> _getColor() {
+        return color;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("dashArray")
     private Optional<List<Double>> _getDashArray() {
         return dashArray;
@@ -578,6 +605,7 @@ public final class AnnotationPatchPolyline {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity.equals(other.opacity)
                 && strokeWidth.equals(other.strokeWidth)
@@ -627,6 +655,7 @@ public final class AnnotationPatchPolyline {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.strokeWidth,
@@ -715,6 +744,8 @@ public final class AnnotationPatchPolyline {
 
         private Optional<Object> actions = Optional.empty();
 
+        private Optional<RichTextDocumentInput> richText = Optional.empty();
+
         private Optional<String> color = Optional.empty();
 
         private Optional<Double> opacity = Optional.empty();
@@ -778,6 +809,7 @@ public final class AnnotationPatchPolyline {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             strokeWidth(other.getStrokeWidth());
@@ -1190,6 +1222,28 @@ public final class AnnotationPatchPolyline {
             return this;
         }
 
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public Builder richText(Optional<RichTextDocumentInput> richText) {
+            this.richText = richText;
+            return this;
+        }
+
+        public Builder richText(RichTextDocumentInput richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        public Builder richText(Nullable<RichTextDocumentInput> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public Builder color(Optional<String> color) {
             this.color = color;
@@ -1198,6 +1252,17 @@ public final class AnnotationPatchPolyline {
 
         public Builder color(String color) {
             this.color = Optional.ofNullable(color);
+            return this;
+        }
+
+        public Builder color(Nullable<String> color) {
+            if (color.isNull()) {
+                this.color = null;
+            } else if (color.isEmpty()) {
+                this.color = Optional.empty();
+            } else {
+                this.color = Optional.of(color.get());
+            }
             return this;
         }
 
@@ -1443,6 +1508,7 @@ public final class AnnotationPatchPolyline {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     strokeWidth,

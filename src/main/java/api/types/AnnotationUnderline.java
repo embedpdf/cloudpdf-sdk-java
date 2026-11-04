@@ -89,6 +89,8 @@ public final class AnnotationUnderline {
 
     private final Optional<PdfAnnotationActions> actions;
 
+    private final Optional<RichTextDocument> richText;
+
     private final String color;
 
     private final double opacity;
@@ -129,6 +131,7 @@ public final class AnnotationUnderline {
             Optional<String> modifiedBy,
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
+            Optional<RichTextDocument> richText,
             String color,
             double opacity,
             List<AnnotationUnderlineQuadPointsItem> quadPoints,
@@ -164,6 +167,7 @@ public final class AnnotationUnderline {
         this.modifiedBy = modifiedBy;
         this.importedBy = importedBy;
         this.actions = actions;
+        this.richText = richText;
         this.color = color;
         this.opacity = opacity;
         this.quadPoints = quadPoints;
@@ -373,6 +377,14 @@ public final class AnnotationUnderline {
         return actions;
     }
 
+    @JsonIgnore
+    public Optional<RichTextDocument> getRichText() {
+        if (richText == null) {
+            return Optional.empty();
+        }
+        return richText;
+    }
+
     @JsonProperty("color")
     public String getColor() {
         return color;
@@ -484,6 +496,12 @@ public final class AnnotationUnderline {
         return actions;
     }
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("richText")
+    private Optional<RichTextDocument> _getRichText() {
+        return richText;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -527,6 +545,7 @@ public final class AnnotationUnderline {
                 && modifiedBy.equals(other.modifiedBy)
                 && importedBy.equals(other.importedBy)
                 && actions.equals(other.actions)
+                && richText.equals(other.richText)
                 && color.equals(other.color)
                 && opacity == other.opacity
                 && quadPoints.equals(other.quadPoints);
@@ -566,6 +585,7 @@ public final class AnnotationUnderline {
                 this.modifiedBy,
                 this.importedBy,
                 this.actions,
+                this.richText,
                 this.color,
                 this.opacity,
                 this.quadPoints);
@@ -753,6 +773,12 @@ public final class AnnotationUnderline {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
+        _FinalStage richText(Optional<RichTextDocument> richText);
+
+        _FinalStage richText(RichTextDocument richText);
+
+        _FinalStage richText(Nullable<RichTextDocument> richText);
+
         _FinalStage quadPoints(List<AnnotationUnderlineQuadPointsItem> quadPoints);
 
         _FinalStage addQuadPoints(AnnotationUnderlineQuadPointsItem quadPoints);
@@ -815,6 +841,8 @@ public final class AnnotationUnderline {
         private double opacity;
 
         private List<AnnotationUnderlineQuadPointsItem> quadPoints = new ArrayList<>();
+
+        private Optional<RichTextDocument> richText = Optional.empty();
 
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
@@ -886,6 +914,7 @@ public final class AnnotationUnderline {
             modifiedBy(other.getModifiedBy());
             importedBy(other.getImportedBy());
             actions(other.getActions());
+            richText(other.getRichText());
             color(other.getColor());
             opacity(other.getOpacity());
             quadPoints(other.getQuadPoints());
@@ -1032,6 +1061,31 @@ public final class AnnotationUnderline {
             if (quadPoints != null) {
                 this.quadPoints.addAll(quadPoints);
             }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(Nullable<RichTextDocument> richText) {
+            if (richText.isNull()) {
+                this.richText = null;
+            } else if (richText.isEmpty()) {
+                this.richText = Optional.empty();
+            } else {
+                this.richText = Optional.of(richText.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage richText(RichTextDocument richText) {
+            this.richText = Optional.ofNullable(richText);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "richText", nulls = Nulls.SKIP)
+        public _FinalStage richText(Optional<RichTextDocument> richText) {
+            this.richText = richText;
             return this;
         }
 
@@ -1469,6 +1523,7 @@ public final class AnnotationUnderline {
                     modifiedBy,
                     importedBy,
                     actions,
+                    richText,
                     color,
                     opacity,
                     quadPoints,

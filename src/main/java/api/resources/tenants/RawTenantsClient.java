@@ -598,6 +598,13 @@ public class RawTenantsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "period", request.getPeriod().get(), false);
         }
+        if (request.getFrom().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "from", request.getFrom().get(), false);
+        }
+        if (request.getTo().isPresent()) {
+            QueryStringMapper.addQueryParameter(httpUrl, "to", request.getTo().get(), false);
+        }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
