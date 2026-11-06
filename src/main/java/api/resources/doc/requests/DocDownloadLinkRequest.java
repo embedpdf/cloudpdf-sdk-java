@@ -23,14 +23,16 @@ import java.util.Optional;
 public final class DocDownloadLinkRequest {
     private final Optional<String> documentPassword;
 
-    private final Optional<Integer> expiresIn;
+    private final Optional<Integer> expiresInSeconds;
 
     private final Map<String, Object> additionalProperties;
 
     private DocDownloadLinkRequest(
-            Optional<String> documentPassword, Optional<Integer> expiresIn, Map<String, Object> additionalProperties) {
+            Optional<String> documentPassword,
+            Optional<Integer> expiresInSeconds,
+            Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
-        this.expiresIn = expiresIn;
+        this.expiresInSeconds = expiresInSeconds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -42,9 +44,9 @@ public final class DocDownloadLinkRequest {
         return documentPassword;
     }
 
-    @JsonProperty("expiresIn")
-    public Optional<Integer> getExpiresIn() {
-        return expiresIn;
+    @JsonProperty("expiresInSeconds")
+    public Optional<Integer> getExpiresInSeconds() {
+        return expiresInSeconds;
     }
 
     @java.lang.Override
@@ -59,12 +61,12 @@ public final class DocDownloadLinkRequest {
     }
 
     private boolean equalTo(DocDownloadLinkRequest other) {
-        return documentPassword.equals(other.documentPassword) && expiresIn.equals(other.expiresIn);
+        return documentPassword.equals(other.documentPassword) && expiresInSeconds.equals(other.expiresInSeconds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentPassword, this.expiresIn);
+        return Objects.hash(this.documentPassword, this.expiresInSeconds);
     }
 
     @java.lang.Override
@@ -80,7 +82,7 @@ public final class DocDownloadLinkRequest {
     public static final class Builder {
         private Optional<String> documentPassword = Optional.empty();
 
-        private Optional<Integer> expiresIn = Optional.empty();
+        private Optional<Integer> expiresInSeconds = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -89,7 +91,7 @@ public final class DocDownloadLinkRequest {
 
         public Builder from(DocDownloadLinkRequest other) {
             documentPassword(other.getDocumentPassword());
-            expiresIn(other.getExpiresIn());
+            expiresInSeconds(other.getExpiresInSeconds());
             return this;
         }
 
@@ -106,19 +108,19 @@ public final class DocDownloadLinkRequest {
             return this;
         }
 
-        @JsonSetter(value = "expiresIn", nulls = Nulls.SKIP)
-        public Builder expiresIn(Optional<Integer> expiresIn) {
-            this.expiresIn = expiresIn;
+        @JsonSetter(value = "expiresInSeconds", nulls = Nulls.SKIP)
+        public Builder expiresInSeconds(Optional<Integer> expiresInSeconds) {
+            this.expiresInSeconds = expiresInSeconds;
             return this;
         }
 
-        public Builder expiresIn(Integer expiresIn) {
-            this.expiresIn = Optional.ofNullable(expiresIn);
+        public Builder expiresInSeconds(Integer expiresInSeconds) {
+            this.expiresInSeconds = Optional.ofNullable(expiresInSeconds);
             return this;
         }
 
         public DocDownloadLinkRequest build() {
-            return new DocDownloadLinkRequest(documentPassword, expiresIn, additionalProperties);
+            return new DocDownloadLinkRequest(documentPassword, expiresInSeconds, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

@@ -16,11 +16,11 @@ import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotat
 import com.cloudpdf.api.resources.doc.annotations.requests.ReadFileAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.AnnotationList;
-import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
-import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
-import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
-import com.cloudpdf.api.types.DocAnnotationsReorder200Response;
-import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
+import com.cloudpdf.api.types.DocAnnotationsCreateResponse;
+import com.cloudpdf.api.types.DocAnnotationsDeleteResponse;
+import com.cloudpdf.api.types.DocAnnotationsFlattenResponse;
+import com.cloudpdf.api.types.DocAnnotationsReorderResponse;
+import com.cloudpdf.api.types.DocAnnotationsUpdateResponse;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -96,7 +96,7 @@ public class AnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public DocAnnotationsCreate200Response create(
+    public DocAnnotationsCreateResponse create(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return this.rawClient.create(docId, layerName, pageKey, body).body();
     }
@@ -104,7 +104,7 @@ public class AnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public DocAnnotationsCreate200Response create(
+    public DocAnnotationsCreateResponse create(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
                 .create(docId, layerName, pageKey, body, requestOptions)
@@ -114,7 +114,7 @@ public class AnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public DocAnnotationsCreate200Response create(
+    public DocAnnotationsCreateResponse create(
             String docId, String layerName, String pageKey, CreateAnnotationsRequest request) {
         return this.rawClient.create(docId, layerName, pageKey, request).body();
     }
@@ -122,7 +122,7 @@ public class AnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public DocAnnotationsCreate200Response create(
+    public DocAnnotationsCreateResponse create(
             String docId,
             String layerName,
             String pageKey,
@@ -133,89 +133,84 @@ public class AnnotationsClient {
                 .body();
     }
 
-    public DocAnnotationsDelete200Response delete(String docId, String layerName, String pageKey, String annotKey) {
-        return this.rawClient.delete(docId, layerName, pageKey, annotKey).body();
+    public DocAnnotationsDeleteResponse delete(String docId, String layerName, String pageKey, String annotationKey) {
+        return this.rawClient.delete(docId, layerName, pageKey, annotationKey).body();
     }
 
-    public DocAnnotationsDelete200Response delete(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+    public DocAnnotationsDeleteResponse delete(
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, requestOptions)
+                .delete(docId, layerName, pageKey, annotationKey, requestOptions)
                 .body();
     }
 
-    public DocAnnotationsDelete200Response delete(
-            String docId, String layerName, String pageKey, String annotKey, DeleteAnnotationsRequest request) {
+    public DocAnnotationsDeleteResponse delete(
+            String docId, String layerName, String pageKey, String annotationKey, DeleteAnnotationsRequest request) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, request)
+                .delete(docId, layerName, pageKey, annotationKey, request)
                 .body();
     }
 
-    public DocAnnotationsDelete200Response delete(
+    public DocAnnotationsDeleteResponse delete(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             DeleteAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .delete(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .body();
     }
 
-    public DocAnnotationsUpdate200Response update(
-            String docId, String layerName, String pageKey, String annotKey, Map<String, Object> body) {
-        return this.rawClient.update(docId, layerName, pageKey, annotKey, body).body();
+    public DocAnnotationsUpdateResponse update(
+            String docId, String layerName, String pageKey, String annotationKey, Map<String, Object> body) {
+        return this.rawClient
+                .update(docId, layerName, pageKey, annotationKey, body)
+                .body();
     }
 
-    public DocAnnotationsUpdate200Response update(
+    public DocAnnotationsUpdateResponse update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             Map<String, Object> body,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, body, requestOptions)
+                .update(docId, layerName, pageKey, annotationKey, body, requestOptions)
                 .body();
     }
 
-    public DocAnnotationsUpdate200Response update(
-            String docId, String layerName, String pageKey, String annotKey, UpdateAnnotationsRequest request) {
+    public DocAnnotationsUpdateResponse update(
+            String docId, String layerName, String pageKey, String annotationKey, UpdateAnnotationsRequest request) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, request)
+                .update(docId, layerName, pageKey, annotationKey, request)
                 .body();
     }
 
-    public DocAnnotationsUpdate200Response update(
+    public DocAnnotationsUpdateResponse update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             UpdateAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .update(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .body();
     }
 
-    public InputStream readAppearance(String docId, String layerName, String pageKey, String annotKey) {
+    public InputStream readAppearance(String docId, String layerName, String pageKey, String annotationKey) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey)
-                .body();
-    }
-
-    public InputStream readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
-        return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, requestOptions)
+                .readAppearance(docId, layerName, pageKey, annotationKey)
                 .body();
     }
 
     public InputStream readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, ReadAppearanceAnnotationsRequest request) {
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, request)
+                .readAppearance(docId, layerName, pageKey, annotationKey, requestOptions)
                 .body();
     }
 
@@ -223,28 +218,39 @@ public class AnnotationsClient {
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
+            ReadAppearanceAnnotationsRequest request) {
+        return this.rawClient
+                .readAppearance(docId, layerName, pageKey, annotationKey, request)
+                .body();
+    }
+
+    public InputStream readAppearance(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotationKey,
             ReadAppearanceAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .readAppearance(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .body();
     }
 
     /**
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
-    public InputStream readFile(String docId, String layerName, String pageKey, String annotKey) {
-        return this.rawClient.readFile(docId, layerName, pageKey, annotKey).body();
+    public InputStream readFile(String docId, String layerName, String pageKey, String annotationKey) {
+        return this.rawClient.readFile(docId, layerName, pageKey, annotationKey).body();
     }
 
     /**
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public InputStream readFile(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, requestOptions)
+                .readFile(docId, layerName, pageKey, annotationKey, requestOptions)
                 .body();
     }
 
@@ -252,9 +258,9 @@ public class AnnotationsClient {
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public InputStream readFile(
-            String docId, String layerName, String pageKey, String annotKey, ReadFileAnnotationsRequest request) {
+            String docId, String layerName, String pageKey, String annotationKey, ReadFileAnnotationsRequest request) {
         return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, request)
+                .readFile(docId, layerName, pageKey, annotationKey, request)
                 .body();
     }
 
@@ -265,11 +271,11 @@ public class AnnotationsClient {
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             ReadFileAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .readFile(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .body();
     }
 
@@ -302,24 +308,24 @@ public class AnnotationsClient {
                 .body();
     }
 
-    public DocAnnotationsFlatten200Response flatten(
+    public DocAnnotationsFlattenResponse flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return this.rawClient.flatten(docId, layerName, pageKey, body).body();
     }
 
-    public DocAnnotationsFlatten200Response flatten(
+    public DocAnnotationsFlattenResponse flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
                 .flatten(docId, layerName, pageKey, body, requestOptions)
                 .body();
     }
 
-    public DocAnnotationsFlatten200Response flatten(
+    public DocAnnotationsFlattenResponse flatten(
             String docId, String layerName, String pageKey, FlattenAnnotationsRequest request) {
         return this.rawClient.flatten(docId, layerName, pageKey, request).body();
     }
 
-    public DocAnnotationsFlatten200Response flatten(
+    public DocAnnotationsFlattenResponse flatten(
             String docId,
             String layerName,
             String pageKey,
@@ -330,12 +336,12 @@ public class AnnotationsClient {
                 .body();
     }
 
-    public DocAnnotationsReorder200Response reorder(
+    public DocAnnotationsReorderResponse reorder(
             String docId, String layerName, String pageKey, DocAnnotationsReorderRequest request) {
         return this.rawClient.reorder(docId, layerName, pageKey, request).body();
     }
 
-    public DocAnnotationsReorder200Response reorder(
+    public DocAnnotationsReorderResponse reorder(
             String docId,
             String layerName,
             String pageKey,

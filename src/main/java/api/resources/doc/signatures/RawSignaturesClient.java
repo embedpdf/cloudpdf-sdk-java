@@ -21,11 +21,12 @@ import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesReques
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
-import com.cloudpdf.api.types.DocSignaturesAnalysis200Response;
-import com.cloudpdf.api.types.DocSignaturesCancel200Response;
-import com.cloudpdf.api.types.DocSignaturesComplete200Response;
-import com.cloudpdf.api.types.DocSignaturesList200Response;
-import com.cloudpdf.api.types.DocSignaturesPrepare200Response;
+import com.cloudpdf.api.types.DocSignaturesAnalysisResponse;
+import com.cloudpdf.api.types.DocSignaturesCancelResponse;
+import com.cloudpdf.api.types.DocSignaturesCompleteResponse;
+import com.cloudpdf.api.types.DocSignaturesListResponse;
+import com.cloudpdf.api.types.DocSignaturesPrepareResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
 import java.io.IOException;
@@ -51,14 +52,14 @@ public class RawSignaturesClient {
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesList200Response> list(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocSignaturesListResponse> list(String docId, String layerName) {
         return list(docId, layerName, ListSignaturesRequest.builder().build());
     }
 
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesList200Response> list(
+    public CloudPDFClientHttpResponse<DocSignaturesListResponse> list(
             String docId, String layerName, RequestOptions requestOptions) {
         return list(docId, layerName, ListSignaturesRequest.builder().build(), requestOptions);
     }
@@ -66,7 +67,7 @@ public class RawSignaturesClient {
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesList200Response> list(
+    public CloudPDFClientHttpResponse<DocSignaturesListResponse> list(
             String docId, String layerName, ListSignaturesRequest request) {
         return list(docId, layerName, request, null);
     }
@@ -74,7 +75,7 @@ public class RawSignaturesClient {
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesList200Response> list(
+    public CloudPDFClientHttpResponse<DocSignaturesListResponse> list(
             String docId, String layerName, ListSignaturesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -116,13 +117,13 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesList200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesListResponse.class),
                         response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -137,24 +138,24 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
+    public CloudPDFClientHttpResponse<DocSignaturesCancelResponse> cancel(
             String docId, String layerName, String signingId) {
         return cancel(
                 docId, layerName, signingId, CancelSignaturesRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
+    public CloudPDFClientHttpResponse<DocSignaturesCancelResponse> cancel(
             String docId, String layerName, String signingId, RequestOptions requestOptions) {
         return cancel(
                 docId, layerName, signingId, CancelSignaturesRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
+    public CloudPDFClientHttpResponse<DocSignaturesCancelResponse> cancel(
             String docId, String layerName, String signingId, CancelSignaturesRequest request) {
         return cancel(docId, layerName, signingId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesCancel200Response> cancel(
+    public CloudPDFClientHttpResponse<DocSignaturesCancelResponse> cancel(
             String docId,
             String layerName,
             String signingId,
@@ -201,13 +202,13 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesCancel200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesCancelResponse.class),
                         response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -225,7 +226,7 @@ public class RawSignaturesClient {
     /**
      * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesComplete200Response> complete(
+    public CloudPDFClientHttpResponse<DocSignaturesCompleteResponse> complete(
             String docId, String layerName, String signingId, DocSignaturesCompleteRequest request) {
         return complete(docId, layerName, signingId, request, null);
     }
@@ -233,7 +234,7 @@ public class RawSignaturesClient {
     /**
      * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesComplete200Response> complete(
+    public CloudPDFClientHttpResponse<DocSignaturesCompleteResponse> complete(
             String docId,
             String layerName,
             String signingId,
@@ -289,20 +290,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesComplete200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesCompleteResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -320,14 +321,14 @@ public class RawSignaturesClient {
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesAnalysis200Response> analysis(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocSignaturesAnalysisResponse> analysis(String docId, String layerName) {
         return analysis(docId, layerName, AnalysisSignaturesRequest.builder().build());
     }
 
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesAnalysis200Response> analysis(
+    public CloudPDFClientHttpResponse<DocSignaturesAnalysisResponse> analysis(
             String docId, String layerName, RequestOptions requestOptions) {
         return analysis(docId, layerName, AnalysisSignaturesRequest.builder().build(), requestOptions);
     }
@@ -335,7 +336,7 @@ public class RawSignaturesClient {
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesAnalysis200Response> analysis(
+    public CloudPDFClientHttpResponse<DocSignaturesAnalysisResponse> analysis(
             String docId, String layerName, AnalysisSignaturesRequest request) {
         return analysis(docId, layerName, request, null);
     }
@@ -343,7 +344,7 @@ public class RawSignaturesClient {
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesAnalysis200Response> analysis(
+    public CloudPDFClientHttpResponse<DocSignaturesAnalysisResponse> analysis(
             String docId, String layerName, AnalysisSignaturesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -398,17 +399,17 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesAnalysis200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesAnalysisResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -426,7 +427,7 @@ public class RawSignaturesClient {
     /**
      * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
         return prepare(docId, layerName, file, request, null);
     }
@@ -434,7 +435,7 @@ public class RawSignaturesClient {
     /**
      * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId,
             String layerName,
             File file,
@@ -490,20 +491,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepare200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepareResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -518,7 +519,7 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId, String layerName, InputStream stream, String filename) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -543,20 +544,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepare200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepareResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -571,7 +572,7 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId, String layerName, InputStream stream, String filename, MediaType mediaType) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -596,20 +597,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepare200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepareResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -624,7 +625,7 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId, String layerName, InputStream stream, String filename, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -666,20 +667,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepare200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepareResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -694,7 +695,7 @@ public class RawSignaturesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocSignaturesPrepare200Response> prepare(
+    public CloudPDFClientHttpResponse<DocSignaturesPrepareResponse> prepare(
             String docId,
             String layerName,
             InputStream stream,
@@ -741,20 +742,20 @@ public class RawSignaturesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepare200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocSignaturesPrepareResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

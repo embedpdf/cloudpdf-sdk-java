@@ -22,10 +22,11 @@ import com.cloudpdf.api.resources.folders.requests.FoldersMoveIntoRequest;
 import com.cloudpdf.api.resources.folders.requests.FoldersUpdateRequest;
 import com.cloudpdf.api.resources.folders.requests.GetFoldersRequest;
 import com.cloudpdf.api.resources.folders.requests.ListFoldersRequest;
-import com.cloudpdf.api.types.FoldersCreate200Response;
-import com.cloudpdf.api.types.FoldersGet200Response;
-import com.cloudpdf.api.types.FoldersList200Response;
-import com.cloudpdf.api.types.FoldersUpdate200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.FoldersCreateResponse;
+import com.cloudpdf.api.types.FoldersGetResponse;
+import com.cloudpdf.api.types.FoldersListResponse;
+import com.cloudpdf.api.types.FoldersUpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -43,19 +44,19 @@ public class RawFoldersClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<FoldersList200Response> list(String tenantId) {
+    public CloudPDFClientHttpResponse<FoldersListResponse> list(String tenantId) {
         return list(tenantId, ListFoldersRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<FoldersList200Response> list(String tenantId, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<FoldersListResponse> list(String tenantId, RequestOptions requestOptions) {
         return list(tenantId, ListFoldersRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<FoldersList200Response> list(String tenantId, ListFoldersRequest request) {
+    public CloudPDFClientHttpResponse<FoldersListResponse> list(String tenantId, ListFoldersRequest request) {
         return list(tenantId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<FoldersList200Response> list(
+    public CloudPDFClientHttpResponse<FoldersListResponse> list(
             String tenantId, ListFoldersRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -103,20 +104,19 @@ public class RawFoldersClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersList200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersListResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -134,14 +134,14 @@ public class RawFoldersClient {
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public CloudPDFClientHttpResponse<FoldersCreate200Response> create(String tenantId, FoldersCreateRequest request) {
+    public CloudPDFClientHttpResponse<FoldersCreateResponse> create(String tenantId, FoldersCreateRequest request) {
         return create(tenantId, request, null);
     }
 
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public CloudPDFClientHttpResponse<FoldersCreate200Response> create(
+    public CloudPDFClientHttpResponse<FoldersCreateResponse> create(
             String tenantId, FoldersCreateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -185,23 +185,22 @@ public class RawFoldersClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersCreate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersCreateResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -216,21 +215,21 @@ public class RawFoldersClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<FoldersGet200Response> get(String tenantId, String folderId) {
+    public CloudPDFClientHttpResponse<FoldersGetResponse> get(String tenantId, String folderId) {
         return get(tenantId, folderId, GetFoldersRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<FoldersGet200Response> get(
+    public CloudPDFClientHttpResponse<FoldersGetResponse> get(
             String tenantId, String folderId, RequestOptions requestOptions) {
         return get(tenantId, folderId, GetFoldersRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<FoldersGet200Response> get(
+    public CloudPDFClientHttpResponse<FoldersGetResponse> get(
             String tenantId, String folderId, GetFoldersRequest request) {
         return get(tenantId, folderId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<FoldersGet200Response> get(
+    public CloudPDFClientHttpResponse<FoldersGetResponse> get(
             String tenantId, String folderId, GetFoldersRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -267,16 +266,16 @@ public class RawFoldersClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersGet200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersGetResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -361,13 +360,13 @@ public class RawFoldersClient {
                 switch (response.code()) {
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -385,7 +384,7 @@ public class RawFoldersClient {
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public CloudPDFClientHttpResponse<FoldersUpdate200Response> update(
+    public CloudPDFClientHttpResponse<FoldersUpdateResponse> update(
             String tenantId, String folderId, FoldersUpdateRequest request) {
         return update(tenantId, folderId, request, null);
     }
@@ -393,7 +392,7 @@ public class RawFoldersClient {
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public CloudPDFClientHttpResponse<FoldersUpdate200Response> update(
+    public CloudPDFClientHttpResponse<FoldersUpdateResponse> update(
             String tenantId, String folderId, FoldersUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -438,23 +437,22 @@ public class RawFoldersClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersUpdate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, FoldersUpdateResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -470,28 +468,28 @@ public class RawFoldersClient {
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CloudPDFClientHttpResponse<Void> moveInto(String tenantId, String folderId) {
         return moveInto(tenantId, folderId, FoldersMoveIntoRequest.builder().build());
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CloudPDFClientHttpResponse<Void> moveInto(String tenantId, String folderId, RequestOptions requestOptions) {
         return moveInto(tenantId, folderId, FoldersMoveIntoRequest.builder().build(), requestOptions);
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CloudPDFClientHttpResponse<Void> moveInto(String tenantId, String folderId, FoldersMoveIntoRequest request) {
         return moveInto(tenantId, folderId, request, null);
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CloudPDFClientHttpResponse<Void> moveInto(
             String tenantId, String folderId, FoldersMoveIntoRequest request, RequestOptions requestOptions) {
@@ -544,16 +542,16 @@ public class RawFoldersClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

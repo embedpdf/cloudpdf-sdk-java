@@ -14,12 +14,12 @@ import com.cloudpdf.api.resources.grants.requests.GrantsExchangeRequest;
 import com.cloudpdf.api.resources.grants.requests.GrantsUpdateRequest;
 import com.cloudpdf.api.resources.grants.requests.ListGrantsRequest;
 import com.cloudpdf.api.resources.grants.visitors.VisitorsClient;
-import com.cloudpdf.api.types.GrantsArchive200Response;
-import com.cloudpdf.api.types.GrantsCreate200Response;
-import com.cloudpdf.api.types.GrantsExchange200Response;
-import com.cloudpdf.api.types.GrantsGet200Response;
-import com.cloudpdf.api.types.GrantsList200Response;
-import com.cloudpdf.api.types.GrantsUpdate200Response;
+import com.cloudpdf.api.types.GrantsArchiveResponse;
+import com.cloudpdf.api.types.GrantsCreateResponse;
+import com.cloudpdf.api.types.GrantsExchangeResponse;
+import com.cloudpdf.api.types.GrantsGetResponse;
+import com.cloudpdf.api.types.GrantsListResponse;
+import com.cloudpdf.api.types.GrantsUpdateResponse;
 import java.util.function.Supplier;
 
 public class GrantsClient {
@@ -45,60 +45,60 @@ public class GrantsClient {
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public GrantsExchange200Response exchange(GrantsExchangeRequest request) {
+    public GrantsExchangeResponse exchange(GrantsExchangeRequest request) {
         return this.rawClient.exchange(request).body();
     }
 
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public GrantsExchange200Response exchange(GrantsExchangeRequest request, RequestOptions requestOptions) {
+    public GrantsExchangeResponse exchange(GrantsExchangeRequest request, RequestOptions requestOptions) {
         return this.rawClient.exchange(request, requestOptions).body();
     }
 
-    public GrantsList200Response list(String tenantId) {
+    public GrantsListResponse list(String tenantId) {
         return this.rawClient.list(tenantId).body();
     }
 
-    public GrantsList200Response list(String tenantId, RequestOptions requestOptions) {
+    public GrantsListResponse list(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, requestOptions).body();
     }
 
-    public GrantsList200Response list(String tenantId, ListGrantsRequest request) {
+    public GrantsListResponse list(String tenantId, ListGrantsRequest request) {
         return this.rawClient.list(tenantId, request).body();
     }
 
-    public GrantsList200Response list(String tenantId, ListGrantsRequest request, RequestOptions requestOptions) {
+    public GrantsListResponse list(String tenantId, ListGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, request, requestOptions).body();
     }
 
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public GrantsCreate200Response create(String tenantId, GrantsCreateRequest request) {
+    public GrantsCreateResponse create(String tenantId, GrantsCreateRequest request) {
         return this.rawClient.create(tenantId, request).body();
     }
 
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public GrantsCreate200Response create(String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
+    public GrantsCreateResponse create(String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(tenantId, request, requestOptions).body();
     }
 
-    public GrantsGet200Response get(String tenantId, String grantId) {
+    public GrantsGetResponse get(String tenantId, String grantId) {
         return this.rawClient.get(tenantId, grantId).body();
     }
 
-    public GrantsGet200Response get(String tenantId, String grantId, RequestOptions requestOptions) {
+    public GrantsGetResponse get(String tenantId, String grantId, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, grantId, requestOptions).body();
     }
 
-    public GrantsGet200Response get(String tenantId, String grantId, GetGrantsRequest request) {
+    public GrantsGetResponse get(String tenantId, String grantId, GetGrantsRequest request) {
         return this.rawClient.get(tenantId, grantId, request).body();
     }
 
-    public GrantsGet200Response get(
+    public GrantsGetResponse get(
             String tenantId, String grantId, GetGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, grantId, request, requestOptions).body();
     }
@@ -119,19 +119,19 @@ public class GrantsClient {
         this.rawClient.delete(tenantId, grantId, request, requestOptions).body();
     }
 
-    public GrantsUpdate200Response update(String tenantId, String grantId) {
+    public GrantsUpdateResponse update(String tenantId, String grantId) {
         return this.rawClient.update(tenantId, grantId).body();
     }
 
-    public GrantsUpdate200Response update(String tenantId, String grantId, RequestOptions requestOptions) {
+    public GrantsUpdateResponse update(String tenantId, String grantId, RequestOptions requestOptions) {
         return this.rawClient.update(tenantId, grantId, requestOptions).body();
     }
 
-    public GrantsUpdate200Response update(String tenantId, String grantId, GrantsUpdateRequest request) {
+    public GrantsUpdateResponse update(String tenantId, String grantId, GrantsUpdateRequest request) {
         return this.rawClient.update(tenantId, grantId, request).body();
     }
 
-    public GrantsUpdate200Response update(
+    public GrantsUpdateResponse update(
             String tenantId, String grantId, GrantsUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient.update(tenantId, grantId, request, requestOptions).body();
     }
@@ -139,28 +139,28 @@ public class GrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public GrantsArchive200Response archive(String tenantId, String grantId) {
+    public GrantsArchiveResponse archive(String tenantId, String grantId) {
         return this.rawClient.archive(tenantId, grantId).body();
     }
 
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public GrantsArchive200Response archive(String tenantId, String grantId, RequestOptions requestOptions) {
+    public GrantsArchiveResponse archive(String tenantId, String grantId, RequestOptions requestOptions) {
         return this.rawClient.archive(tenantId, grantId, requestOptions).body();
     }
 
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public GrantsArchive200Response archive(String tenantId, String grantId, ArchiveGrantsRequest request) {
+    public GrantsArchiveResponse archive(String tenantId, String grantId, ArchiveGrantsRequest request) {
         return this.rawClient.archive(tenantId, grantId, request).body();
     }
 
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public GrantsArchive200Response archive(
+    public GrantsArchiveResponse archive(
             String tenantId, String grantId, ArchiveGrantsRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .archive(tenantId, grantId, request, requestOptions)

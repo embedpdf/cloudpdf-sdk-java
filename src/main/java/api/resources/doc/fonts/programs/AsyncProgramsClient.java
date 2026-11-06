@@ -31,17 +31,17 @@ public class AsyncProgramsClient {
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
-    public CompletableFuture<InputStream> download(String docId, String layerName, String displayHash) {
-        return this.rawClient.download(docId, layerName, displayHash).thenApply(response -> response.body());
+    public CompletableFuture<InputStream> download(String docId, String layerName, String displaySha256) {
+        return this.rawClient.download(docId, layerName, displaySha256).thenApply(response -> response.body());
     }
 
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
     public CompletableFuture<InputStream> download(
-            String docId, String layerName, String displayHash, RequestOptions requestOptions) {
+            String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
         return this.rawClient
-                .download(docId, layerName, displayHash, requestOptions)
+                .download(docId, layerName, displaySha256, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -49,8 +49,8 @@ public class AsyncProgramsClient {
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
     public CompletableFuture<InputStream> download(
-            String docId, String layerName, String displayHash, DownloadProgramsRequest request) {
-        return this.rawClient.download(docId, layerName, displayHash, request).thenApply(response -> response.body());
+            String docId, String layerName, String displaySha256, DownloadProgramsRequest request) {
+        return this.rawClient.download(docId, layerName, displaySha256, request).thenApply(response -> response.body());
     }
 
     /**
@@ -59,36 +59,38 @@ public class AsyncProgramsClient {
     public CompletableFuture<InputStream> download(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             DownloadProgramsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .download(docId, layerName, displayHash, request, requestOptions)
+                .download(docId, layerName, displaySha256, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FontProgramInfo> get(String docId, String layerName, String displayHash) {
-        return this.rawClient.get(docId, layerName, displayHash).thenApply(response -> response.body());
+    public CompletableFuture<FontProgramInfo> get(String docId, String layerName, String displaySha256) {
+        return this.rawClient.get(docId, layerName, displaySha256).thenApply(response -> response.body());
     }
 
     public CompletableFuture<FontProgramInfo> get(
-            String docId, String layerName, String displayHash, RequestOptions requestOptions) {
-        return this.rawClient.get(docId, layerName, displayHash, requestOptions).thenApply(response -> response.body());
+            String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
+        return this.rawClient
+                .get(docId, layerName, displaySha256, requestOptions)
+                .thenApply(response -> response.body());
     }
 
     public CompletableFuture<FontProgramInfo> get(
-            String docId, String layerName, String displayHash, GetProgramsRequest request) {
-        return this.rawClient.get(docId, layerName, displayHash, request).thenApply(response -> response.body());
+            String docId, String layerName, String displaySha256, GetProgramsRequest request) {
+        return this.rawClient.get(docId, layerName, displaySha256, request).thenApply(response -> response.body());
     }
 
     public CompletableFuture<FontProgramInfo> get(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             GetProgramsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .get(docId, layerName, displayHash, request, requestOptions)
+                .get(docId, layerName, displaySha256, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

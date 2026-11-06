@@ -4,20 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
+import com.cloudpdf.api.types.ErrorResponse;
 import okhttp3.Response;
 
 public final class ForbiddenError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final Object body;
+    private final ErrorResponse body;
 
-    public ForbiddenError(Object body) {
+    public ForbiddenError(ErrorResponse body) {
         super("ForbiddenError", 403, body);
         this.body = body;
     }
 
-    public ForbiddenError(Object body, Response rawResponse) {
+    public ForbiddenError(ErrorResponse body, Response rawResponse) {
         super("ForbiddenError", 403, body, rawResponse);
         this.body = body;
     }
@@ -26,7 +27,7 @@ public final class ForbiddenError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public Object body() {
+    public ErrorResponse body() {
         return this.body;
     }
 }

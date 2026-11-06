@@ -19,24 +19,24 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocumentsImportFrom202Response.Builder.class)
 public final class DocumentsImportFrom202Response {
-    private final DocumentsImportFrom202ResponseTag tag;
+    private final DocumentsImportFrom202ResponseStatus status;
 
     private final DocumentsImportFrom202ResponseDocument document;
 
     private final Map<String, Object> additionalProperties;
 
     private DocumentsImportFrom202Response(
-            DocumentsImportFrom202ResponseTag tag,
+            DocumentsImportFrom202ResponseStatus status,
             DocumentsImportFrom202ResponseDocument document,
             Map<String, Object> additionalProperties) {
-        this.tag = tag;
+        this.status = status;
         this.document = document;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("tag")
-    public DocumentsImportFrom202ResponseTag getTag() {
-        return tag;
+    @JsonProperty("status")
+    public DocumentsImportFrom202ResponseStatus getStatus() {
+        return status;
     }
 
     @JsonProperty("document")
@@ -56,12 +56,12 @@ public final class DocumentsImportFrom202Response {
     }
 
     private boolean equalTo(DocumentsImportFrom202Response other) {
-        return tag.equals(other.tag) && document.equals(other.document);
+        return status.equals(other.status) && document.equals(other.document);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.tag, this.document);
+        return Objects.hash(this.status, this.document);
     }
 
     @java.lang.Override
@@ -69,12 +69,12 @@ public final class DocumentsImportFrom202Response {
         return ObjectMappers.stringify(this);
     }
 
-    public static TagStage builder() {
+    public static StatusStage builder() {
         return new Builder();
     }
 
-    public interface TagStage {
-        DocumentStage tag(@NotNull DocumentsImportFrom202ResponseTag tag);
+    public interface StatusStage {
+        DocumentStage status(@NotNull DocumentsImportFrom202ResponseStatus status);
 
         Builder from(DocumentsImportFrom202Response other);
     }
@@ -92,8 +92,8 @@ public final class DocumentsImportFrom202Response {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TagStage, DocumentStage, _FinalStage {
-        private DocumentsImportFrom202ResponseTag tag;
+    public static final class Builder implements StatusStage, DocumentStage, _FinalStage {
+        private DocumentsImportFrom202ResponseStatus status;
 
         private DocumentsImportFrom202ResponseDocument document;
 
@@ -104,15 +104,15 @@ public final class DocumentsImportFrom202Response {
 
         @java.lang.Override
         public Builder from(DocumentsImportFrom202Response other) {
-            tag(other.getTag());
+            status(other.getStatus());
             document(other.getDocument());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("tag")
-        public DocumentStage tag(@NotNull DocumentsImportFrom202ResponseTag tag) {
-            this.tag = Objects.requireNonNull(tag, "tag must not be null");
+        @JsonSetter("status")
+        public DocumentStage status(@NotNull DocumentsImportFrom202ResponseStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -125,7 +125,7 @@ public final class DocumentsImportFrom202Response {
 
         @java.lang.Override
         public DocumentsImportFrom202Response build() {
-            return new DocumentsImportFrom202Response(tag, document, additionalProperties);
+            return new DocumentsImportFrom202Response(status, document, additionalProperties);
         }
 
         @java.lang.Override

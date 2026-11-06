@@ -29,7 +29,27 @@ public final class PdfActionWriteSubmitForm {
 
     private final Optional<List<PdfActionTargetRef>> fields;
 
-    private final Optional<Integer> flags;
+    private final Optional<Boolean> exclude;
+
+    private final Optional<Boolean> includeNoValueFields;
+
+    private final Optional<PdfActionWriteSubmitFormFormat> format;
+
+    private final Optional<PdfActionWriteSubmitFormMethod> method;
+
+    private final Optional<Boolean> submitCoordinates;
+
+    private final Optional<Boolean> includeAppendSaves;
+
+    private final Optional<Boolean> includeAnnotations;
+
+    private final Optional<Boolean> canonicalFormat;
+
+    private final Optional<Boolean> exclNonUserAnnots;
+
+    private final Optional<Boolean> exclFKey;
+
+    private final Optional<Boolean> embedForm;
 
     private final Optional<List<Object>> next;
 
@@ -38,12 +58,32 @@ public final class PdfActionWriteSubmitForm {
     private PdfActionWriteSubmitForm(
             String url,
             Optional<List<PdfActionTargetRef>> fields,
-            Optional<Integer> flags,
+            Optional<Boolean> exclude,
+            Optional<Boolean> includeNoValueFields,
+            Optional<PdfActionWriteSubmitFormFormat> format,
+            Optional<PdfActionWriteSubmitFormMethod> method,
+            Optional<Boolean> submitCoordinates,
+            Optional<Boolean> includeAppendSaves,
+            Optional<Boolean> includeAnnotations,
+            Optional<Boolean> canonicalFormat,
+            Optional<Boolean> exclNonUserAnnots,
+            Optional<Boolean> exclFKey,
+            Optional<Boolean> embedForm,
             Optional<List<Object>> next,
             Map<String, Object> additionalProperties) {
         this.url = url;
         this.fields = fields;
-        this.flags = flags;
+        this.exclude = exclude;
+        this.includeNoValueFields = includeNoValueFields;
+        this.format = format;
+        this.method = method;
+        this.submitCoordinates = submitCoordinates;
+        this.includeAppendSaves = includeAppendSaves;
+        this.includeAnnotations = includeAnnotations;
+        this.canonicalFormat = canonicalFormat;
+        this.exclNonUserAnnots = exclNonUserAnnots;
+        this.exclFKey = exclFKey;
+        this.embedForm = embedForm;
         this.next = next;
         this.additionalProperties = additionalProperties;
     }
@@ -61,9 +101,59 @@ public final class PdfActionWriteSubmitForm {
         return fields;
     }
 
-    @JsonProperty("flags")
-    public Optional<Integer> getFlags() {
-        return flags;
+    @JsonProperty("exclude")
+    public Optional<Boolean> getExclude() {
+        return exclude;
+    }
+
+    @JsonProperty("includeNoValueFields")
+    public Optional<Boolean> getIncludeNoValueFields() {
+        return includeNoValueFields;
+    }
+
+    @JsonProperty("format")
+    public Optional<PdfActionWriteSubmitFormFormat> getFormat() {
+        return format;
+    }
+
+    @JsonProperty("method")
+    public Optional<PdfActionWriteSubmitFormMethod> getMethod() {
+        return method;
+    }
+
+    @JsonProperty("submitCoordinates")
+    public Optional<Boolean> getSubmitCoordinates() {
+        return submitCoordinates;
+    }
+
+    @JsonProperty("includeAppendSaves")
+    public Optional<Boolean> getIncludeAppendSaves() {
+        return includeAppendSaves;
+    }
+
+    @JsonProperty("includeAnnotations")
+    public Optional<Boolean> getIncludeAnnotations() {
+        return includeAnnotations;
+    }
+
+    @JsonProperty("canonicalFormat")
+    public Optional<Boolean> getCanonicalFormat() {
+        return canonicalFormat;
+    }
+
+    @JsonProperty("exclNonUserAnnots")
+    public Optional<Boolean> getExclNonUserAnnots() {
+        return exclNonUserAnnots;
+    }
+
+    @JsonProperty("exclFKey")
+    public Optional<Boolean> getExclFKey() {
+        return exclFKey;
+    }
+
+    @JsonProperty("embedForm")
+    public Optional<Boolean> getEmbedForm() {
+        return embedForm;
     }
 
     @JsonProperty("next")
@@ -91,13 +181,37 @@ public final class PdfActionWriteSubmitForm {
     private boolean equalTo(PdfActionWriteSubmitForm other) {
         return url.equals(other.url)
                 && fields.equals(other.fields)
-                && flags.equals(other.flags)
+                && exclude.equals(other.exclude)
+                && includeNoValueFields.equals(other.includeNoValueFields)
+                && format.equals(other.format)
+                && method.equals(other.method)
+                && submitCoordinates.equals(other.submitCoordinates)
+                && includeAppendSaves.equals(other.includeAppendSaves)
+                && includeAnnotations.equals(other.includeAnnotations)
+                && canonicalFormat.equals(other.canonicalFormat)
+                && exclNonUserAnnots.equals(other.exclNonUserAnnots)
+                && exclFKey.equals(other.exclFKey)
+                && embedForm.equals(other.embedForm)
                 && next.equals(other.next);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.fields, this.flags, this.next);
+        return Objects.hash(
+                this.url,
+                this.fields,
+                this.exclude,
+                this.includeNoValueFields,
+                this.format,
+                this.method,
+                this.submitCoordinates,
+                this.includeAppendSaves,
+                this.includeAnnotations,
+                this.canonicalFormat,
+                this.exclNonUserAnnots,
+                this.exclFKey,
+                this.embedForm,
+                this.next);
     }
 
     @java.lang.Override
@@ -128,9 +242,49 @@ public final class PdfActionWriteSubmitForm {
 
         _FinalStage fields(Nullable<List<PdfActionTargetRef>> fields);
 
-        _FinalStage flags(Optional<Integer> flags);
+        _FinalStage exclude(Optional<Boolean> exclude);
 
-        _FinalStage flags(Integer flags);
+        _FinalStage exclude(Boolean exclude);
+
+        _FinalStage includeNoValueFields(Optional<Boolean> includeNoValueFields);
+
+        _FinalStage includeNoValueFields(Boolean includeNoValueFields);
+
+        _FinalStage format(Optional<PdfActionWriteSubmitFormFormat> format);
+
+        _FinalStage format(PdfActionWriteSubmitFormFormat format);
+
+        _FinalStage method(Optional<PdfActionWriteSubmitFormMethod> method);
+
+        _FinalStage method(PdfActionWriteSubmitFormMethod method);
+
+        _FinalStage submitCoordinates(Optional<Boolean> submitCoordinates);
+
+        _FinalStage submitCoordinates(Boolean submitCoordinates);
+
+        _FinalStage includeAppendSaves(Optional<Boolean> includeAppendSaves);
+
+        _FinalStage includeAppendSaves(Boolean includeAppendSaves);
+
+        _FinalStage includeAnnotations(Optional<Boolean> includeAnnotations);
+
+        _FinalStage includeAnnotations(Boolean includeAnnotations);
+
+        _FinalStage canonicalFormat(Optional<Boolean> canonicalFormat);
+
+        _FinalStage canonicalFormat(Boolean canonicalFormat);
+
+        _FinalStage exclNonUserAnnots(Optional<Boolean> exclNonUserAnnots);
+
+        _FinalStage exclNonUserAnnots(Boolean exclNonUserAnnots);
+
+        _FinalStage exclFKey(Optional<Boolean> exclFKey);
+
+        _FinalStage exclFKey(Boolean exclFKey);
+
+        _FinalStage embedForm(Optional<Boolean> embedForm);
+
+        _FinalStage embedForm(Boolean embedForm);
 
         _FinalStage next(Optional<List<Object>> next);
 
@@ -143,7 +297,27 @@ public final class PdfActionWriteSubmitForm {
 
         private Optional<List<Object>> next = Optional.empty();
 
-        private Optional<Integer> flags = Optional.empty();
+        private Optional<Boolean> embedForm = Optional.empty();
+
+        private Optional<Boolean> exclFKey = Optional.empty();
+
+        private Optional<Boolean> exclNonUserAnnots = Optional.empty();
+
+        private Optional<Boolean> canonicalFormat = Optional.empty();
+
+        private Optional<Boolean> includeAnnotations = Optional.empty();
+
+        private Optional<Boolean> includeAppendSaves = Optional.empty();
+
+        private Optional<Boolean> submitCoordinates = Optional.empty();
+
+        private Optional<PdfActionWriteSubmitFormMethod> method = Optional.empty();
+
+        private Optional<PdfActionWriteSubmitFormFormat> format = Optional.empty();
+
+        private Optional<Boolean> includeNoValueFields = Optional.empty();
+
+        private Optional<Boolean> exclude = Optional.empty();
 
         private Optional<List<PdfActionTargetRef>> fields = Optional.empty();
 
@@ -156,7 +330,17 @@ public final class PdfActionWriteSubmitForm {
         public Builder from(PdfActionWriteSubmitForm other) {
             url(other.getUrl());
             fields(other.getFields());
-            flags(other.getFlags());
+            exclude(other.getExclude());
+            includeNoValueFields(other.getIncludeNoValueFields());
+            format(other.getFormat());
+            method(other.getMethod());
+            submitCoordinates(other.getSubmitCoordinates());
+            includeAppendSaves(other.getIncludeAppendSaves());
+            includeAnnotations(other.getIncludeAnnotations());
+            canonicalFormat(other.getCanonicalFormat());
+            exclNonUserAnnots(other.getExclNonUserAnnots());
+            exclFKey(other.getExclFKey());
+            embedForm(other.getEmbedForm());
             next(other.getNext());
             return this;
         }
@@ -182,15 +366,145 @@ public final class PdfActionWriteSubmitForm {
         }
 
         @java.lang.Override
-        public _FinalStage flags(Integer flags) {
-            this.flags = Optional.ofNullable(flags);
+        public _FinalStage embedForm(Boolean embedForm) {
+            this.embedForm = Optional.ofNullable(embedForm);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "flags", nulls = Nulls.SKIP)
-        public _FinalStage flags(Optional<Integer> flags) {
-            this.flags = flags;
+        @JsonSetter(value = "embedForm", nulls = Nulls.SKIP)
+        public _FinalStage embedForm(Optional<Boolean> embedForm) {
+            this.embedForm = embedForm;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage exclFKey(Boolean exclFKey) {
+            this.exclFKey = Optional.ofNullable(exclFKey);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "exclFKey", nulls = Nulls.SKIP)
+        public _FinalStage exclFKey(Optional<Boolean> exclFKey) {
+            this.exclFKey = exclFKey;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage exclNonUserAnnots(Boolean exclNonUserAnnots) {
+            this.exclNonUserAnnots = Optional.ofNullable(exclNonUserAnnots);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "exclNonUserAnnots", nulls = Nulls.SKIP)
+        public _FinalStage exclNonUserAnnots(Optional<Boolean> exclNonUserAnnots) {
+            this.exclNonUserAnnots = exclNonUserAnnots;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage canonicalFormat(Boolean canonicalFormat) {
+            this.canonicalFormat = Optional.ofNullable(canonicalFormat);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "canonicalFormat", nulls = Nulls.SKIP)
+        public _FinalStage canonicalFormat(Optional<Boolean> canonicalFormat) {
+            this.canonicalFormat = canonicalFormat;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage includeAnnotations(Boolean includeAnnotations) {
+            this.includeAnnotations = Optional.ofNullable(includeAnnotations);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "includeAnnotations", nulls = Nulls.SKIP)
+        public _FinalStage includeAnnotations(Optional<Boolean> includeAnnotations) {
+            this.includeAnnotations = includeAnnotations;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage includeAppendSaves(Boolean includeAppendSaves) {
+            this.includeAppendSaves = Optional.ofNullable(includeAppendSaves);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "includeAppendSaves", nulls = Nulls.SKIP)
+        public _FinalStage includeAppendSaves(Optional<Boolean> includeAppendSaves) {
+            this.includeAppendSaves = includeAppendSaves;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage submitCoordinates(Boolean submitCoordinates) {
+            this.submitCoordinates = Optional.ofNullable(submitCoordinates);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "submitCoordinates", nulls = Nulls.SKIP)
+        public _FinalStage submitCoordinates(Optional<Boolean> submitCoordinates) {
+            this.submitCoordinates = submitCoordinates;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage method(PdfActionWriteSubmitFormMethod method) {
+            this.method = Optional.ofNullable(method);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "method", nulls = Nulls.SKIP)
+        public _FinalStage method(Optional<PdfActionWriteSubmitFormMethod> method) {
+            this.method = method;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage format(PdfActionWriteSubmitFormFormat format) {
+            this.format = Optional.ofNullable(format);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "format", nulls = Nulls.SKIP)
+        public _FinalStage format(Optional<PdfActionWriteSubmitFormFormat> format) {
+            this.format = format;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage includeNoValueFields(Boolean includeNoValueFields) {
+            this.includeNoValueFields = Optional.ofNullable(includeNoValueFields);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "includeNoValueFields", nulls = Nulls.SKIP)
+        public _FinalStage includeNoValueFields(Optional<Boolean> includeNoValueFields) {
+            this.includeNoValueFields = includeNoValueFields;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage exclude(Boolean exclude) {
+            this.exclude = Optional.ofNullable(exclude);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "exclude", nulls = Nulls.SKIP)
+        public _FinalStage exclude(Optional<Boolean> exclude) {
+            this.exclude = exclude;
             return this;
         }
 
@@ -221,7 +535,22 @@ public final class PdfActionWriteSubmitForm {
 
         @java.lang.Override
         public PdfActionWriteSubmitForm build() {
-            return new PdfActionWriteSubmitForm(url, fields, flags, next, additionalProperties);
+            return new PdfActionWriteSubmitForm(
+                    url,
+                    fields,
+                    exclude,
+                    includeNoValueFields,
+                    format,
+                    method,
+                    submitCoordinates,
+                    includeAppendSaves,
+                    includeAnnotations,
+                    canonicalFormat,
+                    exclNonUserAnnots,
+                    exclFKey,
+                    embedForm,
+                    next,
+                    additionalProperties);
         }
 
         @java.lang.Override

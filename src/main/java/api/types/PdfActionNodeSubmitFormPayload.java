@@ -29,7 +29,27 @@ public final class PdfActionNodeSubmitFormPayload {
 
     private final Optional<List<PdfActionTargetRef>> fields;
 
-    private final PdfActionNodeSubmitFormPayloadFlags flags;
+    private final boolean exclude;
+
+    private final boolean includeNoValueFields;
+
+    private final PdfActionNodeSubmitFormPayloadFormat format;
+
+    private final PdfActionNodeSubmitFormPayloadMethod method;
+
+    private final boolean submitCoordinates;
+
+    private final boolean includeAppendSaves;
+
+    private final boolean includeAnnotations;
+
+    private final boolean canonicalFormat;
+
+    private final boolean exclNonUserAnnots;
+
+    private final boolean exclFKey;
+
+    private final boolean embedForm;
 
     private final Optional<String> charSet;
 
@@ -38,12 +58,32 @@ public final class PdfActionNodeSubmitFormPayload {
     private PdfActionNodeSubmitFormPayload(
             String url,
             Optional<List<PdfActionTargetRef>> fields,
-            PdfActionNodeSubmitFormPayloadFlags flags,
+            boolean exclude,
+            boolean includeNoValueFields,
+            PdfActionNodeSubmitFormPayloadFormat format,
+            PdfActionNodeSubmitFormPayloadMethod method,
+            boolean submitCoordinates,
+            boolean includeAppendSaves,
+            boolean includeAnnotations,
+            boolean canonicalFormat,
+            boolean exclNonUserAnnots,
+            boolean exclFKey,
+            boolean embedForm,
             Optional<String> charSet,
             Map<String, Object> additionalProperties) {
         this.url = url;
         this.fields = fields;
-        this.flags = flags;
+        this.exclude = exclude;
+        this.includeNoValueFields = includeNoValueFields;
+        this.format = format;
+        this.method = method;
+        this.submitCoordinates = submitCoordinates;
+        this.includeAppendSaves = includeAppendSaves;
+        this.includeAnnotations = includeAnnotations;
+        this.canonicalFormat = canonicalFormat;
+        this.exclNonUserAnnots = exclNonUserAnnots;
+        this.exclFKey = exclFKey;
+        this.embedForm = embedForm;
         this.charSet = charSet;
         this.additionalProperties = additionalProperties;
     }
@@ -61,9 +101,59 @@ public final class PdfActionNodeSubmitFormPayload {
         return fields;
     }
 
-    @JsonProperty("flags")
-    public PdfActionNodeSubmitFormPayloadFlags getFlags() {
-        return flags;
+    @JsonProperty("exclude")
+    public boolean getExclude() {
+        return exclude;
+    }
+
+    @JsonProperty("includeNoValueFields")
+    public boolean getIncludeNoValueFields() {
+        return includeNoValueFields;
+    }
+
+    @JsonProperty("format")
+    public PdfActionNodeSubmitFormPayloadFormat getFormat() {
+        return format;
+    }
+
+    @JsonProperty("method")
+    public PdfActionNodeSubmitFormPayloadMethod getMethod() {
+        return method;
+    }
+
+    @JsonProperty("submitCoordinates")
+    public boolean getSubmitCoordinates() {
+        return submitCoordinates;
+    }
+
+    @JsonProperty("includeAppendSaves")
+    public boolean getIncludeAppendSaves() {
+        return includeAppendSaves;
+    }
+
+    @JsonProperty("includeAnnotations")
+    public boolean getIncludeAnnotations() {
+        return includeAnnotations;
+    }
+
+    @JsonProperty("canonicalFormat")
+    public boolean getCanonicalFormat() {
+        return canonicalFormat;
+    }
+
+    @JsonProperty("exclNonUserAnnots")
+    public boolean getExclNonUserAnnots() {
+        return exclNonUserAnnots;
+    }
+
+    @JsonProperty("exclFKey")
+    public boolean getExclFKey() {
+        return exclFKey;
+    }
+
+    @JsonProperty("embedForm")
+    public boolean getEmbedForm() {
+        return embedForm;
     }
 
     @JsonProperty("charSet")
@@ -91,13 +181,37 @@ public final class PdfActionNodeSubmitFormPayload {
     private boolean equalTo(PdfActionNodeSubmitFormPayload other) {
         return url.equals(other.url)
                 && fields.equals(other.fields)
-                && flags.equals(other.flags)
+                && exclude == other.exclude
+                && includeNoValueFields == other.includeNoValueFields
+                && format.equals(other.format)
+                && method.equals(other.method)
+                && submitCoordinates == other.submitCoordinates
+                && includeAppendSaves == other.includeAppendSaves
+                && includeAnnotations == other.includeAnnotations
+                && canonicalFormat == other.canonicalFormat
+                && exclNonUserAnnots == other.exclNonUserAnnots
+                && exclFKey == other.exclFKey
+                && embedForm == other.embedForm
                 && charSet.equals(other.charSet);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.fields, this.flags, this.charSet);
+        return Objects.hash(
+                this.url,
+                this.fields,
+                this.exclude,
+                this.includeNoValueFields,
+                this.format,
+                this.method,
+                this.submitCoordinates,
+                this.includeAppendSaves,
+                this.includeAnnotations,
+                this.canonicalFormat,
+                this.exclNonUserAnnots,
+                this.exclFKey,
+                this.embedForm,
+                this.charSet);
     }
 
     @java.lang.Override
@@ -110,13 +224,53 @@ public final class PdfActionNodeSubmitFormPayload {
     }
 
     public interface UrlStage {
-        FlagsStage url(@NotNull String url);
+        ExcludeStage url(@NotNull String url);
 
         Builder from(PdfActionNodeSubmitFormPayload other);
     }
 
-    public interface FlagsStage {
-        _FinalStage flags(@NotNull PdfActionNodeSubmitFormPayloadFlags flags);
+    public interface ExcludeStage {
+        IncludeNoValueFieldsStage exclude(boolean exclude);
+    }
+
+    public interface IncludeNoValueFieldsStage {
+        FormatStage includeNoValueFields(boolean includeNoValueFields);
+    }
+
+    public interface FormatStage {
+        MethodStage format(@NotNull PdfActionNodeSubmitFormPayloadFormat format);
+    }
+
+    public interface MethodStage {
+        SubmitCoordinatesStage method(@NotNull PdfActionNodeSubmitFormPayloadMethod method);
+    }
+
+    public interface SubmitCoordinatesStage {
+        IncludeAppendSavesStage submitCoordinates(boolean submitCoordinates);
+    }
+
+    public interface IncludeAppendSavesStage {
+        IncludeAnnotationsStage includeAppendSaves(boolean includeAppendSaves);
+    }
+
+    public interface IncludeAnnotationsStage {
+        CanonicalFormatStage includeAnnotations(boolean includeAnnotations);
+    }
+
+    public interface CanonicalFormatStage {
+        ExclNonUserAnnotsStage canonicalFormat(boolean canonicalFormat);
+    }
+
+    public interface ExclNonUserAnnotsStage {
+        ExclFKeyStage exclNonUserAnnots(boolean exclNonUserAnnots);
+    }
+
+    public interface ExclFKeyStage {
+        EmbedFormStage exclFKey(boolean exclFKey);
+    }
+
+    public interface EmbedFormStage {
+        _FinalStage embedForm(boolean embedForm);
     }
 
     public interface _FinalStage {
@@ -138,10 +292,43 @@ public final class PdfActionNodeSubmitFormPayload {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, FlagsStage, _FinalStage {
+    public static final class Builder
+            implements UrlStage,
+                    ExcludeStage,
+                    IncludeNoValueFieldsStage,
+                    FormatStage,
+                    MethodStage,
+                    SubmitCoordinatesStage,
+                    IncludeAppendSavesStage,
+                    IncludeAnnotationsStage,
+                    CanonicalFormatStage,
+                    ExclNonUserAnnotsStage,
+                    ExclFKeyStage,
+                    EmbedFormStage,
+                    _FinalStage {
         private String url;
 
-        private PdfActionNodeSubmitFormPayloadFlags flags;
+        private boolean exclude;
+
+        private boolean includeNoValueFields;
+
+        private PdfActionNodeSubmitFormPayloadFormat format;
+
+        private PdfActionNodeSubmitFormPayloadMethod method;
+
+        private boolean submitCoordinates;
+
+        private boolean includeAppendSaves;
+
+        private boolean includeAnnotations;
+
+        private boolean canonicalFormat;
+
+        private boolean exclNonUserAnnots;
+
+        private boolean exclFKey;
+
+        private boolean embedForm;
 
         private Optional<String> charSet = Optional.empty();
 
@@ -156,22 +343,102 @@ public final class PdfActionNodeSubmitFormPayload {
         public Builder from(PdfActionNodeSubmitFormPayload other) {
             url(other.getUrl());
             fields(other.getFields());
-            flags(other.getFlags());
+            exclude(other.getExclude());
+            includeNoValueFields(other.getIncludeNoValueFields());
+            format(other.getFormat());
+            method(other.getMethod());
+            submitCoordinates(other.getSubmitCoordinates());
+            includeAppendSaves(other.getIncludeAppendSaves());
+            includeAnnotations(other.getIncludeAnnotations());
+            canonicalFormat(other.getCanonicalFormat());
+            exclNonUserAnnots(other.getExclNonUserAnnots());
+            exclFKey(other.getExclFKey());
+            embedForm(other.getEmbedForm());
             charSet(other.getCharSet());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("url")
-        public FlagsStage url(@NotNull String url) {
+        public ExcludeStage url(@NotNull String url) {
             this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("flags")
-        public _FinalStage flags(@NotNull PdfActionNodeSubmitFormPayloadFlags flags) {
-            this.flags = Objects.requireNonNull(flags, "flags must not be null");
+        @JsonSetter("exclude")
+        public IncludeNoValueFieldsStage exclude(boolean exclude) {
+            this.exclude = exclude;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("includeNoValueFields")
+        public FormatStage includeNoValueFields(boolean includeNoValueFields) {
+            this.includeNoValueFields = includeNoValueFields;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("format")
+        public MethodStage format(@NotNull PdfActionNodeSubmitFormPayloadFormat format) {
+            this.format = Objects.requireNonNull(format, "format must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("method")
+        public SubmitCoordinatesStage method(@NotNull PdfActionNodeSubmitFormPayloadMethod method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("submitCoordinates")
+        public IncludeAppendSavesStage submitCoordinates(boolean submitCoordinates) {
+            this.submitCoordinates = submitCoordinates;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("includeAppendSaves")
+        public IncludeAnnotationsStage includeAppendSaves(boolean includeAppendSaves) {
+            this.includeAppendSaves = includeAppendSaves;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("includeAnnotations")
+        public CanonicalFormatStage includeAnnotations(boolean includeAnnotations) {
+            this.includeAnnotations = includeAnnotations;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("canonicalFormat")
+        public ExclNonUserAnnotsStage canonicalFormat(boolean canonicalFormat) {
+            this.canonicalFormat = canonicalFormat;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("exclNonUserAnnots")
+        public ExclFKeyStage exclNonUserAnnots(boolean exclNonUserAnnots) {
+            this.exclNonUserAnnots = exclNonUserAnnots;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("exclFKey")
+        public EmbedFormStage exclFKey(boolean exclFKey) {
+            this.exclFKey = exclFKey;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("embedForm")
+        public _FinalStage embedForm(boolean embedForm) {
+            this.embedForm = embedForm;
             return this;
         }
 
@@ -215,7 +482,22 @@ public final class PdfActionNodeSubmitFormPayload {
 
         @java.lang.Override
         public PdfActionNodeSubmitFormPayload build() {
-            return new PdfActionNodeSubmitFormPayload(url, fields, flags, charSet, additionalProperties);
+            return new PdfActionNodeSubmitFormPayload(
+                    url,
+                    fields,
+                    exclude,
+                    includeNoValueFields,
+                    format,
+                    method,
+                    submitCoordinates,
+                    includeAppendSaves,
+                    includeAnnotations,
+                    canonicalFormat,
+                    exclNonUserAnnots,
+                    exclFKey,
+                    embedForm,
+                    charSet,
+                    additionalProperties);
         }
 
         @java.lang.Override

@@ -34,7 +34,7 @@ public final class TokensIssueRequestUpload {
 
     private final Optional<List<String>> origins;
 
-    private final int expiresIn;
+    private final int expiresInSeconds;
 
     private final Map<String, Object> additionalProperties;
 
@@ -45,7 +45,7 @@ public final class TokensIssueRequestUpload {
             Optional<Integer> maxFiles,
             Optional<Integer> maxBytes,
             Optional<List<String>> origins,
-            int expiresIn,
+            int expiresInSeconds,
             Map<String, Object> additionalProperties) {
         this.sub = sub;
         this.folderId = folderId;
@@ -53,7 +53,7 @@ public final class TokensIssueRequestUpload {
         this.maxFiles = maxFiles;
         this.maxBytes = maxBytes;
         this.origins = origins;
-        this.expiresIn = expiresIn;
+        this.expiresInSeconds = expiresInSeconds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,9 +90,9 @@ public final class TokensIssueRequestUpload {
         return origins;
     }
 
-    @JsonProperty("expiresIn")
-    public int getExpiresIn() {
-        return expiresIn;
+    @JsonProperty("expiresInSeconds")
+    public int getExpiresInSeconds() {
+        return expiresInSeconds;
     }
 
     @java.lang.Override
@@ -113,13 +113,19 @@ public final class TokensIssueRequestUpload {
                 && maxFiles.equals(other.maxFiles)
                 && maxBytes.equals(other.maxBytes)
                 && origins.equals(other.origins)
-                && expiresIn == other.expiresIn;
+                && expiresInSeconds == other.expiresInSeconds;
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.sub, this.folderId, this.metadata, this.maxFiles, this.maxBytes, this.origins, this.expiresIn);
+                this.sub,
+                this.folderId,
+                this.metadata,
+                this.maxFiles,
+                this.maxBytes,
+                this.origins,
+                this.expiresInSeconds);
     }
 
     @java.lang.Override
@@ -132,13 +138,13 @@ public final class TokensIssueRequestUpload {
     }
 
     public interface SubStage {
-        ExpiresInStage sub(@NotNull String sub);
+        ExpiresInSecondsStage sub(@NotNull String sub);
 
         Builder from(TokensIssueRequestUpload other);
     }
 
-    public interface ExpiresInStage {
-        _FinalStage expiresIn(int expiresIn);
+    public interface ExpiresInSecondsStage {
+        _FinalStage expiresInSeconds(int expiresInSeconds);
     }
 
     public interface _FinalStage {
@@ -173,10 +179,10 @@ public final class TokensIssueRequestUpload {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements SubStage, ExpiresInStage, _FinalStage {
+    public static final class Builder implements SubStage, ExpiresInSecondsStage, _FinalStage {
         private String sub;
 
-        private int expiresIn;
+        private int expiresInSeconds;
 
         private Optional<List<String>> origins = Optional.empty();
 
@@ -201,21 +207,21 @@ public final class TokensIssueRequestUpload {
             maxFiles(other.getMaxFiles());
             maxBytes(other.getMaxBytes());
             origins(other.getOrigins());
-            expiresIn(other.getExpiresIn());
+            expiresInSeconds(other.getExpiresInSeconds());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("sub")
-        public ExpiresInStage sub(@NotNull String sub) {
+        public ExpiresInSecondsStage sub(@NotNull String sub) {
             this.sub = Objects.requireNonNull(sub, "sub must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("expiresIn")
-        public _FinalStage expiresIn(int expiresIn) {
-            this.expiresIn = expiresIn;
+        @JsonSetter("expiresInSeconds")
+        public _FinalStage expiresInSeconds(int expiresInSeconds) {
+            this.expiresInSeconds = expiresInSeconds;
             return this;
         }
 
@@ -294,7 +300,7 @@ public final class TokensIssueRequestUpload {
         @java.lang.Override
         public TokensIssueRequestUpload build() {
             return new TokensIssueRequestUpload(
-                    sub, folderId, metadata, maxFiles, maxBytes, origins, expiresIn, additionalProperties);
+                    sub, folderId, metadata, maxFiles, maxBytes, origins, expiresInSeconds, additionalProperties);
         }
 
         @java.lang.Override

@@ -113,7 +113,7 @@ public final class AnnotationPolygon {
 
     private final Optional<AnnotationPolygonIntent> intent;
 
-    private final Optional<AnnotationPolygonMeasure> measure;
+    private final Optional<PdfMeasurement> measure;
 
     private final Optional<Double> cloudyIntensity;
 
@@ -163,7 +163,7 @@ public final class AnnotationPolygon {
             Optional<Boolean> captionEnabled,
             Optional<AnnotationPolygonCaptionCenter> captionCenter,
             Optional<AnnotationPolygonIntent> intent,
-            Optional<AnnotationPolygonMeasure> measure,
+            Optional<PdfMeasurement> measure,
             Optional<Double> cloudyIntensity,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
@@ -501,8 +501,11 @@ public final class AnnotationPolygon {
         return intent;
     }
 
+    /**
+     * @return A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.
+     */
     @JsonIgnore
-    public Optional<AnnotationPolygonMeasure> getMeasure() {
+    public Optional<PdfMeasurement> getMeasure() {
         if (measure == null) {
             return Optional.empty();
         }
@@ -663,7 +666,7 @@ public final class AnnotationPolygon {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("measure")
-    private Optional<AnnotationPolygonMeasure> _getMeasure() {
+    private Optional<PdfMeasurement> _getMeasure() {
         return measure;
     }
 
@@ -1022,11 +1025,14 @@ public final class AnnotationPolygon {
 
         _FinalStage intent(Nullable<AnnotationPolygonIntent> intent);
 
-        _FinalStage measure(Optional<AnnotationPolygonMeasure> measure);
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         */
+        _FinalStage measure(Optional<PdfMeasurement> measure);
 
-        _FinalStage measure(AnnotationPolygonMeasure measure);
+        _FinalStage measure(PdfMeasurement measure);
 
-        _FinalStage measure(Nullable<AnnotationPolygonMeasure> measure);
+        _FinalStage measure(Nullable<PdfMeasurement> measure);
 
         _FinalStage cloudyIntensity(Optional<Double> cloudyIntensity);
 
@@ -1094,7 +1100,7 @@ public final class AnnotationPolygon {
 
         private Optional<Double> cloudyIntensity = Optional.empty();
 
-        private Optional<AnnotationPolygonMeasure> measure = Optional.empty();
+        private Optional<PdfMeasurement> measure = Optional.empty();
 
         private Optional<AnnotationPolygonIntent> intent = Optional.empty();
 
@@ -1352,8 +1358,12 @@ public final class AnnotationPolygon {
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage measure(Nullable<AnnotationPolygonMeasure> measure) {
+        public _FinalStage measure(Nullable<PdfMeasurement> measure) {
             if (measure.isNull()) {
                 this.measure = null;
             } else if (measure.isEmpty()) {
@@ -1364,15 +1374,22 @@ public final class AnnotationPolygon {
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage measure(AnnotationPolygonMeasure measure) {
+        public _FinalStage measure(PdfMeasurement measure) {
             this.measure = Optional.ofNullable(measure);
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "measure", nulls = Nulls.SKIP)
-        public _FinalStage measure(Optional<AnnotationPolygonMeasure> measure) {
+        public _FinalStage measure(Optional<PdfMeasurement> measure) {
             this.measure = measure;
             return this;
         }

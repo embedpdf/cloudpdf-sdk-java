@@ -15,6 +15,7 @@ import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.fonts.requests.ListFontsRequest;
 import com.cloudpdf.api.resources.doc.fonts.requests.ResolveFontsRequest;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.cloudpdf.api.types.FontList;
 import com.cloudpdf.api.types.FontResolution;
 import com.cloudpdf.api.types.FontResolveRequest;
@@ -94,7 +95,7 @@ public class RawFontsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -182,10 +183,10 @@ public class RawFontsClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

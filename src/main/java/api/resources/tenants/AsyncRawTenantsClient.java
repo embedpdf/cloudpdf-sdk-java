@@ -22,11 +22,12 @@ import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
-import com.cloudpdf.api.types.TenantsCreate200Response;
-import com.cloudpdf.api.types.TenantsGet200Response;
-import com.cloudpdf.api.types.TenantsList200Response;
-import com.cloudpdf.api.types.TenantsUpdate200Response;
-import com.cloudpdf.api.types.TenantsUsage200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.TenantsCreateResponse;
+import com.cloudpdf.api.types.TenantsGetResponse;
+import com.cloudpdf.api.types.TenantsListResponse;
+import com.cloudpdf.api.types.TenantsUpdateResponse;
+import com.cloudpdf.api.types.TenantsUsageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -48,19 +49,19 @@ public class AsyncRawTenantsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsList200Response>> list() {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsListResponse>> list() {
         return list(ListTenantsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsList200Response>> list(RequestOptions requestOptions) {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsListResponse>> list(RequestOptions requestOptions) {
         return list(ListTenantsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsList200Response>> list(ListTenantsRequest request) {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsListResponse>> list(ListTenantsRequest request) {
         return list(request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsListResponse>> list(
             ListTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -97,7 +98,7 @@ public class AsyncRawTenantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TenantsList200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TenantsListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -105,14 +106,15 @@ public class AsyncRawTenantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsList200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsListResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 400) {
                             future.completeExceptionally(new BadRequestError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -138,12 +140,11 @@ public class AsyncRawTenantsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsCreate200Response>> create(
-            TenantsCreateRequest request) {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsCreateResponse>> create(TenantsCreateRequest request) {
         return create(request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsCreateResponse>> create(
             TenantsCreateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -180,7 +181,7 @@ public class AsyncRawTenantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TenantsCreate200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TenantsCreateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -188,14 +189,15 @@ public class AsyncRawTenantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsCreate200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsCreateResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 400) {
                             future.completeExceptionally(new BadRequestError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -221,21 +223,21 @@ public class AsyncRawTenantsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGet200Response>> get(String tenantId) {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGetResponse>> get(String tenantId) {
         return get(tenantId, GetTenantsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGetResponse>> get(
             String tenantId, RequestOptions requestOptions) {
         return get(tenantId, GetTenantsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGetResponse>> get(
             String tenantId, GetTenantsRequest request) {
         return get(tenantId, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsGetResponse>> get(
             String tenantId, GetTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -265,7 +267,7 @@ public class AsyncRawTenantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TenantsGet200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TenantsGetResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -273,14 +275,15 @@ public class AsyncRawTenantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsGet200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsGetResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -373,7 +376,8 @@ public class AsyncRawTenantsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -402,7 +406,7 @@ public class AsyncRawTenantsClient {
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdateResponse>> update(
             String tenantId, TenantsUpdateRequest request) {
         return update(tenantId, request, null);
     }
@@ -410,7 +414,7 @@ public class AsyncRawTenantsClient {
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdateResponse>> update(
             String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -448,7 +452,7 @@ public class AsyncRawTenantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdate200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TenantsUpdateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -456,7 +460,7 @@ public class AsyncRawTenantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUpdate200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUpdateResponse.class),
                                 response));
                         return;
                     }
@@ -464,12 +468,12 @@ public class AsyncRawTenantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -552,7 +556,8 @@ public class AsyncRawTenantsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -654,7 +659,8 @@ public class AsyncRawTenantsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -683,14 +689,14 @@ public class AsyncRawTenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsage200Response>> usage(String tenantId) {
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsageResponse>> usage(String tenantId) {
         return usage(tenantId, UsageTenantsRequest.builder().build());
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsage200Response>> usage(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsageResponse>> usage(
             String tenantId, RequestOptions requestOptions) {
         return usage(tenantId, UsageTenantsRequest.builder().build(), requestOptions);
     }
@@ -698,7 +704,7 @@ public class AsyncRawTenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsage200Response>> usage(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsageResponse>> usage(
             String tenantId, UsageTenantsRequest request) {
         return usage(tenantId, request, null);
     }
@@ -706,7 +712,7 @@ public class AsyncRawTenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsage200Response>> usage(
+    public CompletableFuture<CloudPDFClientHttpResponse<TenantsUsageResponse>> usage(
             String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -748,7 +754,7 @@ public class AsyncRawTenantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TenantsUsage200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TenantsUsageResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -756,7 +762,7 @@ public class AsyncRawTenantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUsage200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUsageResponse.class),
                                 response));
                         return;
                     }
@@ -764,12 +770,12 @@ public class AsyncRawTenantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

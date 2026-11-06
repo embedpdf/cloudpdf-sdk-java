@@ -4,21 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
-import com.cloudpdf.api.types.AdminErrorPayload;
+import com.cloudpdf.api.types.ErrorResponse;
 import okhttp3.Response;
 
 public final class GoneError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final AdminErrorPayload body;
+    private final ErrorResponse body;
 
-    public GoneError(AdminErrorPayload body) {
+    public GoneError(ErrorResponse body) {
         super("GoneError", 410, body);
         this.body = body;
     }
 
-    public GoneError(AdminErrorPayload body, Response rawResponse) {
+    public GoneError(ErrorResponse body, Response rawResponse) {
         super("GoneError", 410, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +27,7 @@ public final class GoneError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public AdminErrorPayload body() {
+    public ErrorResponse body() {
         return this.body;
     }
 }

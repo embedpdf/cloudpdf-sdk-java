@@ -11,10 +11,10 @@ import com.cloudpdf.api.resources.folders.requests.FoldersMoveIntoRequest;
 import com.cloudpdf.api.resources.folders.requests.FoldersUpdateRequest;
 import com.cloudpdf.api.resources.folders.requests.GetFoldersRequest;
 import com.cloudpdf.api.resources.folders.requests.ListFoldersRequest;
-import com.cloudpdf.api.types.FoldersCreate200Response;
-import com.cloudpdf.api.types.FoldersGet200Response;
-import com.cloudpdf.api.types.FoldersList200Response;
-import com.cloudpdf.api.types.FoldersUpdate200Response;
+import com.cloudpdf.api.types.FoldersCreateResponse;
+import com.cloudpdf.api.types.FoldersGetResponse;
+import com.cloudpdf.api.types.FoldersListResponse;
+import com.cloudpdf.api.types.FoldersUpdateResponse;
 
 public class FoldersClient {
     protected final ClientOptions clientOptions;
@@ -33,50 +33,49 @@ public class FoldersClient {
         return this.rawClient;
     }
 
-    public FoldersList200Response list(String tenantId) {
+    public FoldersListResponse list(String tenantId) {
         return this.rawClient.list(tenantId).body();
     }
 
-    public FoldersList200Response list(String tenantId, RequestOptions requestOptions) {
+    public FoldersListResponse list(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, requestOptions).body();
     }
 
-    public FoldersList200Response list(String tenantId, ListFoldersRequest request) {
+    public FoldersListResponse list(String tenantId, ListFoldersRequest request) {
         return this.rawClient.list(tenantId, request).body();
     }
 
-    public FoldersList200Response list(String tenantId, ListFoldersRequest request, RequestOptions requestOptions) {
+    public FoldersListResponse list(String tenantId, ListFoldersRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, request, requestOptions).body();
     }
 
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public FoldersCreate200Response create(String tenantId, FoldersCreateRequest request) {
+    public FoldersCreateResponse create(String tenantId, FoldersCreateRequest request) {
         return this.rawClient.create(tenantId, request).body();
     }
 
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public FoldersCreate200Response create(
-            String tenantId, FoldersCreateRequest request, RequestOptions requestOptions) {
+    public FoldersCreateResponse create(String tenantId, FoldersCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(tenantId, request, requestOptions).body();
     }
 
-    public FoldersGet200Response get(String tenantId, String folderId) {
+    public FoldersGetResponse get(String tenantId, String folderId) {
         return this.rawClient.get(tenantId, folderId).body();
     }
 
-    public FoldersGet200Response get(String tenantId, String folderId, RequestOptions requestOptions) {
+    public FoldersGetResponse get(String tenantId, String folderId, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, folderId, requestOptions).body();
     }
 
-    public FoldersGet200Response get(String tenantId, String folderId, GetFoldersRequest request) {
+    public FoldersGetResponse get(String tenantId, String folderId, GetFoldersRequest request) {
         return this.rawClient.get(tenantId, folderId, request).body();
     }
 
-    public FoldersGet200Response get(
+    public FoldersGetResponse get(
             String tenantId, String folderId, GetFoldersRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, folderId, request, requestOptions).body();
     }
@@ -112,14 +111,14 @@ public class FoldersClient {
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public FoldersUpdate200Response update(String tenantId, String folderId, FoldersUpdateRequest request) {
+    public FoldersUpdateResponse update(String tenantId, String folderId, FoldersUpdateRequest request) {
         return this.rawClient.update(tenantId, folderId, request).body();
     }
 
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public FoldersUpdate200Response update(
+    public FoldersUpdateResponse update(
             String tenantId, String folderId, FoldersUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .update(tenantId, folderId, request, requestOptions)
@@ -127,28 +126,28 @@ public class FoldersClient {
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public void moveInto(String tenantId, String folderId) {
         this.rawClient.moveInto(tenantId, folderId).body();
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public void moveInto(String tenantId, String folderId, RequestOptions requestOptions) {
         this.rawClient.moveInto(tenantId, folderId, requestOptions).body();
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public void moveInto(String tenantId, String folderId, FoldersMoveIntoRequest request) {
         this.rawClient.moveInto(tenantId, folderId, request).body();
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public void moveInto(
             String tenantId, String folderId, FoldersMoveIntoRequest request, RequestOptions requestOptions) {

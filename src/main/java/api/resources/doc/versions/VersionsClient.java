@@ -13,9 +13,9 @@ import com.cloudpdf.api.resources.doc.versions.requests.SignatureContentsVersion
 import com.cloudpdf.api.resources.doc.versions.requests.SignatureDigestVersionsRequest;
 import com.cloudpdf.api.resources.doc.versions.requests.SignaturesVersionsRequest;
 import com.cloudpdf.api.resources.doc.versions.types.SignatureDigestVersionsRequestAlgorithm;
-import com.cloudpdf.api.types.DocVersionsAnalysis200Response;
-import com.cloudpdf.api.types.DocVersionsList200Response;
-import com.cloudpdf.api.types.DocVersionsSignatures200Response;
+import com.cloudpdf.api.types.DocVersionsAnalysisResponse;
+import com.cloudpdf.api.types.DocVersionsListResponse;
+import com.cloudpdf.api.types.DocVersionsSignaturesResponse;
 import java.io.InputStream;
 
 public class VersionsClient {
@@ -38,28 +38,28 @@ public class VersionsClient {
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, String layerName) {
+    public DocVersionsListResponse list(String docId, String layerName) {
         return this.rawClient.list(docId, layerName).body();
     }
 
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, String layerName, RequestOptions requestOptions) {
+    public DocVersionsListResponse list(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.list(docId, layerName, requestOptions).body();
     }
 
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(String docId, String layerName, ListVersionsRequest request) {
+    public DocVersionsListResponse list(String docId, String layerName, ListVersionsRequest request) {
         return this.rawClient.list(docId, layerName, request).body();
     }
 
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public DocVersionsList200Response list(
+    public DocVersionsListResponse list(
             String docId, String layerName, ListVersionsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(docId, layerName, request, requestOptions).body();
     }
@@ -67,129 +67,124 @@ public class VersionsClient {
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public DocVersionsAnalysis200Response analysis(String docId, String layerName, String sha) {
-        return this.rawClient.analysis(docId, layerName, sha).body();
+    public DocVersionsAnalysisResponse analysis(String docId, String layerName, String sha256) {
+        return this.rawClient.analysis(docId, layerName, sha256).body();
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public DocVersionsAnalysis200Response analysis(
-            String docId, String layerName, String sha, RequestOptions requestOptions) {
-        return this.rawClient.analysis(docId, layerName, sha, requestOptions).body();
+    public DocVersionsAnalysisResponse analysis(
+            String docId, String layerName, String sha256, RequestOptions requestOptions) {
+        return this.rawClient.analysis(docId, layerName, sha256, requestOptions).body();
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public DocVersionsAnalysis200Response analysis(
-            String docId, String layerName, String sha, AnalysisVersionsRequest request) {
-        return this.rawClient.analysis(docId, layerName, sha, request).body();
+    public DocVersionsAnalysisResponse analysis(
+            String docId, String layerName, String sha256, AnalysisVersionsRequest request) {
+        return this.rawClient.analysis(docId, layerName, sha256, request).body();
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public DocVersionsAnalysis200Response analysis(
+    public DocVersionsAnalysisResponse analysis(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             AnalysisVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .analysis(docId, layerName, sha, request, requestOptions)
+                .analysis(docId, layerName, sha256, request, requestOptions)
                 .body();
     }
 
-    public InputStream download(String docId, String layerName, String sha) {
-        return this.rawClient.download(docId, layerName, sha).body();
+    public InputStream download(String docId, String layerName, String sha256) {
+        return this.rawClient.download(docId, layerName, sha256).body();
     }
 
-    public InputStream download(String docId, String layerName, String sha, RequestOptions requestOptions) {
-        return this.rawClient.download(docId, layerName, sha, requestOptions).body();
+    public InputStream download(String docId, String layerName, String sha256, RequestOptions requestOptions) {
+        return this.rawClient.download(docId, layerName, sha256, requestOptions).body();
     }
 
-    public InputStream download(String docId, String layerName, String sha, DownloadVersionsRequest request) {
-        return this.rawClient.download(docId, layerName, sha, request).body();
+    public InputStream download(String docId, String layerName, String sha256, DownloadVersionsRequest request) {
+        return this.rawClient.download(docId, layerName, sha256, request).body();
     }
 
     public InputStream download(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             DownloadVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .download(docId, layerName, sha, request, requestOptions)
+                .download(docId, layerName, sha256, request, requestOptions)
                 .body();
     }
 
-    public InputStream revision(String docId, String layerName, String sha, int index) {
-        return this.rawClient.revision(docId, layerName, sha, index).body();
+    public InputStream revision(String docId, String layerName, String sha256, int index) {
+        return this.rawClient.revision(docId, layerName, sha256, index).body();
     }
 
-    public InputStream revision(String docId, String layerName, String sha, int index, RequestOptions requestOptions) {
+    public InputStream revision(
+            String docId, String layerName, String sha256, int index, RequestOptions requestOptions) {
         return this.rawClient
-                .revision(docId, layerName, sha, index, requestOptions)
+                .revision(docId, layerName, sha256, index, requestOptions)
                 .body();
     }
 
     public InputStream revision(
-            String docId, String layerName, String sha, int index, RevisionVersionsRequest request) {
-        return this.rawClient.revision(docId, layerName, sha, index, request).body();
+            String docId, String layerName, String sha256, int index, RevisionVersionsRequest request) {
+        return this.rawClient.revision(docId, layerName, sha256, index, request).body();
     }
 
     public InputStream revision(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             int index,
             RevisionVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .revision(docId, layerName, sha, index, request, requestOptions)
+                .revision(docId, layerName, sha256, index, request, requestOptions)
                 .body();
     }
 
-    public DocVersionsSignatures200Response signatures(String docId, String layerName, String sha) {
-        return this.rawClient.signatures(docId, layerName, sha).body();
+    public DocVersionsSignaturesResponse signatures(String docId, String layerName, String sha256) {
+        return this.rawClient.signatures(docId, layerName, sha256).body();
     }
 
-    public DocVersionsSignatures200Response signatures(
-            String docId, String layerName, String sha, RequestOptions requestOptions) {
-        return this.rawClient.signatures(docId, layerName, sha, requestOptions).body();
+    public DocVersionsSignaturesResponse signatures(
+            String docId, String layerName, String sha256, RequestOptions requestOptions) {
+        return this.rawClient
+                .signatures(docId, layerName, sha256, requestOptions)
+                .body();
     }
 
-    public DocVersionsSignatures200Response signatures(
-            String docId, String layerName, String sha, SignaturesVersionsRequest request) {
-        return this.rawClient.signatures(docId, layerName, sha, request).body();
+    public DocVersionsSignaturesResponse signatures(
+            String docId, String layerName, String sha256, SignaturesVersionsRequest request) {
+        return this.rawClient.signatures(docId, layerName, sha256, request).body();
     }
 
-    public DocVersionsSignatures200Response signatures(
+    public DocVersionsSignaturesResponse signatures(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             SignaturesVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatures(docId, layerName, sha, request, requestOptions)
+                .signatures(docId, layerName, sha256, request, requestOptions)
                 .body();
     }
 
     /**
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
-    public InputStream signatureContents(String docId, String layerName, String sha, String fieldKey) {
-        return this.rawClient.signatureContents(docId, layerName, sha, fieldKey).body();
-    }
-
-    /**
-     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
-     */
-    public InputStream signatureContents(
-            String docId, String layerName, String sha, String fieldKey, RequestOptions requestOptions) {
+    public InputStream signatureContents(String docId, String layerName, String sha256, String fieldKey) {
         return this.rawClient
-                .signatureContents(docId, layerName, sha, fieldKey, requestOptions)
+                .signatureContents(docId, layerName, sha256, fieldKey)
                 .body();
     }
 
@@ -197,9 +192,19 @@ public class VersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public InputStream signatureContents(
-            String docId, String layerName, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
+            String docId, String layerName, String sha256, String fieldKey, RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, layerName, sha, fieldKey, request)
+                .signatureContents(docId, layerName, sha256, fieldKey, requestOptions)
+                .body();
+    }
+
+    /**
+     * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
+     */
+    public InputStream signatureContents(
+            String docId, String layerName, String sha256, String fieldKey, SignatureContentsVersionsRequest request) {
+        return this.rawClient
+                .signatureContents(docId, layerName, sha256, fieldKey, request)
                 .body();
     }
 
@@ -209,12 +214,12 @@ public class VersionsClient {
     public InputStream signatureContents(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureContentsVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureContents(docId, layerName, sha, fieldKey, request, requestOptions)
+                .signatureContents(docId, layerName, sha256, fieldKey, request, requestOptions)
                 .body();
     }
 
@@ -224,11 +229,11 @@ public class VersionsClient {
     public InputStream signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm) {
         return this.rawClient
-                .signatureDigest(docId, layerName, sha, fieldKey, algorithm)
+                .signatureDigest(docId, layerName, sha256, fieldKey, algorithm)
                 .body();
     }
 
@@ -238,12 +243,12 @@ public class VersionsClient {
     public InputStream signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, requestOptions)
+                .signatureDigest(docId, layerName, sha256, fieldKey, algorithm, requestOptions)
                 .body();
     }
 
@@ -253,12 +258,12 @@ public class VersionsClient {
     public InputStream signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request) {
         return this.rawClient
-                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request)
+                .signatureDigest(docId, layerName, sha256, fieldKey, algorithm, request)
                 .body();
     }
 
@@ -268,13 +273,13 @@ public class VersionsClient {
     public InputStream signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .signatureDigest(docId, layerName, sha, fieldKey, algorithm, request, requestOptions)
+                .signatureDigest(docId, layerName, sha256, fieldKey, algorithm, request, requestOptions)
                 .body();
     }
 }

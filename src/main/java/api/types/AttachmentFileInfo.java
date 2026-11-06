@@ -31,9 +31,9 @@ public final class AttachmentFileInfo {
 
     private final Optional<String> description;
 
-    private final Optional<Integer> size;
+    private final Optional<Integer> sizeBytes;
 
-    private final Optional<String> checksum;
+    private final Optional<String> md5;
 
     private final Optional<OffsetDateTime> createdAt;
 
@@ -45,16 +45,16 @@ public final class AttachmentFileInfo {
             String name,
             Optional<String> mimeType,
             Optional<String> description,
-            Optional<Integer> size,
-            Optional<String> checksum,
+            Optional<Integer> sizeBytes,
+            Optional<String> md5,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> modifiedAt,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.mimeType = mimeType;
         this.description = description;
-        this.size = size;
-        this.checksum = checksum;
+        this.sizeBytes = sizeBytes;
+        this.md5 = md5;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.additionalProperties = additionalProperties;
@@ -82,19 +82,19 @@ public final class AttachmentFileInfo {
     }
 
     @JsonIgnore
-    public Optional<Integer> getSize() {
-        if (size == null) {
+    public Optional<Integer> getSizeBytes() {
+        if (sizeBytes == null) {
             return Optional.empty();
         }
-        return size;
+        return sizeBytes;
     }
 
     @JsonIgnore
-    public Optional<String> getChecksum() {
-        if (checksum == null) {
+    public Optional<String> getMd5() {
+        if (md5 == null) {
             return Optional.empty();
         }
-        return checksum;
+        return md5;
     }
 
     @JsonIgnore
@@ -126,15 +126,15 @@ public final class AttachmentFileInfo {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("size")
-    private Optional<Integer> _getSize() {
-        return size;
+    @JsonProperty("sizeBytes")
+    private Optional<Integer> _getSizeBytes() {
+        return sizeBytes;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("checksum")
-    private Optional<String> _getChecksum() {
-        return checksum;
+    @JsonProperty("md5")
+    private Optional<String> _getMd5() {
+        return md5;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -164,8 +164,8 @@ public final class AttachmentFileInfo {
         return name.equals(other.name)
                 && mimeType.equals(other.mimeType)
                 && description.equals(other.description)
-                && size.equals(other.size)
-                && checksum.equals(other.checksum)
+                && sizeBytes.equals(other.sizeBytes)
+                && md5.equals(other.md5)
                 && createdAt.equals(other.createdAt)
                 && modifiedAt.equals(other.modifiedAt);
     }
@@ -173,7 +173,7 @@ public final class AttachmentFileInfo {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.name, this.mimeType, this.description, this.size, this.checksum, this.createdAt, this.modifiedAt);
+                this.name, this.mimeType, this.description, this.sizeBytes, this.md5, this.createdAt, this.modifiedAt);
     }
 
     @java.lang.Override
@@ -210,17 +210,17 @@ public final class AttachmentFileInfo {
 
         _FinalStage description(Nullable<String> description);
 
-        _FinalStage size(Optional<Integer> size);
+        _FinalStage sizeBytes(Optional<Integer> sizeBytes);
 
-        _FinalStage size(Integer size);
+        _FinalStage sizeBytes(Integer sizeBytes);
 
-        _FinalStage size(Nullable<Integer> size);
+        _FinalStage sizeBytes(Nullable<Integer> sizeBytes);
 
-        _FinalStage checksum(Optional<String> checksum);
+        _FinalStage md5(Optional<String> md5);
 
-        _FinalStage checksum(String checksum);
+        _FinalStage md5(String md5);
 
-        _FinalStage checksum(Nullable<String> checksum);
+        _FinalStage md5(Nullable<String> md5);
 
         _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
 
@@ -243,9 +243,9 @@ public final class AttachmentFileInfo {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
-        private Optional<String> checksum = Optional.empty();
+        private Optional<String> md5 = Optional.empty();
 
-        private Optional<Integer> size = Optional.empty();
+        private Optional<Integer> sizeBytes = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -261,8 +261,8 @@ public final class AttachmentFileInfo {
             name(other.getName());
             mimeType(other.getMimeType());
             description(other.getDescription());
-            size(other.getSize());
-            checksum(other.getChecksum());
+            sizeBytes(other.getSizeBytes());
+            md5(other.getMd5());
             createdAt(other.getCreatedAt());
             modifiedAt(other.getModifiedAt());
             return this;
@@ -326,52 +326,52 @@ public final class AttachmentFileInfo {
         }
 
         @java.lang.Override
-        public _FinalStage checksum(Nullable<String> checksum) {
-            if (checksum.isNull()) {
-                this.checksum = null;
-            } else if (checksum.isEmpty()) {
-                this.checksum = Optional.empty();
+        public _FinalStage md5(Nullable<String> md5) {
+            if (md5.isNull()) {
+                this.md5 = null;
+            } else if (md5.isEmpty()) {
+                this.md5 = Optional.empty();
             } else {
-                this.checksum = Optional.of(checksum.get());
+                this.md5 = Optional.of(md5.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage checksum(String checksum) {
-            this.checksum = Optional.ofNullable(checksum);
+        public _FinalStage md5(String md5) {
+            this.md5 = Optional.ofNullable(md5);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "checksum", nulls = Nulls.SKIP)
-        public _FinalStage checksum(Optional<String> checksum) {
-            this.checksum = checksum;
+        @JsonSetter(value = "md5", nulls = Nulls.SKIP)
+        public _FinalStage md5(Optional<String> md5) {
+            this.md5 = md5;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage size(Nullable<Integer> size) {
-            if (size.isNull()) {
-                this.size = null;
-            } else if (size.isEmpty()) {
-                this.size = Optional.empty();
+        public _FinalStage sizeBytes(Nullable<Integer> sizeBytes) {
+            if (sizeBytes.isNull()) {
+                this.sizeBytes = null;
+            } else if (sizeBytes.isEmpty()) {
+                this.sizeBytes = Optional.empty();
             } else {
-                this.size = Optional.of(size.get());
+                this.sizeBytes = Optional.of(sizeBytes.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage size(Integer size) {
-            this.size = Optional.ofNullable(size);
+        public _FinalStage sizeBytes(Integer sizeBytes) {
+            this.sizeBytes = Optional.ofNullable(sizeBytes);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "size", nulls = Nulls.SKIP)
-        public _FinalStage size(Optional<Integer> size) {
-            this.size = size;
+        @JsonSetter(value = "sizeBytes", nulls = Nulls.SKIP)
+        public _FinalStage sizeBytes(Optional<Integer> sizeBytes) {
+            this.sizeBytes = sizeBytes;
             return this;
         }
 
@@ -428,7 +428,7 @@ public final class AttachmentFileInfo {
         @java.lang.Override
         public AttachmentFileInfo build() {
             return new AttachmentFileInfo(
-                    name, mimeType, description, size, checksum, createdAt, modifiedAt, additionalProperties);
+                    name, mimeType, description, sizeBytes, md5, createdAt, modifiedAt, additionalProperties);
         }
 
         @java.lang.Override

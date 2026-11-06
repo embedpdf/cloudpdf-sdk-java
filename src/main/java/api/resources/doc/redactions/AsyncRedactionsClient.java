@@ -6,7 +6,7 @@ package com.cloudpdf.api.resources.doc.redactions;
 import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
-import com.cloudpdf.api.types.DocRedactionsApply200Response;
+import com.cloudpdf.api.types.DocRedactionsApplyResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncRedactionsClient {
@@ -26,21 +26,21 @@ public class AsyncRedactionsClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocRedactionsApply200Response> apply(String docId, String layerName) {
+    public CompletableFuture<DocRedactionsApplyResponse> apply(String docId, String layerName) {
         return this.rawClient.apply(docId, layerName).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocRedactionsApply200Response> apply(
+    public CompletableFuture<DocRedactionsApplyResponse> apply(
             String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.apply(docId, layerName, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocRedactionsApply200Response> apply(
+    public CompletableFuture<DocRedactionsApplyResponse> apply(
             String docId, String layerName, DocRedactionsApplyRequest request) {
         return this.rawClient.apply(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocRedactionsApply200Response> apply(
+    public CompletableFuture<DocRedactionsApplyResponse> apply(
             String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         return this.rawClient.apply(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }

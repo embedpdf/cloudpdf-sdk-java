@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,14 +23,14 @@ import java.util.Optional;
 public final class TokensRevokeRequest {
     private final Optional<String> reason;
 
-    private final Optional<Integer> expiresAtSeconds;
+    private final Optional<OffsetDateTime> expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
     private TokensRevokeRequest(
-            Optional<String> reason, Optional<Integer> expiresAtSeconds, Map<String, Object> additionalProperties) {
+            Optional<String> reason, Optional<OffsetDateTime> expiresAt, Map<String, Object> additionalProperties) {
         this.reason = reason;
-        this.expiresAtSeconds = expiresAtSeconds;
+        this.expiresAt = expiresAt;
         this.additionalProperties = additionalProperties;
     }
 
@@ -38,9 +39,9 @@ public final class TokensRevokeRequest {
         return reason;
     }
 
-    @JsonProperty("expiresAtSeconds")
-    public Optional<Integer> getExpiresAtSeconds() {
-        return expiresAtSeconds;
+    @JsonProperty("expiresAt")
+    public Optional<OffsetDateTime> getExpiresAt() {
+        return expiresAt;
     }
 
     @java.lang.Override
@@ -55,12 +56,12 @@ public final class TokensRevokeRequest {
     }
 
     private boolean equalTo(TokensRevokeRequest other) {
-        return reason.equals(other.reason) && expiresAtSeconds.equals(other.expiresAtSeconds);
+        return reason.equals(other.reason) && expiresAt.equals(other.expiresAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.reason, this.expiresAtSeconds);
+        return Objects.hash(this.reason, this.expiresAt);
     }
 
     @java.lang.Override
@@ -76,7 +77,7 @@ public final class TokensRevokeRequest {
     public static final class Builder {
         private Optional<String> reason = Optional.empty();
 
-        private Optional<Integer> expiresAtSeconds = Optional.empty();
+        private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -85,7 +86,7 @@ public final class TokensRevokeRequest {
 
         public Builder from(TokensRevokeRequest other) {
             reason(other.getReason());
-            expiresAtSeconds(other.getExpiresAtSeconds());
+            expiresAt(other.getExpiresAt());
             return this;
         }
 
@@ -100,19 +101,19 @@ public final class TokensRevokeRequest {
             return this;
         }
 
-        @JsonSetter(value = "expiresAtSeconds", nulls = Nulls.SKIP)
-        public Builder expiresAtSeconds(Optional<Integer> expiresAtSeconds) {
-            this.expiresAtSeconds = expiresAtSeconds;
+        @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
+        public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
+            this.expiresAt = expiresAt;
             return this;
         }
 
-        public Builder expiresAtSeconds(Integer expiresAtSeconds) {
-            this.expiresAtSeconds = Optional.ofNullable(expiresAtSeconds);
+        public Builder expiresAt(OffsetDateTime expiresAt) {
+            this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
         public TokensRevokeRequest build() {
-            return new TokensRevokeRequest(reason, expiresAtSeconds, additionalProperties);
+            return new TokensRevokeRequest(reason, expiresAt, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

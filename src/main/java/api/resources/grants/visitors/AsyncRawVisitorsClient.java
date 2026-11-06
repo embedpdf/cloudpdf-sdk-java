@@ -15,7 +15,8 @@ import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.grants.visitors.requests.DeleteVisitorsRequest;
 import com.cloudpdf.api.resources.grants.visitors.requests.ListVisitorsRequest;
-import com.cloudpdf.api.types.GrantsVisitorsList200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.GrantsVisitorsListResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -39,7 +40,7 @@ public class AsyncRawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsListResponse>> list(
             String tenantId, String grantId) {
         return list(tenantId, grantId, ListVisitorsRequest.builder().build());
     }
@@ -47,7 +48,7 @@ public class AsyncRawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsListResponse>> list(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return list(tenantId, grantId, ListVisitorsRequest.builder().build(), requestOptions);
     }
@@ -55,7 +56,7 @@ public class AsyncRawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsListResponse>> list(
             String tenantId, String grantId, ListVisitorsRequest request) {
         return list(tenantId, grantId, request, null);
     }
@@ -63,7 +64,7 @@ public class AsyncRawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsListResponse>> list(
             String tenantId, String grantId, ListVisitorsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -104,7 +105,7 @@ public class AsyncRawVisitorsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsList200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsVisitorsListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -113,7 +114,7 @@ public class AsyncRawVisitorsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, GrantsVisitorsList200Response.class),
+                                        responseBodyString, GrantsVisitorsListResponse.class),
                                 response));
                         return;
                     }
@@ -121,12 +122,12 @@ public class AsyncRawVisitorsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -233,7 +234,8 @@ public class AsyncRawVisitorsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {

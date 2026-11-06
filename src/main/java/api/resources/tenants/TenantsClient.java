@@ -13,11 +13,11 @@ import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
-import com.cloudpdf.api.types.TenantsCreate200Response;
-import com.cloudpdf.api.types.TenantsGet200Response;
-import com.cloudpdf.api.types.TenantsList200Response;
-import com.cloudpdf.api.types.TenantsUpdate200Response;
-import com.cloudpdf.api.types.TenantsUsage200Response;
+import com.cloudpdf.api.types.TenantsCreateResponse;
+import com.cloudpdf.api.types.TenantsGetResponse;
+import com.cloudpdf.api.types.TenantsListResponse;
+import com.cloudpdf.api.types.TenantsUpdateResponse;
+import com.cloudpdf.api.types.TenantsUsageResponse;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
@@ -36,43 +36,43 @@ public class TenantsClient {
         return this.rawClient;
     }
 
-    public TenantsList200Response list() {
+    public TenantsListResponse list() {
         return this.rawClient.list().body();
     }
 
-    public TenantsList200Response list(RequestOptions requestOptions) {
+    public TenantsListResponse list(RequestOptions requestOptions) {
         return this.rawClient.list(requestOptions).body();
     }
 
-    public TenantsList200Response list(ListTenantsRequest request) {
+    public TenantsListResponse list(ListTenantsRequest request) {
         return this.rawClient.list(request).body();
     }
 
-    public TenantsList200Response list(ListTenantsRequest request, RequestOptions requestOptions) {
+    public TenantsListResponse list(ListTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(request, requestOptions).body();
     }
 
-    public TenantsCreate200Response create(TenantsCreateRequest request) {
+    public TenantsCreateResponse create(TenantsCreateRequest request) {
         return this.rawClient.create(request).body();
     }
 
-    public TenantsCreate200Response create(TenantsCreateRequest request, RequestOptions requestOptions) {
+    public TenantsCreateResponse create(TenantsCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).body();
     }
 
-    public TenantsGet200Response get(String tenantId) {
+    public TenantsGetResponse get(String tenantId) {
         return this.rawClient.get(tenantId).body();
     }
 
-    public TenantsGet200Response get(String tenantId, RequestOptions requestOptions) {
+    public TenantsGetResponse get(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, requestOptions).body();
     }
 
-    public TenantsGet200Response get(String tenantId, GetTenantsRequest request) {
+    public TenantsGetResponse get(String tenantId, GetTenantsRequest request) {
         return this.rawClient.get(tenantId, request).body();
     }
 
-    public TenantsGet200Response get(String tenantId, GetTenantsRequest request, RequestOptions requestOptions) {
+    public TenantsGetResponse get(String tenantId, GetTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, request, requestOptions).body();
     }
 
@@ -107,15 +107,14 @@ public class TenantsClient {
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public TenantsUpdate200Response update(String tenantId, TenantsUpdateRequest request) {
+    public TenantsUpdateResponse update(String tenantId, TenantsUpdateRequest request) {
         return this.rawClient.update(tenantId, request).body();
     }
 
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public TenantsUpdate200Response update(
-            String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
+    public TenantsUpdateResponse update(String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient.update(tenantId, request, requestOptions).body();
     }
 
@@ -166,28 +165,28 @@ public class TenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public TenantsUsage200Response usage(String tenantId) {
+    public TenantsUsageResponse usage(String tenantId) {
         return this.rawClient.usage(tenantId).body();
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public TenantsUsage200Response usage(String tenantId, RequestOptions requestOptions) {
+    public TenantsUsageResponse usage(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, requestOptions).body();
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request) {
+    public TenantsUsageResponse usage(String tenantId, UsageTenantsRequest request) {
         return this.rawClient.usage(tenantId, request).body();
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public TenantsUsage200Response usage(String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
+    public TenantsUsageResponse usage(String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, request, requestOptions).body();
     }
 }

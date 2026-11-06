@@ -43,9 +43,9 @@ public final class FormFieldPushbutton {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldPushbuttonValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldPushbuttonDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -76,8 +76,8 @@ public final class FormFieldPushbutton {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldPushbuttonValueEntry valueEntry,
-            FormFieldPushbuttonDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -157,12 +157,12 @@ public final class FormFieldPushbutton {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldPushbuttonValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldPushbuttonDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -379,11 +379,11 @@ public final class FormFieldPushbutton {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldPushbuttonValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        _FinalStage defaultValueEntry(@NotNull FormFieldPushbuttonDefaultValueEntry defaultValueEntry);
+        _FinalStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface _FinalStage {
@@ -481,9 +481,9 @@ public final class FormFieldPushbutton {
 
         private boolean noExport;
 
-        private FormFieldPushbuttonValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldPushbuttonDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private List<FormWidget> widgets = new ArrayList<>();
 
@@ -580,14 +580,14 @@ public final class FormFieldPushbutton {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldPushbuttonValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public _FinalStage defaultValueEntry(@NotNull FormFieldPushbuttonDefaultValueEntry defaultValueEntry) {
+        public _FinalStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

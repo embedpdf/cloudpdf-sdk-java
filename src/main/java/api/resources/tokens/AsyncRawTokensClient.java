@@ -16,7 +16,8 @@ import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.tokens.requests.IssueTokensRequest;
 import com.cloudpdf.api.resources.tokens.requests.TokensRevokeRequest;
-import com.cloudpdf.api.types.TokensIssue200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.TokensIssueResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -41,7 +42,7 @@ public class AsyncRawTokensClient {
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TokensIssue200Response>> issue(
+    public CompletableFuture<CloudPDFClientHttpResponse<TokensIssueResponse>> issue(
             String tenantId, IssueTokensRequest request) {
         return issue(tenantId, request, null);
     }
@@ -49,7 +50,7 @@ public class AsyncRawTokensClient {
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<TokensIssue200Response>> issue(
+    public CompletableFuture<CloudPDFClientHttpResponse<TokensIssueResponse>> issue(
             String tenantId, IssueTokensRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -88,7 +89,7 @@ public class AsyncRawTokensClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<TokensIssue200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<TokensIssueResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -96,7 +97,7 @@ public class AsyncRawTokensClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokensIssue200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TokensIssueResponse.class),
                                 response));
                         return;
                     }
@@ -104,17 +105,17 @@ public class AsyncRawTokensClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -221,7 +222,8 @@ public class AsyncRawTokensClient {
                     try {
                         if (response.code() == 400) {
                             future.completeExceptionally(new BadRequestError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {

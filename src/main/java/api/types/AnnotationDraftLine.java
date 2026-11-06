@@ -471,11 +471,8 @@ public final class AnnotationDraftLine {
         return measure;
     }
 
-    @JsonIgnore
+    @JsonProperty("captionEnabled")
     public Optional<Boolean> getCaptionEnabled() {
-        if (captionEnabled == null) {
-            return Optional.empty();
-        }
         return captionEnabled;
     }
 
@@ -570,12 +567,6 @@ public final class AnnotationDraftLine {
     @JsonProperty("measure")
     private Optional<AnnotationDraftLineMeasure> _getMeasure() {
         return measure;
-    }
-
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("captionEnabled")
-    private Optional<Boolean> _getCaptionEnabled() {
-        return captionEnabled;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -921,8 +912,6 @@ public final class AnnotationDraftLine {
 
         _FinalStage captionEnabled(Boolean captionEnabled);
 
-        _FinalStage captionEnabled(Nullable<Boolean> captionEnabled);
-
         _FinalStage captionPosition(Optional<AnnotationDraftLineCaptionPosition> captionPosition);
 
         _FinalStage captionPosition(AnnotationDraftLineCaptionPosition captionPosition);
@@ -1160,18 +1149,6 @@ public final class AnnotationDraftLine {
         @JsonSetter(value = "captionPosition", nulls = Nulls.SKIP)
         public _FinalStage captionPosition(Optional<AnnotationDraftLineCaptionPosition> captionPosition) {
             this.captionPosition = captionPosition;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage captionEnabled(Nullable<Boolean> captionEnabled) {
-            if (captionEnabled.isNull()) {
-                this.captionEnabled = null;
-            } else if (captionEnabled.isEmpty()) {
-                this.captionEnabled = Optional.empty();
-            } else {
-                this.captionEnabled = Optional.of(captionEnabled.get());
-            }
             return this;
         }
 

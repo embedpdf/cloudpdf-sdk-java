@@ -20,13 +20,14 @@ import com.cloudpdf.api.resources.doc.forms.requests.DocFormsResetRequest;
 import com.cloudpdf.api.resources.doc.forms.requests.DocFormsUpdateWidgetRequest;
 import com.cloudpdf.api.resources.doc.forms.requests.ListFormsRequest;
 import com.cloudpdf.api.resources.doc.forms.requests.SetValueFormsRequest;
-import com.cloudpdf.api.types.DocFormsDeleteWidget200Response;
-import com.cloudpdf.api.types.DocFormsList200Response;
-import com.cloudpdf.api.types.DocFormsReorderCalculations200Response;
-import com.cloudpdf.api.types.DocFormsReorderWidgets200Response;
-import com.cloudpdf.api.types.DocFormsReset200Response;
-import com.cloudpdf.api.types.DocFormsSetValue200Response;
-import com.cloudpdf.api.types.DocFormsUpdateWidget200Response;
+import com.cloudpdf.api.types.DocFormsDeleteWidgetResponse;
+import com.cloudpdf.api.types.DocFormsListResponse;
+import com.cloudpdf.api.types.DocFormsReorderCalculationsResponse;
+import com.cloudpdf.api.types.DocFormsReorderWidgetsResponse;
+import com.cloudpdf.api.types.DocFormsResetResponse;
+import com.cloudpdf.api.types.DocFormsSetValueResponse;
+import com.cloudpdf.api.types.DocFormsUpdateWidgetResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.Map;
@@ -49,21 +50,21 @@ public class AsyncRawFormsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsList200Response>> list(String docId, String layerName) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsListResponse>> list(String docId, String layerName) {
         return list(docId, layerName, ListFormsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsListResponse>> list(
             String docId, String layerName, RequestOptions requestOptions) {
         return list(docId, layerName, ListFormsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsListResponse>> list(
             String docId, String layerName, ListFormsRequest request) {
         return list(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsListResponse>> list(
             String docId, String layerName, ListFormsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -100,7 +101,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsList200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -108,14 +109,15 @@ public class AsyncRawFormsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsList200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsListResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -141,12 +143,12 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculations200Response>> reorderCalculations(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculationsResponse>> reorderCalculations(
             String docId, String layerName, DocFormsReorderCalculationsRequest request) {
         return reorderCalculations(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculations200Response>> reorderCalculations(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculationsResponse>> reorderCalculations(
             String docId, String layerName, DocFormsReorderCalculationsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -196,7 +198,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculations200Response>> future =
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderCalculationsResponse>> future =
                 new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
@@ -206,7 +208,7 @@ public class AsyncRawFormsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocFormsReorderCalculations200Response.class),
+                                        responseBodyString, DocFormsReorderCalculationsResponse.class),
                                 response));
                         return;
                     }
@@ -214,12 +216,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -246,7 +248,7 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValue200Response>> setValue(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValueResponse>> setValue(
             String docId, String layerName, String fieldKey, Map<String, Object> body) {
         return setValue(
                 docId,
@@ -255,7 +257,7 @@ public class AsyncRawFormsClient {
                 SetValueFormsRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValue200Response>> setValue(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValueResponse>> setValue(
             String docId, String layerName, String fieldKey, Map<String, Object> body, RequestOptions requestOptions) {
         return setValue(
                 docId,
@@ -265,12 +267,12 @@ public class AsyncRawFormsClient {
                 requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValue200Response>> setValue(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValueResponse>> setValue(
             String docId, String layerName, String fieldKey, SetValueFormsRequest request) {
         return setValue(docId, layerName, fieldKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValue200Response>> setValue(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValueResponse>> setValue(
             String docId,
             String layerName,
             String fieldKey,
@@ -325,7 +327,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValue200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsSetValueResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -333,8 +335,7 @@ public class AsyncRawFormsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocFormsSetValue200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsSetValueResponse.class),
                                 response));
                         return;
                     }
@@ -342,12 +343,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -374,22 +375,21 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReset200Response>> reset(
-            String docId, String layerName) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsResetResponse>> reset(String docId, String layerName) {
         return reset(docId, layerName, DocFormsResetRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReset200Response>> reset(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsResetResponse>> reset(
             String docId, String layerName, RequestOptions requestOptions) {
         return reset(docId, layerName, DocFormsResetRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReset200Response>> reset(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsResetResponse>> reset(
             String docId, String layerName, DocFormsResetRequest request) {
         return reset(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReset200Response>> reset(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsResetResponse>> reset(
             String docId, String layerName, DocFormsResetRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -439,7 +439,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsReset200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsResetResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -447,7 +447,7 @@ public class AsyncRawFormsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsReset200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocFormsResetResponse.class),
                                 response));
                         return;
                     }
@@ -455,12 +455,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -487,37 +487,37 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response>> deleteWidget(
-            String docId, String layerName, String pageKey, String annotKey) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidgetResponse>> deleteWidget(
+            String docId, String layerName, String pageKey, String annotationKey) {
         return deleteWidget(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 DeleteWidgetFormsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response>> deleteWidget(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidgetResponse>> deleteWidget(
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return deleteWidget(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 DeleteWidgetFormsRequest.builder().build(),
                 requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response>> deleteWidget(
-            String docId, String layerName, String pageKey, String annotKey, DeleteWidgetFormsRequest request) {
-        return deleteWidget(docId, layerName, pageKey, annotKey, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidgetResponse>> deleteWidget(
+            String docId, String layerName, String pageKey, String annotationKey, DeleteWidgetFormsRequest request) {
+        return deleteWidget(docId, layerName, pageKey, annotationKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response>> deleteWidget(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidgetResponse>> deleteWidget(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             DeleteWidgetFormsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -528,7 +528,7 @@ public class AsyncRawFormsClient {
                 .addPathSegment(layerName)
                 .addPathSegments("form/widgets")
                 .addPathSegment(pageKey)
-                .addPathSegment(annotKey);
+                .addPathSegment(annotationKey);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -561,8 +561,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidget200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsDeleteWidgetResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -571,7 +570,7 @@ public class AsyncRawFormsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocFormsDeleteWidget200Response.class),
+                                        responseBodyString, DocFormsDeleteWidgetResponse.class),
                                 response));
                         return;
                     }
@@ -579,12 +578,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -611,16 +610,16 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidget200Response>> updateWidget(
-            String docId, String layerName, String pageKey, String annotKey, DocFormsUpdateWidgetRequest request) {
-        return updateWidget(docId, layerName, pageKey, annotKey, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidgetResponse>> updateWidget(
+            String docId, String layerName, String pageKey, String annotationKey, DocFormsUpdateWidgetRequest request) {
+        return updateWidget(docId, layerName, pageKey, annotationKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidget200Response>> updateWidget(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidgetResponse>> updateWidget(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             DocFormsUpdateWidgetRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -631,7 +630,7 @@ public class AsyncRawFormsClient {
                 .addPathSegment(layerName)
                 .addPathSegments("form/widgets")
                 .addPathSegment(pageKey)
-                .addPathSegment(annotKey);
+                .addPathSegment(annotationKey);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -672,8 +671,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidget200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsUpdateWidgetResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -682,7 +680,7 @@ public class AsyncRawFormsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocFormsUpdateWidget200Response.class),
+                                        responseBodyString, DocFormsUpdateWidgetResponse.class),
                                 response));
                         return;
                     }
@@ -690,12 +688,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -722,12 +720,12 @@ public class AsyncRawFormsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgets200Response>> reorderWidgets(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgetsResponse>> reorderWidgets(
             String docId, String layerName, String pageKey, DocFormsReorderWidgetsRequest request) {
         return reorderWidgets(docId, layerName, pageKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgets200Response>> reorderWidgets(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgetsResponse>> reorderWidgets(
             String docId,
             String layerName,
             String pageKey,
@@ -782,7 +780,7 @@ public class AsyncRawFormsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgets200Response>> future =
+        CompletableFuture<CloudPDFClientHttpResponse<DocFormsReorderWidgetsResponse>> future =
                 new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
@@ -792,7 +790,7 @@ public class AsyncRawFormsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocFormsReorderWidgets200Response.class),
+                                        responseBodyString, DocFormsReorderWidgetsResponse.class),
                                 response));
                         return;
                     }
@@ -800,12 +798,12 @@ public class AsyncRawFormsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

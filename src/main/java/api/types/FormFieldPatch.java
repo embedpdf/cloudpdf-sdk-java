@@ -40,7 +40,7 @@ public final class FormFieldPatch {
 
     private final Optional<FieldActionsPatch> actions;
 
-    private final Optional<FormFieldPatchFamily> family;
+    private final Optional<FormFieldPatchKind> kind;
 
     private final Optional<FormFieldPatchDefaultValue> defaultValue;
 
@@ -73,7 +73,7 @@ public final class FormFieldPatch {
             Optional<String> mappingName,
             Optional<String> groupId,
             Optional<FieldActionsPatch> actions,
-            Optional<FormFieldPatchFamily> family,
+            Optional<FormFieldPatchKind> kind,
             Optional<FormFieldPatchDefaultValue> defaultValue,
             Optional<Integer> maxLength,
             Optional<Boolean> multiline,
@@ -93,7 +93,7 @@ public final class FormFieldPatch {
         this.mappingName = mappingName;
         this.groupId = groupId;
         this.actions = actions;
-        this.family = family;
+        this.kind = kind;
         this.defaultValue = defaultValue;
         this.maxLength = maxLength;
         this.multiline = multiline;
@@ -153,9 +153,9 @@ public final class FormFieldPatch {
         return actions;
     }
 
-    @JsonProperty("family")
-    public Optional<FormFieldPatchFamily> getFamily() {
-        return family;
+    @JsonProperty("kind")
+    public Optional<FormFieldPatchKind> getKind() {
+        return kind;
     }
 
     @JsonIgnore
@@ -258,7 +258,7 @@ public final class FormFieldPatch {
                 && mappingName.equals(other.mappingName)
                 && groupId.equals(other.groupId)
                 && actions.equals(other.actions)
-                && family.equals(other.family)
+                && kind.equals(other.kind)
                 && defaultValue.equals(other.defaultValue)
                 && maxLength.equals(other.maxLength)
                 && multiline.equals(other.multiline)
@@ -282,7 +282,7 @@ public final class FormFieldPatch {
                 this.mappingName,
                 this.groupId,
                 this.actions,
-                this.family,
+                this.kind,
                 this.defaultValue,
                 this.maxLength,
                 this.multiline,
@@ -322,7 +322,7 @@ public final class FormFieldPatch {
 
         private Optional<FieldActionsPatch> actions = Optional.empty();
 
-        private Optional<FormFieldPatchFamily> family = Optional.empty();
+        private Optional<FormFieldPatchKind> kind = Optional.empty();
 
         private Optional<FormFieldPatchDefaultValue> defaultValue = Optional.empty();
 
@@ -358,7 +358,7 @@ public final class FormFieldPatch {
             mappingName(other.getMappingName());
             groupId(other.getGroupId());
             actions(other.getActions());
-            family(other.getFamily());
+            kind(other.getKind());
             defaultValue(other.getDefaultValue());
             maxLength(other.getMaxLength());
             multiline(other.getMultiline());
@@ -482,14 +482,14 @@ public final class FormFieldPatch {
             return this;
         }
 
-        @JsonSetter(value = "family", nulls = Nulls.SKIP)
-        public Builder family(Optional<FormFieldPatchFamily> family) {
-            this.family = family;
+        @JsonSetter(value = "kind", nulls = Nulls.SKIP)
+        public Builder kind(Optional<FormFieldPatchKind> kind) {
+            this.kind = kind;
             return this;
         }
 
-        public Builder family(FormFieldPatchFamily family) {
-            this.family = Optional.ofNullable(family);
+        public Builder kind(FormFieldPatchKind kind) {
+            this.kind = Optional.ofNullable(kind);
             return this;
         }
 
@@ -635,7 +635,7 @@ public final class FormFieldPatch {
                     mappingName,
                     groupId,
                     actions,
-                    family,
+                    kind,
                     defaultValue,
                     maxLength,
                     multiline,

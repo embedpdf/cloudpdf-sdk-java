@@ -470,11 +470,8 @@ public final class AnnotationPatchLine {
         return measure;
     }
 
-    @JsonIgnore
+    @JsonProperty("captionEnabled")
     public Optional<Boolean> getCaptionEnabled() {
-        if (captionEnabled == null) {
-            return Optional.empty();
-        }
         return captionEnabled;
     }
 
@@ -569,12 +566,6 @@ public final class AnnotationPatchLine {
     @JsonProperty("measure")
     private Optional<AnnotationPatchLineMeasure> _getMeasure() {
         return measure;
-    }
-
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("captionEnabled")
-    private Optional<Boolean> _getCaptionEnabled() {
-        return captionEnabled;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -1476,17 +1467,6 @@ public final class AnnotationPatchLine {
 
         public Builder captionEnabled(Boolean captionEnabled) {
             this.captionEnabled = Optional.ofNullable(captionEnabled);
-            return this;
-        }
-
-        public Builder captionEnabled(Nullable<Boolean> captionEnabled) {
-            if (captionEnabled.isNull()) {
-                this.captionEnabled = null;
-            } else if (captionEnabled.isEmpty()) {
-                this.captionEnabled = Optional.empty();
-            } else {
-                this.captionEnabled = Optional.of(captionEnabled.get());
-            }
             return this;
         }
 

@@ -4,20 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
+import com.cloudpdf.api.types.ErrorResponse;
 import okhttp3.Response;
 
 public final class NotFoundError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final Object body;
+    private final ErrorResponse body;
 
-    public NotFoundError(Object body) {
+    public NotFoundError(ErrorResponse body) {
         super("NotFoundError", 404, body);
         this.body = body;
     }
 
-    public NotFoundError(Object body, Response rawResponse) {
+    public NotFoundError(ErrorResponse body, Response rawResponse) {
         super("NotFoundError", 404, body, rawResponse);
         this.body = body;
     }
@@ -26,7 +27,7 @@ public final class NotFoundError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public Object body() {
+    public ErrorResponse body() {
         return this.body;
     }
 }

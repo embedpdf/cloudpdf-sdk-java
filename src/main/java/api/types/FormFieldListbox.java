@@ -43,9 +43,9 @@ public final class FormFieldListbox {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldListboxValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldListboxDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -86,8 +86,8 @@ public final class FormFieldListbox {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldListboxValueEntry valueEntry,
-            FormFieldListboxDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -177,12 +177,12 @@ public final class FormFieldListbox {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldListboxValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldListboxDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -434,11 +434,11 @@ public final class FormFieldListbox {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldListboxValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        MultiSelectStage defaultValueEntry(@NotNull FormFieldListboxDefaultValueEntry defaultValueEntry);
+        MultiSelectStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface MultiSelectStage {
@@ -564,9 +564,9 @@ public final class FormFieldListbox {
 
         private boolean noExport;
 
-        private FormFieldListboxValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldListboxDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private boolean multiSelect;
 
@@ -678,14 +678,14 @@ public final class FormFieldListbox {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldListboxValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public MultiSelectStage defaultValueEntry(@NotNull FormFieldListboxDefaultValueEntry defaultValueEntry) {
+        public MultiSelectStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

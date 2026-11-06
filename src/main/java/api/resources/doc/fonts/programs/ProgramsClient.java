@@ -30,24 +30,24 @@ public class ProgramsClient {
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
-    public InputStream download(String docId, String layerName, String displayHash) {
-        return this.rawClient.download(docId, layerName, displayHash).body();
+    public InputStream download(String docId, String layerName, String displaySha256) {
+        return this.rawClient.download(docId, layerName, displaySha256).body();
     }
 
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
-    public InputStream download(String docId, String layerName, String displayHash, RequestOptions requestOptions) {
+    public InputStream download(String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
         return this.rawClient
-                .download(docId, layerName, displayHash, requestOptions)
+                .download(docId, layerName, displaySha256, requestOptions)
                 .body();
     }
 
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
-    public InputStream download(String docId, String layerName, String displayHash, DownloadProgramsRequest request) {
-        return this.rawClient.download(docId, layerName, displayHash, request).body();
+    public InputStream download(String docId, String layerName, String displaySha256, DownloadProgramsRequest request) {
+        return this.rawClient.download(docId, layerName, displaySha256, request).body();
     }
 
     /**
@@ -56,34 +56,36 @@ public class ProgramsClient {
     public InputStream download(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             DownloadProgramsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .download(docId, layerName, displayHash, request, requestOptions)
+                .download(docId, layerName, displaySha256, request, requestOptions)
                 .body();
     }
 
-    public FontProgramInfo get(String docId, String layerName, String displayHash) {
-        return this.rawClient.get(docId, layerName, displayHash).body();
+    public FontProgramInfo get(String docId, String layerName, String displaySha256) {
+        return this.rawClient.get(docId, layerName, displaySha256).body();
     }
 
-    public FontProgramInfo get(String docId, String layerName, String displayHash, RequestOptions requestOptions) {
-        return this.rawClient.get(docId, layerName, displayHash, requestOptions).body();
+    public FontProgramInfo get(String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
+        return this.rawClient
+                .get(docId, layerName, displaySha256, requestOptions)
+                .body();
     }
 
-    public FontProgramInfo get(String docId, String layerName, String displayHash, GetProgramsRequest request) {
-        return this.rawClient.get(docId, layerName, displayHash, request).body();
+    public FontProgramInfo get(String docId, String layerName, String displaySha256, GetProgramsRequest request) {
+        return this.rawClient.get(docId, layerName, displaySha256, request).body();
     }
 
     public FontProgramInfo get(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             GetProgramsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .get(docId, layerName, displayHash, request, requestOptions)
+                .get(docId, layerName, displaySha256, request, requestOptions)
                 .body();
     }
 }

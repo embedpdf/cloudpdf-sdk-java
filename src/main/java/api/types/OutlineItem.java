@@ -85,6 +85,9 @@ public final class OutlineItem {
         return title;
     }
 
+    /**
+     * @return Where a link goes, by its <code>kind</code>. A newer server can add kinds: read one your client doesn't know as <code>unsupported</code>.
+     */
     @JsonIgnore
     public Optional<PdfLinkTarget> getTarget() {
         if (target == null) {
@@ -229,6 +232,9 @@ public final class OutlineItem {
 
         _FinalStage parent(Nullable<OutlineItemRef> parent);
 
+        /**
+         * <p>Where a link goes, by its <code>kind</code>. A newer server can add kinds: read one your client doesn't know as <code>unsupported</code>.</p>
+         */
         _FinalStage target(Optional<PdfLinkTarget> target);
 
         _FinalStage target(PdfLinkTarget target);
@@ -372,6 +378,10 @@ public final class OutlineItem {
             return this;
         }
 
+        /**
+         * <p>Where a link goes, by its <code>kind</code>. A newer server can add kinds: read one your client doesn't know as <code>unsupported</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage target(Nullable<PdfLinkTarget> target) {
             if (target.isNull()) {
@@ -384,12 +394,19 @@ public final class OutlineItem {
             return this;
         }
 
+        /**
+         * <p>Where a link goes, by its <code>kind</code>. A newer server can add kinds: read one your client doesn't know as <code>unsupported</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage target(PdfLinkTarget target) {
             this.target = Optional.ofNullable(target);
             return this;
         }
 
+        /**
+         * <p>Where a link goes, by its <code>kind</code>. A newer server can add kinds: read one your client doesn't know as <code>unsupported</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "target", nulls = Nulls.SKIP)
         public _FinalStage target(Optional<PdfLinkTarget> target) {

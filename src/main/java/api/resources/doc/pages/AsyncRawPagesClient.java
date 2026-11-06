@@ -20,11 +20,12 @@ import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ViewportsPagesRequest;
-import com.cloudpdf.api.types.DocPagesFlatten200Response;
-import com.cloudpdf.api.types.DocPagesRemoveName200Response;
-import com.cloudpdf.api.types.DocPagesSetName200Response;
-import com.cloudpdf.api.types.DocPagesSetScale200Response;
-import com.cloudpdf.api.types.DocPagesViewports200Response;
+import com.cloudpdf.api.types.DocPagesFlattenResponse;
+import com.cloudpdf.api.types.DocPagesRemoveNameResponse;
+import com.cloudpdf.api.types.DocPagesSetNameResponse;
+import com.cloudpdf.api.types.DocPagesSetScaleResponse;
+import com.cloudpdf.api.types.DocPagesViewportsResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,12 +49,12 @@ public class AsyncRawPagesClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScale200Response>> setScale(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScaleResponse>> setScale(
             String docId, String layerName, String pageKey, DocPagesSetScaleRequest request) {
         return setScale(docId, layerName, pageKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScale200Response>> setScale(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScaleResponse>> setScale(
             String docId,
             String layerName,
             String pageKey,
@@ -108,7 +109,7 @@ public class AsyncRawPagesClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScale200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetScaleResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -116,8 +117,7 @@ public class AsyncRawPagesClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocPagesSetScale200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetScaleResponse.class),
                                 response));
                         return;
                     }
@@ -125,12 +125,12 @@ public class AsyncRawPagesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -157,24 +157,24 @@ public class AsyncRawPagesClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewports200Response>> viewports(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewportsResponse>> viewports(
             String docId, String layerName, String pageKey) {
         return viewports(
                 docId, layerName, pageKey, ViewportsPagesRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewports200Response>> viewports(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewportsResponse>> viewports(
             String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return viewports(
                 docId, layerName, pageKey, ViewportsPagesRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewports200Response>> viewports(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewportsResponse>> viewports(
             String docId, String layerName, String pageKey, ViewportsPagesRequest request) {
         return viewports(docId, layerName, pageKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewports200Response>> viewports(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewportsResponse>> viewports(
             String docId,
             String layerName,
             String pageKey,
@@ -217,7 +217,7 @@ public class AsyncRawPagesClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewports200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocPagesViewportsResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -226,14 +226,15 @@ public class AsyncRawPagesClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocPagesViewports200Response.class),
+                                        responseBodyString, DocPagesViewportsResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -350,12 +351,12 @@ public class AsyncRawPagesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -382,24 +383,24 @@ public class AsyncRawPagesClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlattenResponse>> flatten(
             String docId, String layerName, Map<String, Object> body) {
         return flatten(
                 docId, layerName, FlattenPagesRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlattenResponse>> flatten(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return flatten(
                 docId, layerName, FlattenPagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlattenResponse>> flatten(
             String docId, String layerName, FlattenPagesRequest request) {
         return flatten(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlattenResponse>> flatten(
             String docId, String layerName, FlattenPagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -449,7 +450,7 @@ public class AsyncRawPagesClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlatten200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocPagesFlattenResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -457,8 +458,7 @@ public class AsyncRawPagesClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocPagesFlatten200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesFlattenResponse.class),
                                 response));
                         return;
                     }
@@ -466,12 +466,12 @@ public class AsyncRawPagesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -498,24 +498,24 @@ public class AsyncRawPagesClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetName200Response>> setName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetNameResponse>> setName(
             String docId, String layerName, Map<String, Object> body) {
         return setName(
                 docId, layerName, SetNamePagesRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetName200Response>> setName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetNameResponse>> setName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return setName(
                 docId, layerName, SetNamePagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetName200Response>> setName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetNameResponse>> setName(
             String docId, String layerName, SetNamePagesRequest request) {
         return setName(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetName200Response>> setName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetNameResponse>> setName(
             String docId, String layerName, SetNamePagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -565,7 +565,7 @@ public class AsyncRawPagesClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetName200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocPagesSetNameResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -573,8 +573,7 @@ public class AsyncRawPagesClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocPagesSetName200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetNameResponse.class),
                                 response));
                         return;
                     }
@@ -582,12 +581,12 @@ public class AsyncRawPagesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -614,24 +613,24 @@ public class AsyncRawPagesClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveName200Response>> removeName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveNameResponse>> removeName(
             String docId, String layerName, Map<String, Object> body) {
         return removeName(
                 docId, layerName, RemoveNamePagesRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveName200Response>> removeName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveNameResponse>> removeName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return removeName(
                 docId, layerName, RemoveNamePagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveName200Response>> removeName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveNameResponse>> removeName(
             String docId, String layerName, RemoveNamePagesRequest request) {
         return removeName(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveName200Response>> removeName(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveNameResponse>> removeName(
             String docId, String layerName, RemoveNamePagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -681,7 +680,7 @@ public class AsyncRawPagesClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveName200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocPagesRemoveNameResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -690,7 +689,7 @@ public class AsyncRawPagesClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocPagesRemoveName200Response.class),
+                                        responseBodyString, DocPagesRemoveNameResponse.class),
                                 response));
                         return;
                     }
@@ -698,12 +697,12 @@ public class AsyncRawPagesClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

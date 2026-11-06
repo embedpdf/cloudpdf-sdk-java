@@ -12,6 +12,8 @@ import java.util.function.Supplier;
 public final class RequestOptions {
     private final String token;
 
+    private final String embedPdfVersion;
+
     private final Optional<Integer> timeout;
 
     private final TimeUnit timeoutTimeUnit;
@@ -28,6 +30,7 @@ public final class RequestOptions {
 
     private RequestOptions(
             String token,
+            String embedPdfVersion,
             Optional<Integer> timeout,
             TimeUnit timeoutTimeUnit,
             Optional<Integer> maxRetries,
@@ -36,6 +39,7 @@ public final class RequestOptions {
             Map<String, String> queryParameters,
             Map<String, Supplier<String>> queryParameterSuppliers) {
         this.token = token;
+        this.embedPdfVersion = embedPdfVersion;
         this.timeout = timeout;
         this.timeoutTimeUnit = timeoutTimeUnit;
         this.maxRetries = maxRetries;
@@ -62,6 +66,9 @@ public final class RequestOptions {
         if (this.token != null) {
             headers.put("Authorization", "Bearer " + this.token);
         }
+        if (this.embedPdfVersion != null) {
+            headers.put("EmbedPDF-Version", this.embedPdfVersion);
+        }
         headers.putAll(this.headers);
         this.headerSuppliers.forEach((key, supplier) -> {
             headers.put(key, supplier.get());
@@ -84,6 +91,8 @@ public final class RequestOptions {
     public static class Builder {
         private String token = null;
 
+        private String embedPdfVersion = null;
+
         private Optional<Integer> timeout = Optional.empty();
 
         private TimeUnit timeoutTimeUnit = TimeUnit.SECONDS;
@@ -100,6 +109,11 @@ public final class RequestOptions {
 
         public Builder token(String token) {
             this.token = token;
+            return this;
+        }
+
+        public Builder embedPdfVersion(String embedPdfVersion) {
+            this.embedPdfVersion = embedPdfVersion;
             return this;
         }
 
@@ -142,6 +156,7 @@ public final class RequestOptions {
         public RequestOptions build() {
             return new RequestOptions(
                     token,
+                    embedPdfVersion,
                     timeout,
                     timeoutTimeUnit,
                     maxRetries,

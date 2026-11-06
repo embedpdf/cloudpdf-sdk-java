@@ -26,6 +26,8 @@ public class CloudPDFClientBuilder {
 
     private String token = null;
 
+    private String embedPdfVersion = "3.0";
+
     private Environment environment = Environment.SAAS;
 
     private OkHttpClient httpClient;
@@ -37,6 +39,14 @@ public class CloudPDFClientBuilder {
      */
     public CloudPDFClientBuilder token(String token) {
         this.token = token;
+        return this;
+    }
+
+    /**
+     * Sets embedPdfVersion
+     */
+    public CloudPDFClientBuilder embedPdfVersion(String embedPdfVersion) {
+        this.embedPdfVersion = embedPdfVersion;
         return this;
     }
 
@@ -123,6 +133,7 @@ public class CloudPDFClientBuilder {
         ClientOptions.Builder builder = ClientOptions.builder();
         setEnvironment(builder);
         setAuthentication(builder);
+        setCustomHeaders(builder);
         setHttpClient(builder);
         setTimeouts(builder);
         setRetries(builder);
@@ -163,6 +174,25 @@ public class CloudPDFClientBuilder {
         if (this.token != null) {
             builder.addHeader("Authorization", "Bearer " + this.token);
         }
+    }
+
+    /**
+     * Override this method to add or modify custom headers.
+     * This method is called during client options construction to set up custom headers defined in the API.
+     *
+     * @param builder The ClientOptions.Builder to configure
+     *
+     * Example:
+     * <pre>{@code
+     * &#64;Override
+     * protected void setCustomHeaders(ClientOptions.Builder builder) {
+     *     super.setCustomHeaders(builder); // Keep existing headers
+     *     builder.addHeader("X-Trace-ID", generateTraceId());
+     * }
+     * }</pre>
+     */
+    protected void setCustomHeaders(ClientOptions.Builder builder) {
+        builder.addHeader("EmbedPDF-Version", this.embedPdfVersion);
     }
 
     /**

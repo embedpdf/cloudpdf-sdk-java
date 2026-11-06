@@ -4,21 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
-import com.cloudpdf.api.types.EngineErrorPayload;
+import com.cloudpdf.api.types.ErrorResponse;
 import okhttp3.Response;
 
 public final class NotImplementedError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final EngineErrorPayload body;
+    private final ErrorResponse body;
 
-    public NotImplementedError(EngineErrorPayload body) {
+    public NotImplementedError(ErrorResponse body) {
         super("NotImplementedError", 501, body);
         this.body = body;
     }
 
-    public NotImplementedError(EngineErrorPayload body, Response rawResponse) {
+    public NotImplementedError(ErrorResponse body, Response rawResponse) {
         super("NotImplementedError", 501, body, rawResponse);
         this.body = body;
     }
@@ -27,7 +27,7 @@ public final class NotImplementedError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public EngineErrorPayload body() {
+    public ErrorResponse body() {
         return this.body;
     }
 }

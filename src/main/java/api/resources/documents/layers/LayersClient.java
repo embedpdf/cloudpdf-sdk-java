@@ -7,7 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.documents.layers.requests.DeleteLayersRequest;
 import com.cloudpdf.api.resources.documents.layers.requests.ListLayersRequest;
-import com.cloudpdf.api.types.DocumentsLayersList200Response;
+import com.cloudpdf.api.types.DocumentsLayersListResponse;
 
 public class LayersClient {
     protected final ClientOptions clientOptions;
@@ -26,37 +26,43 @@ public class LayersClient {
         return this.rawClient;
     }
 
-    public DocumentsLayersList200Response list(String tenantId, String id) {
-        return this.rawClient.list(tenantId, id).body();
+    public DocumentsLayersListResponse list(String tenantId, String docId) {
+        return this.rawClient.list(tenantId, docId).body();
     }
 
-    public DocumentsLayersList200Response list(String tenantId, String id, RequestOptions requestOptions) {
-        return this.rawClient.list(tenantId, id, requestOptions).body();
+    public DocumentsLayersListResponse list(String tenantId, String docId, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, docId, requestOptions).body();
     }
 
-    public DocumentsLayersList200Response list(String tenantId, String id, ListLayersRequest request) {
-        return this.rawClient.list(tenantId, id, request).body();
+    public DocumentsLayersListResponse list(String tenantId, String docId, ListLayersRequest request) {
+        return this.rawClient.list(tenantId, docId, request).body();
     }
 
-    public DocumentsLayersList200Response list(
-            String tenantId, String id, ListLayersRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(tenantId, id, request, requestOptions).body();
+    public DocumentsLayersListResponse list(
+            String tenantId, String docId, ListLayersRequest request, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, docId, request, requestOptions).body();
     }
 
-    public void delete(String tenantId, String id, String layerName) {
-        this.rawClient.delete(tenantId, id, layerName).body();
+    public void delete(String tenantId, String docId, String layerName) {
+        this.rawClient.delete(tenantId, docId, layerName).body();
     }
 
-    public void delete(String tenantId, String id, String layerName, RequestOptions requestOptions) {
-        this.rawClient.delete(tenantId, id, layerName, requestOptions).body();
+    public void delete(String tenantId, String docId, String layerName, RequestOptions requestOptions) {
+        this.rawClient.delete(tenantId, docId, layerName, requestOptions).body();
     }
 
-    public void delete(String tenantId, String id, String layerName, DeleteLayersRequest request) {
-        this.rawClient.delete(tenantId, id, layerName, request).body();
+    public void delete(String tenantId, String docId, String layerName, DeleteLayersRequest request) {
+        this.rawClient.delete(tenantId, docId, layerName, request).body();
     }
 
     public void delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request, RequestOptions requestOptions) {
-        this.rawClient.delete(tenantId, id, layerName, request, requestOptions).body();
+            String tenantId,
+            String docId,
+            String layerName,
+            DeleteLayersRequest request,
+            RequestOptions requestOptions) {
+        this.rawClient
+                .delete(tenantId, docId, layerName, request, requestOptions)
+                .body();
     }
 }

@@ -17,7 +17,8 @@ import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.documents.layers.requests.DeleteLayersRequest;
 import com.cloudpdf.api.resources.documents.layers.requests.ListLayersRequest;
-import com.cloudpdf.api.types.DocumentsLayersList200Response;
+import com.cloudpdf.api.types.DocumentsLayersListResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -34,28 +35,28 @@ public class RawLayersClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocumentsLayersList200Response> list(String tenantId, String id) {
-        return list(tenantId, id, ListLayersRequest.builder().build());
+    public CloudPDFClientHttpResponse<DocumentsLayersListResponse> list(String tenantId, String docId) {
+        return list(tenantId, docId, ListLayersRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocumentsLayersList200Response> list(
-            String tenantId, String id, RequestOptions requestOptions) {
-        return list(tenantId, id, ListLayersRequest.builder().build(), requestOptions);
+    public CloudPDFClientHttpResponse<DocumentsLayersListResponse> list(
+            String tenantId, String docId, RequestOptions requestOptions) {
+        return list(tenantId, docId, ListLayersRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocumentsLayersList200Response> list(
-            String tenantId, String id, ListLayersRequest request) {
-        return list(tenantId, id, request, null);
+    public CloudPDFClientHttpResponse<DocumentsLayersListResponse> list(
+            String tenantId, String docId, ListLayersRequest request) {
+        return list(tenantId, docId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocumentsLayersList200Response> list(
-            String tenantId, String id, ListLayersRequest request, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<DocumentsLayersListResponse> list(
+            String tenantId, String docId, ListLayersRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("documents")
-                .addPathSegment(id)
+                .addPathSegment(docId)
                 .addPathSegments("layers");
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -98,20 +99,20 @@ public class RawLayersClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentsLayersList200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocumentsLayersListResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -126,28 +127,32 @@ public class RawLayersClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<Void> delete(String tenantId, String id, String layerName) {
-        return delete(tenantId, id, layerName, DeleteLayersRequest.builder().build());
+    public CloudPDFClientHttpResponse<Void> delete(String tenantId, String docId, String layerName) {
+        return delete(tenantId, docId, layerName, DeleteLayersRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<Void> delete(
-            String tenantId, String id, String layerName, RequestOptions requestOptions) {
-        return delete(tenantId, id, layerName, DeleteLayersRequest.builder().build(), requestOptions);
+            String tenantId, String docId, String layerName, RequestOptions requestOptions) {
+        return delete(tenantId, docId, layerName, DeleteLayersRequest.builder().build(), requestOptions);
     }
 
     public CloudPDFClientHttpResponse<Void> delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request) {
-        return delete(tenantId, id, layerName, request, null);
+            String tenantId, String docId, String layerName, DeleteLayersRequest request) {
+        return delete(tenantId, docId, layerName, request, null);
     }
 
     public CloudPDFClientHttpResponse<Void> delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request, RequestOptions requestOptions) {
+            String tenantId,
+            String docId,
+            String layerName,
+            DeleteLayersRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("documents")
-                .addPathSegment(id)
+                .addPathSegment(docId)
                 .addPathSegments("layers")
                 .addPathSegment(layerName);
         if (requestOptions != null) {
@@ -184,13 +189,13 @@ public class RawLayersClient {
                 switch (response.code()) {
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

@@ -43,9 +43,9 @@ public final class FormFieldUnknown {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldUnknownValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldUnknownDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -78,8 +78,8 @@ public final class FormFieldUnknown {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldUnknownValueEntry valueEntry,
-            FormFieldUnknownDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -161,12 +161,12 @@ public final class FormFieldUnknown {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldUnknownValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldUnknownDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -390,11 +390,11 @@ public final class FormFieldUnknown {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldUnknownValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        RawValueStage defaultValueEntry(@NotNull FormFieldUnknownDefaultValueEntry defaultValueEntry);
+        RawValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface RawValueStage {
@@ -497,9 +497,9 @@ public final class FormFieldUnknown {
 
         private boolean noExport;
 
-        private FormFieldUnknownValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldUnknownDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private String rawValue;
 
@@ -599,14 +599,14 @@ public final class FormFieldUnknown {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldUnknownValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public RawValueStage defaultValueEntry(@NotNull FormFieldUnknownDefaultValueEntry defaultValueEntry) {
+        public RawValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

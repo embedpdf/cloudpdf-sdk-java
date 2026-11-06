@@ -43,9 +43,9 @@ public final class FormFieldRadio {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldRadioValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldRadioDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -82,8 +82,8 @@ public final class FormFieldRadio {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldRadioValueEntry valueEntry,
-            FormFieldRadioDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -169,12 +169,12 @@ public final class FormFieldRadio {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldRadioValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldRadioDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -412,11 +412,11 @@ public final class FormFieldRadio {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldRadioValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        ValueStage defaultValueEntry(@NotNull FormFieldRadioDefaultValueEntry defaultValueEntry);
+        ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface ValueStage {
@@ -529,9 +529,9 @@ public final class FormFieldRadio {
 
         private boolean noExport;
 
-        private FormFieldRadioValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldRadioDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private String value;
 
@@ -637,14 +637,14 @@ public final class FormFieldRadio {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldRadioValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public ValueStage defaultValueEntry(@NotNull FormFieldRadioDefaultValueEntry defaultValueEntry) {
+        public ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

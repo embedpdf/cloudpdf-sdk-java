@@ -198,7 +198,7 @@ public final class FormField {
         T _visitUnknown(Object unknownType);
     }
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "family", visible = true, defaultImpl = _UnknownValue.class)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", visible = true, defaultImpl = _UnknownValue.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(TextValue.class),
         @JsonSubTypes.Type(CheckboxValue.class),
@@ -215,10 +215,10 @@ public final class FormField {
     }
 
     @JsonTypeName("text")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class TextValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldText value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -255,10 +255,10 @@ public final class FormField {
     }
 
     @JsonTypeName("checkbox")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class CheckboxValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldCheckbox value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -295,10 +295,10 @@ public final class FormField {
     }
 
     @JsonTypeName("radio")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class RadioValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldRadio value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -335,10 +335,10 @@ public final class FormField {
     }
 
     @JsonTypeName("combobox")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class ComboboxValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldCombobox value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -375,10 +375,10 @@ public final class FormField {
     }
 
     @JsonTypeName("listbox")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class ListboxValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldListbox value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -415,10 +415,10 @@ public final class FormField {
     }
 
     @JsonTypeName("pushbutton")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class PushbuttonValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldPushbutton value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -455,10 +455,10 @@ public final class FormField {
     }
 
     @JsonTypeName("signature")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class SignatureValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldSignature value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -495,10 +495,10 @@ public final class FormField {
     }
 
     @JsonTypeName("unknown")
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class UnknownValue implements Value {
         @JsonUnwrapped
-        @JsonIgnoreProperties(value = "family", allowSetters = true)
+        @JsonIgnoreProperties(value = "kind", allowSetters = true)
         private FormFieldUnknown value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
@@ -534,7 +534,7 @@ public final class FormField {
         }
     }
 
-    @JsonIgnoreProperties("family")
+    @JsonIgnoreProperties("kind")
     private static final class _UnknownValue implements Value {
         private String type;
 

@@ -14,7 +14,8 @@ import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
-import com.cloudpdf.api.types.DocRedactionsApply200Response;
+import com.cloudpdf.api.types.DocRedactionsApplyResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -32,21 +33,21 @@ public class RawRedactionsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocRedactionsApply200Response> apply(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocRedactionsApplyResponse> apply(String docId, String layerName) {
         return apply(docId, layerName, DocRedactionsApplyRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocRedactionsApply200Response> apply(
+    public CloudPDFClientHttpResponse<DocRedactionsApplyResponse> apply(
             String docId, String layerName, RequestOptions requestOptions) {
         return apply(docId, layerName, DocRedactionsApplyRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocRedactionsApply200Response> apply(
+    public CloudPDFClientHttpResponse<DocRedactionsApplyResponse> apply(
             String docId, String layerName, DocRedactionsApplyRequest request) {
         return apply(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocRedactionsApply200Response> apply(
+    public CloudPDFClientHttpResponse<DocRedactionsApplyResponse> apply(
             String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -101,17 +102,17 @@ public class RawRedactionsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocRedactionsApply200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocRedactionsApplyResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

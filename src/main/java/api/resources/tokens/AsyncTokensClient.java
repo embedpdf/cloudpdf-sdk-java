@@ -7,7 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.tokens.requests.IssueTokensRequest;
 import com.cloudpdf.api.resources.tokens.requests.TokensRevokeRequest;
-import com.cloudpdf.api.types.TokensIssue200Response;
+import com.cloudpdf.api.types.TokensIssueResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncTokensClient {
@@ -30,14 +30,14 @@ public class AsyncTokensClient {
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public CompletableFuture<TokensIssue200Response> issue(String tenantId, IssueTokensRequest request) {
+    public CompletableFuture<TokensIssueResponse> issue(String tenantId, IssueTokensRequest request) {
         return this.rawClient.issue(tenantId, request).thenApply(response -> response.body());
     }
 
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public CompletableFuture<TokensIssue200Response> issue(
+    public CompletableFuture<TokensIssueResponse> issue(
             String tenantId, IssueTokensRequest request, RequestOptions requestOptions) {
         return this.rawClient.issue(tenantId, request, requestOptions).thenApply(response -> response.body());
     }

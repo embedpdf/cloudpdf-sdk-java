@@ -43,9 +43,9 @@ public final class FormFieldCombobox {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldComboboxValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldComboboxDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -84,8 +84,8 @@ public final class FormFieldCombobox {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldComboboxValueEntry valueEntry,
-            FormFieldComboboxDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -173,12 +173,12 @@ public final class FormFieldCombobox {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldComboboxValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldComboboxDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -423,11 +423,11 @@ public final class FormFieldCombobox {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldComboboxValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        ValueStage defaultValueEntry(@NotNull FormFieldComboboxDefaultValueEntry defaultValueEntry);
+        ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface ValueStage {
@@ -546,9 +546,9 @@ public final class FormFieldCombobox {
 
         private boolean noExport;
 
-        private FormFieldComboboxValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldComboboxDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private String value;
 
@@ -657,14 +657,14 @@ public final class FormFieldCombobox {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldComboboxValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public ValueStage defaultValueEntry(@NotNull FormFieldComboboxDefaultValueEntry defaultValueEntry) {
+        public ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

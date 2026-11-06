@@ -4,20 +4,21 @@
 package com.cloudpdf.api.errors;
 
 import com.cloudpdf.api.core.CloudPDFApiException;
+import com.cloudpdf.api.types.ErrorResponse;
 import okhttp3.Response;
 
 public final class ConflictError extends CloudPDFApiException {
     /**
      * The body of the response that triggered the exception.
      */
-    private final Object body;
+    private final ErrorResponse body;
 
-    public ConflictError(Object body) {
+    public ConflictError(ErrorResponse body) {
         super("ConflictError", 409, body);
         this.body = body;
     }
 
-    public ConflictError(Object body, Response rawResponse) {
+    public ConflictError(ErrorResponse body, Response rawResponse) {
         super("ConflictError", 409, body, rawResponse);
         this.body = body;
     }
@@ -26,7 +27,7 @@ public final class ConflictError extends CloudPDFApiException {
      * @return the body
      */
     @java.lang.Override
-    public Object body() {
+    public ErrorResponse body() {
         return this.body;
     }
 }

@@ -11,11 +11,11 @@ import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ViewportsPagesRequest;
-import com.cloudpdf.api.types.DocPagesFlatten200Response;
-import com.cloudpdf.api.types.DocPagesRemoveName200Response;
-import com.cloudpdf.api.types.DocPagesSetName200Response;
-import com.cloudpdf.api.types.DocPagesSetScale200Response;
-import com.cloudpdf.api.types.DocPagesViewports200Response;
+import com.cloudpdf.api.types.DocPagesFlattenResponse;
+import com.cloudpdf.api.types.DocPagesRemoveNameResponse;
+import com.cloudpdf.api.types.DocPagesSetNameResponse;
+import com.cloudpdf.api.types.DocPagesSetScaleResponse;
+import com.cloudpdf.api.types.DocPagesViewportsResponse;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -37,12 +37,12 @@ public class AsyncPagesClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocPagesSetScale200Response> setScale(
+    public CompletableFuture<DocPagesSetScaleResponse> setScale(
             String docId, String layerName, String pageKey, DocPagesSetScaleRequest request) {
         return this.rawClient.setScale(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesSetScale200Response> setScale(
+    public CompletableFuture<DocPagesSetScaleResponse> setScale(
             String docId,
             String layerName,
             String pageKey,
@@ -53,23 +53,23 @@ public class AsyncPagesClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesViewports200Response> viewports(String docId, String layerName, String pageKey) {
+    public CompletableFuture<DocPagesViewportsResponse> viewports(String docId, String layerName, String pageKey) {
         return this.rawClient.viewports(docId, layerName, pageKey).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesViewports200Response> viewports(
+    public CompletableFuture<DocPagesViewportsResponse> viewports(
             String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return this.rawClient
                 .viewports(docId, layerName, pageKey, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesViewports200Response> viewports(
+    public CompletableFuture<DocPagesViewportsResponse> viewports(
             String docId, String layerName, String pageKey, ViewportsPagesRequest request) {
         return this.rawClient.viewports(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesViewports200Response> viewports(
+    public CompletableFuture<DocPagesViewportsResponse> viewports(
             String docId,
             String layerName,
             String pageKey,
@@ -110,62 +110,62 @@ public class AsyncPagesClient {
         return this.rawClient.extract(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesFlatten200Response> flatten(
+    public CompletableFuture<DocPagesFlattenResponse> flatten(
             String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.flatten(docId, layerName, body).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesFlatten200Response> flatten(
+    public CompletableFuture<DocPagesFlattenResponse> flatten(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient.flatten(docId, layerName, body, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesFlatten200Response> flatten(
+    public CompletableFuture<DocPagesFlattenResponse> flatten(
             String docId, String layerName, FlattenPagesRequest request) {
         return this.rawClient.flatten(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesFlatten200Response> flatten(
+    public CompletableFuture<DocPagesFlattenResponse> flatten(
             String docId, String layerName, FlattenPagesRequest request, RequestOptions requestOptions) {
         return this.rawClient.flatten(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesSetName200Response> setName(
+    public CompletableFuture<DocPagesSetNameResponse> setName(
             String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.setName(docId, layerName, body).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesSetName200Response> setName(
+    public CompletableFuture<DocPagesSetNameResponse> setName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient.setName(docId, layerName, body, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesSetName200Response> setName(
+    public CompletableFuture<DocPagesSetNameResponse> setName(
             String docId, String layerName, SetNamePagesRequest request) {
         return this.rawClient.setName(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesSetName200Response> setName(
+    public CompletableFuture<DocPagesSetNameResponse> setName(
             String docId, String layerName, SetNamePagesRequest request, RequestOptions requestOptions) {
         return this.rawClient.setName(docId, layerName, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesRemoveName200Response> removeName(
+    public CompletableFuture<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, Map<String, Object> body) {
         return this.rawClient.removeName(docId, layerName, body).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesRemoveName200Response> removeName(
+    public CompletableFuture<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient.removeName(docId, layerName, body, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesRemoveName200Response> removeName(
+    public CompletableFuture<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, RemoveNamePagesRequest request) {
         return this.rawClient.removeName(docId, layerName, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocPagesRemoveName200Response> removeName(
+    public CompletableFuture<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, RemoveNamePagesRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .removeName(docId, layerName, request, requestOptions)
