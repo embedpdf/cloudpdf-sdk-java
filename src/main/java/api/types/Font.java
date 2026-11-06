@@ -30,6 +30,8 @@ public final class Font {
 
     private final FontSource source;
 
+    private final boolean builtIn;
+
     private final String familyName;
 
     private final int weight;
@@ -49,6 +51,7 @@ public final class Font {
     private Font(
             String name,
             FontSource source,
+            boolean builtIn,
             String familyName,
             int weight,
             boolean italic,
@@ -59,6 +62,7 @@ public final class Font {
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.source = source;
+        this.builtIn = builtIn;
         this.familyName = familyName;
         this.weight = weight;
         this.italic = italic;
@@ -77,6 +81,11 @@ public final class Font {
     @JsonProperty("source")
     public FontSource getSource() {
         return source;
+    }
+
+    @JsonProperty("builtIn")
+    public boolean getBuiltIn() {
+        return builtIn;
     }
 
     @JsonProperty("familyName")
@@ -137,6 +146,7 @@ public final class Font {
     private boolean equalTo(Font other) {
         return name.equals(other.name)
                 && source.equals(other.source)
+                && builtIn == other.builtIn
                 && familyName.equals(other.familyName)
                 && weight == other.weight
                 && italic == other.italic
@@ -151,6 +161,7 @@ public final class Font {
         return Objects.hash(
                 this.name,
                 this.source,
+                this.builtIn,
                 this.familyName,
                 this.weight,
                 this.italic,
@@ -176,7 +187,11 @@ public final class Font {
     }
 
     public interface SourceStage {
-        FamilyNameStage source(@NotNull FontSource source);
+        BuiltInStage source(@NotNull FontSource source);
+    }
+
+    public interface BuiltInStage {
+        FamilyNameStage builtIn(boolean builtIn);
     }
 
     public interface FamilyNameStage {
@@ -223,10 +238,19 @@ public final class Font {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements NameStage, SourceStage, FamilyNameStage, WeightStage, ItalicStage, CanChooseStage, _FinalStage {
+            implements NameStage,
+                    SourceStage,
+                    BuiltInStage,
+                    FamilyNameStage,
+                    WeightStage,
+                    ItalicStage,
+                    CanChooseStage,
+                    _FinalStage {
         private String name;
 
         private FontSource source;
+
+        private boolean builtIn;
 
         private String familyName;
 
@@ -251,6 +275,7 @@ public final class Font {
         public Builder from(Font other) {
             name(other.getName());
             source(other.getSource());
+            builtIn(other.getBuiltIn());
             familyName(other.getFamilyName());
             weight(other.getWeight());
             italic(other.getItalic());
@@ -270,8 +295,15 @@ public final class Font {
 
         @java.lang.Override
         @JsonSetter("source")
-        public FamilyNameStage source(@NotNull FontSource source) {
+        public BuiltInStage source(@NotNull FontSource source) {
             this.source = Objects.requireNonNull(source, "source must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("builtIn")
+        public FamilyNameStage builtIn(boolean builtIn) {
+            this.builtIn = builtIn;
             return this;
         }
 
@@ -381,6 +413,7 @@ public final class Font {
             return new Font(
                     name,
                     source,
+                    builtIn,
                     familyName,
                     weight,
                     italic,
