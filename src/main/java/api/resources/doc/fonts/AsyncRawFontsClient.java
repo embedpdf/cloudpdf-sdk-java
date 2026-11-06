@@ -15,6 +15,7 @@ import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.fonts.requests.ListFontsRequest;
 import com.cloudpdf.api.resources.doc.fonts.requests.ResolveFontsRequest;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.cloudpdf.api.types.FontList;
 import com.cloudpdf.api.types.FontResolution;
 import com.cloudpdf.api.types.FontResolveRequest;
@@ -104,7 +105,8 @@ public class AsyncRawFontsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -209,12 +211,12 @@ public class AsyncRawFontsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

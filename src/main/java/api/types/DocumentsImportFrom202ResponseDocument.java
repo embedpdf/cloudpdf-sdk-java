@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,9 +35,9 @@ public final class DocumentsImportFrom202ResponseDocument {
 
     private final DocumentsImportFrom202ResponseDocumentState state;
 
-    private final Optional<String> baseSha;
+    private final Optional<String> baseSha256;
 
-    private final Optional<Double> storageSizeBytes;
+    private final Optional<Integer> sizeBytes;
 
     private final Optional<Map<String, Object>> metadata;
 
@@ -44,13 +45,13 @@ public final class DocumentsImportFrom202ResponseDocument {
 
     private final Optional<String> failureReason;
 
-    private final Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> thumbnailState;
+    private final DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState;
 
     private final Optional<String> thumbnailUrl;
 
-    private final double createdAt;
+    private final OffsetDateTime createdAt;
 
-    private final double updatedAt;
+    private final OffsetDateTime updatedAt;
 
     private final Optional<String> createdBy;
 
@@ -62,15 +63,15 @@ public final class DocumentsImportFrom202ResponseDocument {
             String name,
             String folderId,
             DocumentsImportFrom202ResponseDocumentState state,
-            Optional<String> baseSha,
-            Optional<Double> storageSizeBytes,
+            Optional<String> baseSha256,
+            Optional<Integer> sizeBytes,
             Optional<Map<String, Object>> metadata,
             Optional<String> idempotencyKey,
             Optional<String> failureReason,
-            Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> thumbnailState,
+            DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState,
             Optional<String> thumbnailUrl,
-            double createdAt,
-            double updatedAt,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
             Optional<String> createdBy,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -78,8 +79,8 @@ public final class DocumentsImportFrom202ResponseDocument {
         this.name = name;
         this.folderId = folderId;
         this.state = state;
-        this.baseSha = baseSha;
-        this.storageSizeBytes = storageSizeBytes;
+        this.baseSha256 = baseSha256;
+        this.sizeBytes = sizeBytes;
         this.metadata = metadata;
         this.idempotencyKey = idempotencyKey;
         this.failureReason = failureReason;
@@ -120,19 +121,19 @@ public final class DocumentsImportFrom202ResponseDocument {
     }
 
     @JsonIgnore
-    public Optional<String> getBaseSha() {
-        if (baseSha == null) {
+    public Optional<String> getBaseSha256() {
+        if (baseSha256 == null) {
             return Optional.empty();
         }
-        return baseSha;
+        return baseSha256;
     }
 
     @JsonIgnore
-    public Optional<Double> getStorageSizeBytes() {
-        if (storageSizeBytes == null) {
+    public Optional<Integer> getSizeBytes() {
+        if (sizeBytes == null) {
             return Optional.empty();
         }
-        return storageSizeBytes;
+        return sizeBytes;
     }
 
     @JsonIgnore
@@ -160,7 +161,7 @@ public final class DocumentsImportFrom202ResponseDocument {
     }
 
     @JsonProperty("thumbnailState")
-    public Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> getThumbnailState() {
+    public DocumentsImportFrom202ResponseDocumentThumbnailState getThumbnailState() {
         return thumbnailState;
     }
 
@@ -173,12 +174,12 @@ public final class DocumentsImportFrom202ResponseDocument {
     }
 
     @JsonProperty("createdAt")
-    public double getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
     @JsonProperty("updatedAt")
-    public double getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
@@ -191,15 +192,15 @@ public final class DocumentsImportFrom202ResponseDocument {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("baseSha")
-    private Optional<String> _getBaseSha() {
-        return baseSha;
+    @JsonProperty("baseSha256")
+    private Optional<String> _getBaseSha256() {
+        return baseSha256;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("storageSizeBytes")
-    private Optional<Double> _getStorageSizeBytes() {
-        return storageSizeBytes;
+    @JsonProperty("sizeBytes")
+    private Optional<Integer> _getSizeBytes() {
+        return sizeBytes;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -250,15 +251,15 @@ public final class DocumentsImportFrom202ResponseDocument {
                 && name.equals(other.name)
                 && folderId.equals(other.folderId)
                 && state.equals(other.state)
-                && baseSha.equals(other.baseSha)
-                && storageSizeBytes.equals(other.storageSizeBytes)
+                && baseSha256.equals(other.baseSha256)
+                && sizeBytes.equals(other.sizeBytes)
                 && metadata.equals(other.metadata)
                 && idempotencyKey.equals(other.idempotencyKey)
                 && failureReason.equals(other.failureReason)
                 && thumbnailState.equals(other.thumbnailState)
                 && thumbnailUrl.equals(other.thumbnailUrl)
-                && createdAt == other.createdAt
-                && updatedAt == other.updatedAt
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
                 && createdBy.equals(other.createdBy);
     }
 
@@ -270,8 +271,8 @@ public final class DocumentsImportFrom202ResponseDocument {
                 this.name,
                 this.folderId,
                 this.state,
-                this.baseSha,
-                this.storageSizeBytes,
+                this.baseSha256,
+                this.sizeBytes,
                 this.metadata,
                 this.idempotencyKey,
                 this.failureReason,
@@ -313,15 +314,19 @@ public final class DocumentsImportFrom202ResponseDocument {
     }
 
     public interface StateStage {
-        CreatedAtStage state(@NotNull DocumentsImportFrom202ResponseDocumentState state);
+        ThumbnailStateStage state(@NotNull DocumentsImportFrom202ResponseDocumentState state);
+    }
+
+    public interface ThumbnailStateStage {
+        CreatedAtStage thumbnailState(@NotNull DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState);
     }
 
     public interface CreatedAtStage {
-        UpdatedAtStage createdAt(double createdAt);
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(double updatedAt);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -331,17 +336,17 @@ public final class DocumentsImportFrom202ResponseDocument {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage baseSha(Optional<String> baseSha);
+        _FinalStage baseSha256(Optional<String> baseSha256);
 
-        _FinalStage baseSha(String baseSha);
+        _FinalStage baseSha256(String baseSha256);
 
-        _FinalStage baseSha(Nullable<String> baseSha);
+        _FinalStage baseSha256(Nullable<String> baseSha256);
 
-        _FinalStage storageSizeBytes(Optional<Double> storageSizeBytes);
+        _FinalStage sizeBytes(Optional<Integer> sizeBytes);
 
-        _FinalStage storageSizeBytes(Double storageSizeBytes);
+        _FinalStage sizeBytes(Integer sizeBytes);
 
-        _FinalStage storageSizeBytes(Nullable<Double> storageSizeBytes);
+        _FinalStage sizeBytes(Nullable<Integer> sizeBytes);
 
         _FinalStage metadata(Optional<Map<String, Object>> metadata);
 
@@ -360,10 +365,6 @@ public final class DocumentsImportFrom202ResponseDocument {
         _FinalStage failureReason(String failureReason);
 
         _FinalStage failureReason(Nullable<String> failureReason);
-
-        _FinalStage thumbnailState(Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> thumbnailState);
-
-        _FinalStage thumbnailState(DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState);
 
         _FinalStage thumbnailUrl(Optional<String> thumbnailUrl);
 
@@ -385,6 +386,7 @@ public final class DocumentsImportFrom202ResponseDocument {
                     NameStage,
                     FolderIdStage,
                     StateStage,
+                    ThumbnailStateStage,
                     CreatedAtStage,
                     UpdatedAtStage,
                     _FinalStage {
@@ -398,15 +400,15 @@ public final class DocumentsImportFrom202ResponseDocument {
 
         private DocumentsImportFrom202ResponseDocumentState state;
 
-        private double createdAt;
+        private DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState;
 
-        private double updatedAt;
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
 
         private Optional<String> createdBy = Optional.empty();
 
         private Optional<String> thumbnailUrl = Optional.empty();
-
-        private Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> thumbnailState = Optional.empty();
 
         private Optional<String> failureReason = Optional.empty();
 
@@ -414,9 +416,9 @@ public final class DocumentsImportFrom202ResponseDocument {
 
         private Optional<Map<String, Object>> metadata = Optional.empty();
 
-        private Optional<Double> storageSizeBytes = Optional.empty();
+        private Optional<Integer> sizeBytes = Optional.empty();
 
-        private Optional<String> baseSha = Optional.empty();
+        private Optional<String> baseSha256 = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -430,8 +432,8 @@ public final class DocumentsImportFrom202ResponseDocument {
             name(other.getName());
             folderId(other.getFolderId());
             state(other.getState());
-            baseSha(other.getBaseSha());
-            storageSizeBytes(other.getStorageSizeBytes());
+            baseSha256(other.getBaseSha256());
+            sizeBytes(other.getSizeBytes());
             metadata(other.getMetadata());
             idempotencyKey(other.getIdempotencyKey());
             failureReason(other.getFailureReason());
@@ -477,22 +479,30 @@ public final class DocumentsImportFrom202ResponseDocument {
 
         @java.lang.Override
         @JsonSetter("state")
-        public CreatedAtStage state(@NotNull DocumentsImportFrom202ResponseDocumentState state) {
+        public ThumbnailStateStage state(@NotNull DocumentsImportFrom202ResponseDocumentState state) {
             this.state = Objects.requireNonNull(state, "state must not be null");
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("thumbnailState")
+        public CreatedAtStage thumbnailState(
+                @NotNull DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState) {
+            this.thumbnailState = Objects.requireNonNull(thumbnailState, "thumbnailState must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter("createdAt")
-        public UpdatedAtStage createdAt(double createdAt) {
-            this.createdAt = createdAt;
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updatedAt")
-        public _FinalStage updatedAt(double updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -543,20 +553,6 @@ public final class DocumentsImportFrom202ResponseDocument {
         @JsonSetter(value = "thumbnailUrl", nulls = Nulls.SKIP)
         public _FinalStage thumbnailUrl(Optional<String> thumbnailUrl) {
             this.thumbnailUrl = thumbnailUrl;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage thumbnailState(DocumentsImportFrom202ResponseDocumentThumbnailState thumbnailState) {
-            this.thumbnailState = Optional.ofNullable(thumbnailState);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "thumbnailState", nulls = Nulls.SKIP)
-        public _FinalStage thumbnailState(
-                Optional<DocumentsImportFrom202ResponseDocumentThumbnailState> thumbnailState) {
-            this.thumbnailState = thumbnailState;
             return this;
         }
 
@@ -636,52 +632,52 @@ public final class DocumentsImportFrom202ResponseDocument {
         }
 
         @java.lang.Override
-        public _FinalStage storageSizeBytes(Nullable<Double> storageSizeBytes) {
-            if (storageSizeBytes.isNull()) {
-                this.storageSizeBytes = null;
-            } else if (storageSizeBytes.isEmpty()) {
-                this.storageSizeBytes = Optional.empty();
+        public _FinalStage sizeBytes(Nullable<Integer> sizeBytes) {
+            if (sizeBytes.isNull()) {
+                this.sizeBytes = null;
+            } else if (sizeBytes.isEmpty()) {
+                this.sizeBytes = Optional.empty();
             } else {
-                this.storageSizeBytes = Optional.of(storageSizeBytes.get());
+                this.sizeBytes = Optional.of(sizeBytes.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage storageSizeBytes(Double storageSizeBytes) {
-            this.storageSizeBytes = Optional.ofNullable(storageSizeBytes);
+        public _FinalStage sizeBytes(Integer sizeBytes) {
+            this.sizeBytes = Optional.ofNullable(sizeBytes);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "storageSizeBytes", nulls = Nulls.SKIP)
-        public _FinalStage storageSizeBytes(Optional<Double> storageSizeBytes) {
-            this.storageSizeBytes = storageSizeBytes;
+        @JsonSetter(value = "sizeBytes", nulls = Nulls.SKIP)
+        public _FinalStage sizeBytes(Optional<Integer> sizeBytes) {
+            this.sizeBytes = sizeBytes;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage baseSha(Nullable<String> baseSha) {
-            if (baseSha.isNull()) {
-                this.baseSha = null;
-            } else if (baseSha.isEmpty()) {
-                this.baseSha = Optional.empty();
+        public _FinalStage baseSha256(Nullable<String> baseSha256) {
+            if (baseSha256.isNull()) {
+                this.baseSha256 = null;
+            } else if (baseSha256.isEmpty()) {
+                this.baseSha256 = Optional.empty();
             } else {
-                this.baseSha = Optional.of(baseSha.get());
+                this.baseSha256 = Optional.of(baseSha256.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage baseSha(String baseSha) {
-            this.baseSha = Optional.ofNullable(baseSha);
+        public _FinalStage baseSha256(String baseSha256) {
+            this.baseSha256 = Optional.ofNullable(baseSha256);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "baseSha", nulls = Nulls.SKIP)
-        public _FinalStage baseSha(Optional<String> baseSha) {
-            this.baseSha = baseSha;
+        @JsonSetter(value = "baseSha256", nulls = Nulls.SKIP)
+        public _FinalStage baseSha256(Optional<String> baseSha256) {
+            this.baseSha256 = baseSha256;
             return this;
         }
 
@@ -693,8 +689,8 @@ public final class DocumentsImportFrom202ResponseDocument {
                     name,
                     folderId,
                     state,
-                    baseSha,
-                    storageSizeBytes,
+                    baseSha256,
+                    sizeBytes,
                     metadata,
                     idempotencyKey,
                     failureReason,

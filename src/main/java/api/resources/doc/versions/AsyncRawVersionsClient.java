@@ -22,9 +22,10 @@ import com.cloudpdf.api.resources.doc.versions.requests.SignatureContentsVersion
 import com.cloudpdf.api.resources.doc.versions.requests.SignatureDigestVersionsRequest;
 import com.cloudpdf.api.resources.doc.versions.requests.SignaturesVersionsRequest;
 import com.cloudpdf.api.resources.doc.versions.types.SignatureDigestVersionsRequestAlgorithm;
-import com.cloudpdf.api.types.DocVersionsAnalysis200Response;
-import com.cloudpdf.api.types.DocVersionsList200Response;
-import com.cloudpdf.api.types.DocVersionsSignatures200Response;
+import com.cloudpdf.api.types.DocVersionsAnalysisResponse;
+import com.cloudpdf.api.types.DocVersionsListResponse;
+import com.cloudpdf.api.types.DocVersionsSignaturesResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,15 +50,14 @@ public class AsyncRawVersionsClient {
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsList200Response>> list(
-            String docId, String layerName) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsListResponse>> list(String docId, String layerName) {
         return list(docId, layerName, ListVersionsRequest.builder().build());
     }
 
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsListResponse>> list(
             String docId, String layerName, RequestOptions requestOptions) {
         return list(docId, layerName, ListVersionsRequest.builder().build(), requestOptions);
     }
@@ -65,7 +65,7 @@ public class AsyncRawVersionsClient {
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsListResponse>> list(
             String docId, String layerName, ListVersionsRequest request) {
         return list(docId, layerName, request, null);
     }
@@ -73,7 +73,7 @@ public class AsyncRawVersionsClient {
     /**
      * Every completed signature makes a new version of its layer; another layer's versions are never listed. Never cached: the list grows.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsListResponse>> list(
             String docId, String layerName, ListVersionsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -110,7 +110,7 @@ public class AsyncRawVersionsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsList200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -118,15 +118,15 @@ public class AsyncRawVersionsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocVersionsList200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocVersionsListResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -155,34 +155,36 @@ public class AsyncRawVersionsClient {
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysis200Response>> analysis(
-            String docId, String layerName, String sha) {
-        return analysis(docId, layerName, sha, AnalysisVersionsRequest.builder().build());
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysisResponse>> analysis(
+            String docId, String layerName, String sha256) {
+        return analysis(
+                docId, layerName, sha256, AnalysisVersionsRequest.builder().build());
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysis200Response>> analysis(
-            String docId, String layerName, String sha, RequestOptions requestOptions) {
-        return analysis(docId, layerName, sha, AnalysisVersionsRequest.builder().build(), requestOptions);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysisResponse>> analysis(
+            String docId, String layerName, String sha256, RequestOptions requestOptions) {
+        return analysis(
+                docId, layerName, sha256, AnalysisVersionsRequest.builder().build(), requestOptions);
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysis200Response>> analysis(
-            String docId, String layerName, String sha, AnalysisVersionsRequest request) {
-        return analysis(docId, layerName, sha, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysisResponse>> analysis(
+            String docId, String layerName, String sha256, AnalysisVersionsRequest request) {
+        return analysis(docId, layerName, sha256, request, null);
     }
 
     /**
      * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysis200Response>> analysis(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysisResponse>> analysis(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             AnalysisVersionsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -192,7 +194,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/analysis")
-                .addPathSegment(sha);
+                .addPathSegment(sha256);
         if (request.getSinceSignature().isPresent()) {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "since.signature", request.getSinceSignature().get(), false);
@@ -241,8 +243,7 @@ public class AsyncRawVersionsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysis200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsAnalysisResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -251,7 +252,7 @@ public class AsyncRawVersionsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocVersionsAnalysis200Response.class),
+                                        responseBodyString, DocVersionsAnalysisResponse.class),
                                 response));
                         return;
                     }
@@ -259,12 +260,12 @@ public class AsyncRawVersionsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -292,24 +293,26 @@ public class AsyncRawVersionsClient {
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> download(
-            String docId, String layerName, String sha) {
-        return download(docId, layerName, sha, DownloadVersionsRequest.builder().build());
+            String docId, String layerName, String sha256) {
+        return download(
+                docId, layerName, sha256, DownloadVersionsRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> download(
-            String docId, String layerName, String sha, RequestOptions requestOptions) {
-        return download(docId, layerName, sha, DownloadVersionsRequest.builder().build(), requestOptions);
+            String docId, String layerName, String sha256, RequestOptions requestOptions) {
+        return download(
+                docId, layerName, sha256, DownloadVersionsRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> download(
-            String docId, String layerName, String sha, DownloadVersionsRequest request) {
-        return download(docId, layerName, sha, request, null);
+            String docId, String layerName, String sha256, DownloadVersionsRequest request) {
+        return download(docId, layerName, sha256, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> download(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             DownloadVersionsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -319,7 +322,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/download")
-                .addPathSegment(sha);
+                .addPathSegment(sha256);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -363,7 +366,8 @@ public class AsyncRawVersionsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -390,26 +394,35 @@ public class AsyncRawVersionsClient {
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> revision(
-            String docId, String layerName, String sha, int index) {
+            String docId, String layerName, String sha256, int index) {
         return revision(
-                docId, layerName, sha, index, RevisionVersionsRequest.builder().build());
+                docId,
+                layerName,
+                sha256,
+                index,
+                RevisionVersionsRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> revision(
-            String docId, String layerName, String sha, int index, RequestOptions requestOptions) {
+            String docId, String layerName, String sha256, int index, RequestOptions requestOptions) {
         return revision(
-                docId, layerName, sha, index, RevisionVersionsRequest.builder().build(), requestOptions);
+                docId,
+                layerName,
+                sha256,
+                index,
+                RevisionVersionsRequest.builder().build(),
+                requestOptions);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> revision(
-            String docId, String layerName, String sha, int index, RevisionVersionsRequest request) {
-        return revision(docId, layerName, sha, index, request, null);
+            String docId, String layerName, String sha256, int index, RevisionVersionsRequest request) {
+        return revision(docId, layerName, sha256, index, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> revision(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             int index,
             RevisionVersionsRequest request,
             RequestOptions requestOptions) {
@@ -420,7 +433,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/revisions")
-                .addPathSegment(sha)
+                .addPathSegment(sha256)
                 .addPathSegment(Integer.toString(index));
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -465,7 +478,8 @@ public class AsyncRawVersionsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -491,27 +505,27 @@ public class AsyncRawVersionsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignatures200Response>> signatures(
-            String docId, String layerName, String sha) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignaturesResponse>> signatures(
+            String docId, String layerName, String sha256) {
         return signatures(
-                docId, layerName, sha, SignaturesVersionsRequest.builder().build());
+                docId, layerName, sha256, SignaturesVersionsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignatures200Response>> signatures(
-            String docId, String layerName, String sha, RequestOptions requestOptions) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignaturesResponse>> signatures(
+            String docId, String layerName, String sha256, RequestOptions requestOptions) {
         return signatures(
-                docId, layerName, sha, SignaturesVersionsRequest.builder().build(), requestOptions);
+                docId, layerName, sha256, SignaturesVersionsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignatures200Response>> signatures(
-            String docId, String layerName, String sha, SignaturesVersionsRequest request) {
-        return signatures(docId, layerName, sha, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignaturesResponse>> signatures(
+            String docId, String layerName, String sha256, SignaturesVersionsRequest request) {
+        return signatures(docId, layerName, sha256, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignatures200Response>> signatures(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignaturesResponse>> signatures(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             SignaturesVersionsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -521,7 +535,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
-                .addPathSegment(sha);
+                .addPathSegment(sha256);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -550,8 +564,7 @@ public class AsyncRawVersionsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignatures200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocVersionsSignaturesResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -560,14 +573,15 @@ public class AsyncRawVersionsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocVersionsSignatures200Response.class),
+                                        responseBodyString, DocVersionsSignaturesResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -597,11 +611,11 @@ public class AsyncRawVersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureContents(
-            String docId, String layerName, String sha, String fieldKey) {
+            String docId, String layerName, String sha256, String fieldKey) {
         return signatureContents(
                 docId,
                 layerName,
-                sha,
+                sha256,
                 fieldKey,
                 SignatureContentsVersionsRequest.builder().build());
     }
@@ -610,11 +624,11 @@ public class AsyncRawVersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureContents(
-            String docId, String layerName, String sha, String fieldKey, RequestOptions requestOptions) {
+            String docId, String layerName, String sha256, String fieldKey, RequestOptions requestOptions) {
         return signatureContents(
                 docId,
                 layerName,
-                sha,
+                sha256,
                 fieldKey,
                 SignatureContentsVersionsRequest.builder().build(),
                 requestOptions);
@@ -624,8 +638,8 @@ public class AsyncRawVersionsClient {
      * <code>fieldKey</code> is the field's fully qualified name, token-text encoded (the same encoding attachment keys use).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureContents(
-            String docId, String layerName, String sha, String fieldKey, SignatureContentsVersionsRequest request) {
-        return signatureContents(docId, layerName, sha, fieldKey, request, null);
+            String docId, String layerName, String sha256, String fieldKey, SignatureContentsVersionsRequest request) {
+        return signatureContents(docId, layerName, sha256, fieldKey, request, null);
     }
 
     /**
@@ -634,7 +648,7 @@ public class AsyncRawVersionsClient {
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureContents(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureContentsVersionsRequest request,
             RequestOptions requestOptions) {
@@ -645,7 +659,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
-                .addPathSegment(sha)
+                .addPathSegment(sha256)
                 .addPathSegment(fieldKey)
                 .addPathSegments("contents");
         if (requestOptions != null) {
@@ -691,7 +705,8 @@ public class AsyncRawVersionsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -723,13 +738,13 @@ public class AsyncRawVersionsClient {
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm) {
         return signatureDigest(
                 docId,
                 layerName,
-                sha,
+                sha256,
                 fieldKey,
                 algorithm,
                 SignatureDigestVersionsRequest.builder().build());
@@ -741,14 +756,14 @@ public class AsyncRawVersionsClient {
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             RequestOptions requestOptions) {
         return signatureDigest(
                 docId,
                 layerName,
-                sha,
+                sha256,
                 fieldKey,
                 algorithm,
                 SignatureDigestVersionsRequest.builder().build(),
@@ -761,11 +776,11 @@ public class AsyncRawVersionsClient {
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request) {
-        return signatureDigest(docId, layerName, sha, fieldKey, algorithm, request, null);
+        return signatureDigest(docId, layerName, sha256, fieldKey, algorithm, request, null);
     }
 
     /**
@@ -774,7 +789,7 @@ public class AsyncRawVersionsClient {
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> signatureDigest(
             String docId,
             String layerName,
-            String sha,
+            String sha256,
             String fieldKey,
             SignatureDigestVersionsRequestAlgorithm algorithm,
             SignatureDigestVersionsRequest request,
@@ -786,7 +801,7 @@ public class AsyncRawVersionsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
-                .addPathSegment(sha)
+                .addPathSegment(sha256)
                 .addPathSegment(fieldKey)
                 .addPathSegments("digest")
                 .addPathSegment(algorithm.toString());
@@ -833,7 +848,8 @@ public class AsyncRawVersionsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {

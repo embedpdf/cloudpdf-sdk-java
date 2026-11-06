@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public final class GrantsCreateRequest {
 
     private final Optional<Integer> sessionTtlSeconds;
 
-    private final Optional<Integer> expiresAt;
+    private final Optional<OffsetDateTime> expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
@@ -70,7 +71,7 @@ public final class GrantsCreateRequest {
             Optional<List<String>> origins,
             Optional<String> passphrase,
             Optional<Integer> sessionTtlSeconds,
-            Optional<Integer> expiresAt,
+            Optional<OffsetDateTime> expiresAt,
             Map<String, Object> additionalProperties) {
         this.docId = docId;
         this.name = name;
@@ -145,8 +146,11 @@ public final class GrantsCreateRequest {
         return scope;
     }
 
-    @JsonProperty("origins")
+    @JsonIgnore
     public Optional<List<String>> getOrigins() {
+        if (origins == null) {
+            return Optional.empty();
+        }
         return origins;
     }
 
@@ -160,8 +164,11 @@ public final class GrantsCreateRequest {
         return sessionTtlSeconds;
     }
 
-    @JsonProperty("expiresAt")
-    public Optional<Integer> getExpiresAt() {
+    @JsonIgnore
+    public Optional<OffsetDateTime> getExpiresAt() {
+        if (expiresAt == null) {
+            return Optional.empty();
+        }
         return expiresAt;
     }
 
@@ -187,6 +194,18 @@ public final class GrantsCreateRequest {
     @JsonProperty("identity")
     private Optional<Identity> _getIdentity() {
         return identity;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("origins")
+    private Optional<List<String>> _getOrigins() {
+        return origins;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("expiresAt")
+    private Optional<OffsetDateTime> _getExpiresAt() {
+        return expiresAt;
     }
 
     @java.lang.Override
@@ -302,6 +321,8 @@ public final class GrantsCreateRequest {
 
         _FinalStage origins(List<String> origins);
 
+        _FinalStage origins(Nullable<List<String>> origins);
+
         _FinalStage passphrase(Optional<String> passphrase);
 
         _FinalStage passphrase(String passphrase);
@@ -310,16 +331,18 @@ public final class GrantsCreateRequest {
 
         _FinalStage sessionTtlSeconds(Integer sessionTtlSeconds);
 
-        _FinalStage expiresAt(Optional<Integer> expiresAt);
+        _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt);
 
-        _FinalStage expiresAt(Integer expiresAt);
+        _FinalStage expiresAt(OffsetDateTime expiresAt);
+
+        _FinalStage expiresAt(Nullable<OffsetDateTime> expiresAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements DocIdStage, _FinalStage {
         private String docId;
 
-        private Optional<Integer> expiresAt = Optional.empty();
+        private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         private Optional<Integer> sessionTtlSeconds = Optional.empty();
 
@@ -374,14 +397,26 @@ public final class GrantsCreateRequest {
         }
 
         @java.lang.Override
-        public _FinalStage expiresAt(Integer expiresAt) {
+        public _FinalStage expiresAt(Nullable<OffsetDateTime> expiresAt) {
+            if (expiresAt.isNull()) {
+                this.expiresAt = null;
+            } else if (expiresAt.isEmpty()) {
+                this.expiresAt = Optional.empty();
+            } else {
+                this.expiresAt = Optional.of(expiresAt.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage expiresAt(OffsetDateTime expiresAt) {
             this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
-        public _FinalStage expiresAt(Optional<Integer> expiresAt) {
+        public _FinalStage expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
             return this;
         }
@@ -409,6 +444,18 @@ public final class GrantsCreateRequest {
         @JsonSetter(value = "passphrase", nulls = Nulls.SKIP)
         public _FinalStage passphrase(Optional<String> passphrase) {
             this.passphrase = passphrase;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage origins(Nullable<List<String>> origins) {
+            if (origins.isNull()) {
+                this.origins = null;
+            } else if (origins.isEmpty()) {
+                this.origins = Optional.empty();
+            } else {
+                this.origins = Optional.of(origins.get());
+            }
             return this;
         }
 

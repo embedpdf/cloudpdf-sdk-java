@@ -11,10 +11,10 @@ import com.cloudpdf.api.resources.folders.requests.FoldersMoveIntoRequest;
 import com.cloudpdf.api.resources.folders.requests.FoldersUpdateRequest;
 import com.cloudpdf.api.resources.folders.requests.GetFoldersRequest;
 import com.cloudpdf.api.resources.folders.requests.ListFoldersRequest;
-import com.cloudpdf.api.types.FoldersCreate200Response;
-import com.cloudpdf.api.types.FoldersGet200Response;
-import com.cloudpdf.api.types.FoldersList200Response;
-import com.cloudpdf.api.types.FoldersUpdate200Response;
+import com.cloudpdf.api.types.FoldersCreateResponse;
+import com.cloudpdf.api.types.FoldersGetResponse;
+import com.cloudpdf.api.types.FoldersListResponse;
+import com.cloudpdf.api.types.FoldersUpdateResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncFoldersClient {
@@ -34,19 +34,19 @@ public class AsyncFoldersClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<FoldersList200Response> list(String tenantId) {
+    public CompletableFuture<FoldersListResponse> list(String tenantId) {
         return this.rawClient.list(tenantId).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersList200Response> list(String tenantId, RequestOptions requestOptions) {
+    public CompletableFuture<FoldersListResponse> list(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersList200Response> list(String tenantId, ListFoldersRequest request) {
+    public CompletableFuture<FoldersListResponse> list(String tenantId, ListFoldersRequest request) {
         return this.rawClient.list(tenantId, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersList200Response> list(
+    public CompletableFuture<FoldersListResponse> list(
             String tenantId, ListFoldersRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
@@ -54,32 +54,31 @@ public class AsyncFoldersClient {
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public CompletableFuture<FoldersCreate200Response> create(String tenantId, FoldersCreateRequest request) {
+    public CompletableFuture<FoldersCreateResponse> create(String tenantId, FoldersCreateRequest request) {
         return this.rawClient.create(tenantId, request).thenApply(response -> response.body());
     }
 
     /**
      * 409 Conflict carries <code>details.reason</code>: <code>name-taken</code> (a sibling has the name, ignoring case; <code>details.name</code>) or <code>too-deep</code> (folders nest at most 100 levels; <code>details.maxDepth</code>). 404 when the parent folder does not exist.
      */
-    public CompletableFuture<FoldersCreate200Response> create(
+    public CompletableFuture<FoldersCreateResponse> create(
             String tenantId, FoldersCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersGet200Response> get(String tenantId, String folderId) {
+    public CompletableFuture<FoldersGetResponse> get(String tenantId, String folderId) {
         return this.rawClient.get(tenantId, folderId).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersGet200Response> get(
-            String tenantId, String folderId, RequestOptions requestOptions) {
+    public CompletableFuture<FoldersGetResponse> get(String tenantId, String folderId, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, folderId, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersGet200Response> get(String tenantId, String folderId, GetFoldersRequest request) {
+    public CompletableFuture<FoldersGetResponse> get(String tenantId, String folderId, GetFoldersRequest request) {
         return this.rawClient.get(tenantId, folderId, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<FoldersGet200Response> get(
+    public CompletableFuture<FoldersGetResponse> get(
             String tenantId, String folderId, GetFoldersRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, folderId, request, requestOptions).thenApply(response -> response.body());
     }
@@ -118,7 +117,7 @@ public class AsyncFoldersClient {
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public CompletableFuture<FoldersUpdate200Response> update(
+    public CompletableFuture<FoldersUpdateResponse> update(
             String tenantId, String folderId, FoldersUpdateRequest request) {
         return this.rawClient.update(tenantId, folderId, request).thenApply(response -> response.body());
     }
@@ -126,7 +125,7 @@ public class AsyncFoldersClient {
     /**
      * 409 Conflict with <code>details.reason</code> <code>name-taken</code> when a sibling has the name, ignoring case.
      */
-    public CompletableFuture<FoldersUpdate200Response> update(
+    public CompletableFuture<FoldersUpdateResponse> update(
             String tenantId, String folderId, FoldersUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .update(tenantId, folderId, request, requestOptions)
@@ -134,28 +133,28 @@ public class AsyncFoldersClient {
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CompletableFuture<Void> moveInto(String tenantId, String folderId) {
         return this.rawClient.moveInto(tenantId, folderId).thenApply(response -> response.body());
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CompletableFuture<Void> moveInto(String tenantId, String folderId, RequestOptions requestOptions) {
         return this.rawClient.moveInto(tenantId, folderId, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CompletableFuture<Void> moveInto(String tenantId, String folderId, FoldersMoveIntoRequest request) {
         return this.rawClient.moveInto(tenantId, folderId, request).thenApply(response -> response.body());
     }
 
     /**
-     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.documentIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
+     * Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in <code>details.docIds</code> and <code>details.folderIds</code>. 409 Conflict carries <code>details.reason</code>: <code>cycle</code> (the destination is a moved folder or inside one; <code>details.folderId</code>), <code>too-deep</code> (the move would nest folders deeper than 100 levels; <code>details.maxDepth</code>) or <code>name-taken</code> (a moved folder's name is taken in the destination, ignoring case; <code>details.name</code>).
      */
     public CompletableFuture<Void> moveInto(
             String tenantId, String folderId, FoldersMoveIntoRequest request, RequestOptions requestOptions) {

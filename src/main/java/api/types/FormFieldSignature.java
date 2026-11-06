@@ -43,9 +43,9 @@ public final class FormFieldSignature {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldSignatureValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldSignatureDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -76,8 +76,8 @@ public final class FormFieldSignature {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldSignatureValueEntry valueEntry,
-            FormFieldSignatureDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -157,12 +157,12 @@ public final class FormFieldSignature {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldSignatureValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldSignatureDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -379,11 +379,11 @@ public final class FormFieldSignature {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldSignatureValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        _FinalStage defaultValueEntry(@NotNull FormFieldSignatureDefaultValueEntry defaultValueEntry);
+        _FinalStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface _FinalStage {
@@ -481,9 +481,9 @@ public final class FormFieldSignature {
 
         private boolean noExport;
 
-        private FormFieldSignatureValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldSignatureDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private List<FormWidget> widgets = new ArrayList<>();
 
@@ -580,14 +580,14 @@ public final class FormFieldSignature {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldSignatureValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public _FinalStage defaultValueEntry(@NotNull FormFieldSignatureDefaultValueEntry defaultValueEntry) {
+        public _FinalStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

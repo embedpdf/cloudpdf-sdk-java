@@ -7,7 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.tokens.requests.IssueTokensRequest;
 import com.cloudpdf.api.resources.tokens.requests.TokensRevokeRequest;
-import com.cloudpdf.api.types.TokensIssue200Response;
+import com.cloudpdf.api.types.TokensIssueResponse;
 
 public class TokensClient {
     protected final ClientOptions clientOptions;
@@ -29,14 +29,14 @@ public class TokensClient {
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public TokensIssue200Response issue(String tenantId, IssueTokensRequest request) {
+    public TokensIssueResponse issue(String tenantId, IssueTokensRequest request) {
         return this.rawClient.issue(tenantId, request).body();
     }
 
     /**
      * Authority mints only downward: kind &quot;doc&quot; gives only document permissions the caller holds itself, kind &quot;tenant&quot; requires the API token, and kind &quot;upload&quot; requires docs.create instead of tokens.issue-doc, since an upload token can do only what docs.create allows. Mounted only when the deployment can sign (HS256 mode); asymmetric deployments mint with their own private key.
      */
-    public TokensIssue200Response issue(String tenantId, IssueTokensRequest request, RequestOptions requestOptions) {
+    public TokensIssueResponse issue(String tenantId, IssueTokensRequest request, RequestOptions requestOptions) {
         return this.rawClient.issue(tenantId, request, requestOptions).body();
     }
 

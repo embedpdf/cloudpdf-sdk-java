@@ -14,7 +14,8 @@ import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.redactions.requests.DocRedactionsApplyRequest;
-import com.cloudpdf.api.types.DocRedactionsApply200Response;
+import com.cloudpdf.api.types.DocRedactionsApplyResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -36,22 +37,22 @@ public class AsyncRawRedactionsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApplyResponse>> apply(
             String docId, String layerName) {
         return apply(docId, layerName, DocRedactionsApplyRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApplyResponse>> apply(
             String docId, String layerName, RequestOptions requestOptions) {
         return apply(docId, layerName, DocRedactionsApplyRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApplyResponse>> apply(
             String docId, String layerName, DocRedactionsApplyRequest request) {
         return apply(docId, layerName, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> apply(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApplyResponse>> apply(
             String docId, String layerName, DocRedactionsApplyRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -101,7 +102,7 @@ public class AsyncRawRedactionsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApply200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocRedactionsApplyResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -110,7 +111,7 @@ public class AsyncRawRedactionsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocRedactionsApply200Response.class),
+                                        responseBodyString, DocRedactionsApplyResponse.class),
                                 response));
                         return;
                     }
@@ -118,12 +119,12 @@ public class AsyncRawRedactionsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

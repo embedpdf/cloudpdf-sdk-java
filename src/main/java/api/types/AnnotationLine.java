@@ -110,9 +110,9 @@ public final class AnnotationLine {
 
     private final Optional<AnnotationLineIntent> intent;
 
-    private final Optional<AnnotationLineMeasure> measure;
+    private final Optional<PdfMeasurement> measure;
 
-    private final Optional<Boolean> captionEnabled;
+    private final boolean captionEnabled;
 
     private final AnnotationLineCaptionPosition captionPosition;
 
@@ -165,8 +165,8 @@ public final class AnnotationLine {
             AnnotationLineLineEndings lineEndings,
             Optional<Double> rotation,
             Optional<AnnotationLineIntent> intent,
-            Optional<AnnotationLineMeasure> measure,
-            Optional<Boolean> captionEnabled,
+            Optional<PdfMeasurement> measure,
+            boolean captionEnabled,
             AnnotationLineCaptionPosition captionPosition,
             Optional<AnnotationLineCaptionOffset> captionOffset,
             Optional<AnnotationLineLeader> leader,
@@ -497,19 +497,19 @@ public final class AnnotationLine {
         return intent;
     }
 
+    /**
+     * @return A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.
+     */
     @JsonIgnore
-    public Optional<AnnotationLineMeasure> getMeasure() {
+    public Optional<PdfMeasurement> getMeasure() {
         if (measure == null) {
             return Optional.empty();
         }
         return measure;
     }
 
-    @JsonIgnore
-    public Optional<Boolean> getCaptionEnabled() {
-        if (captionEnabled == null) {
-            return Optional.empty();
-        }
+    @JsonProperty("captionEnabled")
+    public boolean getCaptionEnabled() {
         return captionEnabled;
     }
 
@@ -668,14 +668,8 @@ public final class AnnotationLine {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("measure")
-    private Optional<AnnotationLineMeasure> _getMeasure() {
+    private Optional<PdfMeasurement> _getMeasure() {
         return measure;
-    }
-
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("captionEnabled")
-    private Optional<Boolean> _getCaptionEnabled() {
-        return captionEnabled;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -745,7 +739,7 @@ public final class AnnotationLine {
                 && rotation.equals(other.rotation)
                 && intent.equals(other.intent)
                 && measure.equals(other.measure)
-                && captionEnabled.equals(other.captionEnabled)
+                && captionEnabled == other.captionEnabled
                 && captionPosition.equals(other.captionPosition)
                 && captionOffset.equals(other.captionOffset)
                 && leader.equals(other.leader);
@@ -891,7 +885,11 @@ public final class AnnotationLine {
     }
 
     public interface LineEndingsStage {
-        CaptionPositionStage lineEndings(@NotNull AnnotationLineLineEndings lineEndings);
+        CaptionEnabledStage lineEndings(@NotNull AnnotationLineLineEndings lineEndings);
+    }
+
+    public interface CaptionEnabledStage {
+        CaptionPositionStage captionEnabled(boolean captionEnabled);
     }
 
     public interface CaptionPositionStage {
@@ -1037,17 +1035,14 @@ public final class AnnotationLine {
 
         _FinalStage intent(Nullable<AnnotationLineIntent> intent);
 
-        _FinalStage measure(Optional<AnnotationLineMeasure> measure);
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         */
+        _FinalStage measure(Optional<PdfMeasurement> measure);
 
-        _FinalStage measure(AnnotationLineMeasure measure);
+        _FinalStage measure(PdfMeasurement measure);
 
-        _FinalStage measure(Nullable<AnnotationLineMeasure> measure);
-
-        _FinalStage captionEnabled(Optional<Boolean> captionEnabled);
-
-        _FinalStage captionEnabled(Boolean captionEnabled);
-
-        _FinalStage captionEnabled(Nullable<Boolean> captionEnabled);
+        _FinalStage measure(Nullable<PdfMeasurement> measure);
 
         _FinalStage captionOffset(Optional<AnnotationLineCaptionOffset> captionOffset);
 
@@ -1084,6 +1079,7 @@ public final class AnnotationLine {
                     BorderStyleStage,
                     LinePointsStage,
                     LineEndingsStage,
+                    CaptionEnabledStage,
                     CaptionPositionStage,
                     _FinalStage {
         private AnnotationRef ref;
@@ -1126,15 +1122,15 @@ public final class AnnotationLine {
 
         private AnnotationLineLineEndings lineEndings;
 
+        private boolean captionEnabled;
+
         private AnnotationLineCaptionPosition captionPosition;
 
         private Optional<AnnotationLineLeader> leader = Optional.empty();
 
         private Optional<AnnotationLineCaptionOffset> captionOffset = Optional.empty();
 
-        private Optional<Boolean> captionEnabled = Optional.empty();
-
-        private Optional<AnnotationLineMeasure> measure = Optional.empty();
+        private Optional<PdfMeasurement> measure = Optional.empty();
 
         private Optional<AnnotationLineIntent> intent = Optional.empty();
 
@@ -1372,8 +1368,15 @@ public final class AnnotationLine {
 
         @java.lang.Override
         @JsonSetter("lineEndings")
-        public CaptionPositionStage lineEndings(@NotNull AnnotationLineLineEndings lineEndings) {
+        public CaptionEnabledStage lineEndings(@NotNull AnnotationLineLineEndings lineEndings) {
             this.lineEndings = Objects.requireNonNull(lineEndings, "lineEndings must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("captionEnabled")
+        public CaptionPositionStage captionEnabled(boolean captionEnabled) {
+            this.captionEnabled = captionEnabled;
             return this;
         }
 
@@ -1434,33 +1437,12 @@ public final class AnnotationLine {
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage captionEnabled(Nullable<Boolean> captionEnabled) {
-            if (captionEnabled.isNull()) {
-                this.captionEnabled = null;
-            } else if (captionEnabled.isEmpty()) {
-                this.captionEnabled = Optional.empty();
-            } else {
-                this.captionEnabled = Optional.of(captionEnabled.get());
-            }
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage captionEnabled(Boolean captionEnabled) {
-            this.captionEnabled = Optional.ofNullable(captionEnabled);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "captionEnabled", nulls = Nulls.SKIP)
-        public _FinalStage captionEnabled(Optional<Boolean> captionEnabled) {
-            this.captionEnabled = captionEnabled;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage measure(Nullable<AnnotationLineMeasure> measure) {
+        public _FinalStage measure(Nullable<PdfMeasurement> measure) {
             if (measure.isNull()) {
                 this.measure = null;
             } else if (measure.isEmpty()) {
@@ -1471,15 +1453,22 @@ public final class AnnotationLine {
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage measure(AnnotationLineMeasure measure) {
+        public _FinalStage measure(PdfMeasurement measure) {
             this.measure = Optional.ofNullable(measure);
             return this;
         }
 
+        /**
+         * <p>A measure, by its <code>subtype</code>. A newer server can add subtypes: read one your client doesn't know as <code>unknown</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "measure", nulls = Nulls.SKIP)
-        public _FinalStage measure(Optional<AnnotationLineMeasure> measure) {
+        public _FinalStage measure(Optional<PdfMeasurement> measure) {
             this.measure = measure;
             return this;
         }

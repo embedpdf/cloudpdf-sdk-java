@@ -23,11 +23,11 @@ import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
 import com.cloudpdf.api.resources.doc.signatures.SignaturesClient;
 import com.cloudpdf.api.resources.doc.versions.VersionsClient;
-import com.cloudpdf.api.types.DocChanges200Response;
-import com.cloudpdf.api.types.DocDownloadLink200Response;
-import com.cloudpdf.api.types.DocHead200Response;
-import com.cloudpdf.api.types.DocManifest200Response;
-import com.cloudpdf.api.types.DocText200Response;
+import com.cloudpdf.api.types.DocChangesResponse;
+import com.cloudpdf.api.types.DocDownloadLinkResponse;
+import com.cloudpdf.api.types.DocHeadResponse;
+import com.cloudpdf.api.types.DocManifestResponse;
+import com.cloudpdf.api.types.DocTextResponse;
 import java.io.InputStream;
 import java.util.function.Supplier;
 
@@ -78,33 +78,33 @@ public class DocClient {
         return this.rawClient;
     }
 
-    public DocHead200Response head(String docId) {
+    public DocHeadResponse head(String docId) {
         return this.rawClient.head(docId).body();
     }
 
-    public DocHead200Response head(String docId, RequestOptions requestOptions) {
+    public DocHeadResponse head(String docId, RequestOptions requestOptions) {
         return this.rawClient.head(docId, requestOptions).body();
     }
 
-    public DocHead200Response head(String docId, HeadDocRequest request) {
+    public DocHeadResponse head(String docId, HeadDocRequest request) {
         return this.rawClient.head(docId, request).body();
     }
 
-    public DocHead200Response head(String docId, HeadDocRequest request, RequestOptions requestOptions) {
+    public DocHeadResponse head(String docId, HeadDocRequest request, RequestOptions requestOptions) {
         return this.rawClient.head(docId, request, requestOptions).body();
     }
 
     /**
      * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
-    public DocChanges200Response changes(String docId, String layerName, DocChangesRequest request) {
+    public DocChangesResponse changes(String docId, String layerName, DocChangesRequest request) {
         return this.rawClient.changes(docId, layerName, request).body();
     }
 
     /**
      * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
-    public DocChanges200Response changes(
+    public DocChangesResponse changes(
             String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
         return this.rawClient.changes(docId, layerName, request, requestOptions).body();
     }
@@ -131,47 +131,47 @@ public class DocClient {
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public DocDownloadLink200Response downloadLink(String docId, String layerName) {
+    public DocDownloadLinkResponse downloadLink(String docId, String layerName) {
         return this.rawClient.downloadLink(docId, layerName).body();
     }
 
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public DocDownloadLink200Response downloadLink(String docId, String layerName, RequestOptions requestOptions) {
+    public DocDownloadLinkResponse downloadLink(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.downloadLink(docId, layerName, requestOptions).body();
     }
 
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public DocDownloadLink200Response downloadLink(String docId, String layerName, DocDownloadLinkRequest request) {
+    public DocDownloadLinkResponse downloadLink(String docId, String layerName, DocDownloadLinkRequest request) {
         return this.rawClient.downloadLink(docId, layerName, request).body();
     }
 
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public DocDownloadLink200Response downloadLink(
+    public DocDownloadLinkResponse downloadLink(
             String docId, String layerName, DocDownloadLinkRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .downloadLink(docId, layerName, request, requestOptions)
                 .body();
     }
 
-    public DocManifest200Response manifest(String docId, String layerName) {
+    public DocManifestResponse manifest(String docId, String layerName) {
         return this.rawClient.manifest(docId, layerName).body();
     }
 
-    public DocManifest200Response manifest(String docId, String layerName, RequestOptions requestOptions) {
+    public DocManifestResponse manifest(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.manifest(docId, layerName, requestOptions).body();
     }
 
-    public DocManifest200Response manifest(String docId, String layerName, ManifestDocRequest request) {
+    public DocManifestResponse manifest(String docId, String layerName, ManifestDocRequest request) {
         return this.rawClient.manifest(docId, layerName, request).body();
     }
 
-    public DocManifest200Response manifest(
+    public DocManifestResponse manifest(
             String docId, String layerName, ManifestDocRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .manifest(docId, layerName, request, requestOptions)
@@ -209,19 +209,19 @@ public class DocClient {
                 .body();
     }
 
-    public DocText200Response text(String docId, String layerName, String pageKey) {
+    public DocTextResponse text(String docId, String layerName, String pageKey) {
         return this.rawClient.text(docId, layerName, pageKey).body();
     }
 
-    public DocText200Response text(String docId, String layerName, String pageKey, RequestOptions requestOptions) {
+    public DocTextResponse text(String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return this.rawClient.text(docId, layerName, pageKey, requestOptions).body();
     }
 
-    public DocText200Response text(String docId, String layerName, String pageKey, TextDocRequest request) {
+    public DocTextResponse text(String docId, String layerName, String pageKey, TextDocRequest request) {
         return this.rawClient.text(docId, layerName, pageKey, request).body();
     }
 
-    public DocText200Response text(
+    public DocTextResponse text(
             String docId, String layerName, String pageKey, TextDocRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .text(docId, layerName, pageKey, request, requestOptions)

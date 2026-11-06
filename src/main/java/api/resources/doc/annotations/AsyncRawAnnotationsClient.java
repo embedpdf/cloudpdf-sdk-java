@@ -27,11 +27,12 @@ import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotat
 import com.cloudpdf.api.resources.doc.annotations.requests.ReadFileAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.AnnotationList;
-import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
-import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
-import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
-import com.cloudpdf.api.types.DocAnnotationsReorder200Response;
-import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
+import com.cloudpdf.api.types.DocAnnotationsCreateResponse;
+import com.cloudpdf.api.types.DocAnnotationsDeleteResponse;
+import com.cloudpdf.api.types.DocAnnotationsFlattenResponse;
+import com.cloudpdf.api.types.DocAnnotationsReorderResponse;
+import com.cloudpdf.api.types.DocAnnotationsUpdateResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -135,12 +136,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -240,7 +241,8 @@ public class AsyncRawAnnotationsClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -269,7 +271,7 @@ public class AsyncRawAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreateResponse>> create(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return create(
                 docId,
@@ -281,7 +283,7 @@ public class AsyncRawAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreateResponse>> create(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return create(
                 docId,
@@ -294,7 +296,7 @@ public class AsyncRawAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreateResponse>> create(
             String docId, String layerName, String pageKey, CreateAnnotationsRequest request) {
         return create(docId, layerName, pageKey, request, null);
     }
@@ -302,7 +304,7 @@ public class AsyncRawAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreateResponse>> create(
             String docId,
             String layerName,
             String pageKey,
@@ -357,8 +359,7 @@ public class AsyncRawAnnotationsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreate200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsCreateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -367,7 +368,7 @@ public class AsyncRawAnnotationsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocAnnotationsCreate200Response.class),
+                                        responseBodyString, DocAnnotationsCreateResponse.class),
                                 response));
                         return;
                     }
@@ -375,12 +376,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -407,37 +408,37 @@ public class AsyncRawAnnotationsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDelete200Response>> delete(
-            String docId, String layerName, String pageKey, String annotKey) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDeleteResponse>> delete(
+            String docId, String layerName, String pageKey, String annotationKey) {
         return delete(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 DeleteAnnotationsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDelete200Response>> delete(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDeleteResponse>> delete(
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return delete(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 DeleteAnnotationsRequest.builder().build(),
                 requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDelete200Response>> delete(
-            String docId, String layerName, String pageKey, String annotKey, DeleteAnnotationsRequest request) {
-        return delete(docId, layerName, pageKey, annotKey, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDeleteResponse>> delete(
+            String docId, String layerName, String pageKey, String annotationKey, DeleteAnnotationsRequest request) {
+        return delete(docId, layerName, pageKey, annotationKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDelete200Response>> delete(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDeleteResponse>> delete(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             DeleteAnnotationsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -449,7 +450,7 @@ public class AsyncRawAnnotationsClient {
                 .addPathSegments("annotations/pages")
                 .addPathSegment(pageKey)
                 .addPathSegments("items")
-                .addPathSegment(annotKey);
+                .addPathSegment(annotationKey);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -482,8 +483,7 @@ public class AsyncRawAnnotationsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDelete200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsDeleteResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -492,14 +492,15 @@ public class AsyncRawAnnotationsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocAnnotationsDelete200Response.class),
+                                        responseBodyString, DocAnnotationsDeleteResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -525,42 +526,42 @@ public class AsyncRawAnnotationsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response>> update(
-            String docId, String layerName, String pageKey, String annotKey, Map<String, Object> body) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdateResponse>> update(
+            String docId, String layerName, String pageKey, String annotationKey, Map<String, Object> body) {
         return update(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 UpdateAnnotationsRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdateResponse>> update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             Map<String, Object> body,
             RequestOptions requestOptions) {
         return update(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 UpdateAnnotationsRequest.builder().body(body).build(),
                 requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response>> update(
-            String docId, String layerName, String pageKey, String annotKey, UpdateAnnotationsRequest request) {
-        return update(docId, layerName, pageKey, annotKey, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdateResponse>> update(
+            String docId, String layerName, String pageKey, String annotationKey, UpdateAnnotationsRequest request) {
+        return update(docId, layerName, pageKey, annotationKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdateResponse>> update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             UpdateAnnotationsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -572,7 +573,7 @@ public class AsyncRawAnnotationsClient {
                 .addPathSegments("annotations/pages")
                 .addPathSegment(pageKey)
                 .addPathSegments("items")
-                .addPathSegment(annotKey);
+                .addPathSegment(annotationKey);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -613,8 +614,7 @@ public class AsyncRawAnnotationsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdate200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsUpdateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -623,7 +623,7 @@ public class AsyncRawAnnotationsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocAnnotationsUpdate200Response.class),
+                                        responseBodyString, DocAnnotationsUpdateResponse.class),
                                 response));
                         return;
                     }
@@ -631,12 +631,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -664,36 +664,40 @@ public class AsyncRawAnnotationsClient {
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey) {
+            String docId, String layerName, String pageKey, String annotationKey) {
         return readAppearance(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 ReadAppearanceAnnotationsRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return readAppearance(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 ReadAppearanceAnnotationsRequest.builder().build(),
                 requestOptions);
-    }
-
-    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, ReadAppearanceAnnotationsRequest request) {
-        return readAppearance(docId, layerName, pageKey, annotKey, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readAppearance(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
+            ReadAppearanceAnnotationsRequest request) {
+        return readAppearance(docId, layerName, pageKey, annotationKey, request, null);
+    }
+
+    public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readAppearance(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotationKey,
             ReadAppearanceAnnotationsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -705,7 +709,7 @@ public class AsyncRawAnnotationsClient {
                 .addPathSegments("annotations/pages")
                 .addPathSegment(pageKey)
                 .addPathSegments("items")
-                .addPathSegment(annotKey)
+                .addPathSegment(annotationKey)
                 .addPathSegments("resources")
                 .addPathSegments("appearance");
         if (requestOptions != null) {
@@ -752,12 +756,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -788,12 +792,12 @@ public class AsyncRawAnnotationsClient {
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readFile(
-            String docId, String layerName, String pageKey, String annotKey) {
+            String docId, String layerName, String pageKey, String annotationKey) {
         return readFile(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 ReadFileAnnotationsRequest.builder().build());
     }
 
@@ -801,12 +805,12 @@ public class AsyncRawAnnotationsClient {
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readFile(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return readFile(
                 docId,
                 layerName,
                 pageKey,
-                annotKey,
+                annotationKey,
                 ReadFileAnnotationsRequest.builder().build(),
                 requestOptions);
     }
@@ -815,8 +819,8 @@ public class AsyncRawAnnotationsClient {
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public CompletableFuture<CloudPDFClientHttpResponse<InputStream>> readFile(
-            String docId, String layerName, String pageKey, String annotKey, ReadFileAnnotationsRequest request) {
-        return readFile(docId, layerName, pageKey, annotKey, request, null);
+            String docId, String layerName, String pageKey, String annotationKey, ReadFileAnnotationsRequest request) {
+        return readFile(docId, layerName, pageKey, annotationKey, request, null);
     }
 
     /**
@@ -826,7 +830,7 @@ public class AsyncRawAnnotationsClient {
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             ReadFileAnnotationsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -838,7 +842,7 @@ public class AsyncRawAnnotationsClient {
                 .addPathSegments("annotations/pages")
                 .addPathSegment(pageKey)
                 .addPathSegments("items")
-                .addPathSegment(annotKey)
+                .addPathSegment(annotationKey)
                 .addPathSegments("resources")
                 .addPathSegments("file");
         if (requestOptions != null) {
@@ -885,17 +889,17 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 413:
                                 future.completeExceptionally(new ContentTooLargeError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -1014,12 +1018,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -1046,7 +1050,7 @@ public class AsyncRawAnnotationsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlattenResponse>> flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return flatten(
                 docId,
@@ -1055,7 +1059,7 @@ public class AsyncRawAnnotationsClient {
                 FlattenAnnotationsRequest.builder().body(body).build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlattenResponse>> flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return flatten(
                 docId,
@@ -1065,12 +1069,12 @@ public class AsyncRawAnnotationsClient {
                 requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlattenResponse>> flatten(
             String docId, String layerName, String pageKey, FlattenAnnotationsRequest request) {
         return flatten(docId, layerName, pageKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> flatten(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlattenResponse>> flatten(
             String docId,
             String layerName,
             String pageKey,
@@ -1126,8 +1130,7 @@ public class AsyncRawAnnotationsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlatten200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsFlattenResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -1136,7 +1139,7 @@ public class AsyncRawAnnotationsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocAnnotationsFlatten200Response.class),
+                                        responseBodyString, DocAnnotationsFlattenResponse.class),
                                 response));
                         return;
                     }
@@ -1144,12 +1147,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -1176,12 +1179,12 @@ public class AsyncRawAnnotationsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorder200Response>> reorder(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorderResponse>> reorder(
             String docId, String layerName, String pageKey, DocAnnotationsReorderRequest request) {
         return reorder(docId, layerName, pageKey, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorder200Response>> reorder(
+    public CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorderResponse>> reorder(
             String docId,
             String layerName,
             String pageKey,
@@ -1237,8 +1240,7 @@ public class AsyncRawAnnotationsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorder200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocAnnotationsReorderResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -1247,7 +1249,7 @@ public class AsyncRawAnnotationsClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocAnnotationsReorder200Response.class),
+                                        responseBodyString, DocAnnotationsReorderResponse.class),
                                 response));
                         return;
                     }
@@ -1255,12 +1257,12 @@ public class AsyncRawAnnotationsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

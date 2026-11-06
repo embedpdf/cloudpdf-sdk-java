@@ -90,7 +90,7 @@ public final class WidgetPatch {
 
     private final Optional<WidgetPatchBox> box;
 
-    private final Optional<Double> rotation;
+    private final Optional<Integer> rotation;
 
     private final Optional<String> color;
 
@@ -116,7 +116,9 @@ public final class WidgetPatch {
 
     private final Optional<Object> field;
 
-    private final Optional<Object> fieldFamily;
+    private final Optional<Object> fieldKind;
+
+    private final Optional<Object> hasMark;
 
     private final Map<String, Object> additionalProperties;
 
@@ -154,7 +156,7 @@ public final class WidgetPatch {
             Optional<Object> importedBy,
             Optional<WidgetPatchActions> actions,
             Optional<WidgetPatchBox> box,
-            Optional<Double> rotation,
+            Optional<Integer> rotation,
             Optional<String> color,
             Optional<String> interiorColor,
             Optional<Double> strokeWidth,
@@ -167,7 +169,8 @@ public final class WidgetPatch {
             Optional<String> caption,
             Optional<WidgetPatchCheckStyle> checkStyle,
             Optional<Object> field,
-            Optional<Object> fieldFamily,
+            Optional<Object> fieldKind,
+            Optional<Object> hasMark,
             Map<String, Object> additionalProperties) {
         this.subtype = subtype;
         this.ref = ref;
@@ -215,7 +218,8 @@ public final class WidgetPatch {
         this.caption = caption;
         this.checkStyle = checkStyle;
         this.field = field;
-        this.fieldFamily = fieldFamily;
+        this.fieldKind = fieldKind;
+        this.hasMark = hasMark;
         this.additionalProperties = additionalProperties;
     }
 
@@ -400,7 +404,7 @@ public final class WidgetPatch {
     }
 
     @JsonIgnore
-    public Optional<Double> getRotation() {
+    public Optional<Integer> getRotation() {
         if (rotation == null) {
             return Optional.empty();
         }
@@ -491,9 +495,14 @@ public final class WidgetPatch {
         return field;
     }
 
-    @JsonProperty("fieldFamily")
-    public Optional<Object> getFieldFamily() {
-        return fieldFamily;
+    @JsonProperty("fieldKind")
+    public Optional<Object> getFieldKind() {
+        return fieldKind;
+    }
+
+    @JsonProperty("hasMark")
+    public Optional<Object> getHasMark() {
+        return hasMark;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -528,7 +537,7 @@ public final class WidgetPatch {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
-    private Optional<Double> _getRotation() {
+    private Optional<Integer> _getRotation() {
         return rotation;
     }
 
@@ -638,7 +647,8 @@ public final class WidgetPatch {
                 && caption.equals(other.caption)
                 && checkStyle.equals(other.checkStyle)
                 && field.equals(other.field)
-                && fieldFamily.equals(other.fieldFamily);
+                && fieldKind.equals(other.fieldKind)
+                && hasMark.equals(other.hasMark);
     }
 
     @java.lang.Override
@@ -690,7 +700,8 @@ public final class WidgetPatch {
                 this.caption,
                 this.checkStyle,
                 this.field,
-                this.fieldFamily);
+                this.fieldKind,
+                this.hasMark);
     }
 
     @java.lang.Override
@@ -770,7 +781,7 @@ public final class WidgetPatch {
 
         private Optional<WidgetPatchBox> box = Optional.empty();
 
-        private Optional<Double> rotation = Optional.empty();
+        private Optional<Integer> rotation = Optional.empty();
 
         private Optional<String> color = Optional.empty();
 
@@ -796,7 +807,9 @@ public final class WidgetPatch {
 
         private Optional<Object> field = Optional.empty();
 
-        private Optional<Object> fieldFamily = Optional.empty();
+        private Optional<Object> fieldKind = Optional.empty();
+
+        private Optional<Object> hasMark = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -850,7 +863,8 @@ public final class WidgetPatch {
             caption(other.getCaption());
             checkStyle(other.getCheckStyle());
             field(other.getField());
-            fieldFamily(other.getFieldFamily());
+            fieldKind(other.getFieldKind());
+            hasMark(other.getHasMark());
             return this;
         }
 
@@ -1273,17 +1287,17 @@ public final class WidgetPatch {
         }
 
         @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
-        public Builder rotation(Optional<Double> rotation) {
+        public Builder rotation(Optional<Integer> rotation) {
             this.rotation = rotation;
             return this;
         }
 
-        public Builder rotation(Double rotation) {
+        public Builder rotation(Integer rotation) {
             this.rotation = Optional.ofNullable(rotation);
             return this;
         }
 
-        public Builder rotation(Nullable<Double> rotation) {
+        public Builder rotation(Nullable<Integer> rotation) {
             if (rotation.isNull()) {
                 this.rotation = null;
             } else if (rotation.isEmpty()) {
@@ -1514,14 +1528,25 @@ public final class WidgetPatch {
             return this;
         }
 
-        @JsonSetter(value = "fieldFamily", nulls = Nulls.SKIP)
-        public Builder fieldFamily(Optional<Object> fieldFamily) {
-            this.fieldFamily = fieldFamily;
+        @JsonSetter(value = "fieldKind", nulls = Nulls.SKIP)
+        public Builder fieldKind(Optional<Object> fieldKind) {
+            this.fieldKind = fieldKind;
             return this;
         }
 
-        public Builder fieldFamily(Object fieldFamily) {
-            this.fieldFamily = Optional.ofNullable(fieldFamily);
+        public Builder fieldKind(Object fieldKind) {
+            this.fieldKind = Optional.ofNullable(fieldKind);
+            return this;
+        }
+
+        @JsonSetter(value = "hasMark", nulls = Nulls.SKIP)
+        public Builder hasMark(Optional<Object> hasMark) {
+            this.hasMark = hasMark;
+            return this;
+        }
+
+        public Builder hasMark(Object hasMark) {
+            this.hasMark = Optional.ofNullable(hasMark);
             return this;
         }
 
@@ -1573,7 +1598,8 @@ public final class WidgetPatch {
                     caption,
                     checkStyle,
                     field,
-                    fieldFamily,
+                    fieldKind,
+                    hasMark,
                     additionalProperties);
         }
 

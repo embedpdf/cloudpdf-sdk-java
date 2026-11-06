@@ -17,7 +17,8 @@ import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.documents.layers.requests.DeleteLayersRequest;
 import com.cloudpdf.api.resources.documents.layers.requests.ListLayersRequest;
-import com.cloudpdf.api.types.DocumentsLayersList200Response;
+import com.cloudpdf.api.types.DocumentsLayersListResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -38,29 +39,29 @@ public class AsyncRawLayersClient {
         this.clientOptions = clientOptions;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersList200Response>> list(
-            String tenantId, String id) {
-        return list(tenantId, id, ListLayersRequest.builder().build());
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersListResponse>> list(
+            String tenantId, String docId) {
+        return list(tenantId, docId, ListLayersRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersList200Response>> list(
-            String tenantId, String id, RequestOptions requestOptions) {
-        return list(tenantId, id, ListLayersRequest.builder().build(), requestOptions);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersListResponse>> list(
+            String tenantId, String docId, RequestOptions requestOptions) {
+        return list(tenantId, docId, ListLayersRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersList200Response>> list(
-            String tenantId, String id, ListLayersRequest request) {
-        return list(tenantId, id, request, null);
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersListResponse>> list(
+            String tenantId, String docId, ListLayersRequest request) {
+        return list(tenantId, docId, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersList200Response>> list(
-            String tenantId, String id, ListLayersRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersListResponse>> list(
+            String tenantId, String docId, ListLayersRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("documents")
-                .addPathSegment(id)
+                .addPathSegment(docId)
                 .addPathSegments("layers");
         if (request.getLimit().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -98,8 +99,7 @@ public class AsyncRawLayersClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersList200Response>> future =
-                new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<DocumentsLayersListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -108,7 +108,7 @@ public class AsyncRawLayersClient {
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, DocumentsLayersList200Response.class),
+                                        responseBodyString, DocumentsLayersListResponse.class),
                                 response));
                         return;
                     }
@@ -116,17 +116,17 @@ public class AsyncRawLayersClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -153,28 +153,32 @@ public class AsyncRawLayersClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<Void>> delete(String tenantId, String id, String layerName) {
-        return delete(tenantId, id, layerName, DeleteLayersRequest.builder().build());
+    public CompletableFuture<CloudPDFClientHttpResponse<Void>> delete(String tenantId, String docId, String layerName) {
+        return delete(tenantId, docId, layerName, DeleteLayersRequest.builder().build());
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<Void>> delete(
-            String tenantId, String id, String layerName, RequestOptions requestOptions) {
-        return delete(tenantId, id, layerName, DeleteLayersRequest.builder().build(), requestOptions);
+            String tenantId, String docId, String layerName, RequestOptions requestOptions) {
+        return delete(tenantId, docId, layerName, DeleteLayersRequest.builder().build(), requestOptions);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<Void>> delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request) {
-        return delete(tenantId, id, layerName, request, null);
+            String tenantId, String docId, String layerName, DeleteLayersRequest request) {
+        return delete(tenantId, docId, layerName, request, null);
     }
 
     public CompletableFuture<CloudPDFClientHttpResponse<Void>> delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request, RequestOptions requestOptions) {
+            String tenantId,
+            String docId,
+            String layerName,
+            DeleteLayersRequest request,
+            RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/tenants")
                 .addPathSegment(tenantId)
                 .addPathSegments("documents")
-                .addPathSegment(id)
+                .addPathSegment(docId)
                 .addPathSegments("layers")
                 .addPathSegment(layerName);
         if (requestOptions != null) {
@@ -215,17 +219,17 @@ public class AsyncRawLayersClient {
                         switch (response.code()) {
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }

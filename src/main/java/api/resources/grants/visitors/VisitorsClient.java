@@ -7,7 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.grants.visitors.requests.DeleteVisitorsRequest;
 import com.cloudpdf.api.resources.grants.visitors.requests.ListVisitorsRequest;
-import com.cloudpdf.api.types.GrantsVisitorsList200Response;
+import com.cloudpdf.api.types.GrantsVisitorsListResponse;
 
 public class VisitorsClient {
     protected final ClientOptions clientOptions;
@@ -29,28 +29,28 @@ public class VisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public GrantsVisitorsList200Response list(String tenantId, String grantId) {
+    public GrantsVisitorsListResponse list(String tenantId, String grantId) {
         return this.rawClient.list(tenantId, grantId).body();
     }
 
     /**
      * An archived grant's visitors are listed too.
      */
-    public GrantsVisitorsList200Response list(String tenantId, String grantId, RequestOptions requestOptions) {
+    public GrantsVisitorsListResponse list(String tenantId, String grantId, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, grantId, requestOptions).body();
     }
 
     /**
      * An archived grant's visitors are listed too.
      */
-    public GrantsVisitorsList200Response list(String tenantId, String grantId, ListVisitorsRequest request) {
+    public GrantsVisitorsListResponse list(String tenantId, String grantId, ListVisitorsRequest request) {
         return this.rawClient.list(tenantId, grantId, request).body();
     }
 
     /**
      * An archived grant's visitors are listed too.
      */
-    public GrantsVisitorsList200Response list(
+    public GrantsVisitorsListResponse list(
             String tenantId, String grantId, ListVisitorsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, grantId, request, requestOptions).body();
     }

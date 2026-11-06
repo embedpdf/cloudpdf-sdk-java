@@ -7,7 +7,7 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.documents.layers.requests.DeleteLayersRequest;
 import com.cloudpdf.api.resources.documents.layers.requests.ListLayersRequest;
-import com.cloudpdf.api.types.DocumentsLayersList200Response;
+import com.cloudpdf.api.types.DocumentsLayersListResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncLayersClient {
@@ -27,41 +27,47 @@ public class AsyncLayersClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<DocumentsLayersList200Response> list(String tenantId, String id) {
-        return this.rawClient.list(tenantId, id).thenApply(response -> response.body());
+    public CompletableFuture<DocumentsLayersListResponse> list(String tenantId, String docId) {
+        return this.rawClient.list(tenantId, docId).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocumentsLayersList200Response> list(
-            String tenantId, String id, RequestOptions requestOptions) {
-        return this.rawClient.list(tenantId, id, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<DocumentsLayersListResponse> list(
+            String tenantId, String docId, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, docId, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocumentsLayersList200Response> list(
-            String tenantId, String id, ListLayersRequest request) {
-        return this.rawClient.list(tenantId, id, request).thenApply(response -> response.body());
+    public CompletableFuture<DocumentsLayersListResponse> list(
+            String tenantId, String docId, ListLayersRequest request) {
+        return this.rawClient.list(tenantId, docId, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocumentsLayersList200Response> list(
-            String tenantId, String id, ListLayersRequest request, RequestOptions requestOptions) {
-        return this.rawClient.list(tenantId, id, request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<DocumentsLayersListResponse> list(
+            String tenantId, String docId, ListLayersRequest request, RequestOptions requestOptions) {
+        return this.rawClient.list(tenantId, docId, request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<Void> delete(String tenantId, String id, String layerName) {
-        return this.rawClient.delete(tenantId, id, layerName).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> delete(String tenantId, String id, String layerName, RequestOptions requestOptions) {
-        return this.rawClient.delete(tenantId, id, layerName, requestOptions).thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<Void> delete(String tenantId, String id, String layerName, DeleteLayersRequest request) {
-        return this.rawClient.delete(tenantId, id, layerName, request).thenApply(response -> response.body());
+    public CompletableFuture<Void> delete(String tenantId, String docId, String layerName) {
+        return this.rawClient.delete(tenantId, docId, layerName).thenApply(response -> response.body());
     }
 
     public CompletableFuture<Void> delete(
-            String tenantId, String id, String layerName, DeleteLayersRequest request, RequestOptions requestOptions) {
+            String tenantId, String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.delete(tenantId, docId, layerName, requestOptions).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> delete(
+            String tenantId, String docId, String layerName, DeleteLayersRequest request) {
+        return this.rawClient.delete(tenantId, docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<Void> delete(
+            String tenantId,
+            String docId,
+            String layerName,
+            DeleteLayersRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .delete(tenantId, id, layerName, request, requestOptions)
+                .delete(tenantId, docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

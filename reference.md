@@ -65,7 +65,7 @@ client.deployment().modules();
 </details>
 
 ## Doc
-<details><summary><code>client.doc.head(docId) -> DocHead200Response</code></summary>
+<details><summary><code>client.doc.head(docId) -> DocHeadResponse</code></summary>
 <dl>
 <dd>
 
@@ -118,7 +118,7 @@ client.doc().head(
 </dl>
 </details>
 
-<details><summary><code>client.doc.changes(docId, layerName, request) -> DocChanges200Response</code></summary>
+<details><summary><code>client.doc.changes(docId, layerName, request) -> DocChangesResponse</code></summary>
 <dl>
 <dd>
 
@@ -272,7 +272,7 @@ client.doc().download(
 </dl>
 </details>
 
-<details><summary><code>client.doc.downloadLink(docId, layerName, request) -> DocDownloadLink200Response</code></summary>
+<details><summary><code>client.doc.downloadLink(docId, layerName, request) -> DocDownloadLinkResponse</code></summary>
 <dl>
 <dd>
 
@@ -344,7 +344,7 @@ client.doc().downloadLink(
 <dl>
 <dd>
 
-**expiresIn:** `Optional<Integer>` 
+**expiresInSeconds:** `Optional<Integer>` 
     
 </dd>
 </dl>
@@ -356,7 +356,7 @@ client.doc().downloadLink(
 </dl>
 </details>
 
-<details><summary><code>client.doc.manifest(docId, layerName) -> DocManifest200Response</code></summary>
+<details><summary><code>client.doc.manifest(docId, layerName) -> DocManifestResponse</code></summary>
 <dl>
 <dd>
 
@@ -483,7 +483,7 @@ client.doc().render(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -503,7 +503,7 @@ client.doc().render(
 </dl>
 </details>
 
-<details><summary><code>client.doc.text(docId, layerName, pageKey) -> DocText200Response</code></summary>
+<details><summary><code>client.doc.text(docId, layerName, pageKey) -> DocTextResponse</code></summary>
 <dl>
 <dd>
 
@@ -554,7 +554,7 @@ client.doc().text(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -575,7 +575,7 @@ client.doc().text(
 </details>
 
 ## Grants
-<details><summary><code>client.grants.exchange(request) -> GrantsExchange200Response</code></summary>
+<details><summary><code>client.grants.exchange(request) -> GrantsExchangeResponse</code></summary>
 <dl>
 <dd>
 
@@ -666,7 +666,7 @@ client.grants().exchange(
 </dl>
 </details>
 
-<details><summary><code>client.grants.list(tenantId) -> GrantsList200Response</code></summary>
+<details><summary><code>client.grants.list(tenantId) -> GrantsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -743,7 +743,7 @@ client.grants().list(
 </dl>
 </details>
 
-<details><summary><code>client.grants.create(tenantId, request) -> GrantsCreate200Response</code></summary>
+<details><summary><code>client.grants.create(tenantId, request) -> GrantsCreateResponse</code></summary>
 <dl>
 <dd>
 
@@ -898,7 +898,7 @@ client.grants().create(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<Integer>` 
+**expiresAt:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -910,7 +910,7 @@ client.grants().create(
 </dl>
 </details>
 
-<details><summary><code>client.grants.get(tenantId, grantId) -> GrantsGet200Response</code></summary>
+<details><summary><code>client.grants.get(tenantId, grantId) -> GrantsGetResponse</code></summary>
 <dl>
 <dd>
 
@@ -1018,7 +1018,7 @@ client.grants().delete(
 </dl>
 </details>
 
-<details><summary><code>client.grants.update(tenantId, grantId, request) -> GrantsUpdate200Response</code></summary>
+<details><summary><code>client.grants.update(tenantId, grantId, request) -> GrantsUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -1164,7 +1164,7 @@ client.grants().update(
 <dl>
 <dd>
 
-**expiresAt:** `Optional<Integer>` 
+**expiresAt:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -1176,7 +1176,7 @@ client.grants().update(
 </dl>
 </details>
 
-<details><summary><code>client.grants.archive(tenantId, grantId) -> GrantsArchive200Response</code></summary>
+<details><summary><code>client.grants.archive(tenantId, grantId) -> GrantsArchiveResponse</code></summary>
 <dl>
 <dd>
 
@@ -1245,7 +1245,7 @@ client.grants().archive(
 </details>
 
 ## Tenants
-<details><summary><code>client.tenants.list() -> TenantsList200Response</code></summary>
+<details><summary><code>client.tenants.list() -> TenantsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1297,7 +1297,7 @@ client.tenants().list(
 </dl>
 </details>
 
-<details><summary><code>client.tenants.create(request) -> TenantsCreate200Response</code></summary>
+<details><summary><code>client.tenants.create(request) -> TenantsCreateResponse</code></summary>
 <dl>
 <dd>
 
@@ -1350,7 +1350,7 @@ client.tenants().create(
 </dl>
 </details>
 
-<details><summary><code>client.tenants.get(tenantId) -> TenantsGet200Response</code></summary>
+<details><summary><code>client.tenants.get(tenantId) -> TenantsGetResponse</code></summary>
 <dl>
 <dd>
 
@@ -1454,7 +1454,7 @@ client.tenants().delete(
 </dl>
 </details>
 
-<details><summary><code>client.tenants.update(tenantId, request) -> TenantsUpdate200Response</code></summary>
+<details><summary><code>client.tenants.update(tenantId, request) -> TenantsUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -1641,7 +1641,7 @@ client.tenants().suspend(
 </dl>
 </details>
 
-<details><summary><code>client.tenants.usage(tenantId) -> TenantsUsage200Response</code></summary>
+<details><summary><code>client.tenants.usage(tenantId) -> TenantsUsageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1725,7 +1725,7 @@ client.tenants().usage(
 </details>
 
 ## Documents
-<details><summary><code>client.documents.list(tenantId) -> DocumentsList200Response</code></summary>
+<details><summary><code>client.documents.list(tenantId) -> DocumentsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1826,7 +1826,7 @@ client.documents().list(
 </dl>
 </details>
 
-<details><summary><code>client.documents.get(tenantId, id) -> DocumentsGet200Response</code></summary>
+<details><summary><code>client.documents.get(tenantId, docId) -> DocumentsGetResponse</code></summary>
 <dl>
 <dd>
 
@@ -1841,7 +1841,7 @@ client.documents().list(
 ```java
 client.documents().get(
     "tenantId",
-    "id",
+    "docId",
     GetDocumentsRequest
         .builder()
         .build()
@@ -1868,7 +1868,7 @@ client.documents().get(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -1880,7 +1880,7 @@ client.documents().get(
 </dl>
 </details>
 
-<details><summary><code>client.documents.delete(tenantId, id)</code></summary>
+<details><summary><code>client.documents.delete(tenantId, docId)</code></summary>
 <dl>
 <dd>
 
@@ -1895,7 +1895,7 @@ client.documents().get(
 ```java
 client.documents().delete(
     "tenantId",
-    "id",
+    "docId",
     DeleteDocumentsRequest
         .builder()
         .build()
@@ -1922,7 +1922,7 @@ client.documents().delete(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -1934,7 +1934,7 @@ client.documents().delete(
 </dl>
 </details>
 
-<details><summary><code>client.documents.update(tenantId, id, request) -> DocumentsUpdate200Response</code></summary>
+<details><summary><code>client.documents.update(tenantId, docId, request) -> DocumentsUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -1963,7 +1963,7 @@ A document that is being deleted answers 404.
 ```java
 client.documents().update(
     "tenantId",
-    "id",
+    "docId",
     DocumentsUpdateRequest
         .builder()
         .name("name")
@@ -1991,7 +1991,7 @@ client.documents().update(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -2011,7 +2011,7 @@ client.documents().update(
 </dl>
 </details>
 
-<details><summary><code>client.documents.commit(tenantId, id, request) -> DocumentsCommit200Response</code></summary>
+<details><summary><code>client.documents.commit(tenantId, docId, request) -> DocumentsCommitResponse</code></summary>
 <dl>
 <dd>
 
@@ -2040,7 +2040,7 @@ An upload token commits only the documents it started; any other document answer
 ```java
 client.documents().commit(
     "tenantId",
-    "id",
+    "docId",
     DocumentsCommitRequest
         .builder()
         .sha256("sha256")
@@ -2068,7 +2068,7 @@ client.documents().commit(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -2088,7 +2088,7 @@ client.documents().commit(
 </dl>
 </details>
 
-<details><summary><code>client.documents.download(tenantId, id) -> InputStream</code></summary>
+<details><summary><code>client.documents.download(tenantId, docId) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -2103,7 +2103,7 @@ client.documents().commit(
 ```java
 client.documents().download(
     "tenantId",
-    "id",
+    "docId",
     DownloadDocumentsRequest
         .builder()
         .build()
@@ -2130,7 +2130,7 @@ client.documents().download(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -2142,7 +2142,7 @@ client.documents().download(
 </dl>
 </details>
 
-<details><summary><code>client.documents.thumbnail(tenantId, id) -> InputStream</code></summary>
+<details><summary><code>client.documents.thumbnail(tenantId, docId) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -2157,7 +2157,7 @@ client.documents().download(
 ```java
 client.documents().thumbnail(
     "tenantId",
-    "id",
+    "docId",
     ThumbnailDocumentsRequest
         .builder()
         .build()
@@ -2184,7 +2184,7 @@ client.documents().thumbnail(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -2196,7 +2196,7 @@ client.documents().thumbnail(
 </dl>
 </details>
 
-<details><summary><code>client.documents.uploadProxy(tenantId, id, request) -> DocumentsUploadProxy200Response</code></summary>
+<details><summary><code>client.documents.uploadProxy(tenantId, docId, request) -> DocumentsUploadProxyResponse</code></summary>
 <dl>
 <dd>
 
@@ -2225,7 +2225,7 @@ This bounded origin-mediated fallback must only be used after documents.init ret
 ```java
 client.documents().uploadProxy(
     "tenantId",
-    "id",
+    "docId",
     null,
     UploadProxyDocumentsRequest
         .builder()
@@ -2253,7 +2253,7 @@ client.documents().uploadProxy(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -2404,7 +2404,7 @@ client.documents().importFrom(
 </dl>
 </details>
 
-<details><summary><code>client.documents.init(tenantId, request) -> DocumentsInit200Response</code></summary>
+<details><summary><code>client.documents.init(tenantId, request) -> DocumentsInitResponse</code></summary>
 <dl>
 <dd>
 
@@ -2416,7 +2416,7 @@ client.documents().importFrom(
 <dl>
 <dd>
 
-With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; sizeBytes must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
 </dd>
 </dl>
 </dd>
@@ -2435,7 +2435,7 @@ client.documents().init(
     "tenantId",
     DocumentsInitRequest
         .builder()
-        .contentLength(1.1)
+        .sizeBytes(1)
         .contentSha256("contentSha256")
         .build()
 );
@@ -2461,7 +2461,7 @@ client.documents().init(
 <dl>
 <dd>
 
-**contentLength:** `Double` 
+**sizeBytes:** `Integer` 
     
 </dd>
 </dl>
@@ -2525,7 +2525,7 @@ client.documents().init(
 <dl>
 <dd>
 
-**uploadTtlSec:** `Optional<Double>` 
+**uploadTtlSeconds:** `Optional<Integer>` 
     
 </dd>
 </dl>
@@ -2546,7 +2546,7 @@ client.documents().init(
 </details>
 
 ## Folders
-<details><summary><code>client.folders.list(tenantId) -> FoldersList200Response</code></summary>
+<details><summary><code>client.folders.list(tenantId) -> FoldersListResponse</code></summary>
 <dl>
 <dd>
 
@@ -2615,7 +2615,7 @@ client.folders().list(
 </dl>
 </details>
 
-<details><summary><code>client.folders.create(tenantId, request) -> FoldersCreate200Response</code></summary>
+<details><summary><code>client.folders.create(tenantId, request) -> FoldersCreateResponse</code></summary>
 <dl>
 <dd>
 
@@ -2691,7 +2691,7 @@ client.folders().create(
 </dl>
 </details>
 
-<details><summary><code>client.folders.get(tenantId, folderId) -> FoldersGet200Response</code></summary>
+<details><summary><code>client.folders.get(tenantId, folderId) -> FoldersGetResponse</code></summary>
 <dl>
 <dd>
 
@@ -2821,7 +2821,7 @@ client.folders().delete(
 </dl>
 </details>
 
-<details><summary><code>client.folders.update(tenantId, folderId, request) -> FoldersUpdate200Response</code></summary>
+<details><summary><code>client.folders.update(tenantId, folderId, request) -> FoldersUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -2910,7 +2910,7 @@ client.folders().update(
 <dl>
 <dd>
 
-Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in `details.documentIds` and `details.folderIds`. 409 Conflict carries `details.reason`: `cycle` (the destination is a moved folder or inside one; `details.folderId`), `too-deep` (the move would nest folders deeper than 100 levels; `details.maxDepth`) or `name-taken` (a moved folder's name is taken in the destination, ignoring case; `details.name`).
+Up to 1,000 ids in total. A folder moves with everything in it. 404 NotFound names the ids that do not exist or are being deleted in `details.docIds` and `details.folderIds`. 409 Conflict carries `details.reason`: `cycle` (the destination is a moved folder or inside one; `details.folderId`), `too-deep` (the move would nest folders deeper than 100 levels; `details.maxDepth`) or `name-taken` (a moved folder's name is taken in the destination, ignoring case; `details.name`).
 </dd>
 </dl>
 </dd>
@@ -2962,7 +2962,7 @@ client.folders().moveInto(
 <dl>
 <dd>
 
-**documentIds:** `Optional<List<String>>` 
+**docIds:** `Optional<List<String>>` 
     
 </dd>
 </dl>
@@ -2983,7 +2983,7 @@ client.folders().moveInto(
 </details>
 
 ## Tokens
-<details><summary><code>client.tokens.issue(tenantId, request) -> TokensIssue200Response</code></summary>
+<details><summary><code>client.tokens.issue(tenantId, request) -> TokensIssueResponse</code></summary>
 <dl>
 <dd>
 
@@ -3020,7 +3020,7 @@ client.tokens().issue(
                     .builder()
                     .sub("sub")
                     .docId("docId")
-                    .expiresIn(1)
+                    .expiresInSeconds(1)
                     .scope(
                         Arrays.asList("scope")
                     )
@@ -3135,7 +3135,7 @@ client.tokens().revoke(
 <dl>
 <dd>
 
-**expiresAtSeconds:** `Optional<Integer>` 
+**expiresAt:** `Optional<OffsetDateTime>` 
     
 </dd>
 </dl>
@@ -3275,7 +3275,7 @@ client.doc().annotations().list(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3295,7 +3295,7 @@ client.doc().annotations().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.create(docId, layerName, pageKey, request) -> DocAnnotationsCreate200Response</code></summary>
+<details><summary><code>client.doc.annotations.create(docId, layerName, pageKey, request) -> DocAnnotationsCreateResponse</code></summary>
 <dl>
 <dd>
 
@@ -3365,7 +3365,7 @@ client.doc().annotations().create(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3401,7 +3401,7 @@ client.doc().annotations().create(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.delete(docId, layerName, pageKey, annotKey) -> DocAnnotationsDelete200Response</code></summary>
+<details><summary><code>client.doc.annotations.delete(docId, layerName, pageKey, annotationKey) -> DocAnnotationsDeleteResponse</code></summary>
 <dl>
 <dd>
 
@@ -3418,7 +3418,7 @@ client.doc().annotations().delete(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     DeleteAnnotationsRequest
         .builder()
         .build()
@@ -3453,7 +3453,7 @@ client.doc().annotations().delete(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3461,7 +3461,7 @@ client.doc().annotations().delete(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -3489,7 +3489,7 @@ client.doc().annotations().delete(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.update(docId, layerName, pageKey, annotKey, request) -> DocAnnotationsUpdate200Response</code></summary>
+<details><summary><code>client.doc.annotations.update(docId, layerName, pageKey, annotationKey, request) -> DocAnnotationsUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -3506,7 +3506,7 @@ client.doc().annotations().update(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     UpdateAnnotationsRequest
         .builder()
         .body(
@@ -3546,7 +3546,7 @@ client.doc().annotations().update(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3554,7 +3554,7 @@ client.doc().annotations().update(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -3590,7 +3590,7 @@ client.doc().annotations().update(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.readAppearance(docId, layerName, pageKey, annotKey) -> InputStream</code></summary>
+<details><summary><code>client.doc.annotations.readAppearance(docId, layerName, pageKey, annotationKey) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -3607,7 +3607,7 @@ client.doc().annotations().readAppearance(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     ReadAppearanceAnnotationsRequest
         .builder()
         .build()
@@ -3642,7 +3642,7 @@ client.doc().annotations().readAppearance(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3650,7 +3650,7 @@ client.doc().annotations().readAppearance(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -3670,7 +3670,7 @@ client.doc().annotations().readAppearance(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.readFile(docId, layerName, pageKey, annotKey) -> InputStream</code></summary>
+<details><summary><code>client.doc.annotations.readFile(docId, layerName, pageKey, annotationKey) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -3701,7 +3701,7 @@ client.doc().annotations().readFile(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     ReadFileAnnotationsRequest
         .builder()
         .build()
@@ -3736,7 +3736,7 @@ client.doc().annotations().readFile(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3744,7 +3744,7 @@ client.doc().annotations().readFile(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -3822,7 +3822,7 @@ client.doc().annotations().exportAppearance(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3850,7 +3850,7 @@ client.doc().annotations().exportAppearance(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.flatten(docId, layerName, pageKey, request) -> DocAnnotationsFlatten200Response</code></summary>
+<details><summary><code>client.doc.annotations.flatten(docId, layerName, pageKey, request) -> DocAnnotationsFlattenResponse</code></summary>
 <dl>
 <dd>
 
@@ -3906,7 +3906,7 @@ client.doc().annotations().flatten(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -3942,7 +3942,7 @@ client.doc().annotations().flatten(
 </dl>
 </details>
 
-<details><summary><code>client.doc.annotations.reorder(docId, layerName, pageKey, request) -> DocAnnotationsReorder200Response</code></summary>
+<details><summary><code>client.doc.annotations.reorder(docId, layerName, pageKey, request) -> DocAnnotationsReorderResponse</code></summary>
 <dl>
 <dd>
 
@@ -4013,7 +4013,7 @@ client.doc().annotations().reorder(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -4366,7 +4366,7 @@ client.doc().fonts().resolve(
 </details>
 
 ## Doc Forms
-<details><summary><code>client.doc.forms.list(docId, layerName) -> DocFormsList200Response</code></summary>
+<details><summary><code>client.doc.forms.list(docId, layerName) -> DocFormsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -4428,7 +4428,7 @@ client.doc().forms().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.reorderCalculations(docId, layerName, request) -> DocFormsReorderCalculations200Response</code></summary>
+<details><summary><code>client.doc.forms.reorderCalculations(docId, layerName, request) -> DocFormsReorderCalculationsResponse</code></summary>
 <dl>
 <dd>
 
@@ -4527,7 +4527,7 @@ client.doc().forms().reorderCalculations(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.setValue(docId, layerName, fieldKey, request) -> DocFormsSetValue200Response</code></summary>
+<details><summary><code>client.doc.forms.setValue(docId, layerName, fieldKey, request) -> DocFormsSetValueResponse</code></summary>
 <dl>
 <dd>
 
@@ -4619,7 +4619,7 @@ client.doc().forms().setValue(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.reset(docId, layerName, request) -> DocFormsReset200Response</code></summary>
+<details><summary><code>client.doc.forms.reset(docId, layerName, request) -> DocFormsResetResponse</code></summary>
 <dl>
 <dd>
 
@@ -4697,7 +4697,7 @@ client.doc().forms().reset(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.deleteWidget(docId, layerName, pageKey, annotKey) -> DocFormsDeleteWidget200Response</code></summary>
+<details><summary><code>client.doc.forms.deleteWidget(docId, layerName, pageKey, annotationKey) -> DocFormsDeleteWidgetResponse</code></summary>
 <dl>
 <dd>
 
@@ -4714,7 +4714,7 @@ client.doc().forms().deleteWidget(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     DeleteWidgetFormsRequest
         .builder()
         .build()
@@ -4749,7 +4749,7 @@ client.doc().forms().deleteWidget(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -4757,7 +4757,7 @@ client.doc().forms().deleteWidget(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -4785,7 +4785,7 @@ client.doc().forms().deleteWidget(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.updateWidget(docId, layerName, pageKey, annotKey, request) -> DocFormsUpdateWidget200Response</code></summary>
+<details><summary><code>client.doc.forms.updateWidget(docId, layerName, pageKey, annotationKey, request) -> DocFormsUpdateWidgetResponse</code></summary>
 <dl>
 <dd>
 
@@ -4802,7 +4802,7 @@ client.doc().forms().updateWidget(
     "docId",
     "layerName",
     "pageKey",
-    "annotKey",
+    "annotationKey",
     DocFormsUpdateWidgetRequest
         .builder()
         .patch(
@@ -4842,7 +4842,7 @@ client.doc().forms().updateWidget(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -4850,7 +4850,7 @@ client.doc().forms().updateWidget(
 <dl>
 <dd>
 
-**annotKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
+**annotationKey:** `String` — The annotation's address on the page: `obj:N`, its indirect object number, or `base:N` for an annotation the uploaded file stored inline (without an object number of its own), the position it was born at in the page's /Annots. The name the annotation's `ref` carries for life.
     
 </dd>
 </dl>
@@ -4886,7 +4886,7 @@ client.doc().forms().updateWidget(
 </dl>
 </details>
 
-<details><summary><code>client.doc.forms.reorderWidgets(docId, layerName, pageKey, request) -> DocFormsReorderWidgets200Response</code></summary>
+<details><summary><code>client.doc.forms.reorderWidgets(docId, layerName, pageKey, request) -> DocFormsReorderWidgetsResponse</code></summary>
 <dl>
 <dd>
 
@@ -4957,7 +4957,7 @@ client.doc().forms().reorderWidgets(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -5128,7 +5128,7 @@ client.doc().outline().get(
 </details>
 
 ## Doc Pages
-<details><summary><code>client.doc.pages.setScale(docId, layerName, pageKey, request) -> DocPagesSetScale200Response</code></summary>
+<details><summary><code>client.doc.pages.setScale(docId, layerName, pageKey, request) -> DocPagesSetScaleResponse</code></summary>
 <dl>
 <dd>
 
@@ -5179,7 +5179,7 @@ client.doc().pages().setScale(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -5215,7 +5215,7 @@ client.doc().pages().setScale(
 </dl>
 </details>
 
-<details><summary><code>client.doc.pages.viewports(docId, layerName, pageKey) -> DocPagesViewports200Response</code></summary>
+<details><summary><code>client.doc.pages.viewports(docId, layerName, pageKey) -> DocPagesViewportsResponse</code></summary>
 <dl>
 <dd>
 
@@ -5266,7 +5266,7 @@ client.doc().pages().viewports(
 <dl>
 <dd>
 
-**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotKey` and `fieldKey`.
+**pageKey:** `String` — The page's address, `obj:N`: the page's indirect object number, the durable identity every `PageLayout.ref` carries. Mirrors `annotationKey` and `fieldKey`.
     
 </dd>
 </dl>
@@ -5377,7 +5377,7 @@ client.doc().pages().extract(
 </dl>
 </details>
 
-<details><summary><code>client.doc.pages.flatten(docId, layerName, request) -> DocPagesFlatten200Response</code></summary>
+<details><summary><code>client.doc.pages.flatten(docId, layerName, request) -> DocPagesFlattenResponse</code></summary>
 <dl>
 <dd>
 
@@ -5460,7 +5460,7 @@ client.doc().pages().flatten(
 </dl>
 </details>
 
-<details><summary><code>client.doc.pages.setName(docId, layerName, request) -> DocPagesSetName200Response</code></summary>
+<details><summary><code>client.doc.pages.setName(docId, layerName, request) -> DocPagesSetNameResponse</code></summary>
 <dl>
 <dd>
 
@@ -5543,7 +5543,7 @@ client.doc().pages().setName(
 </dl>
 </details>
 
-<details><summary><code>client.doc.pages.removeName(docId, layerName, request) -> DocPagesRemoveName200Response</code></summary>
+<details><summary><code>client.doc.pages.removeName(docId, layerName, request) -> DocPagesRemoveNameResponse</code></summary>
 <dl>
 <dd>
 
@@ -5627,7 +5627,7 @@ client.doc().pages().removeName(
 </details>
 
 ## Doc Redactions
-<details><summary><code>client.doc.redactions.apply(docId, layerName, request) -> DocRedactionsApply200Response</code></summary>
+<details><summary><code>client.doc.redactions.apply(docId, layerName, request) -> DocRedactionsApplyResponse</code></summary>
 <dl>
 <dd>
 
@@ -5714,7 +5714,7 @@ client.doc().redactions().apply(
 </details>
 
 ## Doc Signatures
-<details><summary><code>client.doc.signatures.list(docId, layerName) -> DocSignaturesList200Response</code></summary>
+<details><summary><code>client.doc.signatures.list(docId, layerName) -> DocSignaturesListResponse</code></summary>
 <dl>
 <dd>
 
@@ -5790,7 +5790,7 @@ client.doc().signatures().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.signatures.cancel(docId, layerName, signingId) -> DocSignaturesCancel200Response</code></summary>
+<details><summary><code>client.doc.signatures.cancel(docId, layerName, signingId) -> DocSignaturesCancelResponse</code></summary>
 <dl>
 <dd>
 
@@ -5861,7 +5861,7 @@ client.doc().signatures().cancel(
 </dl>
 </details>
 
-<details><summary><code>client.doc.signatures.complete(docId, layerName, signingId, request) -> DocSignaturesComplete200Response</code></summary>
+<details><summary><code>client.doc.signatures.complete(docId, layerName, signingId, request) -> DocSignaturesCompleteResponse</code></summary>
 <dl>
 <dd>
 
@@ -5970,7 +5970,7 @@ client.doc().signatures().complete(
 </dl>
 </details>
 
-<details><summary><code>client.doc.signatures.analysis(docId, layerName) -> DocSignaturesAnalysis200Response</code></summary>
+<details><summary><code>client.doc.signatures.analysis(docId, layerName) -> DocSignaturesAnalysisResponse</code></summary>
 <dl>
 <dd>
 
@@ -6070,7 +6070,7 @@ client.doc().signatures().analysis(
 </dl>
 </details>
 
-<details><summary><code>client.doc.signatures.prepare(docId, layerName, request) -> DocSignaturesPrepare200Response</code></summary>
+<details><summary><code>client.doc.signatures.prepare(docId, layerName, request) -> DocSignaturesPrepareResponse</code></summary>
 <dl>
 <dd>
 
@@ -6148,7 +6148,7 @@ client.doc().signatures().prepare(
 </details>
 
 ## Doc Versions
-<details><summary><code>client.doc.versions.list(docId, layerName) -> DocVersionsList200Response</code></summary>
+<details><summary><code>client.doc.versions.list(docId, layerName) -> DocVersionsListResponse</code></summary>
 <dl>
 <dd>
 
@@ -6224,7 +6224,7 @@ client.doc().versions().list(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.analysis(docId, layerName, sha) -> DocVersionsAnalysis200Response</code></summary>
+<details><summary><code>client.doc.versions.analysis(docId, layerName, sha256) -> DocVersionsAnalysisResponse</code></summary>
 <dl>
 <dd>
 
@@ -6254,7 +6254,7 @@ Exactly one of `since.signature` / `since.revision`; `until=<revision>` defaults
 client.doc().versions().analysis(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     AnalysisVersionsRequest
         .builder()
         .build()
@@ -6289,7 +6289,7 @@ client.doc().versions().analysis(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6349,7 +6349,7 @@ client.doc().versions().analysis(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.download(docId, layerName, sha) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.download(docId, layerName, sha256) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -6365,7 +6365,7 @@ client.doc().versions().analysis(
 client.doc().versions().download(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     DownloadVersionsRequest
         .builder()
         .build()
@@ -6400,7 +6400,7 @@ client.doc().versions().download(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6420,7 +6420,7 @@ client.doc().versions().download(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.revision(docId, layerName, sha, index) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.revision(docId, layerName, sha256, index) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -6436,7 +6436,7 @@ client.doc().versions().download(
 client.doc().versions().revision(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     1,
     RevisionVersionsRequest
         .builder()
@@ -6472,7 +6472,7 @@ client.doc().versions().revision(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6500,7 +6500,7 @@ client.doc().versions().revision(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatures(docId, layerName, sha) -> DocVersionsSignatures200Response</code></summary>
+<details><summary><code>client.doc.versions.signatures(docId, layerName, sha256) -> DocVersionsSignaturesResponse</code></summary>
 <dl>
 <dd>
 
@@ -6516,7 +6516,7 @@ client.doc().versions().revision(
 client.doc().versions().signatures(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     SignaturesVersionsRequest
         .builder()
         .build()
@@ -6551,7 +6551,7 @@ client.doc().versions().signatures(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6571,7 +6571,7 @@ client.doc().versions().signatures(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatureContents(docId, layerName, sha, fieldKey) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.signatureContents(docId, layerName, sha256, fieldKey) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -6601,7 +6601,7 @@ client.doc().versions().signatures(
 client.doc().versions().signatureContents(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     "fieldKey",
     SignatureContentsVersionsRequest
         .builder()
@@ -6637,7 +6637,7 @@ client.doc().versions().signatureContents(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6665,7 +6665,7 @@ client.doc().versions().signatureContents(
 </dl>
 </details>
 
-<details><summary><code>client.doc.versions.signatureDigest(docId, layerName, sha, fieldKey, algorithm) -> InputStream</code></summary>
+<details><summary><code>client.doc.versions.signatureDigest(docId, layerName, sha256, fieldKey, algorithm) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -6695,7 +6695,7 @@ What a CMS verifier compares its message digest to.
 client.doc().versions().signatureDigest(
     "docId",
     "layerName",
-    "sha",
+    "sha256",
     "fieldKey",
     SignatureDigestVersionsRequestAlgorithm.SHA1,
     SignatureDigestVersionsRequest
@@ -6732,7 +6732,7 @@ client.doc().versions().signatureDigest(
 <dl>
 <dd>
 
-**sha:** `String` 
+**sha256:** `String` 
     
 </dd>
 </dl>
@@ -6769,7 +6769,7 @@ client.doc().versions().signatureDigest(
 </details>
 
 ## Doc Fonts Programs
-<details><summary><code>client.doc.fonts.programs.download(docId, layerName, displayHash) -> InputStream</code></summary>
+<details><summary><code>client.doc.fonts.programs.download(docId, layerName, displaySha256) -> InputStream</code></summary>
 <dl>
 <dd>
 
@@ -6799,7 +6799,7 @@ A document token needs any one of the listed capabilities: one that may write te
 client.doc().fonts().programs().download(
     "docId",
     "layerName",
-    "displayHash",
+    "displaySha256",
     DownloadProgramsRequest
         .builder()
         .build()
@@ -6834,7 +6834,7 @@ client.doc().fonts().programs().download(
 <dl>
 <dd>
 
-**displayHash:** `String` 
+**displaySha256:** `String` 
     
 </dd>
 </dl>
@@ -6854,7 +6854,7 @@ client.doc().fonts().programs().download(
 </dl>
 </details>
 
-<details><summary><code>client.doc.fonts.programs.get(docId, layerName, displayHash) -> FontProgramInfo</code></summary>
+<details><summary><code>client.doc.fonts.programs.get(docId, layerName, displaySha256) -> FontProgramInfo</code></summary>
 <dl>
 <dd>
 
@@ -6870,7 +6870,7 @@ client.doc().fonts().programs().download(
 client.doc().fonts().programs().get(
     "docId",
     "layerName",
-    "displayHash",
+    "displaySha256",
     GetProgramsRequest
         .builder()
         .build()
@@ -6905,7 +6905,7 @@ client.doc().fonts().programs().get(
 <dl>
 <dd>
 
-**displayHash:** `String` 
+**displaySha256:** `String` 
     
 </dd>
 </dl>
@@ -6989,7 +6989,7 @@ client.doc().metadata().custom().get(
 </details>
 
 ## Documents Layers
-<details><summary><code>client.documents.layers.list(tenantId, id) -> DocumentsLayersList200Response</code></summary>
+<details><summary><code>client.documents.layers.list(tenantId, docId) -> DocumentsLayersListResponse</code></summary>
 <dl>
 <dd>
 
@@ -7004,7 +7004,7 @@ client.doc().metadata().custom().get(
 ```java
 client.documents().layers().list(
     "tenantId",
-    "id",
+    "docId",
     ListLayersRequest
         .builder()
         .build()
@@ -7031,7 +7031,7 @@ client.documents().layers().list(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -7067,7 +7067,7 @@ client.documents().layers().list(
 </dl>
 </details>
 
-<details><summary><code>client.documents.layers.delete(tenantId, id, layerName)</code></summary>
+<details><summary><code>client.documents.layers.delete(tenantId, docId, layerName)</code></summary>
 <dl>
 <dd>
 
@@ -7082,7 +7082,7 @@ client.documents().layers().list(
 ```java
 client.documents().layers().delete(
     "tenantId",
-    "id",
+    "docId",
     "layerName",
     DeleteLayersRequest
         .builder()
@@ -7110,7 +7110,7 @@ client.documents().layers().delete(
 <dl>
 <dd>
 
-**id:** `String` 
+**docId:** `String` 
     
 </dd>
 </dl>
@@ -7131,7 +7131,7 @@ client.documents().layers().delete(
 </details>
 
 ## Grants Visitors
-<details><summary><code>client.grants.visitors.list(tenantId, grantId) -> GrantsVisitorsList200Response</code></summary>
+<details><summary><code>client.grants.visitors.list(tenantId, grantId) -> GrantsVisitorsListResponse</code></summary>
 <dl>
 <dd>
 

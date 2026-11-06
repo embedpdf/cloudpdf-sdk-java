@@ -29,8 +29,6 @@ public final class PdfActionTree {
 
     private final boolean incomplete;
 
-    private final int warningFlags;
-
     private final List<PdfActionTreeWarningsItem> warnings;
 
     private final Map<String, Object> additionalProperties;
@@ -38,12 +36,10 @@ public final class PdfActionTree {
     private PdfActionTree(
             Optional<PdfActionNode> root,
             boolean incomplete,
-            int warningFlags,
             List<PdfActionTreeWarningsItem> warnings,
             Map<String, Object> additionalProperties) {
         this.root = root;
         this.incomplete = incomplete;
-        this.warningFlags = warningFlags;
         this.warnings = warnings;
         this.additionalProperties = additionalProperties;
     }
@@ -59,11 +55,6 @@ public final class PdfActionTree {
     @JsonProperty("incomplete")
     public boolean getIncomplete() {
         return incomplete;
-    }
-
-    @JsonProperty("warningFlags")
-    public int getWarningFlags() {
-        return warningFlags;
     }
 
     @JsonProperty("warnings")
@@ -89,15 +80,12 @@ public final class PdfActionTree {
     }
 
     private boolean equalTo(PdfActionTree other) {
-        return root.equals(other.root)
-                && incomplete == other.incomplete
-                && warningFlags == other.warningFlags
-                && warnings.equals(other.warnings);
+        return root.equals(other.root) && incomplete == other.incomplete && warnings.equals(other.warnings);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.root, this.incomplete, this.warningFlags, this.warnings);
+        return Objects.hash(this.root, this.incomplete, this.warnings);
     }
 
     @java.lang.Override
@@ -110,13 +98,9 @@ public final class PdfActionTree {
     }
 
     public interface IncompleteStage {
-        WarningFlagsStage incomplete(boolean incomplete);
+        _FinalStage incomplete(boolean incomplete);
 
         Builder from(PdfActionTree other);
-    }
-
-    public interface WarningFlagsStage {
-        _FinalStage warningFlags(int warningFlags);
     }
 
     public interface _FinalStage {
@@ -140,10 +124,8 @@ public final class PdfActionTree {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IncompleteStage, WarningFlagsStage, _FinalStage {
+    public static final class Builder implements IncompleteStage, _FinalStage {
         private boolean incomplete;
-
-        private int warningFlags;
 
         private List<PdfActionTreeWarningsItem> warnings = new ArrayList<>();
 
@@ -158,22 +140,14 @@ public final class PdfActionTree {
         public Builder from(PdfActionTree other) {
             root(other.getRoot());
             incomplete(other.getIncomplete());
-            warningFlags(other.getWarningFlags());
             warnings(other.getWarnings());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("incomplete")
-        public WarningFlagsStage incomplete(boolean incomplete) {
+        public _FinalStage incomplete(boolean incomplete) {
             this.incomplete = incomplete;
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("warningFlags")
-        public _FinalStage warningFlags(int warningFlags) {
-            this.warningFlags = warningFlags;
             return this;
         }
 
@@ -228,7 +202,7 @@ public final class PdfActionTree {
 
         @java.lang.Override
         public PdfActionTree build() {
-            return new PdfActionTree(root, incomplete, warningFlags, warnings, additionalProperties);
+            return new PdfActionTree(root, incomplete, warnings, additionalProperties);
         }
 
         @java.lang.Override

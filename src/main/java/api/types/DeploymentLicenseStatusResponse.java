@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,18 +24,18 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeploymentLicenseStatusResponse.Builder.class)
 public final class DeploymentLicenseStatusResponse {
-    private final Optional<Object> license;
+    private final Map<String, Object> license;
 
-    private final Optional<Object> reporting;
+    private final Optional<Map<String, Object>> reporting;
 
-    private final Optional<Object> usage;
+    private final Optional<Map<String, Object>> usage;
 
     private final Map<String, Object> additionalProperties;
 
     private DeploymentLicenseStatusResponse(
-            Optional<Object> license,
-            Optional<Object> reporting,
-            Optional<Object> usage,
+            Map<String, Object> license,
+            Optional<Map<String, Object>> reporting,
+            Optional<Map<String, Object>> usage,
             Map<String, Object> additionalProperties) {
         this.license = license;
         this.reporting = reporting;
@@ -43,12 +44,12 @@ public final class DeploymentLicenseStatusResponse {
     }
 
     @JsonProperty("license")
-    public Optional<Object> getLicense() {
+    public Map<String, Object> getLicense() {
         return license;
     }
 
     @JsonIgnore
-    public Optional<Object> getReporting() {
+    public Optional<Map<String, Object>> getReporting() {
         if (reporting == null) {
             return Optional.empty();
         }
@@ -56,7 +57,7 @@ public final class DeploymentLicenseStatusResponse {
     }
 
     @JsonIgnore
-    public Optional<Object> getUsage() {
+    public Optional<Map<String, Object>> getUsage() {
         if (usage == null) {
             return Optional.empty();
         }
@@ -65,13 +66,13 @@ public final class DeploymentLicenseStatusResponse {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("reporting")
-    private Optional<Object> _getReporting() {
+    private Optional<Map<String, Object>> _getReporting() {
         return reporting;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("usage")
-    private Optional<Object> _getUsage() {
+    private Optional<Map<String, Object>> _getUsage() {
         return usage;
     }
 
@@ -106,11 +107,11 @@ public final class DeploymentLicenseStatusResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<Object> license = Optional.empty();
+        private Map<String, Object> license = new LinkedHashMap<>();
 
-        private Optional<Object> reporting = Optional.empty();
+        private Optional<Map<String, Object>> reporting = Optional.empty();
 
-        private Optional<Object> usage = Optional.empty();
+        private Optional<Map<String, Object>> usage = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -125,28 +126,38 @@ public final class DeploymentLicenseStatusResponse {
         }
 
         @JsonSetter(value = "license", nulls = Nulls.SKIP)
-        public Builder license(Optional<Object> license) {
-            this.license = license;
+        public Builder license(Map<String, Object> license) {
+            this.license.clear();
+            if (license != null) {
+                this.license.putAll(license);
+            }
             return this;
         }
 
-        public Builder license(Object license) {
-            this.license = Optional.ofNullable(license);
+        public Builder putAllLicense(Map<String, Object> license) {
+            if (license != null) {
+                this.license.putAll(license);
+            }
+            return this;
+        }
+
+        public Builder license(String key, Object value) {
+            this.license.put(key, value);
             return this;
         }
 
         @JsonSetter(value = "reporting", nulls = Nulls.SKIP)
-        public Builder reporting(Optional<Object> reporting) {
+        public Builder reporting(Optional<Map<String, Object>> reporting) {
             this.reporting = reporting;
             return this;
         }
 
-        public Builder reporting(Object reporting) {
+        public Builder reporting(Map<String, Object> reporting) {
             this.reporting = Optional.ofNullable(reporting);
             return this;
         }
 
-        public Builder reporting(Nullable<Object> reporting) {
+        public Builder reporting(Nullable<Map<String, Object>> reporting) {
             if (reporting.isNull()) {
                 this.reporting = null;
             } else if (reporting.isEmpty()) {
@@ -158,17 +169,17 @@ public final class DeploymentLicenseStatusResponse {
         }
 
         @JsonSetter(value = "usage", nulls = Nulls.SKIP)
-        public Builder usage(Optional<Object> usage) {
+        public Builder usage(Optional<Map<String, Object>> usage) {
             this.usage = usage;
             return this;
         }
 
-        public Builder usage(Object usage) {
+        public Builder usage(Map<String, Object> usage) {
             this.usage = Optional.ofNullable(usage);
             return this;
         }
 
-        public Builder usage(Nullable<Object> usage) {
+        public Builder usage(Nullable<Map<String, Object>> usage) {
             if (usage.isNull()) {
                 this.usage = null;
             } else if (usage.isEmpty()) {

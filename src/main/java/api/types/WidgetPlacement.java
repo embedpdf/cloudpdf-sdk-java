@@ -31,7 +31,7 @@ public final class WidgetPlacement {
 
     private final Optional<WidgetPlacementBox> box;
 
-    private final Optional<Double> rotation;
+    private final Optional<Integer> rotation;
 
     private final Optional<String> exportValue;
 
@@ -65,7 +65,7 @@ public final class WidgetPlacement {
             PageRef page,
             Optional<WidgetPlacementRect> rect,
             Optional<WidgetPlacementBox> box,
-            Optional<Double> rotation,
+            Optional<Integer> rotation,
             Optional<String> exportValue,
             Optional<WidgetActionsPatch> actions,
             Optional<String> color,
@@ -116,7 +116,7 @@ public final class WidgetPlacement {
     }
 
     @JsonProperty("rotation")
-    public Optional<Double> getRotation() {
+    public Optional<Integer> getRotation() {
         return rotation;
     }
 
@@ -340,9 +340,9 @@ public final class WidgetPlacement {
 
         _FinalStage box(WidgetPlacementBox box);
 
-        _FinalStage rotation(Optional<Double> rotation);
+        _FinalStage rotation(Optional<Integer> rotation);
 
-        _FinalStage rotation(Double rotation);
+        _FinalStage rotation(Integer rotation);
 
         _FinalStage exportValue(Optional<String> exportValue);
 
@@ -443,7 +443,7 @@ public final class WidgetPlacement {
 
         private Optional<String> exportValue = Optional.empty();
 
-        private Optional<Double> rotation = Optional.empty();
+        private Optional<Integer> rotation = Optional.empty();
 
         private Optional<WidgetPlacementBox> box = Optional.empty();
 
@@ -749,14 +749,14 @@ public final class WidgetPlacement {
         }
 
         @java.lang.Override
-        public _FinalStage rotation(Double rotation) {
+        public _FinalStage rotation(Integer rotation) {
             this.rotation = Optional.ofNullable(rotation);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
-        public _FinalStage rotation(Optional<Double> rotation) {
+        public _FinalStage rotation(Optional<Integer> rotation) {
             this.rotation = rotation;
             return this;
         }

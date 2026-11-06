@@ -15,7 +15,8 @@ import com.cloudpdf.api.errors.BadRequestError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.grants.visitors.requests.DeleteVisitorsRequest;
 import com.cloudpdf.api.resources.grants.visitors.requests.ListVisitorsRequest;
-import com.cloudpdf.api.types.GrantsVisitorsList200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.GrantsVisitorsListResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -35,14 +36,14 @@ public class RawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CloudPDFClientHttpResponse<GrantsVisitorsList200Response> list(String tenantId, String grantId) {
+    public CloudPDFClientHttpResponse<GrantsVisitorsListResponse> list(String tenantId, String grantId) {
         return list(tenantId, grantId, ListVisitorsRequest.builder().build());
     }
 
     /**
      * An archived grant's visitors are listed too.
      */
-    public CloudPDFClientHttpResponse<GrantsVisitorsList200Response> list(
+    public CloudPDFClientHttpResponse<GrantsVisitorsListResponse> list(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return list(tenantId, grantId, ListVisitorsRequest.builder().build(), requestOptions);
     }
@@ -50,7 +51,7 @@ public class RawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CloudPDFClientHttpResponse<GrantsVisitorsList200Response> list(
+    public CloudPDFClientHttpResponse<GrantsVisitorsListResponse> list(
             String tenantId, String grantId, ListVisitorsRequest request) {
         return list(tenantId, grantId, request, null);
     }
@@ -58,7 +59,7 @@ public class RawVisitorsClient {
     /**
      * An archived grant's visitors are listed too.
      */
-    public CloudPDFClientHttpResponse<GrantsVisitorsList200Response> list(
+    public CloudPDFClientHttpResponse<GrantsVisitorsListResponse> list(
             String tenantId, String grantId, ListVisitorsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -104,17 +105,17 @@ public class RawVisitorsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsVisitorsList200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsVisitorsListResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -204,7 +205,7 @@ public class RawVisitorsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

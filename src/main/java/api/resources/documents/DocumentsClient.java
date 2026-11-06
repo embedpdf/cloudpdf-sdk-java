@@ -17,13 +17,13 @@ import com.cloudpdf.api.resources.documents.requests.GetDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ListDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.ThumbnailDocumentsRequest;
 import com.cloudpdf.api.resources.documents.requests.UploadProxyDocumentsRequest;
-import com.cloudpdf.api.types.DocumentsCommit200Response;
-import com.cloudpdf.api.types.DocumentsGet200Response;
+import com.cloudpdf.api.types.DocumentsCommitResponse;
+import com.cloudpdf.api.types.DocumentsGetResponse;
 import com.cloudpdf.api.types.DocumentsImportFrom200Response;
-import com.cloudpdf.api.types.DocumentsInit200Response;
-import com.cloudpdf.api.types.DocumentsList200Response;
-import com.cloudpdf.api.types.DocumentsUpdate200Response;
-import com.cloudpdf.api.types.DocumentsUploadProxy200Response;
+import com.cloudpdf.api.types.DocumentsInitResponse;
+import com.cloudpdf.api.types.DocumentsListResponse;
+import com.cloudpdf.api.types.DocumentsUpdateResponse;
+import com.cloudpdf.api.types.DocumentsUploadProxyResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.util.function.Supplier;
@@ -49,165 +49,171 @@ public class DocumentsClient {
         return this.rawClient;
     }
 
-    public DocumentsList200Response list(String tenantId) {
+    public DocumentsListResponse list(String tenantId) {
         return this.rawClient.list(tenantId).body();
     }
 
-    public DocumentsList200Response list(String tenantId, RequestOptions requestOptions) {
+    public DocumentsListResponse list(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, requestOptions).body();
     }
 
-    public DocumentsList200Response list(String tenantId, ListDocumentsRequest request) {
+    public DocumentsListResponse list(String tenantId, ListDocumentsRequest request) {
         return this.rawClient.list(tenantId, request).body();
     }
 
-    public DocumentsList200Response list(String tenantId, ListDocumentsRequest request, RequestOptions requestOptions) {
+    public DocumentsListResponse list(String tenantId, ListDocumentsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(tenantId, request, requestOptions).body();
     }
 
-    public DocumentsGet200Response get(String tenantId, String id) {
-        return this.rawClient.get(tenantId, id).body();
+    public DocumentsGetResponse get(String tenantId, String docId) {
+        return this.rawClient.get(tenantId, docId).body();
     }
 
-    public DocumentsGet200Response get(String tenantId, String id, RequestOptions requestOptions) {
-        return this.rawClient.get(tenantId, id, requestOptions).body();
+    public DocumentsGetResponse get(String tenantId, String docId, RequestOptions requestOptions) {
+        return this.rawClient.get(tenantId, docId, requestOptions).body();
     }
 
-    public DocumentsGet200Response get(String tenantId, String id, GetDocumentsRequest request) {
-        return this.rawClient.get(tenantId, id, request).body();
+    public DocumentsGetResponse get(String tenantId, String docId, GetDocumentsRequest request) {
+        return this.rawClient.get(tenantId, docId, request).body();
     }
 
-    public DocumentsGet200Response get(
-            String tenantId, String id, GetDocumentsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.get(tenantId, id, request, requestOptions).body();
+    public DocumentsGetResponse get(
+            String tenantId, String docId, GetDocumentsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.get(tenantId, docId, request, requestOptions).body();
     }
 
-    public void delete(String tenantId, String id) {
-        this.rawClient.delete(tenantId, id).body();
+    public void delete(String tenantId, String docId) {
+        this.rawClient.delete(tenantId, docId).body();
     }
 
-    public void delete(String tenantId, String id, RequestOptions requestOptions) {
-        this.rawClient.delete(tenantId, id, requestOptions).body();
+    public void delete(String tenantId, String docId, RequestOptions requestOptions) {
+        this.rawClient.delete(tenantId, docId, requestOptions).body();
     }
 
-    public void delete(String tenantId, String id, DeleteDocumentsRequest request) {
-        this.rawClient.delete(tenantId, id, request).body();
+    public void delete(String tenantId, String docId, DeleteDocumentsRequest request) {
+        this.rawClient.delete(tenantId, docId, request).body();
     }
 
-    public void delete(String tenantId, String id, DeleteDocumentsRequest request, RequestOptions requestOptions) {
-        this.rawClient.delete(tenantId, id, request, requestOptions).body();
-    }
-
-    /**
-     * A document that is being deleted answers 404.
-     */
-    public DocumentsUpdate200Response update(String tenantId, String id, DocumentsUpdateRequest request) {
-        return this.rawClient.update(tenantId, id, request).body();
+    public void delete(String tenantId, String docId, DeleteDocumentsRequest request, RequestOptions requestOptions) {
+        this.rawClient.delete(tenantId, docId, request, requestOptions).body();
     }
 
     /**
      * A document that is being deleted answers 404.
      */
-    public DocumentsUpdate200Response update(
-            String tenantId, String id, DocumentsUpdateRequest request, RequestOptions requestOptions) {
-        return this.rawClient.update(tenantId, id, request, requestOptions).body();
+    public DocumentsUpdateResponse update(String tenantId, String docId, DocumentsUpdateRequest request) {
+        return this.rawClient.update(tenantId, docId, request).body();
+    }
+
+    /**
+     * A document that is being deleted answers 404.
+     */
+    public DocumentsUpdateResponse update(
+            String tenantId, String docId, DocumentsUpdateRequest request, RequestOptions requestOptions) {
+        return this.rawClient.update(tenantId, docId, request, requestOptions).body();
     }
 
     /**
      * An upload token commits only the documents it started; any other document answers 404.
      */
-    public DocumentsCommit200Response commit(String tenantId, String id, DocumentsCommitRequest request) {
-        return this.rawClient.commit(tenantId, id, request).body();
+    public DocumentsCommitResponse commit(String tenantId, String docId, DocumentsCommitRequest request) {
+        return this.rawClient.commit(tenantId, docId, request).body();
     }
 
     /**
      * An upload token commits only the documents it started; any other document answers 404.
      */
-    public DocumentsCommit200Response commit(
-            String tenantId, String id, DocumentsCommitRequest request, RequestOptions requestOptions) {
-        return this.rawClient.commit(tenantId, id, request, requestOptions).body();
+    public DocumentsCommitResponse commit(
+            String tenantId, String docId, DocumentsCommitRequest request, RequestOptions requestOptions) {
+        return this.rawClient.commit(tenantId, docId, request, requestOptions).body();
     }
 
-    public InputStream download(String tenantId, String id) {
-        return this.rawClient.download(tenantId, id).body();
+    public InputStream download(String tenantId, String docId) {
+        return this.rawClient.download(tenantId, docId).body();
     }
 
-    public InputStream download(String tenantId, String id, RequestOptions requestOptions) {
-        return this.rawClient.download(tenantId, id, requestOptions).body();
+    public InputStream download(String tenantId, String docId, RequestOptions requestOptions) {
+        return this.rawClient.download(tenantId, docId, requestOptions).body();
     }
 
-    public InputStream download(String tenantId, String id, DownloadDocumentsRequest request) {
-        return this.rawClient.download(tenantId, id, request).body();
+    public InputStream download(String tenantId, String docId, DownloadDocumentsRequest request) {
+        return this.rawClient.download(tenantId, docId, request).body();
     }
 
     public InputStream download(
-            String tenantId, String id, DownloadDocumentsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.download(tenantId, id, request, requestOptions).body();
+            String tenantId, String docId, DownloadDocumentsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.download(tenantId, docId, request, requestOptions).body();
     }
 
-    public InputStream thumbnail(String tenantId, String id) {
-        return this.rawClient.thumbnail(tenantId, id).body();
+    public InputStream thumbnail(String tenantId, String docId) {
+        return this.rawClient.thumbnail(tenantId, docId).body();
     }
 
-    public InputStream thumbnail(String tenantId, String id, RequestOptions requestOptions) {
-        return this.rawClient.thumbnail(tenantId, id, requestOptions).body();
+    public InputStream thumbnail(String tenantId, String docId, RequestOptions requestOptions) {
+        return this.rawClient.thumbnail(tenantId, docId, requestOptions).body();
     }
 
-    public InputStream thumbnail(String tenantId, String id, ThumbnailDocumentsRequest request) {
-        return this.rawClient.thumbnail(tenantId, id, request).body();
+    public InputStream thumbnail(String tenantId, String docId, ThumbnailDocumentsRequest request) {
+        return this.rawClient.thumbnail(tenantId, docId, request).body();
     }
 
     public InputStream thumbnail(
-            String tenantId, String id, ThumbnailDocumentsRequest request, RequestOptions requestOptions) {
-        return this.rawClient.thumbnail(tenantId, id, request, requestOptions).body();
+            String tenantId, String docId, ThumbnailDocumentsRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .thumbnail(tenantId, docId, request, requestOptions)
+                .body();
     }
 
     /**
      * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
-    public DocumentsUploadProxy200Response uploadProxy(
-            String tenantId, String id, File file, UploadProxyDocumentsRequest request) {
-        return this.rawClient.uploadProxy(tenantId, id, file, request).body();
+    public DocumentsUploadProxyResponse uploadProxy(
+            String tenantId, String docId, File file, UploadProxyDocumentsRequest request) {
+        return this.rawClient.uploadProxy(tenantId, docId, file, request).body();
     }
 
     /**
      * This bounded origin-mediated fallback must only be used after documents.init returns upload.kind=proxy. Auto mode prefers a presigned object-store PUT whenever available. An upload token sends files only to the documents it started.
      */
-    public DocumentsUploadProxy200Response uploadProxy(
-            String tenantId, String id, File file, UploadProxyDocumentsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .uploadProxy(tenantId, id, file, request, requestOptions)
-                .body();
-    }
-
-    public DocumentsUploadProxy200Response uploadProxy(
-            String tenantId, String id, InputStream stream, String filename) {
-        return this.rawClient.uploadProxy(tenantId, id, stream, filename).body();
-    }
-
-    public DocumentsUploadProxy200Response uploadProxy(
-            String tenantId, String id, InputStream stream, String filename, MediaType mediaType) {
-        return this.rawClient
-                .uploadProxy(tenantId, id, stream, filename, mediaType)
-                .body();
-    }
-
-    public DocumentsUploadProxy200Response uploadProxy(
-            String tenantId, String id, InputStream stream, String filename, RequestOptions requestOptions) {
-        return this.rawClient
-                .uploadProxy(tenantId, id, stream, filename, requestOptions)
-                .body();
-    }
-
-    public DocumentsUploadProxy200Response uploadProxy(
+    public DocumentsUploadProxyResponse uploadProxy(
             String tenantId,
-            String id,
+            String docId,
+            File file,
+            UploadProxyDocumentsRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadProxy(tenantId, docId, file, request, requestOptions)
+                .body();
+    }
+
+    public DocumentsUploadProxyResponse uploadProxy(
+            String tenantId, String docId, InputStream stream, String filename) {
+        return this.rawClient.uploadProxy(tenantId, docId, stream, filename).body();
+    }
+
+    public DocumentsUploadProxyResponse uploadProxy(
+            String tenantId, String docId, InputStream stream, String filename, MediaType mediaType) {
+        return this.rawClient
+                .uploadProxy(tenantId, docId, stream, filename, mediaType)
+                .body();
+    }
+
+    public DocumentsUploadProxyResponse uploadProxy(
+            String tenantId, String docId, InputStream stream, String filename, RequestOptions requestOptions) {
+        return this.rawClient
+                .uploadProxy(tenantId, docId, stream, filename, requestOptions)
+                .body();
+    }
+
+    public DocumentsUploadProxyResponse uploadProxy(
+            String tenantId,
+            String docId,
             InputStream stream,
             String filename,
             MediaType mediaType,
             RequestOptions requestOptions) {
         return this.rawClient
-                .uploadProxy(tenantId, id, stream, filename, mediaType, requestOptions)
+                .uploadProxy(tenantId, docId, stream, filename, mediaType, requestOptions)
                 .body();
     }
 
@@ -227,16 +233,16 @@ public class DocumentsClient {
     }
 
     /**
-     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; sizeBytes must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
      */
-    public DocumentsInit200Response init(String tenantId, DocumentsInitRequest request) {
+    public DocumentsInitResponse init(String tenantId, DocumentsInitRequest request) {
         return this.rawClient.init(tenantId, request).body();
     }
 
     /**
-     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; contentLength must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
+     * With an upload token, the document goes into the token's folder with the token's metadata, whatever the request says; sizeBytes must be within the token's maxBytes, and the token makes at most maxFiles documents (403 after). docId, idempotencyKey and dedupMode reuse-existing are refused (400): each could reach a document the token didn't make.
      */
-    public DocumentsInit200Response init(String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
+    public DocumentsInitResponse init(String tenantId, DocumentsInitRequest request, RequestOptions requestOptions) {
         return this.rawClient.init(tenantId, request, requestOptions).body();
     }
 

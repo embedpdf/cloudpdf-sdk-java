@@ -13,11 +13,11 @@ import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
-import com.cloudpdf.api.types.TenantsCreate200Response;
-import com.cloudpdf.api.types.TenantsGet200Response;
-import com.cloudpdf.api.types.TenantsList200Response;
-import com.cloudpdf.api.types.TenantsUpdate200Response;
-import com.cloudpdf.api.types.TenantsUsage200Response;
+import com.cloudpdf.api.types.TenantsCreateResponse;
+import com.cloudpdf.api.types.TenantsGetResponse;
+import com.cloudpdf.api.types.TenantsListResponse;
+import com.cloudpdf.api.types.TenantsUpdateResponse;
+import com.cloudpdf.api.types.TenantsUsageResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncTenantsClient {
@@ -37,44 +37,44 @@ public class AsyncTenantsClient {
         return this.rawClient;
     }
 
-    public CompletableFuture<TenantsList200Response> list() {
+    public CompletableFuture<TenantsListResponse> list() {
         return this.rawClient.list().thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsList200Response> list(RequestOptions requestOptions) {
+    public CompletableFuture<TenantsListResponse> list(RequestOptions requestOptions) {
         return this.rawClient.list(requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsList200Response> list(ListTenantsRequest request) {
+    public CompletableFuture<TenantsListResponse> list(ListTenantsRequest request) {
         return this.rawClient.list(request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsList200Response> list(ListTenantsRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<TenantsListResponse> list(ListTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsCreate200Response> create(TenantsCreateRequest request) {
+    public CompletableFuture<TenantsCreateResponse> create(TenantsCreateRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsCreate200Response> create(
+    public CompletableFuture<TenantsCreateResponse> create(
             TenantsCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsGet200Response> get(String tenantId) {
+    public CompletableFuture<TenantsGetResponse> get(String tenantId) {
         return this.rawClient.get(tenantId).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsGet200Response> get(String tenantId, RequestOptions requestOptions) {
+    public CompletableFuture<TenantsGetResponse> get(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, requestOptions).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsGet200Response> get(String tenantId, GetTenantsRequest request) {
+    public CompletableFuture<TenantsGetResponse> get(String tenantId, GetTenantsRequest request) {
         return this.rawClient.get(tenantId, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<TenantsGet200Response> get(
+    public CompletableFuture<TenantsGetResponse> get(
             String tenantId, GetTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
@@ -111,14 +111,14 @@ public class AsyncTenantsClient {
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CompletableFuture<TenantsUpdate200Response> update(String tenantId, TenantsUpdateRequest request) {
+    public CompletableFuture<TenantsUpdateResponse> update(String tenantId, TenantsUpdateRequest request) {
         return this.rawClient.update(tenantId, request).thenApply(response -> response.body());
     }
 
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CompletableFuture<TenantsUpdate200Response> update(
+    public CompletableFuture<TenantsUpdateResponse> update(
             String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
         return this.rawClient.update(tenantId, request, requestOptions).thenApply(response -> response.body());
     }
@@ -172,28 +172,28 @@ public class AsyncTenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<TenantsUsage200Response> usage(String tenantId) {
+    public CompletableFuture<TenantsUsageResponse> usage(String tenantId) {
         return this.rawClient.usage(tenantId).thenApply(response -> response.body());
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<TenantsUsage200Response> usage(String tenantId, RequestOptions requestOptions) {
+    public CompletableFuture<TenantsUsageResponse> usage(String tenantId, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, requestOptions).thenApply(response -> response.body());
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<TenantsUsage200Response> usage(String tenantId, UsageTenantsRequest request) {
+    public CompletableFuture<TenantsUsageResponse> usage(String tenantId, UsageTenantsRequest request) {
         return this.rawClient.usage(tenantId, request).thenApply(response -> response.body());
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CompletableFuture<TenantsUsage200Response> usage(
+    public CompletableFuture<TenantsUsageResponse> usage(
             String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
         return this.rawClient.usage(tenantId, request, requestOptions).thenApply(response -> response.body());
     }

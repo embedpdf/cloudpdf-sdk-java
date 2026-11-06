@@ -25,13 +25,13 @@ import com.cloudpdf.api.resources.grants.requests.GrantsCreateRequest;
 import com.cloudpdf.api.resources.grants.requests.GrantsExchangeRequest;
 import com.cloudpdf.api.resources.grants.requests.GrantsUpdateRequest;
 import com.cloudpdf.api.resources.grants.requests.ListGrantsRequest;
-import com.cloudpdf.api.types.AdminErrorPayload;
-import com.cloudpdf.api.types.GrantsArchive200Response;
-import com.cloudpdf.api.types.GrantsCreate200Response;
-import com.cloudpdf.api.types.GrantsExchange200Response;
-import com.cloudpdf.api.types.GrantsGet200Response;
-import com.cloudpdf.api.types.GrantsList200Response;
-import com.cloudpdf.api.types.GrantsUpdate200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.GrantsArchiveResponse;
+import com.cloudpdf.api.types.GrantsCreateResponse;
+import com.cloudpdf.api.types.GrantsExchangeResponse;
+import com.cloudpdf.api.types.GrantsGetResponse;
+import com.cloudpdf.api.types.GrantsListResponse;
+import com.cloudpdf.api.types.GrantsUpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -56,7 +56,7 @@ public class AsyncRawGrantsClient {
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsExchange200Response>> exchange(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsExchangeResponse>> exchange(
             GrantsExchangeRequest request) {
         return exchange(request, null);
     }
@@ -64,7 +64,7 @@ public class AsyncRawGrantsClient {
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsExchange200Response>> exchange(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsExchangeResponse>> exchange(
             GrantsExchangeRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -101,7 +101,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsExchange200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsExchangeResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -109,8 +109,7 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBodyString, GrantsExchange200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsExchangeResponse.class),
                                 response));
                         return;
                     }
@@ -118,29 +117,27 @@ public class AsyncRawGrantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 410:
                                 future.completeExceptionally(new GoneError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, AdminErrorPayload.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 422:
                                 future.completeExceptionally(new UnprocessableEntityError(
-                                        ObjectMappers.JSON_MAPPER.readValue(
-                                                responseBodyString, AdminErrorPayload.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -167,21 +164,21 @@ public class AsyncRawGrantsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsList200Response>> list(String tenantId) {
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsListResponse>> list(String tenantId) {
         return list(tenantId, ListGrantsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsListResponse>> list(
             String tenantId, RequestOptions requestOptions) {
         return list(tenantId, ListGrantsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsListResponse>> list(
             String tenantId, ListGrantsRequest request) {
         return list(tenantId, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsList200Response>> list(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsListResponse>> list(
             String tenantId, ListGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -228,7 +225,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsList200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsListResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -236,14 +233,15 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsList200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsListResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 400) {
                             future.completeExceptionally(new BadRequestError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -272,7 +270,7 @@ public class AsyncRawGrantsClient {
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreateResponse>> create(
             String tenantId, GrantsCreateRequest request) {
         return create(tenantId, request, null);
     }
@@ -280,7 +278,7 @@ public class AsyncRawGrantsClient {
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreate200Response>> create(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsCreateResponse>> create(
             String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -319,7 +317,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsCreate200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsCreateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -327,7 +325,7 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsCreate200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsCreateResponse.class),
                                 response));
                         return;
                     }
@@ -335,17 +333,17 @@ public class AsyncRawGrantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -372,21 +370,21 @@ public class AsyncRawGrantsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGet200Response>> get(String tenantId, String grantId) {
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGetResponse>> get(String tenantId, String grantId) {
         return get(tenantId, grantId, GetGrantsRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGetResponse>> get(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return get(tenantId, grantId, GetGrantsRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGetResponse>> get(
             String tenantId, String grantId, GetGrantsRequest request) {
         return get(tenantId, grantId, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGet200Response>> get(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsGetResponse>> get(
             String tenantId, String grantId, GetGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -418,7 +416,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsGet200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsGetResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -426,14 +424,15 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsGet200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsGetResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {
@@ -519,12 +518,12 @@ public class AsyncRawGrantsClient {
                         switch (response.code()) {
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -551,22 +550,21 @@ public class AsyncRawGrantsClient {
         return future;
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdate200Response>> update(
-            String tenantId, String grantId) {
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdateResponse>> update(String tenantId, String grantId) {
         return update(tenantId, grantId, GrantsUpdateRequest.builder().build());
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdateResponse>> update(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return update(tenantId, grantId, GrantsUpdateRequest.builder().build(), requestOptions);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdateResponse>> update(
             String tenantId, String grantId, GrantsUpdateRequest request) {
         return update(tenantId, grantId, request, null);
     }
 
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdate200Response>> update(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdateResponse>> update(
             String tenantId, String grantId, GrantsUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -606,7 +604,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdate200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsUpdateResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -614,7 +612,7 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsUpdate200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsUpdateResponse.class),
                                 response));
                         return;
                     }
@@ -622,22 +620,22 @@ public class AsyncRawGrantsClient {
                         switch (response.code()) {
                             case 400:
                                 future.completeExceptionally(new BadRequestError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 403:
                                 future.completeExceptionally(new ForbiddenError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                             case 409:
                                 future.completeExceptionally(new ConflictError(
-                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
                                         response));
                                 return;
                         }
@@ -667,7 +665,7 @@ public class AsyncRawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchive200Response>> archive(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchiveResponse>> archive(
             String tenantId, String grantId) {
         return archive(tenantId, grantId, ArchiveGrantsRequest.builder().build());
     }
@@ -675,7 +673,7 @@ public class AsyncRawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchive200Response>> archive(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchiveResponse>> archive(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return archive(tenantId, grantId, ArchiveGrantsRequest.builder().build(), requestOptions);
     }
@@ -683,7 +681,7 @@ public class AsyncRawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchive200Response>> archive(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchiveResponse>> archive(
             String tenantId, String grantId, ArchiveGrantsRequest request) {
         return archive(tenantId, grantId, request, null);
     }
@@ -691,7 +689,7 @@ public class AsyncRawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchive200Response>> archive(
+    public CompletableFuture<CloudPDFClientHttpResponse<GrantsArchiveResponse>> archive(
             String tenantId, String grantId, ArchiveGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -724,7 +722,7 @@ public class AsyncRawGrantsClient {
                                     requestOptions.getMaxRetries().get()))
                     .build();
         }
-        CompletableFuture<CloudPDFClientHttpResponse<GrantsArchive200Response>> future = new CompletableFuture<>();
+        CompletableFuture<CloudPDFClientHttpResponse<GrantsArchiveResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
@@ -732,14 +730,15 @@ public class AsyncRawGrantsClient {
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
                     if (response.isSuccessful()) {
                         future.complete(new CloudPDFClientHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsArchive200Response.class),
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsArchiveResponse.class),
                                 response));
                         return;
                     }
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {

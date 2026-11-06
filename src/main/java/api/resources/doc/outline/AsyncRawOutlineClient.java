@@ -13,6 +13,7 @@ import com.cloudpdf.api.core.RetryInterceptor;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.outline.requests.GetOutlineRequest;
 import com.cloudpdf.api.types.DocumentOutline;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -99,7 +100,8 @@ public class AsyncRawOutlineClient {
                     try {
                         if (response.code() == 404) {
                             future.completeExceptionally(new NotFoundError(
-                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response));
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
                             return;
                         }
                     } catch (JsonProcessingException ignored) {

@@ -10,11 +10,11 @@ import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesReques
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
-import com.cloudpdf.api.types.DocSignaturesAnalysis200Response;
-import com.cloudpdf.api.types.DocSignaturesCancel200Response;
-import com.cloudpdf.api.types.DocSignaturesComplete200Response;
-import com.cloudpdf.api.types.DocSignaturesList200Response;
-import com.cloudpdf.api.types.DocSignaturesPrepare200Response;
+import com.cloudpdf.api.types.DocSignaturesAnalysisResponse;
+import com.cloudpdf.api.types.DocSignaturesCancelResponse;
+import com.cloudpdf.api.types.DocSignaturesCompleteResponse;
+import com.cloudpdf.api.types.DocSignaturesListResponse;
+import com.cloudpdf.api.types.DocSignaturesPrepareResponse;
 import java.io.File;
 import java.io.InputStream;
 import okhttp3.MediaType;
@@ -39,49 +39,49 @@ public class SignaturesClient {
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public DocSignaturesList200Response list(String docId, String layerName) {
+    public DocSignaturesListResponse list(String docId, String layerName) {
         return this.rawClient.list(docId, layerName).body();
     }
 
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public DocSignaturesList200Response list(String docId, String layerName, RequestOptions requestOptions) {
+    public DocSignaturesListResponse list(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.list(docId, layerName, requestOptions).body();
     }
 
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public DocSignaturesList200Response list(String docId, String layerName, ListSignaturesRequest request) {
+    public DocSignaturesListResponse list(String docId, String layerName, ListSignaturesRequest request) {
         return this.rawClient.list(docId, layerName, request).body();
     }
 
     /**
      * Describes the bytes the layer is over: the base version's signatures plus the layer's own edits as the last revision. Signed bytes (contents, digests, revision prefixes) are served per base version under /versions.
      */
-    public DocSignaturesList200Response list(
+    public DocSignaturesListResponse list(
             String docId, String layerName, ListSignaturesRequest request, RequestOptions requestOptions) {
         return this.rawClient.list(docId, layerName, request, requestOptions).body();
     }
 
-    public DocSignaturesCancel200Response cancel(String docId, String layerName, String signingId) {
+    public DocSignaturesCancelResponse cancel(String docId, String layerName, String signingId) {
         return this.rawClient.cancel(docId, layerName, signingId).body();
     }
 
-    public DocSignaturesCancel200Response cancel(
+    public DocSignaturesCancelResponse cancel(
             String docId, String layerName, String signingId, RequestOptions requestOptions) {
         return this.rawClient
                 .cancel(docId, layerName, signingId, requestOptions)
                 .body();
     }
 
-    public DocSignaturesCancel200Response cancel(
+    public DocSignaturesCancelResponse cancel(
             String docId, String layerName, String signingId, CancelSignaturesRequest request) {
         return this.rawClient.cancel(docId, layerName, signingId, request).body();
     }
 
-    public DocSignaturesCancel200Response cancel(
+    public DocSignaturesCancelResponse cancel(
             String docId,
             String layerName,
             String signingId,
@@ -95,7 +95,7 @@ public class SignaturesClient {
     /**
      * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
-    public DocSignaturesComplete200Response complete(
+    public DocSignaturesCompleteResponse complete(
             String docId, String layerName, String signingId, DocSignaturesCompleteRequest request) {
         return this.rawClient.complete(docId, layerName, signingId, request).body();
     }
@@ -103,7 +103,7 @@ public class SignaturesClient {
     /**
      * <code>cms</code> is the detached CMS over the prepared digest, base64. <code>expectedVersion</code> must be what prepare returned. Idempotent by signing id: the same CMS again answers <code>already-completed</code>. The new version is the layer's own: only this layer moves to it, and the document and every other layer stay as they were. Refetch the manifest after a completion.
      */
-    public DocSignaturesComplete200Response complete(
+    public DocSignaturesCompleteResponse complete(
             String docId,
             String layerName,
             String signingId,
@@ -117,29 +117,28 @@ public class SignaturesClient {
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public DocSignaturesAnalysis200Response analysis(String docId, String layerName) {
+    public DocSignaturesAnalysisResponse analysis(String docId, String layerName) {
         return this.rawClient.analysis(docId, layerName).body();
     }
 
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public DocSignaturesAnalysis200Response analysis(String docId, String layerName, RequestOptions requestOptions) {
+    public DocSignaturesAnalysisResponse analysis(String docId, String layerName, RequestOptions requestOptions) {
         return this.rawClient.analysis(docId, layerName, requestOptions).body();
     }
 
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public DocSignaturesAnalysis200Response analysis(
-            String docId, String layerName, AnalysisSignaturesRequest request) {
+    public DocSignaturesAnalysisResponse analysis(String docId, String layerName, AnalysisSignaturesRequest request) {
         return this.rawClient.analysis(docId, layerName, request).body();
     }
 
     /**
      * Exactly one of <code>since.signature=&lt;index&gt;</code> or <code>since.revision=&lt;index&gt;</code>; the layer's pending edits are the end. <code>level=fill|annotate|lta|none</code> evaluates exploratorily and never becomes a verdict. For history between two base revisions use the version analysis.
      */
-    public DocSignaturesAnalysis200Response analysis(
+    public DocSignaturesAnalysisResponse analysis(
             String docId, String layerName, AnalysisSignaturesRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .analysis(docId, layerName, request, requestOptions)
@@ -149,7 +148,7 @@ public class SignaturesClient {
     /**
      * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
-    public DocSignaturesPrepare200Response prepare(
+    public DocSignaturesPrepareResponse prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
         return this.rawClient.prepare(docId, layerName, file, request).body();
     }
@@ -157,7 +156,7 @@ public class SignaturesClient {
     /**
      * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
-    public DocSignaturesPrepare200Response prepare(
+    public DocSignaturesPrepareResponse prepare(
             String docId,
             String layerName,
             File file,
@@ -168,26 +167,25 @@ public class SignaturesClient {
                 .body();
     }
 
-    public DocSignaturesPrepare200Response prepare(
-            String docId, String layerName, InputStream stream, String filename) {
+    public DocSignaturesPrepareResponse prepare(String docId, String layerName, InputStream stream, String filename) {
         return this.rawClient.prepare(docId, layerName, stream, filename).body();
     }
 
-    public DocSignaturesPrepare200Response prepare(
+    public DocSignaturesPrepareResponse prepare(
             String docId, String layerName, InputStream stream, String filename, MediaType mediaType) {
         return this.rawClient
                 .prepare(docId, layerName, stream, filename, mediaType)
                 .body();
     }
 
-    public DocSignaturesPrepare200Response prepare(
+    public DocSignaturesPrepareResponse prepare(
             String docId, String layerName, InputStream stream, String filename, RequestOptions requestOptions) {
         return this.rawClient
                 .prepare(docId, layerName, stream, filename, requestOptions)
                 .body();
     }
 
-    public DocSignaturesPrepare200Response prepare(
+    public DocSignaturesPrepareResponse prepare(
             String docId,
             String layerName,
             InputStream stream,

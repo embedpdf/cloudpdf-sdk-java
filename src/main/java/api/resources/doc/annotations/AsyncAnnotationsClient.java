@@ -16,11 +16,11 @@ import com.cloudpdf.api.resources.doc.annotations.requests.ReadAppearanceAnnotat
 import com.cloudpdf.api.resources.doc.annotations.requests.ReadFileAnnotationsRequest;
 import com.cloudpdf.api.resources.doc.annotations.requests.UpdateAnnotationsRequest;
 import com.cloudpdf.api.types.AnnotationList;
-import com.cloudpdf.api.types.DocAnnotationsCreate200Response;
-import com.cloudpdf.api.types.DocAnnotationsDelete200Response;
-import com.cloudpdf.api.types.DocAnnotationsFlatten200Response;
-import com.cloudpdf.api.types.DocAnnotationsReorder200Response;
-import com.cloudpdf.api.types.DocAnnotationsUpdate200Response;
+import com.cloudpdf.api.types.DocAnnotationsCreateResponse;
+import com.cloudpdf.api.types.DocAnnotationsDeleteResponse;
+import com.cloudpdf.api.types.DocAnnotationsFlattenResponse;
+import com.cloudpdf.api.types.DocAnnotationsReorderResponse;
+import com.cloudpdf.api.types.DocAnnotationsUpdateResponse;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -100,7 +100,7 @@ public class AsyncAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<DocAnnotationsCreate200Response> create(
+    public CompletableFuture<DocAnnotationsCreateResponse> create(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return this.rawClient.create(docId, layerName, pageKey, body).thenApply(response -> response.body());
     }
@@ -108,7 +108,7 @@ public class AsyncAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<DocAnnotationsCreate200Response> create(
+    public CompletableFuture<DocAnnotationsCreateResponse> create(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
                 .create(docId, layerName, pageKey, body, requestOptions)
@@ -118,7 +118,7 @@ public class AsyncAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<DocAnnotationsCreate200Response> create(
+    public CompletableFuture<DocAnnotationsCreateResponse> create(
             String docId, String layerName, String pageKey, CreateAnnotationsRequest request) {
         return this.rawClient.create(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
@@ -126,7 +126,7 @@ public class AsyncAnnotationsClient {
     /**
      * Doc JWTs may instead carry collab scopes (annotations:create:self, …) that refine per-annotation authorship rules; the API token is exempt from both.
      */
-    public CompletableFuture<DocAnnotationsCreate200Response> create(
+    public CompletableFuture<DocAnnotationsCreateResponse> create(
             String docId,
             String layerName,
             String pageKey,
@@ -137,91 +137,86 @@ public class AsyncAnnotationsClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, String pageKey, String annotKey) {
-        return this.rawClient.delete(docId, layerName, pageKey, annotKey).thenApply(response -> response.body());
+    public CompletableFuture<DocAnnotationsDeleteResponse> delete(
+            String docId, String layerName, String pageKey, String annotationKey) {
+        return this.rawClient.delete(docId, layerName, pageKey, annotationKey).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+    public CompletableFuture<DocAnnotationsDeleteResponse> delete(
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, requestOptions)
+                .delete(docId, layerName, pageKey, annotationKey, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsDelete200Response> delete(
-            String docId, String layerName, String pageKey, String annotKey, DeleteAnnotationsRequest request) {
+    public CompletableFuture<DocAnnotationsDeleteResponse> delete(
+            String docId, String layerName, String pageKey, String annotationKey, DeleteAnnotationsRequest request) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, request)
+                .delete(docId, layerName, pageKey, annotationKey, request)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsDelete200Response> delete(
+    public CompletableFuture<DocAnnotationsDeleteResponse> delete(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             DeleteAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .delete(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .delete(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsUpdate200Response> update(
-            String docId, String layerName, String pageKey, String annotKey, Map<String, Object> body) {
-        return this.rawClient.update(docId, layerName, pageKey, annotKey, body).thenApply(response -> response.body());
+    public CompletableFuture<DocAnnotationsUpdateResponse> update(
+            String docId, String layerName, String pageKey, String annotationKey, Map<String, Object> body) {
+        return this.rawClient
+                .update(docId, layerName, pageKey, annotationKey, body)
+                .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsUpdate200Response> update(
+    public CompletableFuture<DocAnnotationsUpdateResponse> update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             Map<String, Object> body,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, body, requestOptions)
+                .update(docId, layerName, pageKey, annotationKey, body, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsUpdate200Response> update(
-            String docId, String layerName, String pageKey, String annotKey, UpdateAnnotationsRequest request) {
+    public CompletableFuture<DocAnnotationsUpdateResponse> update(
+            String docId, String layerName, String pageKey, String annotationKey, UpdateAnnotationsRequest request) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, request)
+                .update(docId, layerName, pageKey, annotationKey, request)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsUpdate200Response> update(
+    public CompletableFuture<DocAnnotationsUpdateResponse> update(
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             UpdateAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .update(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .update(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
     public CompletableFuture<InputStream> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey) {
+            String docId, String layerName, String pageKey, String annotationKey) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey)
+                .readAppearance(docId, layerName, pageKey, annotationKey)
                 .thenApply(response -> response.body());
     }
 
     public CompletableFuture<InputStream> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    public CompletableFuture<InputStream> readAppearance(
-            String docId, String layerName, String pageKey, String annotKey, ReadAppearanceAnnotationsRequest request) {
-        return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, request)
+                .readAppearance(docId, layerName, pageKey, annotationKey, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -229,28 +224,22 @@ public class AsyncAnnotationsClient {
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
+            ReadAppearanceAnnotationsRequest request) {
+        return this.rawClient
+                .readAppearance(docId, layerName, pageKey, annotationKey, request)
+                .thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<InputStream> readAppearance(
+            String docId,
+            String layerName,
+            String pageKey,
+            String annotationKey,
             ReadAppearanceAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .readAppearance(docId, layerName, pageKey, annotKey, request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    /**
-     * A file that decodes past the server's limit is refused (PayloadTooLarge).
-     */
-    public CompletableFuture<InputStream> readFile(String docId, String layerName, String pageKey, String annotKey) {
-        return this.rawClient.readFile(docId, layerName, pageKey, annotKey).thenApply(response -> response.body());
-    }
-
-    /**
-     * A file that decodes past the server's limit is refused (PayloadTooLarge).
-     */
-    public CompletableFuture<InputStream> readFile(
-            String docId, String layerName, String pageKey, String annotKey, RequestOptions requestOptions) {
-        return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, requestOptions)
+                .readAppearance(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -258,9 +247,27 @@ public class AsyncAnnotationsClient {
      * A file that decodes past the server's limit is refused (PayloadTooLarge).
      */
     public CompletableFuture<InputStream> readFile(
-            String docId, String layerName, String pageKey, String annotKey, ReadFileAnnotationsRequest request) {
+            String docId, String layerName, String pageKey, String annotationKey) {
+        return this.rawClient.readFile(docId, layerName, pageKey, annotationKey).thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotationKey, RequestOptions requestOptions) {
         return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, request)
+                .readFile(docId, layerName, pageKey, annotationKey, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * A file that decodes past the server's limit is refused (PayloadTooLarge).
+     */
+    public CompletableFuture<InputStream> readFile(
+            String docId, String layerName, String pageKey, String annotationKey, ReadFileAnnotationsRequest request) {
+        return this.rawClient
+                .readFile(docId, layerName, pageKey, annotationKey, request)
                 .thenApply(response -> response.body());
     }
 
@@ -271,11 +278,11 @@ public class AsyncAnnotationsClient {
             String docId,
             String layerName,
             String pageKey,
-            String annotKey,
+            String annotationKey,
             ReadFileAnnotationsRequest request,
             RequestOptions requestOptions) {
         return this.rawClient
-                .readFile(docId, layerName, pageKey, annotKey, request, requestOptions)
+                .readFile(docId, layerName, pageKey, annotationKey, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -309,24 +316,24 @@ public class AsyncAnnotationsClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+    public CompletableFuture<DocAnnotationsFlattenResponse> flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body) {
         return this.rawClient.flatten(docId, layerName, pageKey, body).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+    public CompletableFuture<DocAnnotationsFlattenResponse> flatten(
             String docId, String layerName, String pageKey, Map<String, Object> body, RequestOptions requestOptions) {
         return this.rawClient
                 .flatten(docId, layerName, pageKey, body, requestOptions)
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+    public CompletableFuture<DocAnnotationsFlattenResponse> flatten(
             String docId, String layerName, String pageKey, FlattenAnnotationsRequest request) {
         return this.rawClient.flatten(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsFlatten200Response> flatten(
+    public CompletableFuture<DocAnnotationsFlattenResponse> flatten(
             String docId,
             String layerName,
             String pageKey,
@@ -337,12 +344,12 @@ public class AsyncAnnotationsClient {
                 .thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsReorder200Response> reorder(
+    public CompletableFuture<DocAnnotationsReorderResponse> reorder(
             String docId, String layerName, String pageKey, DocAnnotationsReorderRequest request) {
         return this.rawClient.reorder(docId, layerName, pageKey, request).thenApply(response -> response.body());
     }
 
-    public CompletableFuture<DocAnnotationsReorder200Response> reorder(
+    public CompletableFuture<DocAnnotationsReorderResponse> reorder(
             String docId,
             String layerName,
             String pageKey,

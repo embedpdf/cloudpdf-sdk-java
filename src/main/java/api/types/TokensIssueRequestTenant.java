@@ -26,15 +26,15 @@ public final class TokensIssueRequestTenant {
 
     private final List<String> scope;
 
-    private final int expiresIn;
+    private final int expiresInSeconds;
 
     private final Map<String, Object> additionalProperties;
 
     private TokensIssueRequestTenant(
-            String sub, List<String> scope, int expiresIn, Map<String, Object> additionalProperties) {
+            String sub, List<String> scope, int expiresInSeconds, Map<String, Object> additionalProperties) {
         this.sub = sub;
         this.scope = scope;
-        this.expiresIn = expiresIn;
+        this.expiresInSeconds = expiresInSeconds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -48,9 +48,9 @@ public final class TokensIssueRequestTenant {
         return scope;
     }
 
-    @JsonProperty("expiresIn")
-    public int getExpiresIn() {
-        return expiresIn;
+    @JsonProperty("expiresInSeconds")
+    public int getExpiresInSeconds() {
+        return expiresInSeconds;
     }
 
     @java.lang.Override
@@ -65,12 +65,12 @@ public final class TokensIssueRequestTenant {
     }
 
     private boolean equalTo(TokensIssueRequestTenant other) {
-        return sub.equals(other.sub) && scope.equals(other.scope) && expiresIn == other.expiresIn;
+        return sub.equals(other.sub) && scope.equals(other.scope) && expiresInSeconds == other.expiresInSeconds;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.sub, this.scope, this.expiresIn);
+        return Objects.hash(this.sub, this.scope, this.expiresInSeconds);
     }
 
     @java.lang.Override
@@ -83,13 +83,13 @@ public final class TokensIssueRequestTenant {
     }
 
     public interface SubStage {
-        ExpiresInStage sub(@NotNull String sub);
+        ExpiresInSecondsStage sub(@NotNull String sub);
 
         Builder from(TokensIssueRequestTenant other);
     }
 
-    public interface ExpiresInStage {
-        _FinalStage expiresIn(int expiresIn);
+    public interface ExpiresInSecondsStage {
+        _FinalStage expiresInSeconds(int expiresInSeconds);
     }
 
     public interface _FinalStage {
@@ -107,10 +107,10 @@ public final class TokensIssueRequestTenant {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements SubStage, ExpiresInStage, _FinalStage {
+    public static final class Builder implements SubStage, ExpiresInSecondsStage, _FinalStage {
         private String sub;
 
-        private int expiresIn;
+        private int expiresInSeconds;
 
         private List<String> scope = new ArrayList<>();
 
@@ -123,21 +123,21 @@ public final class TokensIssueRequestTenant {
         public Builder from(TokensIssueRequestTenant other) {
             sub(other.getSub());
             scope(other.getScope());
-            expiresIn(other.getExpiresIn());
+            expiresInSeconds(other.getExpiresInSeconds());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("sub")
-        public ExpiresInStage sub(@NotNull String sub) {
+        public ExpiresInSecondsStage sub(@NotNull String sub) {
             this.sub = Objects.requireNonNull(sub, "sub must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("expiresIn")
-        public _FinalStage expiresIn(int expiresIn) {
-            this.expiresIn = expiresIn;
+        @JsonSetter("expiresInSeconds")
+        public _FinalStage expiresInSeconds(int expiresInSeconds) {
+            this.expiresInSeconds = expiresInSeconds;
             return this;
         }
 
@@ -167,7 +167,7 @@ public final class TokensIssueRequestTenant {
 
         @java.lang.Override
         public TokensIssueRequestTenant build() {
-            return new TokensIssueRequestTenant(sub, scope, expiresIn, additionalProperties);
+            return new TokensIssueRequestTenant(sub, scope, expiresInSeconds, additionalProperties);
         }
 
         @java.lang.Override

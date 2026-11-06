@@ -35,7 +35,7 @@ public final class TokensIssueRequestDoc {
 
     private final Optional<List<String>> origins;
 
-    private final int expiresIn;
+    private final int expiresInSeconds;
 
     private final Map<String, Object> additionalProperties;
 
@@ -46,7 +46,7 @@ public final class TokensIssueRequestDoc {
             List<String> scope,
             Optional<Identity> identity,
             Optional<List<String>> origins,
-            int expiresIn,
+            int expiresInSeconds,
             Map<String, Object> additionalProperties) {
         this.sub = sub;
         this.docId = docId;
@@ -54,7 +54,7 @@ public final class TokensIssueRequestDoc {
         this.scope = scope;
         this.identity = identity;
         this.origins = origins;
-        this.expiresIn = expiresIn;
+        this.expiresInSeconds = expiresInSeconds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -88,9 +88,9 @@ public final class TokensIssueRequestDoc {
         return origins;
     }
 
-    @JsonProperty("expiresIn")
-    public int getExpiresIn() {
-        return expiresIn;
+    @JsonProperty("expiresInSeconds")
+    public int getExpiresInSeconds() {
+        return expiresInSeconds;
     }
 
     @java.lang.Override
@@ -111,13 +111,13 @@ public final class TokensIssueRequestDoc {
                 && scope.equals(other.scope)
                 && identity.equals(other.identity)
                 && origins.equals(other.origins)
-                && expiresIn == other.expiresIn;
+                && expiresInSeconds == other.expiresInSeconds;
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.sub, this.docId, this.layerName, this.scope, this.identity, this.origins, this.expiresIn);
+                this.sub, this.docId, this.layerName, this.scope, this.identity, this.origins, this.expiresInSeconds);
     }
 
     @java.lang.Override
@@ -136,11 +136,11 @@ public final class TokensIssueRequestDoc {
     }
 
     public interface DocIdStage {
-        ExpiresInStage docId(@NotNull String docId);
+        ExpiresInSecondsStage docId(@NotNull String docId);
     }
 
-    public interface ExpiresInStage {
-        _FinalStage expiresIn(int expiresIn);
+    public interface ExpiresInSecondsStage {
+        _FinalStage expiresInSeconds(int expiresInSeconds);
     }
 
     public interface _FinalStage {
@@ -170,12 +170,12 @@ public final class TokensIssueRequestDoc {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements SubStage, DocIdStage, ExpiresInStage, _FinalStage {
+    public static final class Builder implements SubStage, DocIdStage, ExpiresInSecondsStage, _FinalStage {
         private String sub;
 
         private String docId;
 
-        private int expiresIn;
+        private int expiresInSeconds;
 
         private Optional<List<String>> origins = Optional.empty();
 
@@ -198,7 +198,7 @@ public final class TokensIssueRequestDoc {
             scope(other.getScope());
             identity(other.getIdentity());
             origins(other.getOrigins());
-            expiresIn(other.getExpiresIn());
+            expiresInSeconds(other.getExpiresInSeconds());
             return this;
         }
 
@@ -211,15 +211,15 @@ public final class TokensIssueRequestDoc {
 
         @java.lang.Override
         @JsonSetter("docId")
-        public ExpiresInStage docId(@NotNull String docId) {
+        public ExpiresInSecondsStage docId(@NotNull String docId) {
             this.docId = Objects.requireNonNull(docId, "docId must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("expiresIn")
-        public _FinalStage expiresIn(int expiresIn) {
-            this.expiresIn = expiresIn;
+        @JsonSetter("expiresInSeconds")
+        public _FinalStage expiresInSeconds(int expiresInSeconds) {
+            this.expiresInSeconds = expiresInSeconds;
             return this;
         }
 
@@ -289,7 +289,7 @@ public final class TokensIssueRequestDoc {
         @java.lang.Override
         public TokensIssueRequestDoc build() {
             return new TokensIssueRequestDoc(
-                    sub, docId, layerName, scope, identity, origins, expiresIn, additionalProperties);
+                    sub, docId, layerName, scope, identity, origins, expiresInSeconds, additionalProperties);
         }
 
         @java.lang.Override

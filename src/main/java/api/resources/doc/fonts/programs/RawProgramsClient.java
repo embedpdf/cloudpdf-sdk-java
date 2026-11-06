@@ -15,6 +15,7 @@ import com.cloudpdf.api.errors.ForbiddenError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.fonts.programs.requests.DownloadProgramsRequest;
 import com.cloudpdf.api.resources.doc.fonts.programs.requests.GetProgramsRequest;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.cloudpdf.api.types.FontProgramInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
@@ -36,26 +37,33 @@ public class RawProgramsClient {
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
-    public CloudPDFClientHttpResponse<InputStream> download(String docId, String layerName, String displayHash) {
+    public CloudPDFClientHttpResponse<InputStream> download(String docId, String layerName, String displaySha256) {
         return download(
-                docId, layerName, displayHash, DownloadProgramsRequest.builder().build());
+                docId,
+                layerName,
+                displaySha256,
+                DownloadProgramsRequest.builder().build());
     }
 
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
     public CloudPDFClientHttpResponse<InputStream> download(
-            String docId, String layerName, String displayHash, RequestOptions requestOptions) {
+            String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
         return download(
-                docId, layerName, displayHash, DownloadProgramsRequest.builder().build(), requestOptions);
+                docId,
+                layerName,
+                displaySha256,
+                DownloadProgramsRequest.builder().build(),
+                requestOptions);
     }
 
     /**
      * A document token needs any one of the listed capabilities: one that may write text in the document. A file the list says can't be downloaded (<code>canDownload: false</code>) is not found.
      */
     public CloudPDFClientHttpResponse<InputStream> download(
-            String docId, String layerName, String displayHash, DownloadProgramsRequest request) {
-        return download(docId, layerName, displayHash, request, null);
+            String docId, String layerName, String displaySha256, DownloadProgramsRequest request) {
+        return download(docId, layerName, displaySha256, request, null);
     }
 
     /**
@@ -64,7 +72,7 @@ public class RawProgramsClient {
     public CloudPDFClientHttpResponse<InputStream> download(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             DownloadProgramsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -74,7 +82,7 @@ public class RawProgramsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("font-program-files")
-                .addPathSegment(displayHash);
+                .addPathSegment(displaySha256);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -114,10 +122,10 @@ public class RawProgramsClient {
                 switch (response.code()) {
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -132,24 +140,24 @@ public class RawProgramsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<FontProgramInfo> get(String docId, String layerName, String displayHash) {
-        return get(docId, layerName, displayHash, GetProgramsRequest.builder().build());
+    public CloudPDFClientHttpResponse<FontProgramInfo> get(String docId, String layerName, String displaySha256) {
+        return get(docId, layerName, displaySha256, GetProgramsRequest.builder().build());
     }
 
     public CloudPDFClientHttpResponse<FontProgramInfo> get(
-            String docId, String layerName, String displayHash, RequestOptions requestOptions) {
-        return get(docId, layerName, displayHash, GetProgramsRequest.builder().build(), requestOptions);
+            String docId, String layerName, String displaySha256, RequestOptions requestOptions) {
+        return get(docId, layerName, displaySha256, GetProgramsRequest.builder().build(), requestOptions);
     }
 
     public CloudPDFClientHttpResponse<FontProgramInfo> get(
-            String docId, String layerName, String displayHash, GetProgramsRequest request) {
-        return get(docId, layerName, displayHash, request, null);
+            String docId, String layerName, String displaySha256, GetProgramsRequest request) {
+        return get(docId, layerName, displaySha256, request, null);
     }
 
     public CloudPDFClientHttpResponse<FontProgramInfo> get(
             String docId,
             String layerName,
-            String displayHash,
+            String displaySha256,
             GetProgramsRequest request,
             RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -159,7 +167,7 @@ public class RawProgramsClient {
                 .addPathSegments("layers")
                 .addPathSegment(layerName)
                 .addPathSegments("font-programs")
-                .addPathSegment(displayHash);
+                .addPathSegment(displaySha256);
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -198,7 +206,7 @@ public class RawProgramsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

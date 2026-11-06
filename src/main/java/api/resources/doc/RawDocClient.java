@@ -24,12 +24,12 @@ import com.cloudpdf.api.resources.doc.requests.HeadDocRequest;
 import com.cloudpdf.api.resources.doc.requests.ManifestDocRequest;
 import com.cloudpdf.api.resources.doc.requests.RenderDocRequest;
 import com.cloudpdf.api.resources.doc.requests.TextDocRequest;
-import com.cloudpdf.api.types.DocChanges200Response;
-import com.cloudpdf.api.types.DocDownloadLink200Response;
-import com.cloudpdf.api.types.DocHead200Response;
-import com.cloudpdf.api.types.DocManifest200Response;
-import com.cloudpdf.api.types.DocText200Response;
-import com.cloudpdf.api.types.EngineErrorPayload;
+import com.cloudpdf.api.types.DocChangesResponse;
+import com.cloudpdf.api.types.DocDownloadLinkResponse;
+import com.cloudpdf.api.types.DocHeadResponse;
+import com.cloudpdf.api.types.DocManifestResponse;
+import com.cloudpdf.api.types.DocTextResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,19 +48,19 @@ public class RawDocClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocHead200Response> head(String docId) {
+    public CloudPDFClientHttpResponse<DocHeadResponse> head(String docId) {
         return head(docId, HeadDocRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocHead200Response> head(String docId, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<DocHeadResponse> head(String docId, RequestOptions requestOptions) {
         return head(docId, HeadDocRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocHead200Response> head(String docId, HeadDocRequest request) {
+    public CloudPDFClientHttpResponse<DocHeadResponse> head(String docId, HeadDocRequest request) {
         return head(docId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocHead200Response> head(
+    public CloudPDFClientHttpResponse<DocHeadResponse> head(
             String docId, HeadDocRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -100,12 +100,12 @@ public class RawDocClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocHead200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocHeadResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -123,7 +123,7 @@ public class RawDocClient {
     /**
      * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
-    public CloudPDFClientHttpResponse<DocChanges200Response> changes(
+    public CloudPDFClientHttpResponse<DocChangesResponse> changes(
             String docId, String layerName, DocChangesRequest request) {
         return changes(docId, layerName, request, null);
     }
@@ -131,7 +131,7 @@ public class RawDocClient {
     /**
      * Each change stands on its own and names itself by <code>opId</code>: a refused change rolls back alone, and the answer lists every change in order, applied with its result or refused with its error. Asked again under its <code>opId</code>, a change gets the same answer, refusals included; a different change under an answered <code>opId</code> is refused (IdempotencyKeyReused). <code>{ opId, undoOf }</code> undoes an earlier change of the caller, here or in an earlier request; an undo leaves alone what was changed since, and the undo of an undo redoes. A redaction, a flatten, a form repair or a completed signature ends undo for the changes before it (UndoUnavailable). Each op is checked against its own capability: annotation ops need <code>doc.annotate.modify</code>, form values <code>doc.forms.fill</code>, form structure <code>doc.forms.modify</code>, metadata <code>doc.metadata.modify</code>, outline <code>doc.outline.modify</code>, pages <code>doc.pages.assemble</code>, embedded files <code>doc.attachments.modify</code>. Bytes (a stamp's drawing, an attached file, a signature's artwork, a PDF whose pages come in) travel as multipart: a JSON <code>body</code> part, each op naming its files by role as <code>resources: { &lt;role&gt;: '&lt;key&gt;' }</code>, and each file as the part <code>resource:&lt;key&gt;</code>. At most 64 changes per request and 512 ops per change.
      */
-    public CloudPDFClientHttpResponse<DocChanges200Response> changes(
+    public CloudPDFClientHttpResponse<DocChangesResponse> changes(
             String docId, String layerName, DocChangesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -181,22 +181,22 @@ public class RawDocClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocChanges200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocChangesResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 413:
                         throw new ContentTooLargeError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -272,7 +272,7 @@ public class RawDocClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -290,14 +290,14 @@ public class RawDocClient {
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public CloudPDFClientHttpResponse<DocDownloadLink200Response> downloadLink(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocDownloadLinkResponse> downloadLink(String docId, String layerName) {
         return downloadLink(docId, layerName, DocDownloadLinkRequest.builder().build());
     }
 
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public CloudPDFClientHttpResponse<DocDownloadLink200Response> downloadLink(
+    public CloudPDFClientHttpResponse<DocDownloadLinkResponse> downloadLink(
             String docId, String layerName, RequestOptions requestOptions) {
         return downloadLink(docId, layerName, DocDownloadLinkRequest.builder().build(), requestOptions);
     }
@@ -305,7 +305,7 @@ public class RawDocClient {
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public CloudPDFClientHttpResponse<DocDownloadLink200Response> downloadLink(
+    public CloudPDFClientHttpResponse<DocDownloadLinkResponse> downloadLink(
             String docId, String layerName, DocDownloadLinkRequest request) {
         return downloadLink(docId, layerName, request, null);
     }
@@ -313,7 +313,7 @@ public class RawDocClient {
     /**
      * The link opens the layer as it is when created: once the layer changes, it answers 404, so create it right before handing it over. It downloads that one file and nothing else, and a password-protected document is checked when the link is created. Deployments that verify tokens with their own keys (JWKS) mint links on their backend: a doc token with <code>layer_name</code>, a <code>download: { docVersion, mode: &quot;incremental&quot; }</code> claim and a short <code>exp</code>, passed as <code>link</code> on the versioned download URL.
      */
-    public CloudPDFClientHttpResponse<DocDownloadLink200Response> downloadLink(
+    public CloudPDFClientHttpResponse<DocDownloadLinkResponse> downloadLink(
             String docId, String layerName, DocDownloadLinkRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -363,18 +363,17 @@ public class RawDocClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocDownloadLink200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocDownloadLinkResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 501:
                         throw new NotImplementedError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, EngineErrorPayload.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -389,21 +388,21 @@ public class RawDocClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocManifest200Response> manifest(String docId, String layerName) {
+    public CloudPDFClientHttpResponse<DocManifestResponse> manifest(String docId, String layerName) {
         return manifest(docId, layerName, ManifestDocRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocManifest200Response> manifest(
+    public CloudPDFClientHttpResponse<DocManifestResponse> manifest(
             String docId, String layerName, RequestOptions requestOptions) {
         return manifest(docId, layerName, ManifestDocRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocManifest200Response> manifest(
+    public CloudPDFClientHttpResponse<DocManifestResponse> manifest(
             String docId, String layerName, ManifestDocRequest request) {
         return manifest(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocManifest200Response> manifest(
+    public CloudPDFClientHttpResponse<DocManifestResponse> manifest(
             String docId, String layerName, ManifestDocRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -445,13 +444,12 @@ public class RawDocClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocManifest200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocManifestResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -541,7 +539,7 @@ public class RawDocClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -556,21 +554,21 @@ public class RawDocClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocText200Response> text(String docId, String layerName, String pageKey) {
+    public CloudPDFClientHttpResponse<DocTextResponse> text(String docId, String layerName, String pageKey) {
         return text(docId, layerName, pageKey, TextDocRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocText200Response> text(
+    public CloudPDFClientHttpResponse<DocTextResponse> text(
             String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return text(docId, layerName, pageKey, TextDocRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocText200Response> text(
+    public CloudPDFClientHttpResponse<DocTextResponse> text(
             String docId, String layerName, String pageKey, TextDocRequest request) {
         return text(docId, layerName, pageKey, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocText200Response> text(
+    public CloudPDFClientHttpResponse<DocTextResponse> text(
             String docId, String layerName, String pageKey, TextDocRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -614,12 +612,12 @@ public class RawDocClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocText200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocTextResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

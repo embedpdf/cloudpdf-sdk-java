@@ -26,9 +26,9 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FontProgramInfo.Builder.class)
 public final class FontProgramInfo {
-    private final Optional<String> displayHash;
+    private final Optional<String> displaySha256;
 
-    private final Optional<String> sourceHash;
+    private final Optional<String> sourceSha256;
 
     private final FontProgramInfoEmbedded embedded;
 
@@ -47,8 +47,8 @@ public final class FontProgramInfo {
     private final Map<String, Object> additionalProperties;
 
     private FontProgramInfo(
-            Optional<String> displayHash,
-            Optional<String> sourceHash,
+            Optional<String> displaySha256,
+            Optional<String> sourceSha256,
             FontProgramInfoEmbedded embedded,
             Optional<FontProgramInfoFormat> format,
             Optional<FontProgramInfoEmbeddingPermission> embeddingPermission,
@@ -57,8 +57,8 @@ public final class FontProgramInfo {
             double ascent,
             double descent,
             Map<String, Object> additionalProperties) {
-        this.displayHash = displayHash;
-        this.sourceHash = sourceHash;
+        this.displaySha256 = displaySha256;
+        this.sourceSha256 = sourceSha256;
         this.embedded = embedded;
         this.format = format;
         this.embeddingPermission = embeddingPermission;
@@ -70,19 +70,19 @@ public final class FontProgramInfo {
     }
 
     @JsonIgnore
-    public Optional<String> getDisplayHash() {
-        if (displayHash == null) {
+    public Optional<String> getDisplaySha256() {
+        if (displaySha256 == null) {
             return Optional.empty();
         }
-        return displayHash;
+        return displaySha256;
     }
 
     @JsonIgnore
-    public Optional<String> getSourceHash() {
-        if (sourceHash == null) {
+    public Optional<String> getSourceSha256() {
+        if (sourceSha256 == null) {
             return Optional.empty();
         }
-        return sourceHash;
+        return sourceSha256;
     }
 
     @JsonProperty("embedded")
@@ -127,15 +127,15 @@ public final class FontProgramInfo {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("displayHash")
-    private Optional<String> _getDisplayHash() {
-        return displayHash;
+    @JsonProperty("displaySha256")
+    private Optional<String> _getDisplaySha256() {
+        return displaySha256;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("sourceHash")
-    private Optional<String> _getSourceHash() {
-        return sourceHash;
+    @JsonProperty("sourceSha256")
+    private Optional<String> _getSourceSha256() {
+        return sourceSha256;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -162,8 +162,8 @@ public final class FontProgramInfo {
     }
 
     private boolean equalTo(FontProgramInfo other) {
-        return displayHash.equals(other.displayHash)
-                && sourceHash.equals(other.sourceHash)
+        return displaySha256.equals(other.displaySha256)
+                && sourceSha256.equals(other.sourceSha256)
                 && embedded.equals(other.embedded)
                 && format.equals(other.format)
                 && embeddingPermission.equals(other.embeddingPermission)
@@ -176,8 +176,8 @@ public final class FontProgramInfo {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.displayHash,
-                this.sourceHash,
+                this.displaySha256,
+                this.sourceSha256,
                 this.embedded,
                 this.format,
                 this.embeddingPermission,
@@ -221,17 +221,17 @@ public final class FontProgramInfo {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
-        _FinalStage displayHash(Optional<String> displayHash);
+        _FinalStage displaySha256(Optional<String> displaySha256);
 
-        _FinalStage displayHash(String displayHash);
+        _FinalStage displaySha256(String displaySha256);
 
-        _FinalStage displayHash(Nullable<String> displayHash);
+        _FinalStage displaySha256(Nullable<String> displaySha256);
 
-        _FinalStage sourceHash(Optional<String> sourceHash);
+        _FinalStage sourceSha256(Optional<String> sourceSha256);
 
-        _FinalStage sourceHash(String sourceHash);
+        _FinalStage sourceSha256(String sourceSha256);
 
-        _FinalStage sourceHash(Nullable<String> sourceHash);
+        _FinalStage sourceSha256(Nullable<String> sourceSha256);
 
         _FinalStage format(Optional<FontProgramInfoFormat> format);
 
@@ -269,9 +269,9 @@ public final class FontProgramInfo {
 
         private Optional<FontProgramInfoFormat> format = Optional.empty();
 
-        private Optional<String> sourceHash = Optional.empty();
+        private Optional<String> sourceSha256 = Optional.empty();
 
-        private Optional<String> displayHash = Optional.empty();
+        private Optional<String> displaySha256 = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -280,8 +280,8 @@ public final class FontProgramInfo {
 
         @java.lang.Override
         public Builder from(FontProgramInfo other) {
-            displayHash(other.getDisplayHash());
-            sourceHash(other.getSourceHash());
+            displaySha256(other.getDisplaySha256());
+            sourceSha256(other.getSourceSha256());
             embedded(other.getEmbedded());
             format(other.getFormat());
             embeddingPermission(other.getEmbeddingPermission());
@@ -395,60 +395,60 @@ public final class FontProgramInfo {
         }
 
         @java.lang.Override
-        public _FinalStage sourceHash(Nullable<String> sourceHash) {
-            if (sourceHash.isNull()) {
-                this.sourceHash = null;
-            } else if (sourceHash.isEmpty()) {
-                this.sourceHash = Optional.empty();
+        public _FinalStage sourceSha256(Nullable<String> sourceSha256) {
+            if (sourceSha256.isNull()) {
+                this.sourceSha256 = null;
+            } else if (sourceSha256.isEmpty()) {
+                this.sourceSha256 = Optional.empty();
             } else {
-                this.sourceHash = Optional.of(sourceHash.get());
+                this.sourceSha256 = Optional.of(sourceSha256.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage sourceHash(String sourceHash) {
-            this.sourceHash = Optional.ofNullable(sourceHash);
+        public _FinalStage sourceSha256(String sourceSha256) {
+            this.sourceSha256 = Optional.ofNullable(sourceSha256);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "sourceHash", nulls = Nulls.SKIP)
-        public _FinalStage sourceHash(Optional<String> sourceHash) {
-            this.sourceHash = sourceHash;
+        @JsonSetter(value = "sourceSha256", nulls = Nulls.SKIP)
+        public _FinalStage sourceSha256(Optional<String> sourceSha256) {
+            this.sourceSha256 = sourceSha256;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage displayHash(Nullable<String> displayHash) {
-            if (displayHash.isNull()) {
-                this.displayHash = null;
-            } else if (displayHash.isEmpty()) {
-                this.displayHash = Optional.empty();
+        public _FinalStage displaySha256(Nullable<String> displaySha256) {
+            if (displaySha256.isNull()) {
+                this.displaySha256 = null;
+            } else if (displaySha256.isEmpty()) {
+                this.displaySha256 = Optional.empty();
             } else {
-                this.displayHash = Optional.of(displayHash.get());
+                this.displaySha256 = Optional.of(displaySha256.get());
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage displayHash(String displayHash) {
-            this.displayHash = Optional.ofNullable(displayHash);
+        public _FinalStage displaySha256(String displaySha256) {
+            this.displaySha256 = Optional.ofNullable(displaySha256);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "displayHash", nulls = Nulls.SKIP)
-        public _FinalStage displayHash(Optional<String> displayHash) {
-            this.displayHash = displayHash;
+        @JsonSetter(value = "displaySha256", nulls = Nulls.SKIP)
+        public _FinalStage displaySha256(Optional<String> displaySha256) {
+            this.displaySha256 = displaySha256;
             return this;
         }
 
         @java.lang.Override
         public FontProgramInfo build() {
             return new FontProgramInfo(
-                    displayHash,
-                    sourceHash,
+                    displaySha256,
+                    sourceSha256,
                     embedded,
                     format,
                     embeddingPermission,

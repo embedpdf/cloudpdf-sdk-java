@@ -25,13 +25,13 @@ import com.cloudpdf.api.resources.grants.requests.GrantsCreateRequest;
 import com.cloudpdf.api.resources.grants.requests.GrantsExchangeRequest;
 import com.cloudpdf.api.resources.grants.requests.GrantsUpdateRequest;
 import com.cloudpdf.api.resources.grants.requests.ListGrantsRequest;
-import com.cloudpdf.api.types.AdminErrorPayload;
-import com.cloudpdf.api.types.GrantsArchive200Response;
-import com.cloudpdf.api.types.GrantsCreate200Response;
-import com.cloudpdf.api.types.GrantsExchange200Response;
-import com.cloudpdf.api.types.GrantsGet200Response;
-import com.cloudpdf.api.types.GrantsList200Response;
-import com.cloudpdf.api.types.GrantsUpdate200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.GrantsArchiveResponse;
+import com.cloudpdf.api.types.GrantsCreateResponse;
+import com.cloudpdf.api.types.GrantsExchangeResponse;
+import com.cloudpdf.api.types.GrantsGetResponse;
+import com.cloudpdf.api.types.GrantsListResponse;
+import com.cloudpdf.api.types.GrantsUpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -52,14 +52,14 @@ public class RawGrantsClient {
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public CloudPDFClientHttpResponse<GrantsExchange200Response> exchange(GrantsExchangeRequest request) {
+    public CloudPDFClientHttpResponse<GrantsExchangeResponse> exchange(GrantsExchangeRequest request) {
         return exchange(request, null);
     }
 
     /**
      * Unauthenticated, but requires a browser Origin header, checked against the grant allowlist. Unknown, deleted, paused and archived grants are indistinguishable (404). Passphrase-protected grants return 422 GrantPassphraseRequired until <code>passphrase</code> is supplied. A grant that asks its visitors who they are on open returns 422 VisitorIdentityRequired until the required answers are given; <code>error.details</code> carries <code>fields</code> (what the grant asks), <code>missing</code>, <code>invalid</code>, <code>purpose</code> and <code>privacyUrl</code>. A grant that asks before the first change issues the session at once with <code>visitor.identityRequest</code>, and writes answer 403 VisitorIdentityRequired with the same details until the visitor exchanges again with their answers. Answers that can not be taken answer 422 on any grant. Mounted only when the deployment can sign (HS256 mode).
      */
-    public CloudPDFClientHttpResponse<GrantsExchange200Response> exchange(
+    public CloudPDFClientHttpResponse<GrantsExchangeResponse> exchange(
             GrantsExchangeRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -101,28 +101,26 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsExchange200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsExchangeResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 410:
                         throw new GoneError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AdminErrorPayload.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 422:
                         throw new UnprocessableEntityError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AdminErrorPayload.class),
-                                response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -137,19 +135,19 @@ public class RawGrantsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<GrantsList200Response> list(String tenantId) {
+    public CloudPDFClientHttpResponse<GrantsListResponse> list(String tenantId) {
         return list(tenantId, ListGrantsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<GrantsList200Response> list(String tenantId, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<GrantsListResponse> list(String tenantId, RequestOptions requestOptions) {
         return list(tenantId, ListGrantsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<GrantsList200Response> list(String tenantId, ListGrantsRequest request) {
+    public CloudPDFClientHttpResponse<GrantsListResponse> list(String tenantId, ListGrantsRequest request) {
         return list(tenantId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<GrantsList200Response> list(
+    public CloudPDFClientHttpResponse<GrantsListResponse> list(
             String tenantId, ListGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -201,12 +199,12 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsList200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsListResponse.class), response);
             }
             try {
                 if (response.code() == 400) {
                     throw new BadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -224,14 +222,14 @@ public class RawGrantsClient {
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public CloudPDFClientHttpResponse<GrantsCreate200Response> create(String tenantId, GrantsCreateRequest request) {
+    public CloudPDFClientHttpResponse<GrantsCreateResponse> create(String tenantId, GrantsCreateRequest request) {
         return create(tenantId, request, null);
     }
 
     /**
      * The returned id is what a link page or an embed opens. Its scope gives only document permissions the caller holds itself, as tokens.issue does. Mounted only when the deployment can sign (HS256 mode) — exchange mints session JWTs, so grants exist only where minting does.
      */
-    public CloudPDFClientHttpResponse<GrantsCreate200Response> create(
+    public CloudPDFClientHttpResponse<GrantsCreateResponse> create(
             String tenantId, GrantsCreateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -275,20 +273,19 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsCreate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsCreateResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -303,21 +300,21 @@ public class RawGrantsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<GrantsGet200Response> get(String tenantId, String grantId) {
+    public CloudPDFClientHttpResponse<GrantsGetResponse> get(String tenantId, String grantId) {
         return get(tenantId, grantId, GetGrantsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<GrantsGet200Response> get(
+    public CloudPDFClientHttpResponse<GrantsGetResponse> get(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return get(tenantId, grantId, GetGrantsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<GrantsGet200Response> get(
+    public CloudPDFClientHttpResponse<GrantsGetResponse> get(
             String tenantId, String grantId, GetGrantsRequest request) {
         return get(tenantId, grantId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<GrantsGet200Response> get(
+    public CloudPDFClientHttpResponse<GrantsGetResponse> get(
             String tenantId, String grantId, GetGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -354,12 +351,12 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsGet200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsGetResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -428,10 +425,10 @@ public class RawGrantsClient {
                 switch (response.code()) {
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -446,21 +443,21 @@ public class RawGrantsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<GrantsUpdate200Response> update(String tenantId, String grantId) {
+    public CloudPDFClientHttpResponse<GrantsUpdateResponse> update(String tenantId, String grantId) {
         return update(tenantId, grantId, GrantsUpdateRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<GrantsUpdate200Response> update(
+    public CloudPDFClientHttpResponse<GrantsUpdateResponse> update(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return update(tenantId, grantId, GrantsUpdateRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<GrantsUpdate200Response> update(
+    public CloudPDFClientHttpResponse<GrantsUpdateResponse> update(
             String tenantId, String grantId, GrantsUpdateRequest request) {
         return update(tenantId, grantId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<GrantsUpdate200Response> update(
+    public CloudPDFClientHttpResponse<GrantsUpdateResponse> update(
             String tenantId, String grantId, GrantsUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -505,23 +502,22 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsUpdate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsUpdateResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 403:
                         throw new ForbiddenError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 409:
                         throw new ConflictError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -539,14 +535,14 @@ public class RawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CloudPDFClientHttpResponse<GrantsArchive200Response> archive(String tenantId, String grantId) {
+    public CloudPDFClientHttpResponse<GrantsArchiveResponse> archive(String tenantId, String grantId) {
         return archive(tenantId, grantId, ArchiveGrantsRequest.builder().build());
     }
 
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CloudPDFClientHttpResponse<GrantsArchive200Response> archive(
+    public CloudPDFClientHttpResponse<GrantsArchiveResponse> archive(
             String tenantId, String grantId, RequestOptions requestOptions) {
         return archive(tenantId, grantId, ArchiveGrantsRequest.builder().build(), requestOptions);
     }
@@ -554,7 +550,7 @@ public class RawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CloudPDFClientHttpResponse<GrantsArchive200Response> archive(
+    public CloudPDFClientHttpResponse<GrantsArchiveResponse> archive(
             String tenantId, String grantId, ArchiveGrantsRequest request) {
         return archive(tenantId, grantId, request, null);
     }
@@ -562,7 +558,7 @@ public class RawGrantsClient {
     /**
      * Archiving is final: an archived grant never exchanges again, and to give access again you create a new grant. Pausing (<code>disabled</code>) is the reversible stop. An archived grant no longer counts as using its shared layer, so that layer can be deleted.
      */
-    public CloudPDFClientHttpResponse<GrantsArchive200Response> archive(
+    public CloudPDFClientHttpResponse<GrantsArchiveResponse> archive(
             String tenantId, String grantId, ArchiveGrantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -600,13 +596,12 @@ public class RawGrantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsArchive200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, GrantsArchiveResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

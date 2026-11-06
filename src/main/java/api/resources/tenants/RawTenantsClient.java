@@ -22,11 +22,12 @@ import com.cloudpdf.api.resources.tenants.requests.TenantsCreateRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsSuspendRequest;
 import com.cloudpdf.api.resources.tenants.requests.TenantsUpdateRequest;
 import com.cloudpdf.api.resources.tenants.requests.UsageTenantsRequest;
-import com.cloudpdf.api.types.TenantsCreate200Response;
-import com.cloudpdf.api.types.TenantsGet200Response;
-import com.cloudpdf.api.types.TenantsList200Response;
-import com.cloudpdf.api.types.TenantsUpdate200Response;
-import com.cloudpdf.api.types.TenantsUsage200Response;
+import com.cloudpdf.api.types.ErrorResponse;
+import com.cloudpdf.api.types.TenantsCreateResponse;
+import com.cloudpdf.api.types.TenantsGetResponse;
+import com.cloudpdf.api.types.TenantsListResponse;
+import com.cloudpdf.api.types.TenantsUpdateResponse;
+import com.cloudpdf.api.types.TenantsUsageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -44,19 +45,19 @@ public class RawTenantsClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<TenantsList200Response> list() {
+    public CloudPDFClientHttpResponse<TenantsListResponse> list() {
         return list(ListTenantsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<TenantsList200Response> list(RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<TenantsListResponse> list(RequestOptions requestOptions) {
         return list(ListTenantsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<TenantsList200Response> list(ListTenantsRequest request) {
+    public CloudPDFClientHttpResponse<TenantsListResponse> list(ListTenantsRequest request) {
         return list(request, null);
     }
 
-    public CloudPDFClientHttpResponse<TenantsList200Response> list(
+    public CloudPDFClientHttpResponse<TenantsListResponse> list(
             ListTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -98,13 +99,12 @@ public class RawTenantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsList200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsListResponse.class), response);
             }
             try {
                 if (response.code() == 400) {
                     throw new BadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -119,11 +119,11 @@ public class RawTenantsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<TenantsCreate200Response> create(TenantsCreateRequest request) {
+    public CloudPDFClientHttpResponse<TenantsCreateResponse> create(TenantsCreateRequest request) {
         return create(request, null);
     }
 
-    public CloudPDFClientHttpResponse<TenantsCreate200Response> create(
+    public CloudPDFClientHttpResponse<TenantsCreateResponse> create(
             TenantsCreateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -165,13 +165,12 @@ public class RawTenantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsCreate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsCreateResponse.class), response);
             }
             try {
                 if (response.code() == 400) {
                     throw new BadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -186,19 +185,19 @@ public class RawTenantsClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<TenantsGet200Response> get(String tenantId) {
+    public CloudPDFClientHttpResponse<TenantsGetResponse> get(String tenantId) {
         return get(tenantId, GetTenantsRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<TenantsGet200Response> get(String tenantId, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<TenantsGetResponse> get(String tenantId, RequestOptions requestOptions) {
         return get(tenantId, GetTenantsRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<TenantsGet200Response> get(String tenantId, GetTenantsRequest request) {
+    public CloudPDFClientHttpResponse<TenantsGetResponse> get(String tenantId, GetTenantsRequest request) {
         return get(tenantId, request, null);
     }
 
-    public CloudPDFClientHttpResponse<TenantsGet200Response> get(
+    public CloudPDFClientHttpResponse<TenantsGetResponse> get(
             String tenantId, GetTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -233,12 +232,12 @@ public class RawTenantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsGet200Response.class), response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsGetResponse.class), response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -316,7 +315,7 @@ public class RawTenantsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -334,14 +333,14 @@ public class RawTenantsClient {
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CloudPDFClientHttpResponse<TenantsUpdate200Response> update(String tenantId, TenantsUpdateRequest request) {
+    public CloudPDFClientHttpResponse<TenantsUpdateResponse> update(String tenantId, TenantsUpdateRequest request) {
         return update(tenantId, request, null);
     }
 
     /**
      * A feature names an installed module; any other id is a 400. A module route answers a tenant without its feature 403 FeatureNotEnabled, and one whose feature is stopped 402 FeatureStopped (details.feature, details.stopped). Other replicas apply a change within 30 seconds.
      */
-    public CloudPDFClientHttpResponse<TenantsUpdate200Response> update(
+    public CloudPDFClientHttpResponse<TenantsUpdateResponse> update(
             String tenantId, TenantsUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -384,17 +383,16 @@ public class RawTenantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUpdate200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUpdateResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -461,7 +459,7 @@ public class RawTenantsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -548,7 +546,7 @@ public class RawTenantsClient {
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -566,28 +564,28 @@ public class RawTenantsClient {
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId) {
+    public CloudPDFClientHttpResponse<TenantsUsageResponse> usage(String tenantId) {
         return usage(tenantId, UsageTenantsRequest.builder().build());
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, RequestOptions requestOptions) {
+    public CloudPDFClientHttpResponse<TenantsUsageResponse> usage(String tenantId, RequestOptions requestOptions) {
         return usage(tenantId, UsageTenantsRequest.builder().build(), requestOptions);
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(String tenantId, UsageTenantsRequest request) {
+    public CloudPDFClientHttpResponse<TenantsUsageResponse> usage(String tenantId, UsageTenantsRequest request) {
         return usage(tenantId, request, null);
     }
 
     /**
      * Facts only — no limits or billing state. Views count grant exchanges plus authorized /v1/access requests, deduplicated across the two.
      */
-    public CloudPDFClientHttpResponse<TenantsUsage200Response> usage(
+    public CloudPDFClientHttpResponse<TenantsUsageResponse> usage(
             String tenantId, UsageTenantsRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -634,17 +632,16 @@ public class RawTenantsClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUsage200Response.class),
-                        response);
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, TenantsUsageResponse.class), response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

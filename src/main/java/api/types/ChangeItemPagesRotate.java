@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ChangeItemPagesRotate {
     private final List<PageRef> pages;
 
-    private final double rotation;
+    private final int rotation;
 
     private final ChangeItemPagesRotateLayout layout;
 
@@ -34,7 +34,7 @@ public final class ChangeItemPagesRotate {
 
     private ChangeItemPagesRotate(
             List<PageRef> pages,
-            double rotation,
+            int rotation,
             ChangeItemPagesRotateLayout layout,
             MutationMeta meta,
             Map<String, Object> additionalProperties) {
@@ -51,7 +51,7 @@ public final class ChangeItemPagesRotate {
     }
 
     @JsonProperty("rotation")
-    public double getRotation() {
+    public int getRotation() {
         return rotation;
     }
 
@@ -98,7 +98,7 @@ public final class ChangeItemPagesRotate {
     }
 
     public interface RotationStage {
-        LayoutStage rotation(double rotation);
+        LayoutStage rotation(int rotation);
 
         Builder from(ChangeItemPagesRotate other);
     }
@@ -127,7 +127,7 @@ public final class ChangeItemPagesRotate {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements RotationStage, LayoutStage, MetaStage, _FinalStage {
-        private double rotation;
+        private int rotation;
 
         private ChangeItemPagesRotateLayout layout;
 
@@ -151,7 +151,7 @@ public final class ChangeItemPagesRotate {
 
         @java.lang.Override
         @JsonSetter("rotation")
-        public LayoutStage rotation(double rotation) {
+        public LayoutStage rotation(int rotation) {
             this.rotation = rotation;
             return this;
         }

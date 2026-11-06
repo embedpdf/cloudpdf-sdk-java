@@ -43,9 +43,9 @@ public final class FormFieldCheckbox {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldCheckboxValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldCheckboxDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -80,8 +80,8 @@ public final class FormFieldCheckbox {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldCheckboxValueEntry valueEntry,
-            FormFieldCheckboxDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -165,12 +165,12 @@ public final class FormFieldCheckbox {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldCheckboxValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldCheckboxDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -401,11 +401,11 @@ public final class FormFieldCheckbox {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldCheckboxValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        CheckedStage defaultValueEntry(@NotNull FormFieldCheckboxDefaultValueEntry defaultValueEntry);
+        CheckedStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface CheckedStage {
@@ -513,9 +513,9 @@ public final class FormFieldCheckbox {
 
         private boolean noExport;
 
-        private FormFieldCheckboxValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldCheckboxDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private boolean checked;
 
@@ -618,14 +618,14 @@ public final class FormFieldCheckbox {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldCheckboxValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public CheckedStage defaultValueEntry(@NotNull FormFieldCheckboxDefaultValueEntry defaultValueEntry) {
+        public CheckedStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

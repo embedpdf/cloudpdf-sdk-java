@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocumentsInitRequest.Builder.class)
 public final class DocumentsInitRequest {
-    private final double contentLength;
+    private final int sizeBytes;
 
     private final String contentSha256;
 
@@ -39,14 +39,14 @@ public final class DocumentsInitRequest {
 
     private final Optional<String> docId;
 
-    private final Optional<Double> uploadTtlSec;
+    private final Optional<Integer> uploadTtlSeconds;
 
     private final Optional<DocumentsInitRequestUploadPreference> uploadPreference;
 
     private final Map<String, Object> additionalProperties;
 
     private DocumentsInitRequest(
-            double contentLength,
+            int sizeBytes,
             String contentSha256,
             Optional<String> name,
             Optional<String> folderId,
@@ -54,10 +54,10 @@ public final class DocumentsInitRequest {
             Optional<String> idempotencyKey,
             Optional<DocumentsInitRequestDedupMode> dedupMode,
             Optional<String> docId,
-            Optional<Double> uploadTtlSec,
+            Optional<Integer> uploadTtlSeconds,
             Optional<DocumentsInitRequestUploadPreference> uploadPreference,
             Map<String, Object> additionalProperties) {
-        this.contentLength = contentLength;
+        this.sizeBytes = sizeBytes;
         this.contentSha256 = contentSha256;
         this.name = name;
         this.folderId = folderId;
@@ -65,14 +65,14 @@ public final class DocumentsInitRequest {
         this.idempotencyKey = idempotencyKey;
         this.dedupMode = dedupMode;
         this.docId = docId;
-        this.uploadTtlSec = uploadTtlSec;
+        this.uploadTtlSeconds = uploadTtlSeconds;
         this.uploadPreference = uploadPreference;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("contentLength")
-    public double getContentLength() {
-        return contentLength;
+    @JsonProperty("sizeBytes")
+    public int getSizeBytes() {
+        return sizeBytes;
     }
 
     @JsonProperty("contentSha256")
@@ -119,9 +119,9 @@ public final class DocumentsInitRequest {
         return docId;
     }
 
-    @JsonProperty("uploadTtlSec")
-    public Optional<Double> getUploadTtlSec() {
-        return uploadTtlSec;
+    @JsonProperty("uploadTtlSeconds")
+    public Optional<Integer> getUploadTtlSeconds() {
+        return uploadTtlSeconds;
     }
 
     @JsonProperty("uploadPreference")
@@ -141,7 +141,7 @@ public final class DocumentsInitRequest {
     }
 
     private boolean equalTo(DocumentsInitRequest other) {
-        return contentLength == other.contentLength
+        return sizeBytes == other.sizeBytes
                 && contentSha256.equals(other.contentSha256)
                 && name.equals(other.name)
                 && folderId.equals(other.folderId)
@@ -149,14 +149,14 @@ public final class DocumentsInitRequest {
                 && idempotencyKey.equals(other.idempotencyKey)
                 && dedupMode.equals(other.dedupMode)
                 && docId.equals(other.docId)
-                && uploadTtlSec.equals(other.uploadTtlSec)
+                && uploadTtlSeconds.equals(other.uploadTtlSeconds)
                 && uploadPreference.equals(other.uploadPreference);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.contentLength,
+                this.sizeBytes,
                 this.contentSha256,
                 this.name,
                 this.folderId,
@@ -164,7 +164,7 @@ public final class DocumentsInitRequest {
                 this.idempotencyKey,
                 this.dedupMode,
                 this.docId,
-                this.uploadTtlSec,
+                this.uploadTtlSeconds,
                 this.uploadPreference);
     }
 
@@ -173,12 +173,12 @@ public final class DocumentsInitRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static ContentLengthStage builder() {
+    public static SizeBytesStage builder() {
         return new Builder();
     }
 
-    public interface ContentLengthStage {
-        ContentSha256Stage contentLength(double contentLength);
+    public interface SizeBytesStage {
+        ContentSha256Stage sizeBytes(int sizeBytes);
 
         Builder from(DocumentsInitRequest other);
     }
@@ -227,9 +227,9 @@ public final class DocumentsInitRequest {
 
         _FinalStage docId(String docId);
 
-        _FinalStage uploadTtlSec(Optional<Double> uploadTtlSec);
+        _FinalStage uploadTtlSeconds(Optional<Integer> uploadTtlSeconds);
 
-        _FinalStage uploadTtlSec(Double uploadTtlSec);
+        _FinalStage uploadTtlSeconds(Integer uploadTtlSeconds);
 
         _FinalStage uploadPreference(Optional<DocumentsInitRequestUploadPreference> uploadPreference);
 
@@ -237,14 +237,14 @@ public final class DocumentsInitRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentLengthStage, ContentSha256Stage, _FinalStage {
-        private double contentLength;
+    public static final class Builder implements SizeBytesStage, ContentSha256Stage, _FinalStage {
+        private int sizeBytes;
 
         private String contentSha256;
 
         private Optional<DocumentsInitRequestUploadPreference> uploadPreference = Optional.empty();
 
-        private Optional<Double> uploadTtlSec = Optional.empty();
+        private Optional<Integer> uploadTtlSeconds = Optional.empty();
 
         private Optional<String> docId = Optional.empty();
 
@@ -265,7 +265,7 @@ public final class DocumentsInitRequest {
 
         @java.lang.Override
         public Builder from(DocumentsInitRequest other) {
-            contentLength(other.getContentLength());
+            sizeBytes(other.getSizeBytes());
             contentSha256(other.getContentSha256());
             name(other.getName());
             folderId(other.getFolderId());
@@ -273,15 +273,15 @@ public final class DocumentsInitRequest {
             idempotencyKey(other.getIdempotencyKey());
             dedupMode(other.getDedupMode());
             docId(other.getDocId());
-            uploadTtlSec(other.getUploadTtlSec());
+            uploadTtlSeconds(other.getUploadTtlSeconds());
             uploadPreference(other.getUploadPreference());
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("contentLength")
-        public ContentSha256Stage contentLength(double contentLength) {
-            this.contentLength = contentLength;
+        @JsonSetter("sizeBytes")
+        public ContentSha256Stage sizeBytes(int sizeBytes) {
+            this.sizeBytes = sizeBytes;
             return this;
         }
 
@@ -306,15 +306,15 @@ public final class DocumentsInitRequest {
         }
 
         @java.lang.Override
-        public _FinalStage uploadTtlSec(Double uploadTtlSec) {
-            this.uploadTtlSec = Optional.ofNullable(uploadTtlSec);
+        public _FinalStage uploadTtlSeconds(Integer uploadTtlSeconds) {
+            this.uploadTtlSeconds = Optional.ofNullable(uploadTtlSeconds);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "uploadTtlSec", nulls = Nulls.SKIP)
-        public _FinalStage uploadTtlSec(Optional<Double> uploadTtlSec) {
-            this.uploadTtlSec = uploadTtlSec;
+        @JsonSetter(value = "uploadTtlSeconds", nulls = Nulls.SKIP)
+        public _FinalStage uploadTtlSeconds(Optional<Integer> uploadTtlSeconds) {
+            this.uploadTtlSeconds = uploadTtlSeconds;
             return this;
         }
 
@@ -420,7 +420,7 @@ public final class DocumentsInitRequest {
         @java.lang.Override
         public DocumentsInitRequest build() {
             return new DocumentsInitRequest(
-                    contentLength,
+                    sizeBytes,
                     contentSha256,
                     name,
                     folderId,
@@ -428,7 +428,7 @@ public final class DocumentsInitRequest {
                     idempotencyKey,
                     dedupMode,
                     docId,
-                    uploadTtlSec,
+                    uploadTtlSeconds,
                     uploadPreference,
                     additionalProperties);
         }

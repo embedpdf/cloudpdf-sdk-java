@@ -92,7 +92,7 @@ public final class WidgetAnnotation {
 
     private final WidgetAnnotationBox box;
 
-    private final Optional<Double> rotation;
+    private final Optional<Integer> rotation;
 
     private final Optional<String> color;
 
@@ -118,7 +118,9 @@ public final class WidgetAnnotation {
 
     private final Optional<FormFieldRef> field;
 
-    private final WidgetAnnotationFieldFamily fieldFamily;
+    private final WidgetAnnotationFieldKind fieldKind;
+
+    private final boolean hasMark;
 
     private final Map<String, Object> additionalProperties;
 
@@ -156,7 +158,7 @@ public final class WidgetAnnotation {
             Optional<String> importedBy,
             Optional<PdfAnnotationActions> actions,
             WidgetAnnotationBox box,
-            Optional<Double> rotation,
+            Optional<Integer> rotation,
             Optional<String> color,
             Optional<String> interiorColor,
             double strokeWidth,
@@ -169,7 +171,8 @@ public final class WidgetAnnotation {
             Optional<String> caption,
             Optional<WidgetAnnotationCheckStyle> checkStyle,
             Optional<FormFieldRef> field,
-            WidgetAnnotationFieldFamily fieldFamily,
+            WidgetAnnotationFieldKind fieldKind,
+            boolean hasMark,
             Map<String, Object> additionalProperties) {
         this.subtype = subtype;
         this.ref = ref;
@@ -217,7 +220,8 @@ public final class WidgetAnnotation {
         this.caption = caption;
         this.checkStyle = checkStyle;
         this.field = field;
-        this.fieldFamily = fieldFamily;
+        this.fieldKind = fieldKind;
+        this.hasMark = hasMark;
         this.additionalProperties = additionalProperties;
     }
 
@@ -435,7 +439,7 @@ public final class WidgetAnnotation {
     }
 
     @JsonIgnore
-    public Optional<Double> getRotation() {
+    public Optional<Integer> getRotation() {
         if (rotation == null) {
             return Optional.empty();
         }
@@ -529,9 +533,17 @@ public final class WidgetAnnotation {
         return field;
     }
 
-    @JsonProperty("fieldFamily")
-    public WidgetAnnotationFieldFamily getFieldFamily() {
-        return fieldFamily;
+    /**
+     * @return Its field's family. A newer server can add families: read one your client doesn't know as <code>unknown</code>.
+     */
+    @JsonProperty("fieldKind")
+    public WidgetAnnotationFieldKind getFieldKind() {
+        return fieldKind;
+    }
+
+    @JsonProperty("hasMark")
+    public boolean getHasMark() {
+        return hasMark;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -632,7 +644,7 @@ public final class WidgetAnnotation {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("rotation")
-    private Optional<Double> _getRotation() {
+    private Optional<Integer> _getRotation() {
         return rotation;
     }
 
@@ -748,7 +760,8 @@ public final class WidgetAnnotation {
                 && caption.equals(other.caption)
                 && checkStyle.equals(other.checkStyle)
                 && field.equals(other.field)
-                && fieldFamily.equals(other.fieldFamily);
+                && fieldKind.equals(other.fieldKind)
+                && hasMark == other.hasMark;
     }
 
     @java.lang.Override
@@ -800,7 +813,8 @@ public final class WidgetAnnotation {
                 this.caption,
                 this.checkStyle,
                 this.field,
-                this.fieldFamily);
+                this.fieldKind,
+                this.hasMark);
     }
 
     @java.lang.Override
@@ -891,11 +905,18 @@ public final class WidgetAnnotation {
     }
 
     public interface TextAlignStage {
-        FieldFamilyStage textAlign(@NotNull WidgetAnnotationTextAlign textAlign);
+        FieldKindStage textAlign(@NotNull WidgetAnnotationTextAlign textAlign);
     }
 
-    public interface FieldFamilyStage {
-        _FinalStage fieldFamily(@NotNull WidgetAnnotationFieldFamily fieldFamily);
+    public interface FieldKindStage {
+        /**
+         * <p>Its field's family. A newer server can add families: read one your client doesn't know as <code>unknown</code>.</p>
+         */
+        HasMarkStage fieldKind(@NotNull WidgetAnnotationFieldKind fieldKind);
+    }
+
+    public interface HasMarkStage {
+        _FinalStage hasMark(boolean hasMark);
     }
 
     public interface _FinalStage {
@@ -1001,11 +1022,11 @@ public final class WidgetAnnotation {
 
         _FinalStage actions(Nullable<PdfAnnotationActions> actions);
 
-        _FinalStage rotation(Optional<Double> rotation);
+        _FinalStage rotation(Optional<Integer> rotation);
 
-        _FinalStage rotation(Double rotation);
+        _FinalStage rotation(Integer rotation);
 
-        _FinalStage rotation(Nullable<Double> rotation);
+        _FinalStage rotation(Nullable<Integer> rotation);
 
         _FinalStage color(Optional<String> color);
 
@@ -1084,7 +1105,8 @@ public final class WidgetAnnotation {
                     StrokeWidthStage,
                     BorderStyleStage,
                     TextAlignStage,
-                    FieldFamilyStage,
+                    FieldKindStage,
+                    HasMarkStage,
                     _FinalStage {
         private WidgetAnnotationSubtype subtype;
 
@@ -1126,7 +1148,9 @@ public final class WidgetAnnotation {
 
         private WidgetAnnotationTextAlign textAlign;
 
-        private WidgetAnnotationFieldFamily fieldFamily;
+        private WidgetAnnotationFieldKind fieldKind;
+
+        private boolean hasMark;
 
         private Optional<FormFieldRef> field = Optional.empty();
 
@@ -1146,7 +1170,7 @@ public final class WidgetAnnotation {
 
         private Optional<String> color = Optional.empty();
 
-        private Optional<Double> rotation = Optional.empty();
+        private Optional<Integer> rotation = Optional.empty();
 
         private Optional<PdfAnnotationActions> actions = Optional.empty();
 
@@ -1233,7 +1257,8 @@ public final class WidgetAnnotation {
             caption(other.getCaption());
             checkStyle(other.getCheckStyle());
             field(other.getField());
-            fieldFamily(other.getFieldFamily());
+            fieldKind(other.getFieldKind());
+            hasMark(other.getHasMark());
             return this;
         }
 
@@ -1372,15 +1397,26 @@ public final class WidgetAnnotation {
 
         @java.lang.Override
         @JsonSetter("textAlign")
-        public FieldFamilyStage textAlign(@NotNull WidgetAnnotationTextAlign textAlign) {
+        public FieldKindStage textAlign(@NotNull WidgetAnnotationTextAlign textAlign) {
             this.textAlign = Objects.requireNonNull(textAlign, "textAlign must not be null");
             return this;
         }
 
+        /**
+         * <p>Its field's family. A newer server can add families: read one your client doesn't know as <code>unknown</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("fieldFamily")
-        public _FinalStage fieldFamily(@NotNull WidgetAnnotationFieldFamily fieldFamily) {
-            this.fieldFamily = Objects.requireNonNull(fieldFamily, "fieldFamily must not be null");
+        @JsonSetter("fieldKind")
+        public HasMarkStage fieldKind(@NotNull WidgetAnnotationFieldKind fieldKind) {
+            this.fieldKind = Objects.requireNonNull(fieldKind, "fieldKind must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("hasMark")
+        public _FinalStage hasMark(boolean hasMark) {
+            this.hasMark = hasMark;
             return this;
         }
 
@@ -1610,7 +1646,7 @@ public final class WidgetAnnotation {
         }
 
         @java.lang.Override
-        public _FinalStage rotation(Nullable<Double> rotation) {
+        public _FinalStage rotation(Nullable<Integer> rotation) {
             if (rotation.isNull()) {
                 this.rotation = null;
             } else if (rotation.isEmpty()) {
@@ -1622,14 +1658,14 @@ public final class WidgetAnnotation {
         }
 
         @java.lang.Override
-        public _FinalStage rotation(Double rotation) {
+        public _FinalStage rotation(Integer rotation) {
             this.rotation = Optional.ofNullable(rotation);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "rotation", nulls = Nulls.SKIP)
-        public _FinalStage rotation(Optional<Double> rotation) {
+        public _FinalStage rotation(Optional<Integer> rotation) {
             this.rotation = rotation;
             return this;
         }
@@ -2083,7 +2119,8 @@ public final class WidgetAnnotation {
                     caption,
                     checkStyle,
                     field,
-                    fieldFamily,
+                    fieldKind,
+                    hasMark,
                     additionalProperties);
         }
 

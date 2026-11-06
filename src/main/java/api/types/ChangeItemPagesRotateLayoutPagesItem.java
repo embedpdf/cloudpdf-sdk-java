@@ -32,7 +32,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
 
     private final ChangeItemPagesRotateLayoutPagesItemSize size;
 
-    private final double rotation;
+    private final int rotation;
 
     private final double userUnit;
 
@@ -51,7 +51,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
             PageRef ref,
             Optional<String> label,
             ChangeItemPagesRotateLayoutPagesItemSize size,
-            double rotation,
+            int rotation,
             double userUnit,
             Optional<ChangeItemPagesRotateLayoutPagesItemTabOrder> tabOrder,
             ChangeItemPagesRotateLayoutPagesItemBoxes boxes,
@@ -95,7 +95,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
     }
 
     @JsonProperty("rotation")
-    public double getRotation() {
+    public int getRotation() {
         return rotation;
     }
 
@@ -203,7 +203,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
     }
 
     public interface RotationStage {
-        UserUnitStage rotation(double rotation);
+        UserUnitStage rotation(int rotation);
     }
 
     public interface UserUnitStage {
@@ -258,7 +258,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
 
         private ChangeItemPagesRotateLayoutPagesItemSize size;
 
-        private double rotation;
+        private int rotation;
 
         private double userUnit;
 
@@ -315,7 +315,7 @@ public final class ChangeItemPagesRotateLayoutPagesItem {
 
         @java.lang.Override
         @JsonSetter("rotation")
-        public UserUnitStage rotation(double rotation) {
+        public UserUnitStage rotation(int rotation) {
             this.rotation = rotation;
             return this;
         }

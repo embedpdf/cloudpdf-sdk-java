@@ -21,24 +21,22 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = FoldersMoveIntoRequest.Builder.class)
 public final class FoldersMoveIntoRequest {
-    private final Optional<List<String>> documentIds;
+    private final Optional<List<String>> docIds;
 
     private final Optional<List<String>> folderIds;
 
     private final Map<String, Object> additionalProperties;
 
     private FoldersMoveIntoRequest(
-            Optional<List<String>> documentIds,
-            Optional<List<String>> folderIds,
-            Map<String, Object> additionalProperties) {
-        this.documentIds = documentIds;
+            Optional<List<String>> docIds, Optional<List<String>> folderIds, Map<String, Object> additionalProperties) {
+        this.docIds = docIds;
         this.folderIds = folderIds;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("documentIds")
-    public Optional<List<String>> getDocumentIds() {
-        return documentIds;
+    @JsonProperty("docIds")
+    public Optional<List<String>> getDocIds() {
+        return docIds;
     }
 
     @JsonProperty("folderIds")
@@ -58,12 +56,12 @@ public final class FoldersMoveIntoRequest {
     }
 
     private boolean equalTo(FoldersMoveIntoRequest other) {
-        return documentIds.equals(other.documentIds) && folderIds.equals(other.folderIds);
+        return docIds.equals(other.docIds) && folderIds.equals(other.folderIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentIds, this.folderIds);
+        return Objects.hash(this.docIds, this.folderIds);
     }
 
     @java.lang.Override
@@ -77,7 +75,7 @@ public final class FoldersMoveIntoRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private Optional<List<String>> documentIds = Optional.empty();
+        private Optional<List<String>> docIds = Optional.empty();
 
         private Optional<List<String>> folderIds = Optional.empty();
 
@@ -87,19 +85,19 @@ public final class FoldersMoveIntoRequest {
         private Builder() {}
 
         public Builder from(FoldersMoveIntoRequest other) {
-            documentIds(other.getDocumentIds());
+            docIds(other.getDocIds());
             folderIds(other.getFolderIds());
             return this;
         }
 
-        @JsonSetter(value = "documentIds", nulls = Nulls.SKIP)
-        public Builder documentIds(Optional<List<String>> documentIds) {
-            this.documentIds = documentIds;
+        @JsonSetter(value = "docIds", nulls = Nulls.SKIP)
+        public Builder docIds(Optional<List<String>> docIds) {
+            this.docIds = docIds;
             return this;
         }
 
-        public Builder documentIds(List<String> documentIds) {
-            this.documentIds = Optional.ofNullable(documentIds);
+        public Builder docIds(List<String> docIds) {
+            this.docIds = Optional.ofNullable(docIds);
             return this;
         }
 
@@ -115,7 +113,7 @@ public final class FoldersMoveIntoRequest {
         }
 
         public FoldersMoveIntoRequest build() {
-            return new FoldersMoveIntoRequest(documentIds, folderIds, additionalProperties);
+            return new FoldersMoveIntoRequest(docIds, folderIds, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

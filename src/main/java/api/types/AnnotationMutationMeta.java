@@ -36,7 +36,7 @@ public final class AnnotationMutationMeta {
 
     private final Optional<List<String>> missingCharacters;
 
-    private final List<AnnotationRef> changed;
+    private final List<AnnotationRef> changedRefs;
 
     private final Map<String, Object> additionalProperties;
 
@@ -46,14 +46,14 @@ public final class AnnotationMutationMeta {
             String opId,
             boolean undoable,
             Optional<List<String>> missingCharacters,
-            List<AnnotationRef> changed,
+            List<AnnotationRef> changedRefs,
             Map<String, Object> additionalProperties) {
         this.affectedPages = affectedPages;
         this.cacheDelta = cacheDelta;
         this.opId = opId;
         this.undoable = undoable;
         this.missingCharacters = missingCharacters;
-        this.changed = changed;
+        this.changedRefs = changedRefs;
         this.additionalProperties = additionalProperties;
     }
 
@@ -85,9 +85,9 @@ public final class AnnotationMutationMeta {
         return missingCharacters;
     }
 
-    @JsonProperty("changed")
-    public List<AnnotationRef> getChanged() {
-        return changed;
+    @JsonProperty("changedRefs")
+    public List<AnnotationRef> getChangedRefs() {
+        return changedRefs;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -113,13 +113,18 @@ public final class AnnotationMutationMeta {
                 && opId.equals(other.opId)
                 && undoable == other.undoable
                 && missingCharacters.equals(other.missingCharacters)
-                && changed.equals(other.changed);
+                && changedRefs.equals(other.changedRefs);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.affectedPages, this.cacheDelta, this.opId, this.undoable, this.missingCharacters, this.changed);
+                this.affectedPages,
+                this.cacheDelta,
+                this.opId,
+                this.undoable,
+                this.missingCharacters,
+                this.changedRefs);
     }
 
     @java.lang.Override
@@ -164,11 +169,11 @@ public final class AnnotationMutationMeta {
 
         _FinalStage missingCharacters(List<String> missingCharacters);
 
-        _FinalStage changed(List<AnnotationRef> changed);
+        _FinalStage changedRefs(List<AnnotationRef> changedRefs);
 
-        _FinalStage addChanged(AnnotationRef changed);
+        _FinalStage addChangedRefs(AnnotationRef changedRefs);
 
-        _FinalStage addAllChanged(List<AnnotationRef> changed);
+        _FinalStage addAllChangedRefs(List<AnnotationRef> changedRefs);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -177,7 +182,7 @@ public final class AnnotationMutationMeta {
 
         private boolean undoable;
 
-        private List<AnnotationRef> changed = new ArrayList<>();
+        private List<AnnotationRef> changedRefs = new ArrayList<>();
 
         private Optional<List<String>> missingCharacters = Optional.empty();
 
@@ -197,7 +202,7 @@ public final class AnnotationMutationMeta {
             opId(other.getOpId());
             undoable(other.getUndoable());
             missingCharacters(other.getMissingCharacters());
-            changed(other.getChanged());
+            changedRefs(other.getChangedRefs());
             return this;
         }
 
@@ -216,25 +221,25 @@ public final class AnnotationMutationMeta {
         }
 
         @java.lang.Override
-        public _FinalStage addAllChanged(List<AnnotationRef> changed) {
-            if (changed != null) {
-                this.changed.addAll(changed);
+        public _FinalStage addAllChangedRefs(List<AnnotationRef> changedRefs) {
+            if (changedRefs != null) {
+                this.changedRefs.addAll(changedRefs);
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addChanged(AnnotationRef changed) {
-            this.changed.add(changed);
+        public _FinalStage addChangedRefs(AnnotationRef changedRefs) {
+            this.changedRefs.add(changedRefs);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "changed", nulls = Nulls.SKIP)
-        public _FinalStage changed(List<AnnotationRef> changed) {
-            this.changed.clear();
-            if (changed != null) {
-                this.changed.addAll(changed);
+        @JsonSetter(value = "changedRefs", nulls = Nulls.SKIP)
+        public _FinalStage changedRefs(List<AnnotationRef> changedRefs) {
+            this.changedRefs.clear();
+            if (changedRefs != null) {
+                this.changedRefs.addAll(changedRefs);
             }
             return this;
         }
@@ -304,7 +309,7 @@ public final class AnnotationMutationMeta {
         @java.lang.Override
         public AnnotationMutationMeta build() {
             return new AnnotationMutationMeta(
-                    affectedPages, cacheDelta, opId, undoable, missingCharacters, changed, additionalProperties);
+                    affectedPages, cacheDelta, opId, undoable, missingCharacters, changedRefs, additionalProperties);
         }
 
         @java.lang.Override

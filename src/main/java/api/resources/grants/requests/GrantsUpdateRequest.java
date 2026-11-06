@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public final class GrantsUpdateRequest {
 
     private final Optional<Boolean> disabled;
 
-    private final Optional<Integer> expiresAt;
+    private final Optional<OffsetDateTime> expiresAt;
 
     private final Map<String, Object> additionalProperties;
 
@@ -68,7 +69,7 @@ public final class GrantsUpdateRequest {
             Optional<String> passphrase,
             Optional<Integer> sessionTtlSeconds,
             Optional<Boolean> disabled,
-            Optional<Integer> expiresAt,
+            Optional<OffsetDateTime> expiresAt,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.layerMode = layerMode;
@@ -165,7 +166,7 @@ public final class GrantsUpdateRequest {
     }
 
     @JsonIgnore
-    public Optional<Integer> getExpiresAt() {
+    public Optional<OffsetDateTime> getExpiresAt() {
         if (expiresAt == null) {
             return Optional.empty();
         }
@@ -210,7 +211,7 @@ public final class GrantsUpdateRequest {
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("expiresAt")
-    private Optional<Integer> _getExpiresAt() {
+    private Optional<OffsetDateTime> _getExpiresAt() {
         return expiresAt;
     }
 
@@ -294,7 +295,7 @@ public final class GrantsUpdateRequest {
 
         private Optional<Boolean> disabled = Optional.empty();
 
-        private Optional<Integer> expiresAt = Optional.empty();
+        private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -517,17 +518,17 @@ public final class GrantsUpdateRequest {
         }
 
         @JsonSetter(value = "expiresAt", nulls = Nulls.SKIP)
-        public Builder expiresAt(Optional<Integer> expiresAt) {
+        public Builder expiresAt(Optional<OffsetDateTime> expiresAt) {
             this.expiresAt = expiresAt;
             return this;
         }
 
-        public Builder expiresAt(Integer expiresAt) {
+        public Builder expiresAt(OffsetDateTime expiresAt) {
             this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
-        public Builder expiresAt(Nullable<Integer> expiresAt) {
+        public Builder expiresAt(Nullable<OffsetDateTime> expiresAt) {
             if (expiresAt.isNull()) {
                 this.expiresAt = null;
             } else if (expiresAt.isEmpty()) {

@@ -36,7 +36,7 @@ public final class OutlineMutationMeta {
 
     private final Optional<List<String>> missingCharacters;
 
-    private final List<OutlineItemRef> changed;
+    private final List<OutlineItemRef> changedRefs;
 
     private final Map<String, Object> additionalProperties;
 
@@ -46,14 +46,14 @@ public final class OutlineMutationMeta {
             String opId,
             boolean undoable,
             Optional<List<String>> missingCharacters,
-            List<OutlineItemRef> changed,
+            List<OutlineItemRef> changedRefs,
             Map<String, Object> additionalProperties) {
         this.affectedPages = affectedPages;
         this.cacheDelta = cacheDelta;
         this.opId = opId;
         this.undoable = undoable;
         this.missingCharacters = missingCharacters;
-        this.changed = changed;
+        this.changedRefs = changedRefs;
         this.additionalProperties = additionalProperties;
     }
 
@@ -85,9 +85,9 @@ public final class OutlineMutationMeta {
         return missingCharacters;
     }
 
-    @JsonProperty("changed")
-    public List<OutlineItemRef> getChanged() {
-        return changed;
+    @JsonProperty("changedRefs")
+    public List<OutlineItemRef> getChangedRefs() {
+        return changedRefs;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -113,13 +113,18 @@ public final class OutlineMutationMeta {
                 && opId.equals(other.opId)
                 && undoable == other.undoable
                 && missingCharacters.equals(other.missingCharacters)
-                && changed.equals(other.changed);
+                && changedRefs.equals(other.changedRefs);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.affectedPages, this.cacheDelta, this.opId, this.undoable, this.missingCharacters, this.changed);
+                this.affectedPages,
+                this.cacheDelta,
+                this.opId,
+                this.undoable,
+                this.missingCharacters,
+                this.changedRefs);
     }
 
     @java.lang.Override
@@ -164,11 +169,11 @@ public final class OutlineMutationMeta {
 
         _FinalStage missingCharacters(List<String> missingCharacters);
 
-        _FinalStage changed(List<OutlineItemRef> changed);
+        _FinalStage changedRefs(List<OutlineItemRef> changedRefs);
 
-        _FinalStage addChanged(OutlineItemRef changed);
+        _FinalStage addChangedRefs(OutlineItemRef changedRefs);
 
-        _FinalStage addAllChanged(List<OutlineItemRef> changed);
+        _FinalStage addAllChangedRefs(List<OutlineItemRef> changedRefs);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -177,7 +182,7 @@ public final class OutlineMutationMeta {
 
         private boolean undoable;
 
-        private List<OutlineItemRef> changed = new ArrayList<>();
+        private List<OutlineItemRef> changedRefs = new ArrayList<>();
 
         private Optional<List<String>> missingCharacters = Optional.empty();
 
@@ -197,7 +202,7 @@ public final class OutlineMutationMeta {
             opId(other.getOpId());
             undoable(other.getUndoable());
             missingCharacters(other.getMissingCharacters());
-            changed(other.getChanged());
+            changedRefs(other.getChangedRefs());
             return this;
         }
 
@@ -216,25 +221,25 @@ public final class OutlineMutationMeta {
         }
 
         @java.lang.Override
-        public _FinalStage addAllChanged(List<OutlineItemRef> changed) {
-            if (changed != null) {
-                this.changed.addAll(changed);
+        public _FinalStage addAllChangedRefs(List<OutlineItemRef> changedRefs) {
+            if (changedRefs != null) {
+                this.changedRefs.addAll(changedRefs);
             }
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage addChanged(OutlineItemRef changed) {
-            this.changed.add(changed);
+        public _FinalStage addChangedRefs(OutlineItemRef changedRefs) {
+            this.changedRefs.add(changedRefs);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "changed", nulls = Nulls.SKIP)
-        public _FinalStage changed(List<OutlineItemRef> changed) {
-            this.changed.clear();
-            if (changed != null) {
-                this.changed.addAll(changed);
+        @JsonSetter(value = "changedRefs", nulls = Nulls.SKIP)
+        public _FinalStage changedRefs(List<OutlineItemRef> changedRefs) {
+            this.changedRefs.clear();
+            if (changedRefs != null) {
+                this.changedRefs.addAll(changedRefs);
             }
             return this;
         }
@@ -304,7 +309,7 @@ public final class OutlineMutationMeta {
         @java.lang.Override
         public OutlineMutationMeta build() {
             return new OutlineMutationMeta(
-                    affectedPages, cacheDelta, opId, undoable, missingCharacters, changed, additionalProperties);
+                    affectedPages, cacheDelta, opId, undoable, missingCharacters, changedRefs, additionalProperties);
         }
 
         @java.lang.Override

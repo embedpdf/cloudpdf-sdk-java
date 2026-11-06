@@ -43,9 +43,9 @@ public final class FormFieldText {
 
     private final Optional<String> mappingName;
 
-    private final FormFieldTextValueEntry valueEntry;
+    private final FormValueEntry valueEntry;
 
-    private final FormFieldTextDefaultValueEntry defaultValueEntry;
+    private final FormValueEntry defaultValueEntry;
 
     private final Optional<PdfFieldActions> actions;
 
@@ -88,8 +88,8 @@ public final class FormFieldText {
             boolean noExport,
             Optional<String> alternateName,
             Optional<String> mappingName,
-            FormFieldTextValueEntry valueEntry,
-            FormFieldTextDefaultValueEntry defaultValueEntry,
+            FormValueEntry valueEntry,
+            FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
             Optional<String> createdBy,
@@ -181,12 +181,12 @@ public final class FormFieldText {
     }
 
     @JsonProperty("valueEntry")
-    public FormFieldTextValueEntry getValueEntry() {
+    public FormValueEntry getValueEntry() {
         return valueEntry;
     }
 
     @JsonProperty("defaultValueEntry")
-    public FormFieldTextDefaultValueEntry getDefaultValueEntry() {
+    public FormValueEntry getDefaultValueEntry() {
         return defaultValueEntry;
     }
 
@@ -454,11 +454,11 @@ public final class FormFieldText {
     }
 
     public interface ValueEntryStage {
-        DefaultValueEntryStage valueEntry(@NotNull FormFieldTextValueEntry valueEntry);
+        DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry);
     }
 
     public interface DefaultValueEntryStage {
-        ValueStage defaultValueEntry(@NotNull FormFieldTextDefaultValueEntry defaultValueEntry);
+        ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry);
     }
 
     public interface ValueStage {
@@ -587,9 +587,9 @@ public final class FormFieldText {
 
         private boolean noExport;
 
-        private FormFieldTextValueEntry valueEntry;
+        private FormValueEntry valueEntry;
 
-        private FormFieldTextDefaultValueEntry defaultValueEntry;
+        private FormValueEntry defaultValueEntry;
 
         private String value;
 
@@ -704,14 +704,14 @@ public final class FormFieldText {
 
         @java.lang.Override
         @JsonSetter("valueEntry")
-        public DefaultValueEntryStage valueEntry(@NotNull FormFieldTextValueEntry valueEntry) {
+        public DefaultValueEntryStage valueEntry(@NotNull FormValueEntry valueEntry) {
             this.valueEntry = Objects.requireNonNull(valueEntry, "valueEntry must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("defaultValueEntry")
-        public ValueStage defaultValueEntry(@NotNull FormFieldTextDefaultValueEntry defaultValueEntry) {
+        public ValueStage defaultValueEntry(@NotNull FormValueEntry defaultValueEntry) {
             this.defaultValueEntry = Objects.requireNonNull(defaultValueEntry, "defaultValueEntry must not be null");
             return this;
         }

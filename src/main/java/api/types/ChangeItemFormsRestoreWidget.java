@@ -45,6 +45,9 @@ public final class ChangeItemFormsRestoreWidget {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return A form field, by its <code>family</code>. A newer server can add families: read one your client doesn't know as <code>unknown</code>, keeping the fields every field has, with <code>rawValue</code> an empty string when the body has none.
+     */
     @JsonIgnore
     public Optional<FormField> getField() {
         if (field == null) {
@@ -111,6 +114,9 @@ public final class ChangeItemFormsRestoreWidget {
 
         _FinalStage additionalProperties(Map<String, Object> additionalProperties);
 
+        /**
+         * <p>A form field, by its <code>family</code>. A newer server can add families: read one your client doesn't know as <code>unknown</code>, keeping the fields every field has, with <code>rawValue</code> an empty string when the body has none.</p>
+         */
         _FinalStage field(Optional<FormField> field);
 
         _FinalStage field(FormField field);
@@ -176,6 +182,10 @@ public final class ChangeItemFormsRestoreWidget {
             return this;
         }
 
+        /**
+         * <p>A form field, by its <code>family</code>. A newer server can add families: read one your client doesn't know as <code>unknown</code>, keeping the fields every field has, with <code>rawValue</code> an empty string when the body has none.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage field(Nullable<FormField> field) {
             if (field.isNull()) {
@@ -188,12 +198,19 @@ public final class ChangeItemFormsRestoreWidget {
             return this;
         }
 
+        /**
+         * <p>A form field, by its <code>family</code>. A newer server can add families: read one your client doesn't know as <code>unknown</code>, keeping the fields every field has, with <code>rawValue</code> an empty string when the body has none.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage field(FormField field) {
             this.field = Optional.ofNullable(field);
             return this;
         }
 
+        /**
+         * <p>A form field, by its <code>family</code>. A newer server can add families: read one your client doesn't know as <code>unknown</code>, keeping the fields every field has, with <code>rawValue</code> an empty string when the body has none.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "field", nulls = Nulls.SKIP)
         public _FinalStage field(Optional<FormField> field) {

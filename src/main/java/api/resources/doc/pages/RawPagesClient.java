@@ -20,11 +20,12 @@ import com.cloudpdf.api.resources.doc.pages.requests.FlattenPagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.RemoveNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.SetNamePagesRequest;
 import com.cloudpdf.api.resources.doc.pages.requests.ViewportsPagesRequest;
-import com.cloudpdf.api.types.DocPagesFlatten200Response;
-import com.cloudpdf.api.types.DocPagesRemoveName200Response;
-import com.cloudpdf.api.types.DocPagesSetName200Response;
-import com.cloudpdf.api.types.DocPagesSetScale200Response;
-import com.cloudpdf.api.types.DocPagesViewports200Response;
+import com.cloudpdf.api.types.DocPagesFlattenResponse;
+import com.cloudpdf.api.types.DocPagesRemoveNameResponse;
+import com.cloudpdf.api.types.DocPagesSetNameResponse;
+import com.cloudpdf.api.types.DocPagesSetScaleResponse;
+import com.cloudpdf.api.types.DocPagesViewportsResponse;
+import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,12 +45,12 @@ public class RawPagesClient {
         this.clientOptions = clientOptions;
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetScale200Response> setScale(
+    public CloudPDFClientHttpResponse<DocPagesSetScaleResponse> setScale(
             String docId, String layerName, String pageKey, DocPagesSetScaleRequest request) {
         return setScale(docId, layerName, pageKey, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetScale200Response> setScale(
+    public CloudPDFClientHttpResponse<DocPagesSetScaleResponse> setScale(
             String docId,
             String layerName,
             String pageKey,
@@ -109,17 +110,17 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetScale200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetScaleResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -134,24 +135,24 @@ public class RawPagesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+    public CloudPDFClientHttpResponse<DocPagesViewportsResponse> viewports(
             String docId, String layerName, String pageKey) {
         return viewports(
                 docId, layerName, pageKey, ViewportsPagesRequest.builder().build());
     }
 
-    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+    public CloudPDFClientHttpResponse<DocPagesViewportsResponse> viewports(
             String docId, String layerName, String pageKey, RequestOptions requestOptions) {
         return viewports(
                 docId, layerName, pageKey, ViewportsPagesRequest.builder().build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+    public CloudPDFClientHttpResponse<DocPagesViewportsResponse> viewports(
             String docId, String layerName, String pageKey, ViewportsPagesRequest request) {
         return viewports(docId, layerName, pageKey, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesViewports200Response> viewports(
+    public CloudPDFClientHttpResponse<DocPagesViewportsResponse> viewports(
             String docId,
             String layerName,
             String pageKey,
@@ -199,13 +200,13 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesViewports200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesViewportsResponse.class),
                         response);
             }
             try {
                 if (response.code() == 404) {
                     throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -305,10 +306,10 @@ public class RawPagesClient {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -323,24 +324,24 @@ public class RawPagesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocPagesFlatten200Response> flatten(
+    public CloudPDFClientHttpResponse<DocPagesFlattenResponse> flatten(
             String docId, String layerName, Map<String, Object> body) {
         return flatten(
                 docId, layerName, FlattenPagesRequest.builder().body(body).build());
     }
 
-    public CloudPDFClientHttpResponse<DocPagesFlatten200Response> flatten(
+    public CloudPDFClientHttpResponse<DocPagesFlattenResponse> flatten(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return flatten(
                 docId, layerName, FlattenPagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesFlatten200Response> flatten(
+    public CloudPDFClientHttpResponse<DocPagesFlattenResponse> flatten(
             String docId, String layerName, FlattenPagesRequest request) {
         return flatten(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesFlatten200Response> flatten(
+    public CloudPDFClientHttpResponse<DocPagesFlattenResponse> flatten(
             String docId, String layerName, FlattenPagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -395,17 +396,17 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesFlatten200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesFlattenResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -420,24 +421,24 @@ public class RawPagesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+    public CloudPDFClientHttpResponse<DocPagesSetNameResponse> setName(
             String docId, String layerName, Map<String, Object> body) {
         return setName(
                 docId, layerName, SetNamePagesRequest.builder().body(body).build());
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+    public CloudPDFClientHttpResponse<DocPagesSetNameResponse> setName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return setName(
                 docId, layerName, SetNamePagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+    public CloudPDFClientHttpResponse<DocPagesSetNameResponse> setName(
             String docId, String layerName, SetNamePagesRequest request) {
         return setName(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesSetName200Response> setName(
+    public CloudPDFClientHttpResponse<DocPagesSetNameResponse> setName(
             String docId, String layerName, SetNamePagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -492,17 +493,17 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetName200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesSetNameResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
@@ -517,24 +518,24 @@ public class RawPagesClient {
         }
     }
 
-    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+    public CloudPDFClientHttpResponse<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, Map<String, Object> body) {
         return removeName(
                 docId, layerName, RemoveNamePagesRequest.builder().body(body).build());
     }
 
-    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+    public CloudPDFClientHttpResponse<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, Map<String, Object> body, RequestOptions requestOptions) {
         return removeName(
                 docId, layerName, RemoveNamePagesRequest.builder().body(body).build(), requestOptions);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+    public CloudPDFClientHttpResponse<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, RemoveNamePagesRequest request) {
         return removeName(docId, layerName, request, null);
     }
 
-    public CloudPDFClientHttpResponse<DocPagesRemoveName200Response> removeName(
+    public CloudPDFClientHttpResponse<DocPagesRemoveNameResponse> removeName(
             String docId, String layerName, RemoveNamePagesRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -589,17 +590,17 @@ public class RawPagesClient {
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             if (response.isSuccessful()) {
                 return new CloudPDFClientHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesRemoveName200Response.class),
+                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, DocPagesRemoveNameResponse.class),
                         response);
             }
             try {
                 switch (response.code()) {
                     case 400:
                         throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                     case 404:
                         throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class), response);
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

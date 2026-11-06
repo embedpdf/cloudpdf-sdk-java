@@ -23,11 +23,11 @@ import java.util.Objects;
 public final class ChangeOpPagesRotate {
     private final List<PageRef> pages;
 
-    private final double rotation;
+    private final int rotation;
 
     private final Map<String, Object> additionalProperties;
 
-    private ChangeOpPagesRotate(List<PageRef> pages, double rotation, Map<String, Object> additionalProperties) {
+    private ChangeOpPagesRotate(List<PageRef> pages, int rotation, Map<String, Object> additionalProperties) {
         this.pages = pages;
         this.rotation = rotation;
         this.additionalProperties = additionalProperties;
@@ -39,7 +39,7 @@ public final class ChangeOpPagesRotate {
     }
 
     @JsonProperty("rotation")
-    public double getRotation() {
+    public int getRotation() {
         return rotation;
     }
 
@@ -73,7 +73,7 @@ public final class ChangeOpPagesRotate {
     }
 
     public interface RotationStage {
-        _FinalStage rotation(double rotation);
+        _FinalStage rotation(int rotation);
 
         Builder from(ChangeOpPagesRotate other);
     }
@@ -94,7 +94,7 @@ public final class ChangeOpPagesRotate {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements RotationStage, _FinalStage {
-        private double rotation;
+        private int rotation;
 
         private List<PageRef> pages = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public final class ChangeOpPagesRotate {
 
         @java.lang.Override
         @JsonSetter("rotation")
-        public _FinalStage rotation(double rotation) {
+        public _FinalStage rotation(int rotation) {
             this.rotation = rotation;
             return this;
         }
