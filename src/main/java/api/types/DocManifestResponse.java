@@ -42,6 +42,8 @@ public final class DocManifestResponse {
 
     private final Optional<Integer> outlineVersion;
 
+    private final Optional<Integer> viewportsVersion;
+
     private final Optional<Integer> fontsVersion;
 
     private final Optional<Integer> contentsVersion;
@@ -73,6 +75,7 @@ public final class DocManifestResponse {
             Optional<Integer> annotationsVersion,
             Optional<Integer> formsVersion,
             Optional<Integer> outlineVersion,
+            Optional<Integer> viewportsVersion,
             Optional<Integer> fontsVersion,
             Optional<Integer> contentsVersion,
             int auditHead,
@@ -92,6 +95,7 @@ public final class DocManifestResponse {
         this.annotationsVersion = annotationsVersion;
         this.formsVersion = formsVersion;
         this.outlineVersion = outlineVersion;
+        this.viewportsVersion = viewportsVersion;
         this.fontsVersion = fontsVersion;
         this.contentsVersion = contentsVersion;
         this.auditHead = auditHead;
@@ -143,6 +147,11 @@ public final class DocManifestResponse {
     @JsonProperty("outlineVersion")
     public Optional<Integer> getOutlineVersion() {
         return outlineVersion;
+    }
+
+    @JsonProperty("viewportsVersion")
+    public Optional<Integer> getViewportsVersion() {
+        return viewportsVersion;
     }
 
     @JsonProperty("fontsVersion")
@@ -224,6 +233,7 @@ public final class DocManifestResponse {
                 && annotationsVersion.equals(other.annotationsVersion)
                 && formsVersion.equals(other.formsVersion)
                 && outlineVersion.equals(other.outlineVersion)
+                && viewportsVersion.equals(other.viewportsVersion)
                 && fontsVersion.equals(other.fontsVersion)
                 && contentsVersion.equals(other.contentsVersion)
                 && auditHead == other.auditHead
@@ -247,6 +257,7 @@ public final class DocManifestResponse {
                 this.annotationsVersion,
                 this.formsVersion,
                 this.outlineVersion,
+                this.viewportsVersion,
                 this.fontsVersion,
                 this.contentsVersion,
                 this.auditHead,
@@ -316,6 +327,10 @@ public final class DocManifestResponse {
         _FinalStage outlineVersion(Optional<Integer> outlineVersion);
 
         _FinalStage outlineVersion(Integer outlineVersion);
+
+        _FinalStage viewportsVersion(Optional<Integer> viewportsVersion);
+
+        _FinalStage viewportsVersion(Integer viewportsVersion);
 
         _FinalStage fontsVersion(Optional<Integer> fontsVersion);
 
@@ -388,6 +403,8 @@ public final class DocManifestResponse {
 
         private Optional<Integer> fontsVersion = Optional.empty();
 
+        private Optional<Integer> viewportsVersion = Optional.empty();
+
         private Optional<Integer> outlineVersion = Optional.empty();
 
         private Optional<Integer> formsVersion = Optional.empty();
@@ -413,6 +430,7 @@ public final class DocManifestResponse {
             annotationsVersion(other.getAnnotationsVersion());
             formsVersion(other.getFormsVersion());
             outlineVersion(other.getOutlineVersion());
+            viewportsVersion(other.getViewportsVersion());
             fontsVersion(other.getFontsVersion());
             contentsVersion(other.getContentsVersion());
             auditHead(other.getAuditHead());
@@ -589,6 +607,19 @@ public final class DocManifestResponse {
         }
 
         @java.lang.Override
+        public _FinalStage viewportsVersion(Integer viewportsVersion) {
+            this.viewportsVersion = Optional.ofNullable(viewportsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "viewportsVersion", nulls = Nulls.SKIP)
+        public _FinalStage viewportsVersion(Optional<Integer> viewportsVersion) {
+            this.viewportsVersion = viewportsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage outlineVersion(Integer outlineVersion) {
             this.outlineVersion = Optional.ofNullable(outlineVersion);
             return this;
@@ -664,6 +695,7 @@ public final class DocManifestResponse {
                     annotationsVersion,
                     formsVersion,
                     outlineVersion,
+                    viewportsVersion,
                     fontsVersion,
                     contentsVersion,
                     auditHead,

@@ -21,12 +21,16 @@ import org.jetbrains.annotations.NotNull;
 public final class DocPagesSetScaleResponse {
     private final PageRef page;
 
+    private final PageListSnapshot layout;
+
     private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
-    private DocPagesSetScaleResponse(PageRef page, MutationMeta meta, Map<String, Object> additionalProperties) {
+    private DocPagesSetScaleResponse(
+            PageRef page, PageListSnapshot layout, MutationMeta meta, Map<String, Object> additionalProperties) {
         this.page = page;
+        this.layout = layout;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
@@ -34,6 +38,11 @@ public final class DocPagesSetScaleResponse {
     @JsonProperty("page")
     public PageRef getPage() {
         return page;
+    }
+
+    @JsonProperty("layout")
+    public PageListSnapshot getLayout() {
+        return layout;
     }
 
     @JsonProperty("meta")
@@ -53,12 +62,12 @@ public final class DocPagesSetScaleResponse {
     }
 
     private boolean equalTo(DocPagesSetScaleResponse other) {
-        return page.equals(other.page) && meta.equals(other.meta);
+        return page.equals(other.page) && layout.equals(other.layout) && meta.equals(other.meta);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.page, this.meta);
+        return Objects.hash(this.page, this.layout, this.meta);
     }
 
     @java.lang.Override
@@ -71,9 +80,13 @@ public final class DocPagesSetScaleResponse {
     }
 
     public interface PageStage {
-        MetaStage page(@NotNull PageRef page);
+        LayoutStage page(@NotNull PageRef page);
 
         Builder from(DocPagesSetScaleResponse other);
+    }
+
+    public interface LayoutStage {
+        MetaStage layout(@NotNull PageListSnapshot layout);
     }
 
     public interface MetaStage {
@@ -89,8 +102,10 @@ public final class DocPagesSetScaleResponse {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PageStage, MetaStage, _FinalStage {
+    public static final class Builder implements PageStage, LayoutStage, MetaStage, _FinalStage {
         private PageRef page;
+
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -102,14 +117,22 @@ public final class DocPagesSetScaleResponse {
         @java.lang.Override
         public Builder from(DocPagesSetScaleResponse other) {
             page(other.getPage());
+            layout(other.getLayout());
             meta(other.getMeta());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("page")
-        public MetaStage page(@NotNull PageRef page) {
+        public LayoutStage page(@NotNull PageRef page) {
             this.page = Objects.requireNonNull(page, "page must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("layout")
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
+            this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }
 
@@ -122,7 +145,7 @@ public final class DocPagesSetScaleResponse {
 
         @java.lang.Override
         public DocPagesSetScaleResponse build() {
-            return new DocPagesSetScaleResponse(page, meta, additionalProperties);
+            return new DocPagesSetScaleResponse(page, layout, meta, additionalProperties);
         }
 
         @java.lang.Override

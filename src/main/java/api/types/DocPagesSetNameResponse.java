@@ -19,21 +19,21 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesSetNameResponse.Builder.class)
 public final class DocPagesSetNameResponse {
-    private final DocPagesSetNameResponseLayout layout;
+    private final PageListSnapshot layout;
 
     private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesSetNameResponse(
-            DocPagesSetNameResponseLayout layout, MutationMeta meta, Map<String, Object> additionalProperties) {
+            PageListSnapshot layout, MutationMeta meta, Map<String, Object> additionalProperties) {
         this.layout = layout;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("layout")
-    public DocPagesSetNameResponseLayout getLayout() {
+    public PageListSnapshot getLayout() {
         return layout;
     }
 
@@ -72,7 +72,7 @@ public final class DocPagesSetNameResponse {
     }
 
     public interface LayoutStage {
-        MetaStage layout(@NotNull DocPagesSetNameResponseLayout layout);
+        MetaStage layout(@NotNull PageListSnapshot layout);
 
         Builder from(DocPagesSetNameResponse other);
     }
@@ -91,7 +91,7 @@ public final class DocPagesSetNameResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
-        private DocPagesSetNameResponseLayout layout;
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -109,7 +109,7 @@ public final class DocPagesSetNameResponse {
 
         @java.lang.Override
         @JsonSetter("layout")
-        public MetaStage layout(@NotNull DocPagesSetNameResponseLayout layout) {
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
             this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }

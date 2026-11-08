@@ -19,21 +19,21 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesRemoveNameResponse.Builder.class)
 public final class DocPagesRemoveNameResponse {
-    private final DocPagesRemoveNameResponseLayout layout;
+    private final PageListSnapshot layout;
 
     private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesRemoveNameResponse(
-            DocPagesRemoveNameResponseLayout layout, MutationMeta meta, Map<String, Object> additionalProperties) {
+            PageListSnapshot layout, MutationMeta meta, Map<String, Object> additionalProperties) {
         this.layout = layout;
         this.meta = meta;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("layout")
-    public DocPagesRemoveNameResponseLayout getLayout() {
+    public PageListSnapshot getLayout() {
         return layout;
     }
 
@@ -72,7 +72,7 @@ public final class DocPagesRemoveNameResponse {
     }
 
     public interface LayoutStage {
-        MetaStage layout(@NotNull DocPagesRemoveNameResponseLayout layout);
+        MetaStage layout(@NotNull PageListSnapshot layout);
 
         Builder from(DocPagesRemoveNameResponse other);
     }
@@ -91,7 +91,7 @@ public final class DocPagesRemoveNameResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
-        private DocPagesRemoveNameResponseLayout layout;
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -109,7 +109,7 @@ public final class DocPagesRemoveNameResponse {
 
         @java.lang.Override
         @JsonSetter("layout")
-        public MetaStage layout(@NotNull DocPagesRemoveNameResponseLayout layout) {
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
             this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }

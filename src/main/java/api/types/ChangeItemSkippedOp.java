@@ -90,6 +90,9 @@ public final class ChangeItemSkippedOp {
     public static final ChangeItemSkippedOp ANNOTATIONS_UPDATE =
             new ChangeItemSkippedOp(Value.ANNOTATIONS_UPDATE, "annotations.update");
 
+    public static final ChangeItemSkippedOp PAGES_SET_SCALE =
+            new ChangeItemSkippedOp(Value.PAGES_SET_SCALE, "pages.setScale");
+
     public static final ChangeItemSkippedOp ANNOTATIONS_RESTORE =
             new ChangeItemSkippedOp(Value.ANNOTATIONS_RESTORE, "annotations.restore");
 
@@ -204,6 +207,8 @@ public final class ChangeItemSkippedOp {
                 return visitor.visitAttachmentsRestore();
             case ANNOTATIONS_UPDATE:
                 return visitor.visitAnnotationsUpdate();
+            case PAGES_SET_SCALE:
+                return visitor.visitPagesSetScale();
             case ANNOTATIONS_RESTORE:
                 return visitor.visitAnnotationsRestore();
             case PAGES_INSERT:
@@ -289,6 +294,8 @@ public final class ChangeItemSkippedOp {
                 return ATTACHMENTS_RESTORE;
             case "annotations.update":
                 return ANNOTATIONS_UPDATE;
+            case "pages.setScale":
+                return PAGES_SET_SCALE;
             case "annotations.restore":
                 return ANNOTATIONS_RESTORE;
             case "pages.insert":
@@ -360,6 +367,8 @@ public final class ChangeItemSkippedOp {
         OUTLINE_DELETE,
 
         PAGES_ROTATE,
+
+        PAGES_SET_SCALE,
 
         PAGES_REORDER,
 
@@ -440,6 +449,8 @@ public final class ChangeItemSkippedOp {
         T visitOutlineDelete();
 
         T visitPagesRotate();
+
+        T visitPagesSetScale();
 
         T visitPagesReorder();
 

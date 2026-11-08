@@ -21,18 +21,18 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocPagesViewportsResponse.Builder.class)
 public final class DocPagesViewportsResponse {
-    private final List<DocPagesViewportsResponseViewportsItem> viewports;
+    private final List<PageMeasurementViewport> viewports;
 
     private final Map<String, Object> additionalProperties;
 
     private DocPagesViewportsResponse(
-            List<DocPagesViewportsResponseViewportsItem> viewports, Map<String, Object> additionalProperties) {
+            List<PageMeasurementViewport> viewports, Map<String, Object> additionalProperties) {
         this.viewports = viewports;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("viewports")
-    public List<DocPagesViewportsResponseViewportsItem> getViewports() {
+    public List<PageMeasurementViewport> getViewports() {
         return viewports;
     }
 
@@ -67,7 +67,7 @@ public final class DocPagesViewportsResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
-        private List<DocPagesViewportsResponseViewportsItem> viewports = new ArrayList<>();
+        private List<PageMeasurementViewport> viewports = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -80,7 +80,7 @@ public final class DocPagesViewportsResponse {
         }
 
         @JsonSetter(value = "viewports", nulls = Nulls.SKIP)
-        public Builder viewports(List<DocPagesViewportsResponseViewportsItem> viewports) {
+        public Builder viewports(List<PageMeasurementViewport> viewports) {
             this.viewports.clear();
             if (viewports != null) {
                 this.viewports.addAll(viewports);
@@ -88,12 +88,12 @@ public final class DocPagesViewportsResponse {
             return this;
         }
 
-        public Builder addViewports(DocPagesViewportsResponseViewportsItem viewports) {
+        public Builder addViewports(PageMeasurementViewport viewports) {
             this.viewports.add(viewports);
             return this;
         }
 
-        public Builder addAllViewports(List<DocPagesViewportsResponseViewportsItem> viewports) {
+        public Builder addAllViewports(List<PageMeasurementViewport> viewports) {
             if (viewports != null) {
                 this.viewports.addAll(viewports);
             }

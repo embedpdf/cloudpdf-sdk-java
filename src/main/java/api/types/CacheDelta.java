@@ -38,6 +38,8 @@ public final class CacheDelta {
 
     private final Optional<Integer> outlineVersion;
 
+    private final Optional<Integer> viewportsVersion;
+
     private final Optional<Integer> fontsVersion;
 
     private final Optional<Integer> contentsVersion;
@@ -59,6 +61,7 @@ public final class CacheDelta {
             Optional<Integer> metadataVersion,
             Optional<Integer> attachmentsVersion,
             Optional<Integer> outlineVersion,
+            Optional<Integer> viewportsVersion,
             Optional<Integer> fontsVersion,
             Optional<Integer> contentsVersion,
             Optional<Integer> layerVersion,
@@ -73,6 +76,7 @@ public final class CacheDelta {
         this.metadataVersion = metadataVersion;
         this.attachmentsVersion = attachmentsVersion;
         this.outlineVersion = outlineVersion;
+        this.viewportsVersion = viewportsVersion;
         this.fontsVersion = fontsVersion;
         this.contentsVersion = contentsVersion;
         this.layerVersion = layerVersion;
@@ -121,6 +125,11 @@ public final class CacheDelta {
         return outlineVersion;
     }
 
+    @JsonProperty("viewportsVersion")
+    public Optional<Integer> getViewportsVersion() {
+        return viewportsVersion;
+    }
+
     @JsonProperty("fontsVersion")
     public Optional<Integer> getFontsVersion() {
         return fontsVersion;
@@ -166,6 +175,7 @@ public final class CacheDelta {
                 && metadataVersion.equals(other.metadataVersion)
                 && attachmentsVersion.equals(other.attachmentsVersion)
                 && outlineVersion.equals(other.outlineVersion)
+                && viewportsVersion.equals(other.viewportsVersion)
                 && fontsVersion.equals(other.fontsVersion)
                 && contentsVersion.equals(other.contentsVersion)
                 && layerVersion.equals(other.layerVersion)
@@ -184,6 +194,7 @@ public final class CacheDelta {
                 this.metadataVersion,
                 this.attachmentsVersion,
                 this.outlineVersion,
+                this.viewportsVersion,
                 this.fontsVersion,
                 this.contentsVersion,
                 this.layerVersion,
@@ -241,6 +252,10 @@ public final class CacheDelta {
 
         _FinalStage outlineVersion(Integer outlineVersion);
 
+        _FinalStage viewportsVersion(Optional<Integer> viewportsVersion);
+
+        _FinalStage viewportsVersion(Integer viewportsVersion);
+
         _FinalStage fontsVersion(Optional<Integer> fontsVersion);
 
         _FinalStage fontsVersion(Integer fontsVersion);
@@ -280,6 +295,8 @@ public final class CacheDelta {
 
         private Optional<Integer> fontsVersion = Optional.empty();
 
+        private Optional<Integer> viewportsVersion = Optional.empty();
+
         private Optional<Integer> outlineVersion = Optional.empty();
 
         private Optional<Integer> attachmentsVersion = Optional.empty();
@@ -307,6 +324,7 @@ public final class CacheDelta {
             metadataVersion(other.getMetadataVersion());
             attachmentsVersion(other.getAttachmentsVersion());
             outlineVersion(other.getOutlineVersion());
+            viewportsVersion(other.getViewportsVersion());
             fontsVersion(other.getFontsVersion());
             contentsVersion(other.getContentsVersion());
             layerVersion(other.getLayerVersion());
@@ -406,6 +424,19 @@ public final class CacheDelta {
         }
 
         @java.lang.Override
+        public _FinalStage viewportsVersion(Integer viewportsVersion) {
+            this.viewportsVersion = Optional.ofNullable(viewportsVersion);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "viewportsVersion", nulls = Nulls.SKIP)
+        public _FinalStage viewportsVersion(Optional<Integer> viewportsVersion) {
+            this.viewportsVersion = viewportsVersion;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage outlineVersion(Integer outlineVersion) {
             this.outlineVersion = Optional.ofNullable(outlineVersion);
             return this;
@@ -494,6 +525,7 @@ public final class CacheDelta {
                     metadataVersion,
                     attachmentsVersion,
                     outlineVersion,
+                    viewportsVersion,
                     fontsVersion,
                     contentsVersion,
                     layerVersion,

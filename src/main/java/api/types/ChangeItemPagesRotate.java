@@ -26,7 +26,7 @@ public final class ChangeItemPagesRotate {
 
     private final int rotation;
 
-    private final ChangeItemPagesRotateLayout layout;
+    private final PageListSnapshot layout;
 
     private final MutationMeta meta;
 
@@ -35,7 +35,7 @@ public final class ChangeItemPagesRotate {
     private ChangeItemPagesRotate(
             List<PageRef> pages,
             int rotation,
-            ChangeItemPagesRotateLayout layout,
+            PageListSnapshot layout,
             MutationMeta meta,
             Map<String, Object> additionalProperties) {
         this.pages = pages;
@@ -56,7 +56,7 @@ public final class ChangeItemPagesRotate {
     }
 
     @JsonProperty("layout")
-    public ChangeItemPagesRotateLayout getLayout() {
+    public PageListSnapshot getLayout() {
         return layout;
     }
 
@@ -104,7 +104,7 @@ public final class ChangeItemPagesRotate {
     }
 
     public interface LayoutStage {
-        MetaStage layout(@NotNull ChangeItemPagesRotateLayout layout);
+        MetaStage layout(@NotNull PageListSnapshot layout);
     }
 
     public interface MetaStage {
@@ -129,7 +129,7 @@ public final class ChangeItemPagesRotate {
     public static final class Builder implements RotationStage, LayoutStage, MetaStage, _FinalStage {
         private int rotation;
 
-        private ChangeItemPagesRotateLayout layout;
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -158,7 +158,7 @@ public final class ChangeItemPagesRotate {
 
         @java.lang.Override
         @JsonSetter("layout")
-        public MetaStage layout(@NotNull ChangeItemPagesRotateLayout layout) {
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
             this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }
