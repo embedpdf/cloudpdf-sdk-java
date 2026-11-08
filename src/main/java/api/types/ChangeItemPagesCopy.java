@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ChangeItemPagesCopy {
     private final List<PageRef> insertedPages;
 
-    private final ChangeItemPagesCopyLayout layout;
+    private final PageListSnapshot layout;
 
     private final MutationMeta meta;
 
@@ -32,7 +32,7 @@ public final class ChangeItemPagesCopy {
 
     private ChangeItemPagesCopy(
             List<PageRef> insertedPages,
-            ChangeItemPagesCopyLayout layout,
+            PageListSnapshot layout,
             MutationMeta meta,
             Map<String, Object> additionalProperties) {
         this.insertedPages = insertedPages;
@@ -47,7 +47,7 @@ public final class ChangeItemPagesCopy {
     }
 
     @JsonProperty("layout")
-    public ChangeItemPagesCopyLayout getLayout() {
+    public PageListSnapshot getLayout() {
         return layout;
     }
 
@@ -86,7 +86,7 @@ public final class ChangeItemPagesCopy {
     }
 
     public interface LayoutStage {
-        MetaStage layout(@NotNull ChangeItemPagesCopyLayout layout);
+        MetaStage layout(@NotNull PageListSnapshot layout);
 
         Builder from(ChangeItemPagesCopy other);
     }
@@ -111,7 +111,7 @@ public final class ChangeItemPagesCopy {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
-        private ChangeItemPagesCopyLayout layout;
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -132,7 +132,7 @@ public final class ChangeItemPagesCopy {
 
         @java.lang.Override
         @JsonSetter("layout")
-        public MetaStage layout(@NotNull ChangeItemPagesCopyLayout layout) {
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
             this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }

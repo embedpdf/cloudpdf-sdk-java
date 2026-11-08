@@ -146,6 +146,10 @@ public final class ChangeItem {
         return new ChangeItem(new PagesRotateValue(value));
     }
 
+    public static ChangeItem pagesSetScale(ChangeItemPagesSetScale value) {
+        return new ChangeItem(new PagesSetScaleValue(value));
+    }
+
     public static ChangeItem pagesReorder(ChangeItemPagesReorder value) {
         return new ChangeItem(new PagesReorderValue(value));
     }
@@ -300,6 +304,10 @@ public final class ChangeItem {
 
     public boolean isPagesRotate() {
         return value instanceof PagesRotateValue;
+    }
+
+    public boolean isPagesSetScale() {
+        return value instanceof PagesSetScaleValue;
     }
 
     public boolean isPagesReorder() {
@@ -552,6 +560,13 @@ public final class ChangeItem {
         return Optional.empty();
     }
 
+    public Optional<ChangeItemPagesSetScale> getPagesSetScale() {
+        if (isPagesSetScale()) {
+            return Optional.of(((PagesSetScaleValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<ChangeItemPagesReorder> getPagesReorder() {
         if (isPagesReorder()) {
             return Optional.of(((PagesReorderValue) value).value);
@@ -704,6 +719,8 @@ public final class ChangeItem {
 
         T visitPagesRotate(ChangeItemPagesRotate pagesRotate);
 
+        T visitPagesSetScale(ChangeItemPagesSetScale pagesSetScale);
+
         T visitPagesReorder(ChangeItemPagesReorder pagesReorder);
 
         T visitPagesDelete(ChangeItemPagesDelete pagesDelete);
@@ -757,6 +774,7 @@ public final class ChangeItem {
         @JsonSubTypes.Type(OutlineDeleteValue.class),
         @JsonSubTypes.Type(OutlineRestoreValue.class),
         @JsonSubTypes.Type(PagesRotateValue.class),
+        @JsonSubTypes.Type(PagesSetScaleValue.class),
         @JsonSubTypes.Type(PagesReorderValue.class),
         @JsonSubTypes.Type(PagesDeleteValue.class),
         @JsonSubTypes.Type(PagesInsertBlankValue.class),
@@ -1959,6 +1977,46 @@ public final class ChangeItem {
         }
 
         private boolean equalTo(PagesRotateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("pages.setScale")
+    @JsonIgnoreProperties("type")
+    private static final class PagesSetScaleValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeItemPagesSetScale value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private PagesSetScaleValue() {}
+
+        private PagesSetScaleValue(ChangeItemPagesSetScale value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitPagesSetScale(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof PagesSetScaleValue && equalTo((PagesSetScaleValue) other);
+        }
+
+        private boolean equalTo(PagesSetScaleValue other) {
             return value.equals(other.value);
         }
 

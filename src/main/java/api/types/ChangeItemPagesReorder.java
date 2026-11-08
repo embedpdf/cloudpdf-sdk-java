@@ -24,17 +24,14 @@ import org.jetbrains.annotations.NotNull;
 public final class ChangeItemPagesReorder {
     private final List<PageRef> pages;
 
-    private final ChangeItemPagesReorderLayout layout;
+    private final PageListSnapshot layout;
 
     private final MutationMeta meta;
 
     private final Map<String, Object> additionalProperties;
 
     private ChangeItemPagesReorder(
-            List<PageRef> pages,
-            ChangeItemPagesReorderLayout layout,
-            MutationMeta meta,
-            Map<String, Object> additionalProperties) {
+            List<PageRef> pages, PageListSnapshot layout, MutationMeta meta, Map<String, Object> additionalProperties) {
         this.pages = pages;
         this.layout = layout;
         this.meta = meta;
@@ -47,7 +44,7 @@ public final class ChangeItemPagesReorder {
     }
 
     @JsonProperty("layout")
-    public ChangeItemPagesReorderLayout getLayout() {
+    public PageListSnapshot getLayout() {
         return layout;
     }
 
@@ -86,7 +83,7 @@ public final class ChangeItemPagesReorder {
     }
 
     public interface LayoutStage {
-        MetaStage layout(@NotNull ChangeItemPagesReorderLayout layout);
+        MetaStage layout(@NotNull PageListSnapshot layout);
 
         Builder from(ChangeItemPagesReorder other);
     }
@@ -111,7 +108,7 @@ public final class ChangeItemPagesReorder {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements LayoutStage, MetaStage, _FinalStage {
-        private ChangeItemPagesReorderLayout layout;
+        private PageListSnapshot layout;
 
         private MutationMeta meta;
 
@@ -132,7 +129,7 @@ public final class ChangeItemPagesReorder {
 
         @java.lang.Override
         @JsonSetter("layout")
-        public MetaStage layout(@NotNull ChangeItemPagesReorderLayout layout) {
+        public MetaStage layout(@NotNull PageListSnapshot layout) {
             this.layout = Objects.requireNonNull(layout, "layout must not be null");
             return this;
         }
