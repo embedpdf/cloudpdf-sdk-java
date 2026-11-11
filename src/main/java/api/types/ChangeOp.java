@@ -42,6 +42,10 @@ public final class ChangeOp {
         return new ChangeOp(new AnnotationsReorderValue(value));
     }
 
+    public static ChangeOp annotationsCopy(ChangeOpAnnotationsCopy value) {
+        return new ChangeOp(new AnnotationsCopyValue(value));
+    }
+
     public static ChangeOp formsSetValue(ChangeOpFormsSetValue value) {
         return new ChangeOp(new FormsSetValueValue(value));
     }
@@ -60,6 +64,10 @@ public final class ChangeOp {
 
     public static ChangeOp formsCreate(ChangeOpFormsCreate value) {
         return new ChangeOp(new FormsCreateValue(value));
+    }
+
+    public static ChangeOp formsCopy(ChangeOpFormsCopy value) {
+        return new ChangeOp(new FormsCopyValue(value));
     }
 
     public static ChangeOp formsUpdate(ChangeOpFormsUpdate value) {
@@ -174,6 +182,10 @@ public final class ChangeOp {
         return value instanceof AnnotationsReorderValue;
     }
 
+    public boolean isAnnotationsCopy() {
+        return value instanceof AnnotationsCopyValue;
+    }
+
     public boolean isFormsSetValue() {
         return value instanceof FormsSetValueValue;
     }
@@ -192,6 +204,10 @@ public final class ChangeOp {
 
     public boolean isFormsCreate() {
         return value instanceof FormsCreateValue;
+    }
+
+    public boolean isFormsCopy() {
+        return value instanceof FormsCopyValue;
     }
 
     public boolean isFormsUpdate() {
@@ -322,6 +338,13 @@ public final class ChangeOp {
         return Optional.empty();
     }
 
+    public Optional<ChangeOpAnnotationsCopy> getAnnotationsCopy() {
+        if (isAnnotationsCopy()) {
+            return Optional.of(((AnnotationsCopyValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<ChangeOpFormsSetValue> getFormsSetValue() {
         if (isFormsSetValue()) {
             return Optional.of(((FormsSetValueValue) value).value);
@@ -353,6 +376,13 @@ public final class ChangeOp {
     public Optional<ChangeOpFormsCreate> getFormsCreate() {
         if (isFormsCreate()) {
             return Optional.of(((FormsCreateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ChangeOpFormsCopy> getFormsCopy() {
+        if (isFormsCopy()) {
+            return Optional.of(((FormsCopyValue) value).value);
         }
         return Optional.empty();
     }
@@ -562,6 +592,8 @@ public final class ChangeOp {
 
         T visitAnnotationsReorder(ChangeOpAnnotationsReorder annotationsReorder);
 
+        T visitAnnotationsCopy(ChangeOpAnnotationsCopy annotationsCopy);
+
         T visitFormsSetValue(ChangeOpFormsSetValue formsSetValue);
 
         T visitFormsSetDisplay(ChangeOpFormsSetDisplay formsSetDisplay);
@@ -571,6 +603,8 @@ public final class ChangeOp {
         T visitFormsReset(ChangeOpFormsReset formsReset);
 
         T visitFormsCreate(ChangeOpFormsCreate formsCreate);
+
+        T visitFormsCopy(ChangeOpFormsCopy formsCopy);
 
         T visitFormsUpdate(ChangeOpFormsUpdate formsUpdate);
 
@@ -629,11 +663,13 @@ public final class ChangeOp {
         @JsonSubTypes.Type(AnnotationsUpdateValue.class),
         @JsonSubTypes.Type(AnnotationsDeleteValue.class),
         @JsonSubTypes.Type(AnnotationsReorderValue.class),
+        @JsonSubTypes.Type(AnnotationsCopyValue.class),
         @JsonSubTypes.Type(FormsSetValueValue.class),
         @JsonSubTypes.Type(FormsSetDisplayValue.class),
         @JsonSubTypes.Type(FormsSetAppearanceTextValue.class),
         @JsonSubTypes.Type(FormsResetValue.class),
         @JsonSubTypes.Type(FormsCreateValue.class),
+        @JsonSubTypes.Type(FormsCopyValue.class),
         @JsonSubTypes.Type(FormsUpdateValue.class),
         @JsonSubTypes.Type(FormsDeleteValue.class),
         @JsonSubTypes.Type(FormsAddWidgetValue.class),
@@ -810,6 +846,46 @@ public final class ChangeOp {
         }
 
         private boolean equalTo(AnnotationsReorderValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeOp{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("annotations.copy")
+    @JsonIgnoreProperties("type")
+    private static final class AnnotationsCopyValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeOpAnnotationsCopy value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AnnotationsCopyValue() {}
+
+        private AnnotationsCopyValue(ChangeOpAnnotationsCopy value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitAnnotationsCopy(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AnnotationsCopyValue && equalTo((AnnotationsCopyValue) other);
+        }
+
+        private boolean equalTo(AnnotationsCopyValue other) {
             return value.equals(other.value);
         }
 
@@ -1010,6 +1086,46 @@ public final class ChangeOp {
         }
 
         private boolean equalTo(FormsCreateValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ChangeOp{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("forms.copy")
+    @JsonIgnoreProperties("type")
+    private static final class FormsCopyValue implements Value {
+        @JsonUnwrapped
+        @JsonIgnoreProperties(value = "type", allowSetters = true)
+        private ChangeOpFormsCopy value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private FormsCopyValue() {}
+
+        private FormsCopyValue(ChangeOpFormsCopy value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitFormsCopy(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof FormsCopyValue && equalTo((FormsCopyValue) other);
+        }
+
+        private boolean equalTo(FormsCopyValue other) {
             return value.equals(other.value);
         }
 
