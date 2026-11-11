@@ -18,6 +18,9 @@ public final class ChangeItemSkippedOp {
     public static final ChangeItemSkippedOp PAGES_RESTORE =
             new ChangeItemSkippedOp(Value.PAGES_RESTORE, "pages.restore");
 
+    public static final ChangeItemSkippedOp ANNOTATIONS_COPY =
+            new ChangeItemSkippedOp(Value.ANNOTATIONS_COPY, "annotations.copy");
+
     public static final ChangeItemSkippedOp OUTLINE_MOVE = new ChangeItemSkippedOp(Value.OUTLINE_MOVE, "outline.move");
 
     public static final ChangeItemSkippedOp OUTLINE_UPDATE =
@@ -72,6 +75,8 @@ public final class ChangeItemSkippedOp {
 
     public static final ChangeItemSkippedOp FORMS_REMOVE_WIDGET =
             new ChangeItemSkippedOp(Value.FORMS_REMOVE_WIDGET, "forms.removeWidget");
+
+    public static final ChangeItemSkippedOp FORMS_COPY = new ChangeItemSkippedOp(Value.FORMS_COPY, "forms.copy");
 
     public static final ChangeItemSkippedOp OUTLINE_RESTORE =
             new ChangeItemSkippedOp(Value.OUTLINE_RESTORE, "outline.restore");
@@ -155,6 +160,8 @@ public final class ChangeItemSkippedOp {
                 return visitor.visitFormsDelete();
             case PAGES_RESTORE:
                 return visitor.visitPagesRestore();
+            case ANNOTATIONS_COPY:
+                return visitor.visitAnnotationsCopy();
             case OUTLINE_MOVE:
                 return visitor.visitOutlineMove();
             case OUTLINE_UPDATE:
@@ -195,6 +202,8 @@ public final class ChangeItemSkippedOp {
                 return visitor.visitAttachmentsCreate();
             case FORMS_REMOVE_WIDGET:
                 return visitor.visitFormsRemoveWidget();
+            case FORMS_COPY:
+                return visitor.visitFormsCopy();
             case OUTLINE_RESTORE:
                 return visitor.visitOutlineRestore();
             case FORMS_UPDATE:
@@ -242,6 +251,8 @@ public final class ChangeItemSkippedOp {
                 return FORMS_DELETE;
             case "pages.restore":
                 return PAGES_RESTORE;
+            case "annotations.copy":
+                return ANNOTATIONS_COPY;
             case "outline.move":
                 return OUTLINE_MOVE;
             case "outline.update":
@@ -282,6 +293,8 @@ public final class ChangeItemSkippedOp {
                 return ATTACHMENTS_CREATE;
             case "forms.removeWidget":
                 return FORMS_REMOVE_WIDGET;
+            case "forms.copy":
+                return FORMS_COPY;
             case "outline.restore":
                 return OUTLINE_RESTORE;
             case "forms.update":
@@ -326,6 +339,8 @@ public final class ChangeItemSkippedOp {
 
         ANNOTATIONS_REORDER,
 
+        ANNOTATIONS_COPY,
+
         FORMS_SET_VALUE,
 
         FORMS_SET_DISPLAY,
@@ -335,6 +350,8 @@ public final class ChangeItemSkippedOp {
         FORMS_RESET,
 
         FORMS_CREATE,
+
+        FORMS_COPY,
 
         FORMS_UPDATE,
 
@@ -408,6 +425,8 @@ public final class ChangeItemSkippedOp {
 
         T visitAnnotationsReorder();
 
+        T visitAnnotationsCopy();
+
         T visitFormsSetValue();
 
         T visitFormsSetDisplay();
@@ -417,6 +436,8 @@ public final class ChangeItemSkippedOp {
         T visitFormsReset();
 
         T visitFormsCreate();
+
+        T visitFormsCopy();
 
         T visitFormsUpdate();
 
