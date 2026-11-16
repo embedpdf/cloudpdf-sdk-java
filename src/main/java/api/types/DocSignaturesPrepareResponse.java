@@ -43,6 +43,8 @@ public final class DocSignaturesPrepareResponse {
 
     private final Optional<OffsetDateTime> expiresAt;
 
+    private final Optional<FormFieldRef> field;
+
     private final Map<String, Object> additionalProperties;
 
     private DocSignaturesPrepareResponse(
@@ -54,6 +56,7 @@ public final class DocSignaturesPrepareResponse {
             String subFilter,
             DocSignaturesPrepareResponseExpectedVersion expectedVersion,
             Optional<OffsetDateTime> expiresAt,
+            Optional<FormFieldRef> field,
             Map<String, Object> additionalProperties) {
         this.signingId = signingId;
         this.digest = digest;
@@ -63,6 +66,7 @@ public final class DocSignaturesPrepareResponse {
         this.subFilter = subFilter;
         this.expectedVersion = expectedVersion;
         this.expiresAt = expiresAt;
+        this.field = field;
         this.additionalProperties = additionalProperties;
     }
 
@@ -109,6 +113,11 @@ public final class DocSignaturesPrepareResponse {
         return expiresAt;
     }
 
+    @JsonProperty("field")
+    public Optional<FormFieldRef> getField() {
+        return field;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("expiresAt")
     private Optional<OffsetDateTime> _getExpiresAt() {
@@ -134,7 +143,8 @@ public final class DocSignaturesPrepareResponse {
                 && contentsSizeBytes == other.contentsSizeBytes
                 && subFilter.equals(other.subFilter)
                 && expectedVersion.equals(other.expectedVersion)
-                && expiresAt.equals(other.expiresAt);
+                && expiresAt.equals(other.expiresAt)
+                && field.equals(other.field);
     }
 
     @java.lang.Override
@@ -147,7 +157,8 @@ public final class DocSignaturesPrepareResponse {
                 this.contentsSizeBytes,
                 this.subFilter,
                 this.expectedVersion,
-                this.expiresAt);
+                this.expiresAt,
+                this.field);
     }
 
     @java.lang.Override
@@ -203,6 +214,10 @@ public final class DocSignaturesPrepareResponse {
         _FinalStage expiresAt(OffsetDateTime expiresAt);
 
         _FinalStage expiresAt(Nullable<OffsetDateTime> expiresAt);
+
+        _FinalStage field(Optional<FormFieldRef> field);
+
+        _FinalStage field(FormFieldRef field);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -226,6 +241,8 @@ public final class DocSignaturesPrepareResponse {
 
         private DocSignaturesPrepareResponseExpectedVersion expectedVersion;
 
+        private Optional<FormFieldRef> field = Optional.empty();
+
         private Optional<OffsetDateTime> expiresAt = Optional.empty();
 
         private List<Object> byteRange = new ArrayList<>();
@@ -245,6 +262,7 @@ public final class DocSignaturesPrepareResponse {
             subFilter(other.getSubFilter());
             expectedVersion(other.getExpectedVersion());
             expiresAt(other.getExpiresAt());
+            field(other.getField());
             return this;
         }
 
@@ -287,6 +305,19 @@ public final class DocSignaturesPrepareResponse {
         @JsonSetter("expectedVersion")
         public _FinalStage expectedVersion(@NotNull DocSignaturesPrepareResponseExpectedVersion expectedVersion) {
             this.expectedVersion = Objects.requireNonNull(expectedVersion, "expectedVersion must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage field(FormFieldRef field) {
+            this.field = Optional.ofNullable(field);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "field", nulls = Nulls.SKIP)
+        public _FinalStage field(Optional<FormFieldRef> field) {
+            this.field = field;
             return this;
         }
 
@@ -350,6 +381,7 @@ public final class DocSignaturesPrepareResponse {
                     subFilter,
                     expectedVersion,
                     expiresAt,
+                    field,
                     additionalProperties);
         }
 

@@ -18,14 +18,18 @@ import com.cloudpdf.api.errors.ConflictError;
 import com.cloudpdf.api.errors.NotFoundError;
 import com.cloudpdf.api.resources.doc.signatures.requests.AnalysisSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesAddValidationInfoRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.ValidationInfoSignaturesRequest;
+import com.cloudpdf.api.types.DocSignaturesAddValidationInfoResponse;
 import com.cloudpdf.api.types.DocSignaturesAnalysisResponse;
 import com.cloudpdf.api.types.DocSignaturesCancelResponse;
 import com.cloudpdf.api.types.DocSignaturesCompleteResponse;
 import com.cloudpdf.api.types.DocSignaturesListResponse;
 import com.cloudpdf.api.types.DocSignaturesPrepareResponse;
+import com.cloudpdf.api.types.DocSignaturesValidationInfoResponse;
 import com.cloudpdf.api.types.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.File;
@@ -505,7 +509,7 @@ public class AsyncRawSignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A document timestamp (<code>kind: 'timestamp'</code>) may leave <code>field</code> out, since 3.3: the engine then makes a field of no size for it, under a name no other field has, and the answer names it in <code>field</code>. That needs <code>doc.sign</code> for the document. The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesPrepareResponse>> prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
@@ -513,7 +517,7 @@ public class AsyncRawSignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A document timestamp (<code>kind: 'timestamp'</code>) may leave <code>field</code> out, since 3.3: the engine then makes a field of no size for it, under a name no other field has, and the answer names it in <code>field</code>. That needs <code>doc.sign</code> for the document. The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesPrepareResponse>> prepare(
             String docId,
@@ -911,6 +915,259 @@ public class AsyncRawSignaturesClient {
                         future.complete(new CloudPDFClientHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(
                                         responseBodyString, DocSignaturesPrepareResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                        response));
+                                return;
+                            case 409:
+                                future.completeExceptionally(new ConflictError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesValidationInfoResponse>> validationInfo(
+            String docId, String layerName) {
+        return validationInfo(
+                docId, layerName, ValidationInfoSignaturesRequest.builder().build());
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesValidationInfoResponse>> validationInfo(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return validationInfo(
+                docId, layerName, ValidationInfoSignaturesRequest.builder().build(), requestOptions);
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesValidationInfoResponse>> validationInfo(
+            String docId, String layerName, ValidationInfoSignaturesRequest request) {
+        return validationInfo(docId, layerName, request, null);
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesValidationInfoResponse>> validationInfo(
+            String docId, String layerName, ValidationInfoSignaturesRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("signatures")
+                .addPathSegments("validation-info");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesValidationInfoResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DocSignaturesValidationInfoResponse.class),
+                                response));
+                        return;
+                    }
+                    try {
+                        if (response.code() == 404) {
+                            future.completeExceptionally(new NotFoundError(
+                                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class),
+                                    response));
+                            return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    Object errorBody = ObjectMappers.parseErrorBody(responseBodyString);
+                    future.completeExceptionally(new CloudPDFApiException(
+                            "Error with status code " + response.code(), response.code(), errorBody, response));
+                    return;
+                } catch (JsonProcessingException e) {
+                    future.completeExceptionally(
+                            new CloudPDFException("Failed to deserialize response: " + e.getMessage(), e));
+                } catch (IOException e) {
+                    future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new CloudPDFException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesAddValidationInfoResponse>> addValidationInfo(
+            String docId, String layerName) {
+        return addValidationInfo(
+                docId,
+                layerName,
+                DocSignaturesAddValidationInfoRequest.builder().build());
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesAddValidationInfoResponse>> addValidationInfo(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return addValidationInfo(
+                docId,
+                layerName,
+                DocSignaturesAddValidationInfoRequest.builder().build(),
+                requestOptions);
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesAddValidationInfoResponse>> addValidationInfo(
+            String docId, String layerName, DocSignaturesAddValidationInfoRequest request) {
+        return addValidationInfo(docId, layerName, request, null);
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesAddValidationInfoResponse>> addValidationInfo(
+            String docId,
+            String layerName,
+            DocSignaturesAddValidationInfoRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/docs")
+                .addPathSegment(docId)
+                .addPathSegments("layers")
+                .addPathSegment(layerName)
+                .addPathSegments("signatures")
+                .addPathSegments("validation-info");
+        if (requestOptions != null) {
+            requestOptions.getQueryParameters().forEach((_key, _value) -> {
+                httpUrl.addQueryParameter(_key, _value);
+            });
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        if (request.getDocumentPassword().isPresent()) {
+            _requestBuilder.addHeader(
+                    "X-Document-Password", request.getDocumentPassword().get());
+        }
+        if (request.getIdempotencyKey().isPresent()) {
+            _requestBuilder.addHeader(
+                    "Idempotency-Key", request.getIdempotencyKey().get());
+        }
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        if (requestOptions != null && requestOptions.getMaxRetries().isPresent()) {
+            okhttpRequest = okhttpRequest
+                    .newBuilder()
+                    .tag(
+                            RetryInterceptor.MaxRetriesOverride.class,
+                            new RetryInterceptor.MaxRetriesOverride(
+                                    requestOptions.getMaxRetries().get()))
+                    .build();
+        }
+        CompletableFuture<CloudPDFClientHttpResponse<DocSignaturesAddValidationInfoResponse>> future =
+                new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    if (response.isSuccessful()) {
+                        future.complete(new CloudPDFClientHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBodyString, DocSignaturesAddValidationInfoResponse.class),
                                 response));
                         return;
                     }

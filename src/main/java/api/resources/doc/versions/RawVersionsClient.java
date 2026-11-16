@@ -133,7 +133,7 @@ public class RawVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysisResponse> analysis(
             String docId, String layerName, String sha256) {
@@ -142,7 +142,7 @@ public class RawVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysisResponse> analysis(
             String docId, String layerName, String sha256, RequestOptions requestOptions) {
@@ -151,7 +151,7 @@ public class RawVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysisResponse> analysis(
             String docId, String layerName, String sha256, AnalysisVersionsRequest request) {
@@ -159,7 +159,7 @@ public class RawVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CloudPDFClientHttpResponse<DocVersionsAnalysisResponse> analysis(
             String docId,
@@ -191,9 +191,9 @@ public class RawVersionsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "until", request.getUntil().get(), false);
         }
-        if (request.getPolicy().isPresent()) {
+        if (request.getEngine().isPresent()) {
             QueryStringMapper.addQueryParameter(
-                    httpUrl, "policy", request.getPolicy().get(), false);
+                    httpUrl, "engine", request.getEngine().get(), false);
         }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
@@ -430,23 +430,35 @@ public class RawVersionsClient {
         }
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CloudPDFClientHttpResponse<DocVersionsSignaturesResponse> signatures(
             String docId, String layerName, String sha256) {
         return signatures(
                 docId, layerName, sha256, SignaturesVersionsRequest.builder().build());
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CloudPDFClientHttpResponse<DocVersionsSignaturesResponse> signatures(
             String docId, String layerName, String sha256, RequestOptions requestOptions) {
         return signatures(
                 docId, layerName, sha256, SignaturesVersionsRequest.builder().build(), requestOptions);
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CloudPDFClientHttpResponse<DocVersionsSignaturesResponse> signatures(
             String docId, String layerName, String sha256, SignaturesVersionsRequest request) {
         return signatures(docId, layerName, sha256, request, null);
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CloudPDFClientHttpResponse<DocVersionsSignaturesResponse> signatures(
             String docId,
             String layerName,
@@ -461,6 +473,10 @@ public class RawVersionsClient {
                 .addPathSegment(layerName)
                 .addPathSegments("versions/signatures")
                 .addPathSegment(sha256);
+        if (request.getEngine().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "engine", request.getEngine().get(), false);
+        }
         if (requestOptions != null) {
             requestOptions.getQueryParameters().forEach((_key, _value) -> {
                 httpUrl.addQueryParameter(_key, _value);
@@ -498,9 +514,13 @@ public class RawVersionsClient {
                         response);
             }
             try {
-                if (response.code() == 404) {
-                    throw new NotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorResponse.class), response);
                 }
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error

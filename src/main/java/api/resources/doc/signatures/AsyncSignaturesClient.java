@@ -7,14 +7,18 @@ import com.cloudpdf.api.core.ClientOptions;
 import com.cloudpdf.api.core.RequestOptions;
 import com.cloudpdf.api.resources.doc.signatures.requests.AnalysisSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.CancelSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesAddValidationInfoRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.DocSignaturesCompleteRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.ListSignaturesRequest;
 import com.cloudpdf.api.resources.doc.signatures.requests.PrepareSignaturesRequest;
+import com.cloudpdf.api.resources.doc.signatures.requests.ValidationInfoSignaturesRequest;
+import com.cloudpdf.api.types.DocSignaturesAddValidationInfoResponse;
 import com.cloudpdf.api.types.DocSignaturesAnalysisResponse;
 import com.cloudpdf.api.types.DocSignaturesCancelResponse;
 import com.cloudpdf.api.types.DocSignaturesCompleteResponse;
 import com.cloudpdf.api.types.DocSignaturesListResponse;
 import com.cloudpdf.api.types.DocSignaturesPrepareResponse;
+import com.cloudpdf.api.types.DocSignaturesValidationInfoResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
@@ -151,7 +155,7 @@ public class AsyncSignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A document timestamp (<code>kind: 'timestamp'</code>) may leave <code>field</code> out, since 3.3: the engine then makes a field of no size for it, under a name no other field has, and the answer names it in <code>field</code>. That needs <code>doc.sign</code> for the document. The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public CompletableFuture<DocSignaturesPrepareResponse> prepare(
             String docId, String layerName, File file, PrepareSignaturesRequest request) {
@@ -159,7 +163,7 @@ public class AsyncSignaturesClient {
     }
 
     /**
-     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). The signature is made over the layer's own base: the upload, or the version its last signature made.
+     * Multipart: a JSON <code>body</code> part (field, subFilter, digest, contentsSize, signer, certify, lock), naming the appearance PDF it may carry as <code>resources: { appearance: '&lt;key&gt;' }</code>, and that PDF as the part <code>resource:&lt;key&gt;</code>. A certification (<code>certify.permission</code>) additionally requires <code>doc.sign.certify</code>. The layer is read-only until the signing completes, is cancelled, or expires (15 minutes). A document timestamp (<code>kind: 'timestamp'</code>) may leave <code>field</code> out, since 3.3: the engine then makes a field of no size for it, under a name no other field has, and the answer names it in <code>field</code>. That needs <code>doc.sign</code> for the document. The signature is made over the layer's own base: the upload, or the version its last signature made.
      */
     public CompletableFuture<DocSignaturesPrepareResponse> prepare(
             String docId,
@@ -200,6 +204,77 @@ public class AsyncSignaturesClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .prepare(docId, layerName, stream, filename, mediaType, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesValidationInfoResponse> validationInfo(String docId, String layerName) {
+        return this.rawClient.validationInfo(docId, layerName).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesValidationInfoResponse> validationInfo(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient.validationInfo(docId, layerName, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesValidationInfoResponse> validationInfo(
+            String docId, String layerName, ValidationInfoSignaturesRequest request) {
+        return this.rawClient.validationInfo(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object, base64. It reads the layer as it is now, so entries stored and not yet sealed by a signature are among them. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesValidationInfoResponse> validationInfo(
+            String docId, String layerName, ValidationInfoSignaturesRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .validationInfo(docId, layerName, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesAddValidationInfoResponse> addValidationInfo(String docId, String layerName) {
+        return this.rawClient.addValidationInfo(docId, layerName).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesAddValidationInfoResponse> addValidationInfo(
+            String docId, String layerName, RequestOptions requestOptions) {
+        return this.rawClient
+                .addValidationInfo(docId, layerName, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesAddValidationInfoResponse> addValidationInfo(
+            String docId, String layerName, DocSignaturesAddValidationInfoRequest request) {
+        return this.rawClient.addValidationInfo(docId, layerName, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Each entry is one DER object of at most 16 MiB, base64. An entry the file already holds, byte for byte, is not stored again: <code>added</code> counts the new ones. An entry that is not one DER object fails the request and nothing is stored; the error names it, as in <code>certificates[1]</code>. The server stores what it is given and asks no certificate authority: collect the answers first. It needs <code>doc.sign</code> for the document, not for a group of fields, and is refused after a certification that allows no changes. It cannot be undone, and it leaves undo for earlier changes as it was. Arrived in 3.3.
+     */
+    public CompletableFuture<DocSignaturesAddValidationInfoResponse> addValidationInfo(
+            String docId,
+            String layerName,
+            DocSignaturesAddValidationInfoRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .addValidationInfo(docId, layerName, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

@@ -32,7 +32,7 @@ public final class AnalysisVersionsRequest {
 
     private final Optional<Integer> until;
 
-    private final Optional<Integer> policy;
+    private final Optional<String> engine;
 
     private final Map<String, Object> additionalProperties;
 
@@ -42,14 +42,14 @@ public final class AnalysisVersionsRequest {
             Optional<Integer> sinceRevision,
             Optional<AnalysisVersionsRequestLevel> level,
             Optional<Integer> until,
-            Optional<Integer> policy,
+            Optional<String> engine,
             Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
         this.sinceSignature = sinceSignature;
         this.sinceRevision = sinceRevision;
         this.level = level;
         this.until = until;
-        this.policy = policy;
+        this.engine = engine;
         this.additionalProperties = additionalProperties;
     }
 
@@ -81,9 +81,12 @@ public final class AnalysisVersionsRequest {
         return until;
     }
 
-    @JsonProperty("policy")
-    public Optional<Integer> getPolicy() {
-        return policy;
+    /**
+     * @return The <code>analysis</code> engine value from the layer's head (<code>engine.analysis</code>): the rules the answer is judged with. With it, a settled answer is cached.
+     */
+    @JsonProperty("engine")
+    public Optional<String> getEngine() {
+        return engine;
     }
 
     @java.lang.Override
@@ -103,13 +106,13 @@ public final class AnalysisVersionsRequest {
                 && sinceRevision.equals(other.sinceRevision)
                 && level.equals(other.level)
                 && until.equals(other.until)
-                && policy.equals(other.policy);
+                && engine.equals(other.engine);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.documentPassword, this.sinceSignature, this.sinceRevision, this.level, this.until, this.policy);
+                this.documentPassword, this.sinceSignature, this.sinceRevision, this.level, this.until, this.engine);
     }
 
     @java.lang.Override
@@ -133,7 +136,7 @@ public final class AnalysisVersionsRequest {
 
         private Optional<Integer> until = Optional.empty();
 
-        private Optional<Integer> policy = Optional.empty();
+        private Optional<String> engine = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -146,7 +149,7 @@ public final class AnalysisVersionsRequest {
             sinceRevision(other.getSinceRevision());
             level(other.getLevel());
             until(other.getUntil());
-            policy(other.getPolicy());
+            engine(other.getEngine());
             return this;
         }
 
@@ -207,20 +210,23 @@ public final class AnalysisVersionsRequest {
             return this;
         }
 
-        @JsonSetter(value = "policy", nulls = Nulls.SKIP)
-        public Builder policy(Optional<Integer> policy) {
-            this.policy = policy;
+        /**
+         * <p>The <code>analysis</code> engine value from the layer's head (<code>engine.analysis</code>): the rules the answer is judged with. With it, a settled answer is cached.</p>
+         */
+        @JsonSetter(value = "engine", nulls = Nulls.SKIP)
+        public Builder engine(Optional<String> engine) {
+            this.engine = engine;
             return this;
         }
 
-        public Builder policy(Integer policy) {
-            this.policy = Optional.ofNullable(policy);
+        public Builder engine(String engine) {
+            this.engine = Optional.ofNullable(engine);
             return this;
         }
 
         public AnalysisVersionsRequest build() {
             return new AnalysisVersionsRequest(
-                    documentPassword, sinceSignature, sinceRevision, level, until, policy, additionalProperties);
+                    documentPassword, sinceSignature, sinceRevision, level, until, engine, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {
