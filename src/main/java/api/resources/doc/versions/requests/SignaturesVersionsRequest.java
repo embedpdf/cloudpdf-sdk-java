@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +23,14 @@ import java.util.Optional;
 public final class SignaturesVersionsRequest {
     private final Optional<String> documentPassword;
 
+    private final Optional<String> engine;
+
     private final Map<String, Object> additionalProperties;
 
-    private SignaturesVersionsRequest(Optional<String> documentPassword, Map<String, Object> additionalProperties) {
+    private SignaturesVersionsRequest(
+            Optional<String> documentPassword, Optional<String> engine, Map<String, Object> additionalProperties) {
         this.documentPassword = documentPassword;
+        this.engine = engine;
         this.additionalProperties = additionalProperties;
     }
 
@@ -33,6 +40,14 @@ public final class SignaturesVersionsRequest {
     @JsonIgnore
     public Optional<String> getDocumentPassword() {
         return documentPassword;
+    }
+
+    /**
+     * @return The <code>signatures</code> engine value from the layer's head (<code>engine.signatures</code>): what the answer is computed with besides the file. With it, the answer is cached.
+     */
+    @JsonProperty("engine")
+    public Optional<String> getEngine() {
+        return engine;
     }
 
     @java.lang.Override
@@ -47,12 +62,12 @@ public final class SignaturesVersionsRequest {
     }
 
     private boolean equalTo(SignaturesVersionsRequest other) {
-        return documentPassword.equals(other.documentPassword);
+        return documentPassword.equals(other.documentPassword) && engine.equals(other.engine);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentPassword);
+        return Objects.hash(this.documentPassword, this.engine);
     }
 
     @java.lang.Override
@@ -68,6 +83,8 @@ public final class SignaturesVersionsRequest {
     public static final class Builder {
         private Optional<String> documentPassword = Optional.empty();
 
+        private Optional<String> engine = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -75,6 +92,7 @@ public final class SignaturesVersionsRequest {
 
         public Builder from(SignaturesVersionsRequest other) {
             documentPassword(other.getDocumentPassword());
+            engine(other.getEngine());
             return this;
         }
 
@@ -91,8 +109,22 @@ public final class SignaturesVersionsRequest {
             return this;
         }
 
+        /**
+         * <p>The <code>signatures</code> engine value from the layer's head (<code>engine.signatures</code>): what the answer is computed with besides the file. With it, the answer is cached.</p>
+         */
+        @JsonSetter(value = "engine", nulls = Nulls.SKIP)
+        public Builder engine(Optional<String> engine) {
+            this.engine = engine;
+            return this;
+        }
+
+        public Builder engine(String engine) {
+            this.engine = Optional.ofNullable(engine);
+            return this;
+        }
+
         public SignaturesVersionsRequest build() {
-            return new SignaturesVersionsRequest(documentPassword, additionalProperties);
+            return new SignaturesVersionsRequest(documentPassword, engine, additionalProperties);
         }
 
         public Builder additionalProperty(String key, Object value) {

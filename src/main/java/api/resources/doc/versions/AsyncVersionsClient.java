@@ -68,14 +68,14 @@ public class AsyncVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CompletableFuture<DocVersionsAnalysisResponse> analysis(String docId, String layerName, String sha256) {
         return this.rawClient.analysis(docId, layerName, sha256).thenApply(response -> response.body());
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CompletableFuture<DocVersionsAnalysisResponse> analysis(
             String docId, String layerName, String sha256, RequestOptions requestOptions) {
@@ -83,7 +83,7 @@ public class AsyncVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CompletableFuture<DocVersionsAnalysisResponse> analysis(
             String docId, String layerName, String sha256, AnalysisVersionsRequest request) {
@@ -91,7 +91,7 @@ public class AsyncVersionsClient {
     }
 
     /**
-     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller.
+     * Exactly one of <code>since.signature</code> / <code>since.revision</code>; <code>until=&lt;revision&gt;</code> defaults to the last. The same answer for every caller. A version never changes, but the rules that judge it can: with <code>engine</code>, the <code>analysis</code> value of the layer's head, a settled answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
      */
     public CompletableFuture<DocVersionsAnalysisResponse> analysis(
             String docId,
@@ -157,10 +157,16 @@ public class AsyncVersionsClient {
                 .thenApply(response -> response.body());
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CompletableFuture<DocVersionsSignaturesResponse> signatures(String docId, String layerName, String sha256) {
         return this.rawClient.signatures(docId, layerName, sha256).thenApply(response -> response.body());
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CompletableFuture<DocVersionsSignaturesResponse> signatures(
             String docId, String layerName, String sha256, RequestOptions requestOptions) {
         return this.rawClient
@@ -168,11 +174,17 @@ public class AsyncVersionsClient {
                 .thenApply(response -> response.body());
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CompletableFuture<DocVersionsSignaturesResponse> signatures(
             String docId, String layerName, String sha256, SignaturesVersionsRequest request) {
         return this.rawClient.signatures(docId, layerName, sha256, request).thenApply(response -> response.body());
     }
 
+    /**
+     * A version never changes, but what the server reads from it can: with <code>engine</code>, the <code>signatures</code> value of the layer's head, the answer is <code>immutable</code>. Without it, or with another value, the answer is this server's own, with <code>no-store</code> and the current value in <code>EmbedPDF-Engine</code>.
+     */
     public CompletableFuture<DocVersionsSignaturesResponse> signatures(
             String docId,
             String layerName,
