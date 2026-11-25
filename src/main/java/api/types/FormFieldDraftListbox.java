@@ -3,9 +3,12 @@
  */
 package com.cloudpdf.api.types;
 
+import com.cloudpdf.api.core.Nullable;
+import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,6 +39,8 @@ public final class FormFieldDraftListbox {
 
     private final Optional<String> groupId;
 
+    private final Optional<String> purpose;
+
     private final Optional<FieldActionsPatch> actions;
 
     private final Optional<List<WidgetPlacement>> widgets;
@@ -56,6 +61,7 @@ public final class FormFieldDraftListbox {
             Optional<String> alternateName,
             Optional<String> mappingName,
             Optional<String> groupId,
+            Optional<String> purpose,
             Optional<FieldActionsPatch> actions,
             Optional<List<WidgetPlacement>> widgets,
             Optional<Boolean> multiSelect,
@@ -69,6 +75,7 @@ public final class FormFieldDraftListbox {
         this.alternateName = alternateName;
         this.mappingName = mappingName;
         this.groupId = groupId;
+        this.purpose = purpose;
         this.actions = actions;
         this.widgets = widgets;
         this.multiSelect = multiSelect;
@@ -107,9 +114,20 @@ public final class FormFieldDraftListbox {
         return mappingName;
     }
 
-    @JsonProperty("groupId")
+    @JsonIgnore
     public Optional<String> getGroupId() {
+        if (groupId == null) {
+            return Optional.empty();
+        }
         return groupId;
+    }
+
+    @JsonIgnore
+    public Optional<String> getPurpose() {
+        if (purpose == null) {
+            return Optional.empty();
+        }
+        return purpose;
     }
 
     @JsonProperty("actions")
@@ -137,6 +155,18 @@ public final class FormFieldDraftListbox {
         return defaultValue;
     }
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("groupId")
+    private Optional<String> _getGroupId() {
+        return groupId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("purpose")
+    private Optional<String> _getPurpose() {
+        return purpose;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -156,6 +186,7 @@ public final class FormFieldDraftListbox {
                 && alternateName.equals(other.alternateName)
                 && mappingName.equals(other.mappingName)
                 && groupId.equals(other.groupId)
+                && purpose.equals(other.purpose)
                 && actions.equals(other.actions)
                 && widgets.equals(other.widgets)
                 && multiSelect.equals(other.multiSelect)
@@ -173,6 +204,7 @@ public final class FormFieldDraftListbox {
                 this.alternateName,
                 this.mappingName,
                 this.groupId,
+                this.purpose,
                 this.actions,
                 this.widgets,
                 this.multiSelect,
@@ -226,6 +258,14 @@ public final class FormFieldDraftListbox {
 
         _FinalStage groupId(String groupId);
 
+        _FinalStage groupId(Nullable<String> groupId);
+
+        _FinalStage purpose(Optional<String> purpose);
+
+        _FinalStage purpose(String purpose);
+
+        _FinalStage purpose(Nullable<String> purpose);
+
         _FinalStage actions(Optional<FieldActionsPatch> actions);
 
         _FinalStage actions(FieldActionsPatch actions);
@@ -261,6 +301,8 @@ public final class FormFieldDraftListbox {
 
         private Optional<FieldActionsPatch> actions = Optional.empty();
 
+        private Optional<String> purpose = Optional.empty();
+
         private Optional<String> groupId = Optional.empty();
 
         private Optional<String> mappingName = Optional.empty();
@@ -287,6 +329,7 @@ public final class FormFieldDraftListbox {
             alternateName(other.getAlternateName());
             mappingName(other.getMappingName());
             groupId(other.getGroupId());
+            purpose(other.getPurpose());
             actions(other.getActions());
             widgets(other.getWidgets());
             multiSelect(other.getMultiSelect());
@@ -364,6 +407,43 @@ public final class FormFieldDraftListbox {
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
         public _FinalStage actions(Optional<FieldActionsPatch> actions) {
             this.actions = actions;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purpose(Nullable<String> purpose) {
+            if (purpose.isNull()) {
+                this.purpose = null;
+            } else if (purpose.isEmpty()) {
+                this.purpose = Optional.empty();
+            } else {
+                this.purpose = Optional.of(purpose.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purpose(String purpose) {
+            this.purpose = Optional.ofNullable(purpose);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "purpose", nulls = Nulls.SKIP)
+        public _FinalStage purpose(Optional<String> purpose) {
+            this.purpose = purpose;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage groupId(Nullable<String> groupId) {
+            if (groupId.isNull()) {
+                this.groupId = null;
+            } else if (groupId.isEmpty()) {
+                this.groupId = Optional.empty();
+            } else {
+                this.groupId = Optional.of(groupId.get());
+            }
             return this;
         }
 
@@ -455,6 +535,7 @@ public final class FormFieldDraftListbox {
                     alternateName,
                     mappingName,
                     groupId,
+                    purpose,
                     actions,
                     widgets,
                     multiSelect,

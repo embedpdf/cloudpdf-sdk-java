@@ -51,6 +51,8 @@ public final class FormFieldText {
 
     private final Optional<String> groupId;
 
+    private final Optional<String> purpose;
+
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
@@ -77,6 +79,8 @@ public final class FormFieldText {
 
     private final boolean comb;
 
+    private final Optional<FormFieldFormat> format;
+
     private final Map<String, Object> additionalProperties;
 
     private FormFieldText(
@@ -92,6 +96,7 @@ public final class FormFieldText {
             FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
+            Optional<String> purpose,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<String> filledBy,
@@ -105,6 +110,7 @@ public final class FormFieldText {
             boolean multiline,
             boolean password,
             boolean comb,
+            Optional<FormFieldFormat> format,
             Map<String, Object> additionalProperties) {
         this.ref = ref;
         this.name = name;
@@ -118,6 +124,7 @@ public final class FormFieldText {
         this.defaultValueEntry = defaultValueEntry;
         this.actions = actions;
         this.groupId = groupId;
+        this.purpose = purpose;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.filledBy = filledBy;
@@ -131,6 +138,7 @@ public final class FormFieldText {
         this.multiline = multiline;
         this.password = password;
         this.comb = comb;
+        this.format = format;
         this.additionalProperties = additionalProperties;
     }
 
@@ -201,6 +209,14 @@ public final class FormFieldText {
             return Optional.empty();
         }
         return groupId;
+    }
+
+    @JsonIgnore
+    public Optional<String> getPurpose() {
+        if (purpose == null) {
+            return Optional.empty();
+        }
+        return purpose;
     }
 
     @JsonIgnore
@@ -289,6 +305,17 @@ public final class FormFieldText {
         return comb;
     }
 
+    /**
+     * @return The shape a text field's or a dropdown's value has, by its <code>kind</code>: a date or a time with the pattern it is shown in, or <code>other</code> for a format script the engine does not recognise. A newer server can add kinds: read one your client doesn't know as <code>other</code>.
+     */
+    @JsonIgnore
+    public Optional<FormFieldFormat> getFormat() {
+        if (format == null) {
+            return Optional.empty();
+        }
+        return format;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("alternateName")
     private Optional<String> _getAlternateName() {
@@ -305,6 +332,12 @@ public final class FormFieldText {
     @JsonProperty("groupId")
     private Optional<String> _getGroupId() {
         return groupId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("purpose")
+    private Optional<String> _getPurpose() {
+        return purpose;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -349,6 +382,12 @@ public final class FormFieldText {
         return maxLength;
     }
 
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("format")
+    private Optional<FormFieldFormat> _getFormat() {
+        return format;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -373,6 +412,7 @@ public final class FormFieldText {
                 && defaultValueEntry.equals(other.defaultValueEntry)
                 && actions.equals(other.actions)
                 && groupId.equals(other.groupId)
+                && purpose.equals(other.purpose)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && filledBy.equals(other.filledBy)
@@ -385,7 +425,8 @@ public final class FormFieldText {
                 && maxLength.equals(other.maxLength)
                 && multiline == other.multiline
                 && password == other.password
-                && comb == other.comb;
+                && comb == other.comb
+                && format.equals(other.format);
     }
 
     @java.lang.Override
@@ -403,6 +444,7 @@ public final class FormFieldText {
                 this.defaultValueEntry,
                 this.actions,
                 this.groupId,
+                this.purpose,
                 this.createdBy,
                 this.createdAt,
                 this.filledBy,
@@ -415,7 +457,8 @@ public final class FormFieldText {
                 this.maxLength,
                 this.multiline,
                 this.password,
-                this.comb);
+                this.comb,
+                this.format);
     }
 
     @java.lang.Override
@@ -510,6 +553,12 @@ public final class FormFieldText {
 
         _FinalStage groupId(Nullable<String> groupId);
 
+        _FinalStage purpose(Optional<String> purpose);
+
+        _FinalStage purpose(String purpose);
+
+        _FinalStage purpose(Nullable<String> purpose);
+
         _FinalStage createdBy(Optional<String> createdBy);
 
         _FinalStage createdBy(String createdBy);
@@ -557,6 +606,15 @@ public final class FormFieldText {
         _FinalStage maxLength(Integer maxLength);
 
         _FinalStage maxLength(Nullable<Integer> maxLength);
+
+        /**
+         * <p>The shape a text field's or a dropdown's value has, by its <code>kind</code>: a date or a time with the pattern it is shown in, or <code>other</code> for a format script the engine does not recognise. A newer server can add kinds: read one your client doesn't know as <code>other</code>.</p>
+         */
+        _FinalStage format(Optional<FormFieldFormat> format);
+
+        _FinalStage format(FormFieldFormat format);
+
+        _FinalStage format(Nullable<FormFieldFormat> format);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -601,6 +659,8 @@ public final class FormFieldText {
 
         private boolean comb;
 
+        private Optional<FormFieldFormat> format = Optional.empty();
+
         private Optional<Integer> maxLength = Optional.empty();
 
         private List<FormWidget> widgets = new ArrayList<>();
@@ -616,6 +676,8 @@ public final class FormFieldText {
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
         private Optional<String> createdBy = Optional.empty();
+
+        private Optional<String> purpose = Optional.empty();
 
         private Optional<String> groupId = Optional.empty();
 
@@ -644,6 +706,7 @@ public final class FormFieldText {
             defaultValueEntry(other.getDefaultValueEntry());
             actions(other.getActions());
             groupId(other.getGroupId());
+            purpose(other.getPurpose());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             filledBy(other.getFilledBy());
@@ -657,6 +720,7 @@ public final class FormFieldText {
             multiline(other.getMultiline());
             password(other.getPassword());
             comb(other.getComb());
+            format(other.getFormat());
             return this;
         }
 
@@ -748,6 +812,42 @@ public final class FormFieldText {
         @JsonSetter("comb")
         public _FinalStage comb(boolean comb) {
             this.comb = comb;
+            return this;
+        }
+
+        /**
+         * <p>The shape a text field's or a dropdown's value has, by its <code>kind</code>: a date or a time with the pattern it is shown in, or <code>other</code> for a format script the engine does not recognise. A newer server can add kinds: read one your client doesn't know as <code>other</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage format(Nullable<FormFieldFormat> format) {
+            if (format.isNull()) {
+                this.format = null;
+            } else if (format.isEmpty()) {
+                this.format = Optional.empty();
+            } else {
+                this.format = Optional.of(format.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>The shape a text field's or a dropdown's value has, by its <code>kind</code>: a date or a time with the pattern it is shown in, or <code>other</code> for a format script the engine does not recognise. A newer server can add kinds: read one your client doesn't know as <code>other</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage format(FormFieldFormat format) {
+            this.format = Optional.ofNullable(format);
+            return this;
+        }
+
+        /**
+         * <p>The shape a text field's or a dropdown's value has, by its <code>kind</code>: a date or a time with the pattern it is shown in, or <code>other</code> for a format script the engine does not recognise. A newer server can add kinds: read one your client doesn't know as <code>other</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "format", nulls = Nulls.SKIP)
+        public _FinalStage format(Optional<FormFieldFormat> format) {
+            this.format = format;
             return this;
         }
 
@@ -951,6 +1051,31 @@ public final class FormFieldText {
         }
 
         @java.lang.Override
+        public _FinalStage purpose(Nullable<String> purpose) {
+            if (purpose.isNull()) {
+                this.purpose = null;
+            } else if (purpose.isEmpty()) {
+                this.purpose = Optional.empty();
+            } else {
+                this.purpose = Optional.of(purpose.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purpose(String purpose) {
+            this.purpose = Optional.ofNullable(purpose);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "purpose", nulls = Nulls.SKIP)
+        public _FinalStage purpose(Optional<String> purpose) {
+            this.purpose = purpose;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage groupId(Nullable<String> groupId) {
             if (groupId.isNull()) {
                 this.groupId = null;
@@ -1053,6 +1178,7 @@ public final class FormFieldText {
                     defaultValueEntry,
                     actions,
                     groupId,
+                    purpose,
                     createdBy,
                     createdAt,
                     filledBy,
@@ -1066,6 +1192,7 @@ public final class FormFieldText {
                     multiline,
                     password,
                     comb,
+                    format,
                     additionalProperties);
         }
 
