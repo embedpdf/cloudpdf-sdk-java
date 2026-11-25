@@ -3,33 +3,47 @@
  */
 package com.cloudpdf.api.types;
 
+import com.cloudpdf.api.core.Nullable;
+import com.cloudpdf.api.core.NullableNonemptyFilter;
 import com.cloudpdf.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ChangeOpFormsSetSignatureAppearanceResources.Builder.class)
 public final class ChangeOpFormsSetSignatureAppearanceResources {
-    private final String appearance;
+    private final Optional<String> appearance;
 
     private final Map<String, Object> additionalProperties;
 
-    private ChangeOpFormsSetSignatureAppearanceResources(String appearance, Map<String, Object> additionalProperties) {
+    private ChangeOpFormsSetSignatureAppearanceResources(
+            Optional<String> appearance, Map<String, Object> additionalProperties) {
         this.appearance = appearance;
         this.additionalProperties = additionalProperties;
     }
 
+    @JsonIgnore
+    public Optional<String> getAppearance() {
+        if (appearance == null) {
+            return Optional.empty();
+        }
+        return appearance;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("appearance")
-    public String getAppearance() {
+    private Optional<String> _getAppearance() {
         return appearance;
     }
 
@@ -59,58 +73,55 @@ public final class ChangeOpFormsSetSignatureAppearanceResources {
         return ObjectMappers.stringify(this);
     }
 
-    public static AppearanceStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface AppearanceStage {
-        _FinalStage appearance(@NotNull String appearance);
-
-        Builder from(ChangeOpFormsSetSignatureAppearanceResources other);
-    }
-
-    public interface _FinalStage {
-        ChangeOpFormsSetSignatureAppearanceResources build();
-
-        _FinalStage additionalProperty(String key, Object value);
-
-        _FinalStage additionalProperties(Map<String, Object> additionalProperties);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AppearanceStage, _FinalStage {
-        private String appearance;
+    public static final class Builder {
+        private Optional<String> appearance = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(ChangeOpFormsSetSignatureAppearanceResources other) {
             appearance(other.getAppearance());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("appearance")
-        public _FinalStage appearance(@NotNull String appearance) {
-            this.appearance = Objects.requireNonNull(appearance, "appearance must not be null");
+        @JsonSetter(value = "appearance", nulls = Nulls.SKIP)
+        public Builder appearance(Optional<String> appearance) {
+            this.appearance = appearance;
             return this;
         }
 
-        @java.lang.Override
+        public Builder appearance(String appearance) {
+            this.appearance = Optional.ofNullable(appearance);
+            return this;
+        }
+
+        public Builder appearance(Nullable<String> appearance) {
+            if (appearance.isNull()) {
+                this.appearance = null;
+            } else if (appearance.isEmpty()) {
+                this.appearance = Optional.empty();
+            } else {
+                this.appearance = Optional.of(appearance.get());
+            }
+            return this;
+        }
+
         public ChangeOpFormsSetSignatureAppearanceResources build() {
             return new ChangeOpFormsSetSignatureAppearanceResources(appearance, additionalProperties);
         }
 
-        @java.lang.Override
         public Builder additionalProperty(String key, Object value) {
             this.additionalProperties.put(key, value);
             return this;
         }
 
-        @java.lang.Override
         public Builder additionalProperties(Map<String, Object> additionalProperties) {
             this.additionalProperties.putAll(additionalProperties);
             return this;

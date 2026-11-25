@@ -26,7 +26,7 @@ public class CloudPDFClientBuilder {
 
     private String token = null;
 
-    private String embedPdfVersion = "3.3";
+    private String embedPdfVersion = "3.4";
 
     private Environment environment = Environment.SAAS;
 

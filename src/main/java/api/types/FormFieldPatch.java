@@ -38,6 +38,8 @@ public final class FormFieldPatch {
 
     private final Optional<String> groupId;
 
+    private final Optional<String> purpose;
+
     private final Optional<FieldActionsPatch> actions;
 
     private final Optional<FormFieldPatchKind> kind;
@@ -62,6 +64,8 @@ public final class FormFieldPatch {
 
     private final Optional<List<FormFieldPatchOptionsItem>> options;
 
+    private final Optional<FormFieldFormatWritable> format;
+
     private final Map<String, Object> additionalProperties;
 
     private FormFieldPatch(
@@ -72,6 +76,7 @@ public final class FormFieldPatch {
             Optional<String> alternateName,
             Optional<String> mappingName,
             Optional<String> groupId,
+            Optional<String> purpose,
             Optional<FieldActionsPatch> actions,
             Optional<FormFieldPatchKind> kind,
             Optional<FormFieldPatchDefaultValue> defaultValue,
@@ -84,6 +89,7 @@ public final class FormFieldPatch {
             Optional<Boolean> edit,
             Optional<Boolean> multiSelect,
             Optional<List<FormFieldPatchOptionsItem>> options,
+            Optional<FormFieldFormatWritable> format,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.readOnly = readOnly;
@@ -92,6 +98,7 @@ public final class FormFieldPatch {
         this.alternateName = alternateName;
         this.mappingName = mappingName;
         this.groupId = groupId;
+        this.purpose = purpose;
         this.actions = actions;
         this.kind = kind;
         this.defaultValue = defaultValue;
@@ -104,6 +111,7 @@ public final class FormFieldPatch {
         this.edit = edit;
         this.multiSelect = multiSelect;
         this.options = options;
+        this.format = format;
         this.additionalProperties = additionalProperties;
     }
 
@@ -143,9 +151,20 @@ public final class FormFieldPatch {
         return mappingName;
     }
 
-    @JsonProperty("groupId")
+    @JsonIgnore
     public Optional<String> getGroupId() {
+        if (groupId == null) {
+            return Optional.empty();
+        }
         return groupId;
+    }
+
+    @JsonIgnore
+    public Optional<String> getPurpose() {
+        if (purpose == null) {
+            return Optional.empty();
+        }
+        return purpose;
     }
 
     @JsonProperty("actions")
@@ -214,6 +233,14 @@ public final class FormFieldPatch {
         return options;
     }
 
+    @JsonIgnore
+    public Optional<FormFieldFormatWritable> getFormat() {
+        if (format == null) {
+            return Optional.empty();
+        }
+        return format;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("alternateName")
     private Optional<String> _getAlternateName() {
@@ -227,6 +254,18 @@ public final class FormFieldPatch {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("groupId")
+    private Optional<String> _getGroupId() {
+        return groupId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("purpose")
+    private Optional<String> _getPurpose() {
+        return purpose;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("defaultValue")
     private Optional<FormFieldPatchDefaultValue> _getDefaultValue() {
         return defaultValue;
@@ -236,6 +275,12 @@ public final class FormFieldPatch {
     @JsonProperty("maxLength")
     private Optional<Integer> _getMaxLength() {
         return maxLength;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("format")
+    private Optional<FormFieldFormatWritable> _getFormat() {
+        return format;
     }
 
     @java.lang.Override
@@ -257,6 +302,7 @@ public final class FormFieldPatch {
                 && alternateName.equals(other.alternateName)
                 && mappingName.equals(other.mappingName)
                 && groupId.equals(other.groupId)
+                && purpose.equals(other.purpose)
                 && actions.equals(other.actions)
                 && kind.equals(other.kind)
                 && defaultValue.equals(other.defaultValue)
@@ -268,7 +314,8 @@ public final class FormFieldPatch {
                 && noToggleToOff.equals(other.noToggleToOff)
                 && edit.equals(other.edit)
                 && multiSelect.equals(other.multiSelect)
-                && options.equals(other.options);
+                && options.equals(other.options)
+                && format.equals(other.format);
     }
 
     @java.lang.Override
@@ -281,6 +328,7 @@ public final class FormFieldPatch {
                 this.alternateName,
                 this.mappingName,
                 this.groupId,
+                this.purpose,
                 this.actions,
                 this.kind,
                 this.defaultValue,
@@ -292,7 +340,8 @@ public final class FormFieldPatch {
                 this.noToggleToOff,
                 this.edit,
                 this.multiSelect,
-                this.options);
+                this.options,
+                this.format);
     }
 
     @java.lang.Override
@@ -320,6 +369,8 @@ public final class FormFieldPatch {
 
         private Optional<String> groupId = Optional.empty();
 
+        private Optional<String> purpose = Optional.empty();
+
         private Optional<FieldActionsPatch> actions = Optional.empty();
 
         private Optional<FormFieldPatchKind> kind = Optional.empty();
@@ -344,6 +395,8 @@ public final class FormFieldPatch {
 
         private Optional<List<FormFieldPatchOptionsItem>> options = Optional.empty();
 
+        private Optional<FormFieldFormatWritable> format = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -357,6 +410,7 @@ public final class FormFieldPatch {
             alternateName(other.getAlternateName());
             mappingName(other.getMappingName());
             groupId(other.getGroupId());
+            purpose(other.getPurpose());
             actions(other.getActions());
             kind(other.getKind());
             defaultValue(other.getDefaultValue());
@@ -369,6 +423,7 @@ public final class FormFieldPatch {
             edit(other.getEdit());
             multiSelect(other.getMultiSelect());
             options(other.getOptions());
+            format(other.getFormat());
             return this;
         }
 
@@ -468,6 +523,39 @@ public final class FormFieldPatch {
 
         public Builder groupId(String groupId) {
             this.groupId = Optional.ofNullable(groupId);
+            return this;
+        }
+
+        public Builder groupId(Nullable<String> groupId) {
+            if (groupId.isNull()) {
+                this.groupId = null;
+            } else if (groupId.isEmpty()) {
+                this.groupId = Optional.empty();
+            } else {
+                this.groupId = Optional.of(groupId.get());
+            }
+            return this;
+        }
+
+        @JsonSetter(value = "purpose", nulls = Nulls.SKIP)
+        public Builder purpose(Optional<String> purpose) {
+            this.purpose = purpose;
+            return this;
+        }
+
+        public Builder purpose(String purpose) {
+            this.purpose = Optional.ofNullable(purpose);
+            return this;
+        }
+
+        public Builder purpose(Nullable<String> purpose) {
+            if (purpose.isNull()) {
+                this.purpose = null;
+            } else if (purpose.isEmpty()) {
+                this.purpose = Optional.empty();
+            } else {
+                this.purpose = Optional.of(purpose.get());
+            }
             return this;
         }
 
@@ -625,6 +713,28 @@ public final class FormFieldPatch {
             return this;
         }
 
+        @JsonSetter(value = "format", nulls = Nulls.SKIP)
+        public Builder format(Optional<FormFieldFormatWritable> format) {
+            this.format = format;
+            return this;
+        }
+
+        public Builder format(FormFieldFormatWritable format) {
+            this.format = Optional.ofNullable(format);
+            return this;
+        }
+
+        public Builder format(Nullable<FormFieldFormatWritable> format) {
+            if (format.isNull()) {
+                this.format = null;
+            } else if (format.isEmpty()) {
+                this.format = Optional.empty();
+            } else {
+                this.format = Optional.of(format.get());
+            }
+            return this;
+        }
+
         public FormFieldPatch build() {
             return new FormFieldPatch(
                     name,
@@ -634,6 +744,7 @@ public final class FormFieldPatch {
                     alternateName,
                     mappingName,
                     groupId,
+                    purpose,
                     actions,
                     kind,
                     defaultValue,
@@ -646,6 +757,7 @@ public final class FormFieldPatch {
                     edit,
                     multiSelect,
                     options,
+                    format,
                     additionalProperties);
         }
 

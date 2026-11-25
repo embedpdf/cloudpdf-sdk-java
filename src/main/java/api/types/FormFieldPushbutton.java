@@ -51,6 +51,8 @@ public final class FormFieldPushbutton {
 
     private final Optional<String> groupId;
 
+    private final Optional<String> purpose;
+
     private final Optional<String> createdBy;
 
     private final Optional<OffsetDateTime> createdAt;
@@ -80,6 +82,7 @@ public final class FormFieldPushbutton {
             FormValueEntry defaultValueEntry,
             Optional<PdfFieldActions> actions,
             Optional<String> groupId,
+            Optional<String> purpose,
             Optional<String> createdBy,
             Optional<OffsetDateTime> createdAt,
             Optional<String> filledBy,
@@ -100,6 +103,7 @@ public final class FormFieldPushbutton {
         this.defaultValueEntry = defaultValueEntry;
         this.actions = actions;
         this.groupId = groupId;
+        this.purpose = purpose;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.filledBy = filledBy;
@@ -180,6 +184,14 @@ public final class FormFieldPushbutton {
     }
 
     @JsonIgnore
+    public Optional<String> getPurpose() {
+        if (purpose == null) {
+            return Optional.empty();
+        }
+        return purpose;
+    }
+
+    @JsonIgnore
     public Optional<String> getCreatedBy() {
         if (createdBy == null) {
             return Optional.empty();
@@ -251,6 +263,12 @@ public final class FormFieldPushbutton {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("purpose")
+    private Optional<String> _getPurpose() {
+        return purpose;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("createdBy")
     private Optional<String> _getCreatedBy() {
         return createdBy;
@@ -310,6 +328,7 @@ public final class FormFieldPushbutton {
                 && defaultValueEntry.equals(other.defaultValueEntry)
                 && actions.equals(other.actions)
                 && groupId.equals(other.groupId)
+                && purpose.equals(other.purpose)
                 && createdBy.equals(other.createdBy)
                 && createdAt.equals(other.createdAt)
                 && filledBy.equals(other.filledBy)
@@ -334,6 +353,7 @@ public final class FormFieldPushbutton {
                 this.defaultValueEntry,
                 this.actions,
                 this.groupId,
+                this.purpose,
                 this.createdBy,
                 this.createdAt,
                 this.filledBy,
@@ -414,6 +434,12 @@ public final class FormFieldPushbutton {
         _FinalStage groupId(String groupId);
 
         _FinalStage groupId(Nullable<String> groupId);
+
+        _FinalStage purpose(Optional<String> purpose);
+
+        _FinalStage purpose(String purpose);
+
+        _FinalStage purpose(Nullable<String> purpose);
 
         _FinalStage createdBy(Optional<String> createdBy);
 
@@ -499,6 +525,8 @@ public final class FormFieldPushbutton {
 
         private Optional<String> createdBy = Optional.empty();
 
+        private Optional<String> purpose = Optional.empty();
+
         private Optional<String> groupId = Optional.empty();
 
         private Optional<PdfFieldActions> actions = Optional.empty();
@@ -526,6 +554,7 @@ public final class FormFieldPushbutton {
             defaultValueEntry(other.getDefaultValueEntry());
             actions(other.getActions());
             groupId(other.getGroupId());
+            purpose(other.getPurpose());
             createdBy(other.getCreatedBy());
             createdAt(other.getCreatedAt());
             filledBy(other.getFilledBy());
@@ -767,6 +796,31 @@ public final class FormFieldPushbutton {
         }
 
         @java.lang.Override
+        public _FinalStage purpose(Nullable<String> purpose) {
+            if (purpose.isNull()) {
+                this.purpose = null;
+            } else if (purpose.isEmpty()) {
+                this.purpose = Optional.empty();
+            } else {
+                this.purpose = Optional.of(purpose.get());
+            }
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage purpose(String purpose) {
+            this.purpose = Optional.ofNullable(purpose);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "purpose", nulls = Nulls.SKIP)
+        public _FinalStage purpose(Optional<String> purpose) {
+            this.purpose = purpose;
+            return this;
+        }
+
+        @java.lang.Override
         public _FinalStage groupId(Nullable<String> groupId) {
             if (groupId.isNull()) {
                 this.groupId = null;
@@ -869,6 +923,7 @@ public final class FormFieldPushbutton {
                     defaultValueEntry,
                     actions,
                     groupId,
+                    purpose,
                     createdBy,
                     createdAt,
                     filledBy,
